@@ -1,0 +1,8 @@
+{
+  "name": "School of Growth Global",
+  "description": "Elite educational frameworks, global faculties, executive tracks, and AI-powered institutional intelligence for leaders.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
