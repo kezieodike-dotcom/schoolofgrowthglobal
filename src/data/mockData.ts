@@ -161,7 +161,7 @@ export const COURSES: Course[] = [
     rating: 4.92,
     reviewCount: 218,
     status: 'Enrolling for November Cohort',
-    heroImage: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=800',
+    heroImage: '/scenes/leadership-meeting.jpg',
     description: 'Develop psychological stamina, rapid crisis communication, and adaptive command structures during systemic market shocks.',
     price: '$3,200 USD',
     outcomes: [
@@ -209,7 +209,7 @@ export const COURSES: Course[] = [
     rating: 5.0,
     reviewCount: 89,
     status: 'Application Only • Limited 15 Seats',
-    heroImage: 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&q=80&w=800',
+    heroImage: '/scenes/coaching-collab.jpg',
     description: 'An elite 6-month immersive fellowship pairing high-potential executives directly with global industry visionaries.',
     price: '$12,500 USD',
     outcomes: [
@@ -578,7 +578,7 @@ export const EVENTS: EventItem[] = [
     description: 'Our flagship three-day summit on institutional growth, AI governance, and geopolitical strategy for the world\'s top executives.',
     price: 'From $1,200',
     seatsLeft: 42,
-    image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&q=80&w=800'
+    image: '/scenes/summit-audience.jpg'
   },
   {
     id: 'e2',
@@ -606,7 +606,7 @@ export const EVENTS: EventItem[] = [
     description: 'An intensive three-day simulation bootcamp on leading organizations through systemic market shocks.',
     price: '$2,400',
     seatsLeft: 18,
-    image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=800'
+    image: '/scenes/bootcamp-team.jpg'
   },
   {
     id: 'e4',
@@ -648,7 +648,7 @@ export const EVENTS: EventItem[] = [
     description: 'A practitioner seminar on institutional-grade valuation, capital structuring, and M&A modeling.',
     price: '$650',
     seatsLeft: 60,
-    image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&q=80&w=800'
+    image: '/scenes/finance-documents.jpg'
   }
 ];
 
@@ -690,7 +690,7 @@ export const BLOG_POSTS: BlogPost[] = [
     authorRole: 'Chair of Organizational Dynamics',
     readTime: '7 min read',
     date: 'Sep 30, 2024',
-    image: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=800'
+    image: '/scenes/leadership-meeting.jpg'
   },
   {
     id: 'b4',
@@ -714,7 +714,7 @@ export const BLOG_POSTS: BlogPost[] = [
     authorRole: 'Director of Venture Scaling',
     readTime: '6 min read',
     date: 'Sep 14, 2024',
-    image: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&q=80&w=800'
+    image: '/scenes/wealth-planning.jpg'
   },
   {
     id: 'b6',
