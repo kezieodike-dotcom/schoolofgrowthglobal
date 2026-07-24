@@ -2,17 +2,17 @@
 
 /*
   shadcn/ui semantic theme tokens, mapped to the School of Growth Global
-  dark (slate) + amber palette. These back utilities like `bg-background`,
+  light (slate) + amber palette. These back utilities like `bg-background`,
   `text-foreground`, `border`, and `shadow-primary` used by shadcn components.
 */
 @theme {
-  --color-background: #020617;        /* slate-950 */
-  --color-foreground: #f1f5f9;        /* slate-100 */
-  --color-card: #0f172a;              /* slate-900 */
-  --color-border: #1e293b;            /* slate-800 */
+  --color-background: #f8fafc;        /* slate-50 */
+  --color-foreground: #0f172a;        /* slate-900 */
+  --color-card: #ffffff;              /* white */
+  --color-border: #e2e8f0;            /* slate-200 */
   --color-primary: #f59e0b;           /* amber-500 */
   --color-primary-foreground: #020617;/* slate-950 */
-  --color-muted-foreground: #94a3b8;  /* slate-400 */
+  --color-muted-foreground: #64748b;  /* slate-500 */
 }
 
 /* Give the bare `border` utility a sensible default color (shadcn convention). */

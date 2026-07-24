@@ -34,7 +34,7 @@ export const TrustedExecutivesSlider: React.FC = () => {
           return (
             <div
               key={partner}
-              className="flex items-center gap-2.5 whitespace-nowrap text-slate-400 hover:text-amber-300 transition-colors duration-300"
+              className="flex items-center gap-2.5 whitespace-nowrap text-slate-500 hover:text-amber-600 transition-colors duration-300"
             >
               <Icon className="w-5 h-5 flex-shrink-0" />
               <span className="font-serif font-bold text-sm tracking-wide">{partner}</span>

@@ -16,11 +16,11 @@ export const SchoolsView: React.FC = () => {
   );
 
   return (
-    <div className="min-h-screen bg-slate-950">
+    <div className="min-h-screen bg-slate-50">
       <PageHero
         eyebrow="Academic Architecture"
         icon={<GraduationCap className="w-4 h-4" />}
-        title={<>14 Global Schools. <span className="bg-gradient-to-r from-amber-200 via-amber-400 to-amber-600 bg-clip-text text-transparent">One Standard of Excellence.</span></>}
+        title={<>14 Global Schools. <span className="bg-gradient-to-r from-amber-500 via-amber-600 to-amber-700 bg-clip-text text-transparent">One Standard of Excellence.</span></>}
         subtitle="Specialized faculties offering accredited programs, expert instructors, defined career paths, and globally verifiable certifications."
       />
 
@@ -33,7 +33,7 @@ export const SchoolsView: React.FC = () => {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Filter schools by name or topic..."
-            className="w-full bg-slate-900 border border-slate-800 rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-amber-500"
+            className="w-full bg-white border border-slate-200 rounded-xl pl-10 pr-4 py-3 text-sm text-slate-900 placeholder:text-slate-500 focus:outline-none focus:border-amber-500"
           />
         </div>
 
@@ -44,32 +44,32 @@ export const SchoolsView: React.FC = () => {
               <Link
                 key={school.id}
                 to={`/schools/${school.id}`}
-                className={`group p-6 rounded-2xl bg-slate-900/70 hover:bg-slate-900 border border-slate-800 ${a.border} transition-all duration-300 hover:shadow-xl hover:shadow-amber-500/5 flex flex-col justify-between relative overflow-hidden`}
+                className={`group p-6 rounded-2xl bg-white hover:bg-slate-50 border border-slate-200 shadow-sm ${a.border} transition-all duration-300 hover:shadow-xl hover:shadow-amber-500/5 flex flex-col justify-between relative overflow-hidden`}
               >
                 <div className={`absolute top-0 left-0 right-0 h-1 ${a.bg} opacity-0 group-hover:opacity-100 transition-opacity`} />
                 <div>
                   <div className="flex items-center justify-between mb-4">
-                    <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 group-hover:scale-110 transition-transform">
+                    <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 group-hover:scale-110 transition-transform">
                       <SchoolIcon name={school.iconName} className={`w-6 h-6 ${a.text}`} />
                     </div>
-                    <span className="text-[10px] font-mono px-2.5 py-1 rounded-full bg-slate-800 text-slate-300 border border-slate-700">
+                    <span className="text-[10px] font-mono px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 border border-slate-300">
                       {school.code} • {school.programCount} Programs
                     </span>
                   </div>
-                  <h3 className="text-xl font-serif font-bold text-white group-hover:text-amber-300 transition-colors mb-1">
+                  <h3 className="text-xl font-serif font-bold text-slate-900 group-hover:text-amber-700 transition-colors mb-1">
                     {school.name}
                   </h3>
                   <p className={`text-xs font-mono ${a.text} mb-3`}>{school.tagline}</p>
-                  <p className="text-xs text-slate-400 leading-relaxed mb-4">{school.overview}</p>
+                  <p className="text-xs text-slate-500 leading-relaxed mb-4">{school.overview}</p>
                   <div className="flex flex-wrap gap-1.5 mb-6">
                     {school.keyTopics.slice(0, 3).map((topic, i) => (
-                      <span key={i} className="text-[10px] px-2 py-0.5 rounded bg-slate-950 text-slate-300 border border-slate-800/80">
+                      <span key={i} className="text-[10px] px-2 py-0.5 rounded bg-slate-50 text-slate-600 border border-slate-200">
                         {topic}
                       </span>
                     ))}
                   </div>
                 </div>
-                <div className="pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs text-amber-400 font-semibold group-hover:text-amber-300">
+                <div className="pt-4 border-t border-slate-200 flex items-center justify-between text-xs text-amber-600 font-semibold group-hover:text-amber-700">
                   <span>Explore Faculty</span>
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </div>

@@ -21,7 +21,7 @@ export const CoursesView: React.FC = () => {
   });
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100">
+    <div className="min-h-screen bg-slate-50 text-slate-900">
       <PageHero
         eyebrow="Curriculum Catalog"
         icon={<BookOpen className="w-4 h-4" />}
@@ -32,13 +32,13 @@ export const CoursesView: React.FC = () => {
       <section className="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Filters */}
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-10">
-          <div className="flex flex-wrap items-center gap-2 bg-slate-900 p-1.5 rounded-xl border border-slate-800 text-xs font-medium">
+          <div className="flex flex-wrap items-center gap-2 bg-white p-1.5 rounded-xl border border-slate-200 text-xs font-medium">
             {LEVELS.map((l) => (
               <button
                 key={l}
                 onClick={() => setLevel(l)}
                 className={`px-3.5 py-2 rounded-lg transition-all ${
-                  level === l ? 'bg-amber-500 text-slate-950 font-bold shadow' : 'text-slate-400 hover:text-white'
+                  level === l ? 'bg-amber-500 text-slate-950 font-bold shadow' : 'text-slate-500 hover:text-slate-900'
                 }`}
               >
                 {l}
@@ -50,7 +50,7 @@ export const CoursesView: React.FC = () => {
             <select
               value={school}
               onChange={(e) => setSchool(e.target.value)}
-              className="bg-slate-900 border border-slate-800 rounded-lg px-3 py-2.5 text-xs text-white focus:outline-none focus:border-amber-500"
+              className="bg-white border border-slate-200 rounded-lg px-3 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-amber-500"
             >
               <option value="All">All Schools</option>
               {SCHOOLS.map((s) => (
@@ -62,7 +62,7 @@ export const CoursesView: React.FC = () => {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search programs..."
-              className="bg-slate-900 border border-slate-800 rounded-lg px-3 py-2.5 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-amber-500 w-44"
+              className="bg-white border border-slate-200 rounded-lg px-3 py-2.5 text-xs text-slate-900 placeholder:text-slate-500 focus:outline-none focus:border-amber-500 w-44"
             />
           </div>
         </div>
@@ -73,7 +73,7 @@ export const CoursesView: React.FC = () => {
             <Link
               key={course.id}
               to={`/courses/${course.id}`}
-              className="group bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden flex flex-col hover:border-amber-500/40 transition-all"
+              className="group bg-white border border-slate-200 shadow-sm rounded-2xl overflow-hidden flex flex-col hover:border-amber-300 transition-all"
             >
               <div className="relative h-40 overflow-hidden">
                 <img
@@ -94,22 +94,22 @@ export const CoursesView: React.FC = () => {
 
               <div className="p-5 flex flex-col flex-1">
                 <div className="flex items-center justify-between mb-2 text-xs">
-                  <span className="font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">
+                  <span className="font-mono px-2 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-300">
                     {course.level}
                   </span>
-                  <span className="flex items-center gap-1 text-amber-400 font-mono">
+                  <span className="flex items-center gap-1 text-amber-600 font-mono">
                     <Star className="w-3.5 h-3.5 fill-amber-400" /> {course.rating}
                   </span>
                 </div>
-                <h4 className="text-lg font-serif font-bold text-white group-hover:text-amber-300 transition-colors mb-2">
+                <h4 className="text-lg font-serif font-bold text-slate-900 group-hover:text-amber-700 transition-colors mb-2">
                   {course.title}
                 </h4>
-                <p className="text-xs text-slate-400 line-clamp-2 mb-4 flex-1">{course.description}</p>
-                <div className="pt-4 border-t border-slate-800 flex items-center justify-between text-xs">
-                  <span className="flex items-center gap-1.5 text-slate-400 font-mono">
+                <p className="text-xs text-slate-500 line-clamp-2 mb-4 flex-1">{course.description}</p>
+                <div className="pt-4 border-t border-slate-200 flex items-center justify-between text-xs">
+                  <span className="flex items-center gap-1.5 text-slate-500 font-mono">
                     <Clock className="w-3.5 h-3.5" /> {course.duration}
                   </span>
-                  <span className="text-amber-400 font-bold flex items-center gap-1">
+                  <span className="text-amber-600 font-bold flex items-center gap-1">
                     View <ChevronRight className="w-3.5 h-3.5" />
                   </span>
                 </div>
@@ -123,8 +123,8 @@ export const CoursesView: React.FC = () => {
         )}
 
         {/* Pricing note (per PRD: pricing hidden until registration) */}
-        <div className="mt-12 p-5 rounded-2xl bg-slate-900/60 border border-slate-800 flex items-center gap-3 text-xs text-slate-400 max-w-2xl">
-          <Lock className="w-5 h-5 text-amber-400 flex-shrink-0" />
+        <div className="mt-12 p-5 rounded-2xl bg-white border border-slate-200 shadow-sm flex items-center gap-3 text-xs text-slate-500 max-w-2xl">
+          <Lock className="w-5 h-5 text-amber-600 flex-shrink-0" />
           <span>
             Detailed tuition and sponsorship options are shared during registration. Create a free account or speak
             with an advisor to unlock program pricing and scholarship eligibility.

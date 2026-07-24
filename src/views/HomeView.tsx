@@ -3,20 +3,20 @@ import { ViewType, Faculty } from '../types';
 import { FACULTIES } from '../data/mockData';
 import { TrustedExecutivesSlider } from '../components/TrustedExecutivesSlider';
 import { TestimonialsSection } from '../components/TestimonialsSection';
-import { 
-  Crown, 
-  ArrowRight, 
-  Sparkles, 
-  Users, 
-  Building2, 
-  Globe, 
-  Award, 
-  CheckCircle2, 
-  ChevronRight, 
-  TrendingUp, 
-  Cpu, 
-  Lightbulb, 
-  ShieldCheck, 
+import {
+  Crown,
+  ArrowRight,
+  Sparkles,
+  Users,
+  Building2,
+  Globe,
+  Award,
+  CheckCircle2,
+  ChevronRight,
+  TrendingUp,
+  Cpu,
+  Lightbulb,
+  ShieldCheck,
   Terminal,
   Send,
   MessageSquare,
@@ -36,13 +36,13 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate, onSelectSchool }
 
   const getFacultyIcon = (iconName: string) => {
     switch (iconName) {
-      case 'Crown': return <Crown className="w-6 h-6 text-amber-400" />;
-      case 'TrendingUp': return <TrendingUp className="w-6 h-6 text-emerald-400" />;
-      case 'Cpu': return <Cpu className="w-6 h-6 text-indigo-400" />;
-      case 'Users': return <Users className="w-6 h-6 text-purple-400" />;
-      case 'Globe': return <Globe className="w-6 h-6 text-amber-400" />;
-      case 'Lightbulb': return <Lightbulb className="w-6 h-6 text-teal-400" />;
-      default: return <Crown className="w-6 h-6 text-amber-400" />;
+      case 'Crown': return <Crown className="w-6 h-6 text-amber-600" />;
+      case 'TrendingUp': return <TrendingUp className="w-6 h-6 text-emerald-600" />;
+      case 'Cpu': return <Cpu className="w-6 h-6 text-indigo-600" />;
+      case 'Users': return <Users className="w-6 h-6 text-purple-600" />;
+      case 'Globe': return <Globe className="w-6 h-6 text-amber-600" />;
+      case 'Lightbulb': return <Lightbulb className="w-6 h-6 text-teal-600" />;
+      default: return <Crown className="w-6 h-6 text-amber-600" />;
     }
   };
 
@@ -69,33 +69,33 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate, onSelectSchool }
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 font-sans">
-      
+    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans">
+
       {/* Hero Section */}
-      <section className="relative overflow-hidden pt-12 pb-20 lg:pt-20 lg:pb-32 border-b border-slate-800">
-        
+      <section className="relative overflow-hidden pt-12 pb-20 lg:pt-20 lg:pb-32 border-b border-slate-200">
+
         {/* Subtle background glow */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-amber-500/10 blur-[120px] rounded-full pointer-events-none"></div>
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-amber-50 blur-[120px] rounded-full pointer-events-none"></div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
-            
+
             {/* Left Copy */}
             <div className="lg:col-span-7 space-y-6">
-              
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900 border border-amber-500/30 text-xs text-amber-300 font-mono">
-                <Crown className="w-3.5 h-3.5 text-amber-400" />
+
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-amber-300 text-xs text-amber-700 font-mono">
+                <Crown className="w-3.5 h-3.5 text-amber-600" />
                 <span>Global Institutional Standard 2024</span>
               </div>
 
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-serif font-bold text-white tracking-tight leading-[1.1]">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-serif font-bold text-slate-900 tracking-tight leading-[1.1]">
                 Raise Your Growth. <br />
-                <span className="bg-gradient-to-r from-amber-200 via-amber-400 to-amber-600 bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-amber-500 via-amber-600 to-amber-700 bg-clip-text text-transparent">
                   Transform Your Impact.
                 </span>
               </h1>
 
-              <p className="text-slate-300 text-base sm:text-lg leading-relaxed max-w-2xl">
+              <p className="text-slate-600 text-base sm:text-lg leading-relaxed max-w-2xl">
                 Elite educational frameworks, executive tracks, and institutional intelligence designed for high-impact leaders, Managing Directors, and venture architects worldwide.
               </p>
 
@@ -111,25 +111,25 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate, onSelectSchool }
 
                 <button
                   onClick={() => setCorporateModalOpen(true)}
-                  className="px-6 py-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-700/80 font-semibold text-sm flex items-center gap-2 transition-all"
+                  className="px-6 py-3.5 rounded-xl bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 font-semibold text-sm flex items-center gap-2 transition-all"
                 >
-                  <Building2 className="w-4 h-4 text-amber-400" />
+                  <Building2 className="w-4 h-4 text-amber-600" />
                   <span>Corporate Training</span>
                 </button>
               </div>
 
               {/* Quick stats trust indicators */}
-              <div className="pt-8 border-t border-slate-800/80 grid grid-cols-2 sm:grid-cols-3 gap-6 text-slate-400">
+              <div className="pt-8 border-t border-slate-200 grid grid-cols-2 sm:grid-cols-3 gap-6 text-slate-500">
                 <div>
-                  <div className="text-xl font-bold font-serif text-white">10,000+</div>
+                  <div className="text-xl font-bold font-serif text-slate-900">10,000+</div>
                   <div className="text-xs">Global Alumni</div>
                 </div>
                 <div>
-                  <div className="text-xl font-bold font-serif text-white">50+</div>
+                  <div className="text-xl font-bold font-serif text-slate-900">50+</div>
                   <div className="text-xs">Nations Represented</div>
                 </div>
                 <div>
-                  <div className="text-xl font-bold font-serif text-white">94%</div>
+                  <div className="text-xl font-bold font-serif text-slate-900">94%</div>
                   <div className="text-xs">Career Acceleration</div>
                 </div>
               </div>
@@ -138,9 +138,9 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate, onSelectSchool }
 
             {/* Right Hero Visual Card */}
             <div className="lg:col-span-5">
-              <div className="relative rounded-2xl overflow-hidden border border-slate-800 shadow-2xl bg-slate-900 group">
-                <img 
-                  src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=1000" 
+              <div className="relative rounded-2xl overflow-hidden border border-slate-200 shadow-2xl bg-white group">
+                <img
+                  src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=1000"
                   alt="Modern Glass Skyscraper"
                   className="w-full h-[300px] sm:h-[460px] object-cover group-hover:scale-105 transition-transform duration-700 opacity-80"
                 />
@@ -161,7 +161,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate, onSelectSchool }
                   <h3 className="text-base font-bold text-white font-serif">
                     Executive Strategy & Global Growth
                   </h3>
-                  
+
                   <p className="text-xs text-slate-300 line-clamp-2">
                     Led by Dr. Adebayo Okonkwo, PhD. 12-week intensive C-suite governance & market expansion framework.
                   </p>
@@ -186,7 +186,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate, onSelectSchool }
       </section>
 
       {/* Corporate Partners Trust Bar */}
-      <section className="py-8 bg-slate-900/40 border-b border-slate-800">
+      <section className="py-8 bg-white border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <p className="text-center text-xs font-mono uppercase tracking-widest text-slate-500 mb-6">
             Trusted by Executives & Board Members From Global Institutions
@@ -196,20 +196,20 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate, onSelectSchool }
       </section>
 
       {/* The Global Faculties Section */}
-      <section className="py-20 bg-slate-950">
+      <section className="py-20 bg-slate-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          
+
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
             <div>
-              <div className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-amber-400 mb-2">
+              <div className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-amber-600 mb-2">
                 <Crown className="w-3.5 h-3.5" />
                 <span>Academic Architecture</span>
               </div>
-              <h2 className="text-3xl sm:text-4xl font-serif font-bold text-white">
+              <h2 className="text-3xl sm:text-4xl font-serif font-bold text-slate-900">
                 The Global Faculties
               </h2>
             </div>
-            <p className="text-sm text-slate-400 max-w-md">
+            <p className="text-sm text-slate-500 max-w-md">
               Explore specialized academic faculties offering accredited executive certificates, high-stakes governance tracks, and peer boardrooms.
             </p>
           </div>
@@ -223,44 +223,44 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate, onSelectSchool }
                   onSelectSchool(faculty.id);
                   onNavigate('leadership-school');
                 }}
-                className={`group cursor-pointer p-6 rounded-2xl bg-slate-900/70 hover:bg-slate-900 border border-slate-800 hover:border-amber-500/50 transition-all duration-300 hover:shadow-xl hover:shadow-amber-500/5 flex flex-col justify-between relative overflow-hidden`}
+                className={`group cursor-pointer p-6 rounded-2xl bg-white hover:bg-slate-50 border border-slate-200 shadow-sm hover:border-amber-400 transition-all duration-300 hover:shadow-xl hover:shadow-amber-500/5 flex flex-col justify-between relative overflow-hidden`}
               >
                 {/* Subtle top border accent */}
                 <div className={`absolute top-0 left-0 right-0 h-1 bg-amber-500 opacity-0 group-hover:opacity-100 transition-opacity`}></div>
 
                 <div>
                   <div className="flex items-center justify-between mb-4">
-                    <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 group-hover:scale-110 transition-transform">
+                    <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 group-hover:scale-110 transition-transform">
                       {getFacultyIcon(faculty.iconName)}
                     </div>
-                    <span className="text-xs font-mono px-2.5 py-1 rounded-full bg-slate-800 text-slate-300 border border-slate-700">
+                    <span className="text-xs font-mono px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 border border-slate-300">
                       {faculty.programCount} Programs
                     </span>
                   </div>
 
-                  <h3 className="text-xl font-serif font-bold text-white group-hover:text-amber-300 transition-colors mb-2">
+                  <h3 className="text-xl font-serif font-bold text-slate-900 group-hover:text-amber-700 transition-colors mb-2">
                     {faculty.name}
                   </h3>
 
-                  <p className="text-xs font-mono text-amber-400/90 mb-3">
+                  <p className="text-xs font-mono text-amber-600/90 mb-3">
                     {faculty.tagline}
                   </p>
 
-                  <p className="text-xs text-slate-400 leading-relaxed mb-4">
+                  <p className="text-xs text-slate-500 leading-relaxed mb-4">
                     {faculty.description}
                   </p>
 
                   {/* Key Topic Chips */}
                   <div className="flex flex-wrap gap-1.5 mb-6">
                     {faculty.keyTopics.map((topic, i) => (
-                      <span key={i} className="text-[10px] px-2 py-0.5 rounded bg-slate-950 text-slate-300 border border-slate-800/80">
+                      <span key={i} className="text-[10px] px-2 py-0.5 rounded bg-slate-50 text-slate-600 border border-slate-200">
                         {topic}
                       </span>
                     ))}
                   </div>
                 </div>
 
-                <div className="pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs text-amber-400 font-semibold group-hover:text-amber-300">
+                <div className="pt-4 border-t border-slate-200 flex items-center justify-between text-xs text-amber-600 font-semibold group-hover:text-amber-700">
                   <span>Explore Faculty</span>
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </div>
@@ -272,21 +272,21 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate, onSelectSchool }
       </section>
 
       {/* Interactive Growth AI Teaser Section */}
-      <section className="py-16 bg-slate-900/60 border-y border-slate-800">
+      <section className="py-16 bg-white border-y border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            
+
             <div className="lg:col-span-5 space-y-4">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 text-amber-400 text-xs font-mono border border-amber-500/20">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 text-amber-600 text-xs font-mono border border-amber-200">
                 <Terminal className="w-3.5 h-3.5" />
                 <span>Growth AI Institutional Core</span>
               </div>
-              
-              <h2 className="text-3xl font-serif font-bold text-white">
+
+              <h2 className="text-3xl font-serif font-bold text-slate-900">
                 Meet Your Institutional Intelligence Coach
               </h2>
 
-              <p className="text-sm text-slate-300 leading-relaxed">
+              <p className="text-sm text-slate-600 leading-relaxed">
                 Powered by Gemini models, Growth AI synthesizes real-time C-suite governance, geopolitical expansion frameworks, and scenario analysis for your executive growth.
               </p>
 
@@ -355,37 +355,37 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate, onSelectSchool }
 
       {/* Corporate Training Modal */}
       {corporateModalOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl max-w-lg w-full p-6 text-slate-100 space-y-4 relative shadow-2xl">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-4">
+        <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-md flex items-center justify-center p-4">
+          <div className="bg-white border border-slate-200 rounded-2xl max-w-lg w-full p-6 text-slate-900 space-y-4 relative shadow-2xl">
+            <div className="flex items-center justify-between border-b border-slate-200 pb-4">
               <div className="flex items-center gap-2">
-                <Building2 className="w-5 h-5 text-amber-400" />
-                <h3 className="font-serif font-bold text-lg text-white">Corporate & Enterprise Advisory</h3>
+                <Building2 className="w-5 h-5 text-amber-600" />
+                <h3 className="font-serif font-bold text-lg text-slate-900">Corporate & Enterprise Advisory</h3>
               </div>
-              <button 
+              <button
                 onClick={() => setCorporateModalOpen(false)}
-                className="text-slate-400 hover:text-white text-sm"
+                className="text-slate-500 hover:text-slate-900 text-sm"
               >
                 ✕
               </button>
             </div>
 
-            <p className="text-xs text-slate-300 leading-relaxed">
+            <p className="text-xs text-slate-600 leading-relaxed">
               Equip your executive teams, board members, and business unit directors with tailored institutional frameworks and custom AI decision models.
             </p>
 
             <form onSubmit={(e) => { e.preventDefault(); alert("Corporate request received! Our Executive Director will contact your office."); setCorporateModalOpen(false); }} className="space-y-3 text-xs">
               <div>
-                <label className="block text-slate-400 mb-1">Organization Name</label>
-                <input required type="text" placeholder="e.g. Nexus Global Financial" className="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-white" />
+                <label className="block text-slate-500 mb-1">Organization Name</label>
+                <input required type="text" placeholder="e.g. Nexus Global Financial" className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-slate-900" />
               </div>
               <div>
-                <label className="block text-slate-400 mb-1">Corporate Email</label>
-                <input required type="email" placeholder="executive@nexus.com" className="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-white" />
+                <label className="block text-slate-500 mb-1">Corporate Email</label>
+                <input required type="email" placeholder="executive@nexus.com" className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-slate-900" />
               </div>
               <div>
-                <label className="block text-slate-400 mb-1">Team Size / Focus Area</label>
-                <select className="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-white">
+                <label className="block text-slate-500 mb-1">Team Size / Focus Area</label>
+                <select className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-slate-900">
                   <option>Executive Committee (5 - 15 Leaders)</option>
                   <option>Senior Management (15 - 50 Leaders)</option>
                   <option>Global Business Units (50+ Leaders)</option>
