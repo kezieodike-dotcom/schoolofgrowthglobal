@@ -119,7 +119,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate, onSelectSchool }
               </div>
 
               {/* Quick stats trust indicators */}
-              <div className="pt-8 border-t border-slate-800/80 grid grid-cols-3 gap-6 text-slate-400">
+              <div className="pt-8 border-t border-slate-800/80 grid grid-cols-2 sm:grid-cols-3 gap-6 text-slate-400">
                 <div>
                   <div className="text-xl font-bold font-serif text-white">10,000+</div>
                   <div className="text-xs">Global Alumni</div>
@@ -142,7 +142,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate, onSelectSchool }
                 <img 
                   src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=1000" 
                   alt="Modern Glass Skyscraper"
-                  className="w-full h-[460px] object-cover group-hover:scale-105 transition-transform duration-700 opacity-80"
+                  className="w-full h-[300px] sm:h-[460px] object-cover group-hover:scale-105 transition-transform duration-700 opacity-80"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
 

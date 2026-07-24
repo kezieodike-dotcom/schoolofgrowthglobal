@@ -106,7 +106,7 @@ export const Footer: React.FC = () => {
         {/* Bottom copyright */}
         <div className="mt-12 pt-8 border-t border-slate-800/60 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
           <p>© {new Date().getFullYear()} School of Growth Global. All rights reserved.</p>
-          <div className="flex gap-6">
+          <div className="flex flex-wrap justify-center gap-4 sm:gap-6">
             <a href="#" className="hover:text-slate-300">Privacy Protocol</a>
             <a href="#" className="hover:text-slate-300">Institutional Terms</a>
             <a href="#" className="hover:text-slate-300">Academic Integrity</a>
