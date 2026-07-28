@@ -70,6 +70,13 @@ async function startServer() {
   // Diagnostic: list the models this API key may actually call.
   // Use it to confirm GEMINI_MODEL is a real, available model name.
   app.get("/api/ai/models", async (_req, res) => {
+    // Development only. The list advertises every model this key can reach,
+    // which is a detail of our AI setup that production visitors have no
+    // reason to see. 404 rather than 403 so the route's existence stays quiet.
+    if (!IS_DEV) {
+      return res.status(404).json({ error: "Not found" });
+    }
+
     if (!process.env.GEMINI_API_KEY) {
       return res.status(503).json({
         error: "GEMINI_API_KEY is not set, so no models can be listed.",
