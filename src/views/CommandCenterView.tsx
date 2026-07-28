@@ -1,5 +1,12 @@
 import React, { useState } from 'react';
 import { ViewType } from '../types';
+import {
+  askGrowthAI,
+  generateScenario,
+  analyzeStrategy,
+  describeError,
+  type ChatMessage,
+} from '../lib/growthAI';
 import { 
   Terminal, 
   Sparkles, 
@@ -27,7 +34,7 @@ export const CommandCenterView: React.FC<CommandCenterViewProps> = ({ onNavigate
   const [activeTab, setActiveTab] = useState<'chat' | 'scenario' | 'analyze' | 'audio'>('chat');
   
   // Chat State
-  const [messages, setMessages] = useState<Array<{ sender: 'user' | 'assistant'; text: string }>>([
+  const [messages, setMessages] = useState<ChatMessage[]>([
     {
       sender: 'assistant',
       text: 'Command Center Protocol Active v4.2. Executive Neural Sync established at 98%. Ready for high-stakes decision synthesis, scenario drills, or strategy review.'
@@ -40,12 +47,16 @@ export const CommandCenterView: React.FC<CommandCenterViewProps> = ({ onNavigate
   const [scenarioTopic, setScenarioTopic] = useState('Geopolitical Trade Shock & Supply Chain');
   const [scenarioData, setScenarioData] = useState<any>(null);
   const [scenarioLoading, setScenarioLoading] = useState(false);
+  const [scenarioError, setScenarioError] = useState<string | null>(null);
+  const [scenarioSimulated, setScenarioSimulated] = useState(false);
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
 
   // Strategy Critique State
   const [strategyText, setStrategyText] = useState('');
   const [analysisData, setAnalysisData] = useState<any>(null);
   const [analysisLoading, setAnalysisLoading] = useState(false);
+  const [analysisError, setAnalysisError] = useState<string | null>(null);
+  const [analysisSimulated, setAnalysisSimulated] = useState(false);
 
   // Audio Coach State
   const [audioPlaying, setAudioPlaying] = useState(false);
@@ -56,20 +67,20 @@ export const CommandCenterView: React.FC<CommandCenterViewProps> = ({ onNavigate
     if (!chatInput.trim() || chatLoading) return;
 
     const userMsg = chatInput.trim();
+    const history = messages;
     setChatInput('');
     setMessages(prev => [...prev, { sender: 'user', text: userMsg }]);
     setChatLoading(true);
 
     try {
-      const res = await fetch('/api/ai/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: userMsg, context: 'Executive Command Center Workspace' })
+      const { reply, simulated } = await askGrowthAI({
+        message: userMsg,
+        context: 'Executive Command Center Workspace',
+        history,
       });
-      const data = await res.json();
-      setMessages(prev => [...prev, { sender: 'assistant', text: data.reply || 'Strategic guidance synthesized.' }]);
+      setMessages(prev => [...prev, { sender: 'assistant', text: reply, simulated }]);
     } catch (err) {
-      setMessages(prev => [...prev, { sender: 'assistant', text: 'Growth AI simulation active: Priority focus should remain on gross margin resilience and capital allocation hedges.' }]);
+      setMessages(prev => [...prev, { sender: 'assistant', text: describeError(err), failed: true }]);
     } finally {
       setChatLoading(false);
     }
@@ -80,25 +91,17 @@ export const CommandCenterView: React.FC<CommandCenterViewProps> = ({ onNavigate
     setScenarioData(null);
     setSelectedOption(null);
 
+    setScenarioError(null);
+
     try {
-      const res = await fetch('/api/ai/scenario', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ topic: scenarioTopic, difficulty: 'Executive Tier' })
+      const { scenario, simulated } = await generateScenario({
+        topic: scenarioTopic,
+        difficulty: 'Executive Tier',
       });
-      const data = await res.json();
-      setScenarioData(data.scenario);
+      setScenarioData(scenario);
+      setScenarioSimulated(simulated);
     } catch (err) {
-      setScenarioData({
-        title: "Cross-Border Regulatory Divergence Dilemma",
-        brief: "A new EU directive restricts cross-border data flows for your primary cloud platform, while APAC partners demand immediate hardware expansion.",
-        options: [
-          "Option 1: Deploy localized sovereign cloud instances in Frankfurt within 60 days.",
-          "Option 2: Re-negotiate enterprise SLA agreements to offset compliance delays.",
-          "Option 3: Pivot 40% of compute load to neutral APAC nodes."
-        ],
-        recommendation: "Option 1 ensures long-term EU regulatory immunity and protects 45% of recurring ARR."
-      });
+      setScenarioError(describeError(err));
     } finally {
       setScenarioLoading(false);
     }
@@ -109,24 +112,14 @@ export const CommandCenterView: React.FC<CommandCenterViewProps> = ({ onNavigate
     setAnalysisLoading(true);
     setAnalysisData(null);
 
+    setAnalysisError(null);
+
     try {
-      const res = await fetch('/api/ai/analyze', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ strategyText })
-      });
-      const data = await res.json();
-      setAnalysisData(data.analysis);
+      const { analysis, simulated } = await analyzeStrategy(strategyText);
+      setAnalysisData(analysis);
+      setAnalysisSimulated(simulated);
     } catch (err) {
-      setAnalysisData({
-        strengths: ["Strong visionary expansion narrative", "Inclusion of digital leverage"],
-        vulnerabilities: ["CapEx runway not calculated", "Lack of clear downside risk hedges"],
-        strategicScore: 84,
-        actionPlan: [
-          "Incorporate 90-day milestone gates with automated KPI triggers.",
-          "Stress test balance sheet against 15% currency fluctuation."
-        ]
-      });
+      setAnalysisError(describeError(err));
     } finally {
       setAnalysisLoading(false);
     }
@@ -227,14 +220,27 @@ export const CommandCenterView: React.FC<CommandCenterViewProps> = ({ onNavigate
                   {messages.map((m, idx) => (
                     <div key={idx} className={`flex gap-3 ${m.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
                       {m.sender === 'assistant' && (
-                        <div className="w-7 h-7 rounded-lg bg-amber-500/20 border border-amber-500/40 flex items-center justify-center flex-shrink-0 text-amber-400">
-                          <Bot className="w-4 h-4" />
+                        <div className={`w-7 h-7 rounded-lg border flex items-center justify-center flex-shrink-0 ${
+                          m.failed
+                            ? 'bg-red-500/20 border-red-500/40 text-red-400'
+                            : 'bg-amber-500/20 border-amber-500/40 text-amber-400'
+                        }`}>
+                          {m.failed ? <AlertTriangle className="w-4 h-4" /> : <Bot className="w-4 h-4" />}
                         </div>
                       )}
                       <div className={`max-w-[80%] p-4 rounded-2xl leading-relaxed whitespace-pre-line ${
-                        m.sender === 'user' ? 'bg-amber-500 text-slate-950 font-semibold' : 'bg-slate-900 border border-slate-800 text-slate-200'
+                        m.sender === 'user'
+                          ? 'bg-amber-500 text-slate-950 font-semibold'
+                          : m.failed
+                            ? 'bg-red-950/40 border border-red-900/60 text-red-200'
+                            : 'bg-slate-900 border border-slate-800 text-slate-200'
                       }`}>
                         {m.text}
+                        {m.simulated && (
+                          <span className="block mt-2 text-[10px] font-mono uppercase tracking-wide text-amber-400/70">
+                            Simulated · no API key set
+                          </span>
+                        )}
                       </div>
                       {m.sender === 'user' && (
                         <div className="w-7 h-7 rounded-lg bg-slate-800 flex items-center justify-center flex-shrink-0 text-slate-300">
@@ -314,8 +320,20 @@ export const CommandCenterView: React.FC<CommandCenterViewProps> = ({ onNavigate
                   </button>
                 </div>
 
+                {scenarioError && (
+                  <div className="p-4 rounded-2xl bg-red-950/40 border border-red-900/60 text-red-200 text-xs flex items-start gap-2.5">
+                    <AlertTriangle className="w-4 h-4 flex-shrink-0 mt-0.5" />
+                    <span>{scenarioError}</span>
+                  </div>
+                )}
+
                 {scenarioData && (
                   <div className="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-6 animate-fadeIn">
+                    {scenarioSimulated && (
+                      <div className="text-[10px] font-mono uppercase tracking-wide text-amber-400/70 border-b border-slate-800 pb-3">
+                        Simulated drill · no API key set
+                      </div>
+                    )}
                     <div className="space-y-2">
                       <span className="text-xs font-mono text-amber-400">{scenarioData.title}</span>
                       <p className="text-sm text-slate-200 leading-relaxed font-serif">{scenarioData.brief}</p>
@@ -378,8 +396,20 @@ export const CommandCenterView: React.FC<CommandCenterViewProps> = ({ onNavigate
                   <span>Run C-Suite Strategic Critique</span>
                 </button>
 
+                {analysisError && (
+                  <div className="p-4 rounded-2xl bg-red-950/40 border border-red-900/60 text-red-200 text-xs flex items-start gap-2.5">
+                    <AlertTriangle className="w-4 h-4 flex-shrink-0 mt-0.5" />
+                    <span>{analysisError}</span>
+                  </div>
+                )}
+
                 {analysisData && (
                   <div className="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4 animate-fadeIn text-xs">
+                    {analysisSimulated && (
+                      <div className="text-[10px] font-mono uppercase tracking-wide text-amber-400/70 border-b border-slate-800 pb-3">
+                        Simulated critique · no API key set
+                      </div>
+                    )}
                     <div className="flex items-center justify-between border-b border-slate-800 pb-3">
                       <span className="font-bold text-white font-serif">Strategic Readiness Score</span>
                       <span className="text-lg font-bold font-mono text-amber-400">{analysisData.strategicScore} / 100</span>

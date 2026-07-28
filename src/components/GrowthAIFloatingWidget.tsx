@@ -1,43 +1,49 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { X, Send, Sparkles, Bot, User, ArrowUpRight } from 'lucide-react';
+import { X, Send, Sparkles, Bot, User, ArrowUpRight, AlertTriangle } from 'lucide-react';
+import { askGrowthAI, describeError, type ChatMessage } from '../lib/growthAI';
 
 export const GrowthAIFloatingWidget: React.FC = () => {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
-  const [messages, setMessages] = useState<Array<{ sender: 'user' | 'assistant'; text: string }>>([
+  const [messages, setMessages] = useState<ChatMessage[]>([
     {
       sender: 'assistant',
       text: 'Greetings Leader. I am Growth AI, your institutional intelligence advisor. Ask me any strategic, leadership, or expansion question.'
     }
   ]);
 
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  // Keep the newest message in view as the conversation grows.
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (el) el.scrollTop = el.scrollHeight;
+  }, [messages, loading]);
+
   const handleSend = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     if (!input.trim() || loading) return;
 
     const userMsg = input.trim();
+    const history = messages;
     setInput('');
     setMessages(prev => [...prev, { sender: 'user', text: userMsg }]);
     setLoading(true);
 
     try {
-      const res = await fetch('/api/ai/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: userMsg, context: 'Quick Floating Widget' })
+      const { reply, simulated } = await askGrowthAI({
+        message: userMsg,
+        context: 'Quick Floating Widget',
+        history,
       });
-      const data = await res.json();
-      setMessages(prev => [
-        ...prev, 
-        { sender: 'assistant', text: data.reply || 'Strategic guidance synthesized.' }
-      ]);
+      setMessages(prev => [...prev, { sender: 'assistant', text: reply, simulated }]);
     } catch (err) {
       setMessages(prev => [
-        ...prev, 
-        { sender: 'assistant', text: 'Error connecting to Growth AI intelligence engine. Please check backend response.' }
+        ...prev,
+        { sender: 'assistant', text: describeError(err), failed: true }
       ]);
     } finally {
       setLoading(false);
@@ -103,25 +109,36 @@ export const GrowthAIFloatingWidget: React.FC = () => {
           </div>
 
           {/* Messages list */}
-          <div className="flex-1 p-4 overflow-y-auto space-y-3 text-xs bg-slate-950">
+          <div ref={scrollRef} className="flex-1 p-4 overflow-y-auto space-y-3 text-xs bg-slate-950">
             {messages.map((m, idx) => (
               <div
                 key={idx}
                 className={`flex gap-2.5 ${m.sender === 'user' ? 'justify-end' : 'justify-start'}`}
               >
                 {m.sender === 'assistant' && (
-                  <div className="w-6 h-6 rounded-md bg-amber-500/20 border border-amber-500/40 flex items-center justify-center flex-shrink-0 text-amber-400 mt-1">
-                    <Bot className="w-3.5 h-3.5" />
+                  <div className={`w-6 h-6 rounded-md border flex items-center justify-center flex-shrink-0 mt-1 ${
+                    m.failed
+                      ? 'bg-red-500/20 border-red-500/40 text-red-400'
+                      : 'bg-amber-500/20 border-amber-500/40 text-amber-400'
+                  }`}>
+                    {m.failed ? <AlertTriangle className="w-3.5 h-3.5" /> : <Bot className="w-3.5 h-3.5" />}
                   </div>
                 )}
                 <div
-                  className={`max-w-[80%] p-3 rounded-xl leading-relaxed ${
+                  className={`max-w-[80%] p-3 rounded-xl leading-relaxed whitespace-pre-wrap ${
                     m.sender === 'user'
                       ? 'bg-amber-500 text-slate-950 font-medium rounded-tr-none'
-                      : 'bg-slate-900 border border-slate-800 text-slate-200 rounded-tl-none'
+                      : m.failed
+                        ? 'bg-red-950/40 border border-red-900/60 text-red-200 rounded-tl-none'
+                        : 'bg-slate-900 border border-slate-800 text-slate-200 rounded-tl-none'
                   }`}
                 >
                   {m.text}
+                  {m.simulated && (
+                    <span className="block mt-2 text-[10px] font-mono uppercase tracking-wide text-amber-400/70">
+                      Simulated · no API key set
+                    </span>
+                  )}
                 </div>
                 {m.sender === 'user' && (
                   <div className="w-6 h-6 rounded-md bg-slate-800 flex items-center justify-center flex-shrink-0 text-slate-300 mt-1">

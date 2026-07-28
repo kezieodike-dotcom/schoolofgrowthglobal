@@ -1,3 +1,4 @@
+import "dotenv/config";
 import express from "express";
 import path from "path";
 import { createServer as createViteServer } from "vite";
@@ -6,6 +7,10 @@ import { GoogleGenAI } from "@google/genai";
 async function startServer() {
   const app = express();
   const PORT = Number(process.env.PORT) || 3000;
+
+  // Override with GEMINI_MODEL in .env to switch models without touching code.
+  // Use GET /api/ai/models to see what this API key can actually call.
+  const MODEL = process.env.GEMINI_MODEL || "gemini-2.5-flash";
 
   app.use(express.json());
 
@@ -25,9 +30,37 @@ async function startServer() {
     });
   };
 
-  // Health check endpoint
+  // Health check endpoint. Reports AI config so you can tell at a glance
+  // whether you are talking to the real model or the offline fallback.
   app.get("/api/health", (_req, res) => {
-    res.json({ status: "ok", app: "School of Growth Global" });
+    res.json({
+      status: "ok",
+      app: "School of Growth Global",
+      model: MODEL,
+      aiMode: process.env.GEMINI_API_KEY ? "live" : "simulation",
+    });
+  });
+
+  // Diagnostic: list the models this API key may actually call.
+  // Use it to confirm GEMINI_MODEL is a real, available model name.
+  app.get("/api/ai/models", async (_req, res) => {
+    if (!process.env.GEMINI_API_KEY) {
+      return res.status(503).json({
+        error: "GEMINI_API_KEY is not set, so no models can be listed.",
+      });
+    }
+    try {
+      const ai = getAI();
+      const names: string[] = [];
+      const pager = await ai.models.list();
+      for await (const m of pager) {
+        if (m.name) names.push(m.name.replace(/^models\//, ""));
+      }
+      res.json({ configured: MODEL, available: names.sort() });
+    } catch (error: any) {
+      console.error("Error in /api/ai/models:", error);
+      res.status(500).json({ error: error?.message || "Failed to list models" });
+    }
   });
 
   // AI Chat Endpoint for Growth AI Coach
@@ -40,6 +73,7 @@ async function startServer() {
 
       if (!process.env.GEMINI_API_KEY) {
         return res.json({
+          simulated: true,
           reply: `[Growth AI Simulation Mode]: In response to "${message}", strategic advice emphasizes scaling governance, aligning high-level OKRs, and establishing resilient leadership protocols.`
         });
       }
@@ -56,7 +90,7 @@ ${context ? `Current Context: ${context}` : ''}`;
         : message;
 
       const response = await ai.models.generateContent({
-        model: "gemini-3.6-flash",
+        model: MODEL,
         contents,
         config: {
           systemInstruction,
@@ -64,8 +98,17 @@ ${context ? `Current Context: ${context}` : ''}`;
         },
       });
 
-      const reply = response.text || "I have analyzed your query. Strategic alignment requires prioritizing operational leverage and clear metric governance.";
-      res.json({ reply });
+      // No canned substitute here: an empty model response is a failure, and
+      // dressing it up as advice hides the outage from the caller.
+      const reply = response.text?.trim();
+      if (!reply) {
+        return res.status(502).json({
+          error: "Growth AI returned an empty response",
+          details: "The model produced no text. It may have been blocked by a safety filter or hit a token limit.",
+        });
+      }
+
+      res.json({ reply, simulated: false });
     } catch (error: any) {
       console.error("Error in /api/ai/chat:", error);
       res.status(500).json({
@@ -83,6 +126,7 @@ ${context ? `Current Context: ${context}` : ''}`;
 
       if (!process.env.GEMINI_API_KEY) {
         return res.json({
+          simulated: true,
           scenario: {
             title: "Simulated Market Expansion Dilemma",
             brief: "A sudden regulatory shift in APAC threatens 35% of revenue while an activist investor demands immediate capital reallocation.",
@@ -105,7 +149,7 @@ Return a JSON object with:
 - recommendation (string): Executive recommendation and analysis rationale`;
 
       const response = await ai.models.generateContent({
-        model: "gemini-3.6-flash",
+        model: MODEL,
         contents: prompt,
         config: {
           responseMimeType: "application/json",
@@ -117,7 +161,10 @@ Return a JSON object with:
       res.json({ scenario });
     } catch (error: any) {
       console.error("Error in /api/ai/scenario:", error);
-      res.status(500).json({ error: "Failed to generate scenario" });
+      res.status(500).json({
+        error: "Failed to generate scenario",
+        details: error?.message || "Internal server error"
+      });
     }
   });
 
@@ -131,6 +178,7 @@ Return a JSON object with:
 
       if (!process.env.GEMINI_API_KEY) {
         return res.json({
+          simulated: true,
           analysis: {
             strengths: ["Clear visionary positioning", "Focus on digital transformation"],
             vulnerabilities: ["Lack of clear risk mitigation matrix", "Capital efficiency metrics missing"],
@@ -152,7 +200,7 @@ Provide a JSON response with:
 - actionPlan (array of strings): 3 immediate high-impact recommendations`;
 
       const response = await ai.models.generateContent({
-        model: "gemini-3.6-flash",
+        model: MODEL,
         contents: prompt,
         config: {
           responseMimeType: "application/json",
@@ -164,7 +212,10 @@ Provide a JSON response with:
       res.json({ analysis });
     } catch (error: any) {
       console.error("Error in /api/ai/analyze:", error);
-      res.status(500).json({ error: "Failed to analyze strategy" });
+      res.status(500).json({
+        error: "Failed to analyze strategy",
+        details: error?.message || "Internal server error"
+      });
     }
   });
 

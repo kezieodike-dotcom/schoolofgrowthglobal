@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { ViewType } from '../types';
 import { STUDENT_DATA } from '../data/mockData';
+import { askGrowthAI, describeError, type ChatMessage } from '../lib/growthAI';
 import {
+  AlertTriangle,
   Crown,
   LayoutDashboard,
   BookOpen,
@@ -31,7 +33,7 @@ export const StudentDashboardView: React.FC<StudentDashboardViewProps> = ({ onNa
   const [activeTab, setActiveTab] = useState<'overview' | 'courses' | 'ai-coach' | 'milestones'>('overview');
   const [chatInput, setChatInput] = useState('');
   const [chatLoading, setChatLoading] = useState(false);
-  const [messages, setMessages] = useState<Array<{ sender: 'user' | 'assistant'; text: string }>>([
+  const [messages, setMessages] = useState<ChatMessage[]>([
     {
       sender: 'assistant',
       text: 'Hello Alex. Your Strategic Learning Path is 45% complete and you are 12 days ahead of schedule. How can I assist with your Module 4 Boardroom Defense today?'
@@ -43,23 +45,20 @@ export const StudentDashboardView: React.FC<StudentDashboardViewProps> = ({ onNa
     if (!chatInput.trim() || chatLoading) return;
 
     const userText = chatInput.trim();
+    const history = messages;
     setChatInput('');
     setMessages(prev => [...prev, { sender: 'user', text: userText }]);
     setChatLoading(true);
 
     try {
-      const res = await fetch('/api/ai/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          message: userText,
-          context: `Student Portal Dashboard for ${STUDENT_DATA.name}, ${STUDENT_DATA.title}`
-        })
+      const { reply, simulated } = await askGrowthAI({
+        message: userText,
+        context: `Student Portal Dashboard for ${STUDENT_DATA.name}, ${STUDENT_DATA.title}`,
+        history,
       });
-      const data = await res.json();
-      setMessages(prev => [...prev, { sender: 'assistant', text: data.reply || 'Strategic guidance synthesized.' }]);
+      setMessages(prev => [...prev, { sender: 'assistant', text: reply, simulated }]);
     } catch (err) {
-      setMessages(prev => [...prev, { sender: 'assistant', text: 'Growth AI simulation active: Boardroom defense strategy requires clear risk trade-offs and quantitative capital backing.' }]);
+      setMessages(prev => [...prev, { sender: 'assistant', text: describeError(err), failed: true }]);
     } finally {
       setChatLoading(false);
     }
@@ -273,10 +272,22 @@ export const StudentDashboardView: React.FC<StudentDashboardViewProps> = ({ onNa
           <div className="h-48 overflow-y-auto space-y-3 p-3 bg-slate-50 rounded-xl text-xs">
             {messages.map((m, idx) => (
               <div key={idx} className={`flex gap-2 ${m.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
-                <div className={`max-w-[85%] p-3 rounded-xl leading-relaxed ${
-                  m.sender === 'user' ? 'bg-amber-500 text-slate-950 font-medium' : 'bg-white border border-slate-200 text-slate-700 shadow-sm'
+                {m.failed && (
+                  <AlertTriangle className="w-4 h-4 flex-shrink-0 mt-3 text-red-500" />
+                )}
+                <div className={`max-w-[85%] p-3 rounded-xl leading-relaxed whitespace-pre-wrap ${
+                  m.sender === 'user'
+                    ? 'bg-amber-500 text-slate-950 font-medium'
+                    : m.failed
+                      ? 'bg-red-50 border border-red-200 text-red-700'
+                      : 'bg-white border border-slate-200 text-slate-700 shadow-sm'
                 }`}>
                   {m.text}
+                  {m.simulated && (
+                    <span className="block mt-2 text-[10px] font-mono uppercase tracking-wide text-amber-600">
+                      Simulated · no API key set
+                    </span>
+                  )}
                 </div>
               </div>
             ))}
