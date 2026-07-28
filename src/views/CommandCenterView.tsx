@@ -7,6 +7,8 @@ import {
   describeError,
   type ChatMessage,
 } from '../lib/growthAI';
+import { useVoiceInput } from '../lib/useVoiceInput';
+import { VoiceInputButton } from '../components/VoiceInputButton';
 import { 
   Terminal, 
   Sparkles, 
@@ -58,6 +60,8 @@ export const CommandCenterView: React.FC<CommandCenterViewProps> = ({ onNavigate
   const [analysisError, setAnalysisError] = useState<string | null>(null);
   const [analysisSimulated, setAnalysisSimulated] = useState(false);
 
+  const voice = useVoiceInput({ value: chatInput, onValueChange: setChatInput });
+
   // Audio Coach State
   const [audioPlaying, setAudioPlaying] = useState(false);
 
@@ -65,6 +69,10 @@ export const CommandCenterView: React.FC<CommandCenterViewProps> = ({ onNavigate
   const handleSendChat = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!chatInput.trim() || chatLoading) return;
+
+    // Close the dictation session so the next sentence does not land in an
+    // input the user has already cleared.
+    if (voice.listening) voice.stop();
 
     const userMsg = chatInput.trim();
     const history = messages;
@@ -272,14 +280,36 @@ export const CommandCenterView: React.FC<CommandCenterViewProps> = ({ onNavigate
                 </div>
 
                 {/* Form Input */}
+                {voice.error && (
+                  <div className="mt-2 px-3 py-2 rounded-xl bg-red-950/40 border border-red-900/60 text-red-200 text-[11px] flex items-start gap-2">
+                    <AlertTriangle className="w-3.5 h-3.5 flex-shrink-0 mt-0.5" />
+                    <span className="flex-1">{voice.error}</span>
+                    <button
+                      type="button"
+                      onClick={voice.dismissError}
+                      className="text-red-300/70 hover:text-red-200 font-bold"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                )}
+
                 <form onSubmit={handleSendChat} className="flex gap-2 pt-2">
                   <input
                     type="text"
                     value={chatInput}
                     onChange={(e) => setChatInput(e.target.value)}
-                    placeholder="Ask Growth AI Command Core..."
+                    placeholder={voice.listening ? 'Listening…' : 'Ask Growth AI Command Core...'}
                     className="flex-1 bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-amber-500"
                   />
+                  {voice.supported && (
+                    <VoiceInputButton
+                      listening={voice.listening}
+                      onToggle={voice.toggle}
+                      disabled={chatLoading}
+                      className="px-4 rounded-xl"
+                    />
+                  )}
                   <button type="submit" disabled={chatLoading} className="px-5 py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-xl flex items-center gap-2">
                     <span>Send</span>
                     <Send className="w-4 h-4" />

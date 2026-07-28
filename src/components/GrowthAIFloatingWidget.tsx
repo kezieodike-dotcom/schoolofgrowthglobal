@@ -2,6 +2,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { X, Send, Sparkles, Bot, User, ArrowUpRight, AlertTriangle } from 'lucide-react';
 import { askGrowthAI, describeError, type ChatMessage } from '../lib/growthAI';
+import { useVoiceInput } from '../lib/useVoiceInput';
+import { VoiceInputButton } from './VoiceInputButton';
 
 export const GrowthAIFloatingWidget: React.FC = () => {
   const navigate = useNavigate();
@@ -15,6 +17,8 @@ export const GrowthAIFloatingWidget: React.FC = () => {
     }
   ]);
 
+  const voice = useVoiceInput({ value: input, onValueChange: setInput });
+
   const scrollRef = useRef<HTMLDivElement>(null);
 
   // Keep the newest message in view as the conversation grows.
@@ -26,6 +30,10 @@ export const GrowthAIFloatingWidget: React.FC = () => {
   const handleSend = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     if (!input.trim() || loading) return;
+
+    // Sending closes the dictation session; leaving it open would append the
+    // next sentence to an input the user has already cleared.
+    if (voice.listening) voice.stop();
 
     const userMsg = input.trim();
     const history = messages;
@@ -172,22 +180,45 @@ export const GrowthAIFloatingWidget: React.FC = () => {
           </div>
 
           {/* Input Form */}
-          <form onSubmit={handleSend} className="p-3 bg-slate-900 border-t border-slate-800 flex items-center gap-2">
-            <input
-              type="text"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder="Ask Growth AI..."
-              className="flex-1 bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-amber-500"
-            />
-            <button
-              type="submit"
-              disabled={loading || !input.trim()}
-              className="p-2 bg-amber-500 hover:bg-amber-400 disabled:opacity-50 text-slate-950 rounded-lg transition-colors font-bold"
-            >
-              <Send className="w-4 h-4" />
-            </button>
-          </form>
+          <div className="bg-slate-900 border-t border-slate-800">
+            {voice.error && (
+              <div className="px-3 pt-2 text-[10px] text-red-300 flex items-start gap-1.5">
+                <AlertTriangle className="w-3 h-3 flex-shrink-0 mt-0.5" />
+                <span className="flex-1">{voice.error}</span>
+                <button
+                  type="button"
+                  onClick={voice.dismissError}
+                  className="text-red-400/70 hover:text-red-300 font-bold"
+                >
+                  <X className="w-3 h-3" />
+                </button>
+              </div>
+            )}
+            <form onSubmit={handleSend} className="p-3 flex items-center gap-2">
+              <input
+                type="text"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                placeholder={voice.listening ? 'Listening…' : 'Ask Growth AI...'}
+                className="flex-1 bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-amber-500"
+              />
+              {voice.supported && (
+                <VoiceInputButton
+                  listening={voice.listening}
+                  onToggle={voice.toggle}
+                  disabled={loading}
+                  className="p-2"
+                />
+              )}
+              <button
+                type="submit"
+                disabled={loading || !input.trim()}
+                className="p-2 bg-amber-500 hover:bg-amber-400 disabled:opacity-50 text-slate-950 rounded-lg transition-colors font-bold"
+              >
+                <Send className="w-4 h-4" />
+              </button>
+            </form>
+          </div>
 
         </div>
       )}

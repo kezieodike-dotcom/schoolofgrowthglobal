@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { ViewType } from '../types';
 import { STUDENT_DATA } from '../data/mockData';
 import { askGrowthAI, describeError, type ChatMessage } from '../lib/growthAI';
+import { useVoiceInput } from '../lib/useVoiceInput';
+import { VoiceInputButton } from '../components/VoiceInputButton';
 import {
   AlertTriangle,
   Crown,
@@ -33,6 +35,7 @@ export const StudentDashboardView: React.FC<StudentDashboardViewProps> = ({ onNa
   const [activeTab, setActiveTab] = useState<'overview' | 'courses' | 'ai-coach' | 'milestones'>('overview');
   const [chatInput, setChatInput] = useState('');
   const [chatLoading, setChatLoading] = useState(false);
+  const voice = useVoiceInput({ value: chatInput, onValueChange: setChatInput });
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       sender: 'assistant',
@@ -43,6 +46,10 @@ export const StudentDashboardView: React.FC<StudentDashboardViewProps> = ({ onNa
   const handleSendChat = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!chatInput.trim() || chatLoading) return;
+
+    // Close the dictation session so the next sentence does not land in an
+    // input the user has already cleared.
+    if (voice.listening) voice.stop();
 
     const userText = chatInput.trim();
     const history = messages;
@@ -294,14 +301,41 @@ export const StudentDashboardView: React.FC<StudentDashboardViewProps> = ({ onNa
             {chatLoading && <div className="text-amber-600 text-xs animate-pulse">Growth AI generating strategic feedback...</div>}
           </div>
 
+          {voice.error && (
+            <div className="mb-2 px-3 py-2 rounded-xl bg-red-50 border border-red-200 text-red-700 text-[11px] flex items-start gap-2">
+              <AlertTriangle className="w-3.5 h-3.5 flex-shrink-0 mt-0.5" />
+              <span className="flex-1">{voice.error}</span>
+              <button
+                type="button"
+                onClick={voice.dismissError}
+                className="text-red-400 hover:text-red-600 font-bold"
+              >
+                ✕
+              </button>
+            </div>
+          )}
+
           <form onSubmit={handleSendChat} className="flex gap-2">
             <input
               type="text"
               value={chatInput}
               onChange={(e) => setChatInput(e.target.value)}
-              placeholder="Ask about Module 4 Boardroom Defense or scenario strategy..."
+              placeholder={
+                voice.listening
+                  ? 'Listening…'
+                  : 'Ask about Module 4 Boardroom Defense or scenario strategy...'
+              }
               className="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-amber-500"
             />
+            {voice.supported && (
+              <VoiceInputButton
+                listening={voice.listening}
+                onToggle={voice.toggle}
+                disabled={chatLoading}
+                theme="light"
+                className="px-3 rounded-xl"
+              />
+            )}
             <button type="submit" disabled={chatLoading} className="px-4 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-xl">
               <Send className="w-4 h-4" />
             </button>
