@@ -4,15 +4,19 @@ import { GoogleGenAI } from "@google/genai";
 /**
  * Every Growth AI HTTP route, defined once and mounted by both entry points:
  *
- *   server.ts          - local development, a long-lived Express server that
- *                        also runs Vite middleware
- *   api/[...path].ts   - Vercel, where the same routes run as a serverless
- *                        function and the frontend is served from their CDN
+ *   server.ts      - local development, a long-lived Express server that also
+ *                    runs Vite middleware
+ *   api/index.ts   - Vercel, where the same routes run as a serverless function
+ *                    and the frontend is served from their CDN
  *
  * They were previously inlined in server.ts, which meant the deployed site had
  * no backend at all: Vercel published dist/ as a static site, /api/* returned
  * its NOT_FOUND page, and the chat reported a generic failure. Keeping the
  * routes here lets both environments serve identical behaviour.
+ *
+ * Paths here are relative to the mount point ("/health", not "/api/health") so
+ * callers control the prefix. Vercel may or may not strip /api before the
+ * function sees the request, and api/index.ts mounts the router both ways.
  */
 
 // Override with GEMINI_MODEL to switch models without touching code.
@@ -66,7 +70,7 @@ export function createAIRouter(): Router {
 
   // Health check endpoint. Reports AI config so you can tell at a glance
   // whether you are talking to the real model or the offline fallback.
-  router.get("/api/health", (_req, res) => {
+  router.get("/health", (_req, res) => {
     res.json({
       status: "ok",
       app: "School of Growth Global",
@@ -77,7 +81,7 @@ export function createAIRouter(): Router {
 
   // Diagnostic: list the models this API key may actually call.
   // Use it to confirm GEMINI_MODEL is a real, available model name.
-  router.get("/api/ai/models", async (_req, res) => {
+  router.get("/ai/models", async (_req, res) => {
     // Development only. The list advertises every model this key can reach,
     // which is a detail of our AI setup that production visitors have no
     // reason to see. 404 rather than 403 so the route's existence stays quiet.
@@ -108,7 +112,7 @@ export function createAIRouter(): Router {
   });
 
   // AI Chat Endpoint for Growth AI Coach
-  router.post("/api/ai/chat", async (req, res) => {
+  router.post("/ai/chat", async (req, res) => {
     try {
       const { message, context, history } = req.body;
       if (!message) {
@@ -170,7 +174,7 @@ ${context ? `Current Context: ${context}` : ''}`;
   });
 
   // AI Scenario Drill Generator Endpoint
-  router.post("/api/ai/scenario", async (req, res) => {
+  router.post("/ai/scenario", async (req, res) => {
     try {
       const { topic, difficulty } = req.body;
       const theme = topic || "Executive Crisis Management & Geopolitical Shock";
@@ -221,7 +225,7 @@ Return a JSON object with:
   });
 
   // AI Document / Text Strategy Analysis Endpoint
-  router.post("/api/ai/analyze", async (req, res) => {
+  router.post("/ai/analyze", async (req, res) => {
     try {
       const { strategyText } = req.body;
       if (!strategyText) {

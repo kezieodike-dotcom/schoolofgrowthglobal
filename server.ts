@@ -2,13 +2,13 @@ import "dotenv/config";
 import express from "express";
 import path from "path";
 import { createServer as createViteServer } from "vite";
-import { createAIRouter } from "./src/server/aiRoutes";
+import { createAIRouter } from "./src/server/aiRoutes.js";
 
 /**
  * Local development server.
  *
  * The API routes live in src/server/aiRoutes.ts so that Vercel's serverless
- * function (api/[...path].ts) serves exactly the same endpoints. Anything added
+ * function (api/index.ts) serves exactly the same endpoints. Anything added
  * here rather than there will work locally and be missing in production.
  */
 async function startServer() {
@@ -16,7 +16,7 @@ async function startServer() {
   const PORT = Number(process.env.PORT) || 3000;
 
   app.use(express.json());
-  app.use(createAIRouter());
+  app.use("/api", createAIRouter());
 
   // Vite Middleware integration for Development
   if (process.env.NODE_ENV !== "production") {
