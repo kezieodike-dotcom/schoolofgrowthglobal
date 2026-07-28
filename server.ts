@@ -9,8 +9,10 @@ async function startServer() {
   const PORT = Number(process.env.PORT) || 3000;
 
   // Override with GEMINI_MODEL in .env to switch models without touching code.
-  // Use GET /api/ai/models to see what this API key can actually call.
-  const MODEL = process.env.GEMINI_MODEL || "gemini-2.5-flash";
+  // GET /api/ai/models lists candidate names, but being listed does not mean
+  // callable: retired models still appear and then 404 on generateContent
+  // ("no longer available to new users"). Only a real call proves a model works.
+  const MODEL = process.env.GEMINI_MODEL || "gemini-3.6-flash";
 
   app.use(express.json());
 
