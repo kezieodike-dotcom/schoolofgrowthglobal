@@ -236,8 +236,27 @@ Provide a JSON response with:
     });
   }
 
-  app.listen(PORT, "0.0.0.0", () => {
-    console.log(`School of Growth Global server running on http://0.0.0.0:${PORT}`);
+  const server = app.listen(PORT, "0.0.0.0", () => {
+    console.log(`School of Growth Global server running on http://localhost:${PORT}`);
+  });
+
+  // Without this, a busy port throws an unhandled 'error' event and prints a
+  // raw stack trace. Worse, the browser then talks to whatever app *did* win
+  // the port: it serves its own HTML and 404s /api/ai/*, which surfaces in the
+  // UI as "Growth AI returned a non-JSON response" and looks like a bug here.
+  server.on("error", (err: NodeJS.ErrnoException) => {
+    if (err.code === "EADDRINUSE") {
+      console.error(
+        `\nPort ${PORT} is already in use, so School of Growth did not start.\n` +
+          `Anything you load on this port belongs to another app, and Growth AI\n` +
+          `will report "non-JSON response" because that app has no /api/ai routes.\n\n` +
+          `Start on a free port instead:  PORT=3100 npm run dev\n` +
+          `Or set PORT in your .env file.\n`
+      );
+    } else {
+      console.error("School of Growth server failed to start:", err);
+    }
+    process.exit(1);
   });
 }
 
