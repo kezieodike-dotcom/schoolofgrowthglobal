@@ -1,3 +1,4 @@
+/// <reference types="vite/client" />
 /**
  * Shared client for the Growth AI endpoints exposed by server.ts.
  *
@@ -6,6 +7,10 @@
  * undefined and each caller substituted invented advice — the UI looked like a
  * working assistant while the backend was failing. Route calls through here so
  * a failure always surfaces as a failure.
+ *
+ * Error text is written for the learner reading it, not the developer
+ * debugging it. Diagnostics — provider messages, HTTP status, port hints — go
+ * to the console and the server log. Only the dev build puts them on screen.
  */
 
 export type ChatSender = 'user' | 'assistant';
@@ -27,6 +32,18 @@ export interface AskResult {
 /** Turns sent as context. Keeps the prompt bounded on long conversations. */
 const MAX_HISTORY_TURNS = 12;
 
+/** False in a production build, so dev-only hints never ship. */
+const DEV = import.meta.env.DEV;
+
+/** Shown whenever we have nothing safe and specific to say. */
+const GENERIC_FAILURE =
+  'Growth AI is temporarily unavailable. Please try again in a moment.';
+
+/** Diagnostics belong in the console, never in a chat bubble. */
+function logDiagnostic(context: string, detail: unknown) {
+  if (detail) console.error(`[Growth AI] ${context}:`, detail);
+}
+
 export class GrowthAIError extends Error {
   readonly status?: number;
 
@@ -45,9 +62,12 @@ async function postJSON(path: string, body: unknown): Promise<any> {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
     });
-  } catch {
+  } catch (err) {
+    logDiagnostic(`${path} — network request failed`, err);
     throw new GrowthAIError(
-      'Could not reach the Growth AI server. Is the dev server running?'
+      DEV
+        ? 'Growth AI is unreachable — the dev server did not respond. Is it running on the expected port?'
+        : GENERIC_FAILURE
     );
   }
 
@@ -57,17 +77,27 @@ async function postJSON(path: string, body: unknown): Promise<any> {
     try {
       data = JSON.parse(raw);
     } catch {
+      logDiagnostic(
+        `${path} — expected JSON, got HTTP ${res.status}`,
+        raw.slice(0, 200)
+      );
       throw new GrowthAIError(
-        `Growth AI returned a non-JSON response (HTTP ${res.status}). ` +
-          'This usually means another app is serving this port.',
+        DEV
+          ? `Growth AI returned a non-JSON response (HTTP ${res.status}). ` +
+            'This usually means another app is serving this port.'
+          : GENERIC_FAILURE,
         res.status
       );
     }
   }
 
   if (!res.ok) {
-    const detail = data?.details || data?.error || `HTTP ${res.status}`;
-    throw new GrowthAIError(String(detail), res.status);
+    // `error` is written for the user; `details` is dev-only and stays off screen.
+    logDiagnostic(`${path} — HTTP ${res.status}`, data?.details ?? raw);
+    throw new GrowthAIError(
+      String(data?.error || GENERIC_FAILURE),
+      res.status
+    );
   }
 
   return data ?? {};
@@ -96,7 +126,8 @@ export async function askGrowthAI(opts: {
   });
 
   if (typeof data.reply !== 'string' || !data.reply.trim()) {
-    throw new GrowthAIError('Growth AI returned an empty reply.');
+    logDiagnostic('/api/ai/chat — reply missing or empty', data);
+    throw new GrowthAIError(GENERIC_FAILURE);
   }
 
   return { reply: data.reply, simulated: Boolean(data.simulated) };
@@ -107,7 +138,12 @@ export async function generateScenario(opts: {
   difficulty?: string;
 }): Promise<{ scenario: any; simulated: boolean }> {
   const data = await postJSON('/api/ai/scenario', opts);
-  if (!data.scenario) throw new GrowthAIError('Growth AI returned no scenario.');
+  if (!data.scenario) {
+    logDiagnostic('/api/ai/scenario — scenario missing', data);
+    throw new GrowthAIError(
+      'Growth AI could not generate a scenario right now. Please try again in a moment.'
+    );
+  }
   return { scenario: data.scenario, simulated: Boolean(data.simulated) };
 }
 
@@ -115,12 +151,23 @@ export async function analyzeStrategy(
   strategyText: string
 ): Promise<{ analysis: any; simulated: boolean }> {
   const data = await postJSON('/api/ai/analyze', { strategyText });
-  if (!data.analysis) throw new GrowthAIError('Growth AI returned no analysis.');
+  if (!data.analysis) {
+    logDiagnostic('/api/ai/analyze — analysis missing', data);
+    throw new GrowthAIError(
+      'Growth AI could not review that strategy right now. Please try again in a moment.'
+    );
+  }
   return { analysis: data.analysis, simulated: Boolean(data.simulated) };
 }
 
-/** User-facing text for a failed call. Never fabricates advice. */
+/**
+ * User-facing text for a failed call. Never fabricates advice.
+ *
+ * GrowthAIError messages are already written for the reader, so they are
+ * returned as-is rather than wrapped in another prefix.
+ */
 export function describeError(err: unknown): string {
-  if (err instanceof GrowthAIError) return `Growth AI is unavailable — ${err.message}`;
-  return 'Growth AI is unavailable — an unexpected error occurred.';
+  if (err instanceof GrowthAIError) return err.message;
+  logDiagnostic('unexpected error', err);
+  return GENERIC_FAILURE;
 }

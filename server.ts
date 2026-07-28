@@ -14,7 +14,31 @@ async function startServer() {
   // ("no longer available to new users"). Only a real call proves a model works.
   const MODEL = process.env.GEMINI_MODEL || "gemini-3.6-flash";
 
+  const IS_DEV = process.env.NODE_ENV !== "production";
+
   app.use(express.json());
+
+  /**
+   * Fails an AI request without leaking provider internals.
+   *
+   * Gemini errors carry model names, API versions ("v1beta"), quota states and
+   * key-permission details. Those went straight to the browser, so a learner
+   * could be shown raw provider JSON. Log the real cause for us, return a short
+   * line for them. `details` is dev-only, and the client logs it to the console
+   * rather than rendering it.
+   */
+  const failAI = (
+    res: express.Response,
+    opts: { status?: number; route: string; error: unknown; userMessage: string }
+  ) => {
+    console.error(`Error in ${opts.route}:`, opts.error);
+    const body: Record<string, unknown> = { error: opts.userMessage };
+    if (IS_DEV) {
+      body.details =
+        (opts.error as any)?.message ?? String(opts.error ?? "Unknown error");
+    }
+    return res.status(opts.status ?? 500).json(body);
+  };
 
   // Initialize Gemini API client lazily or safely
   const getAI = () => {
@@ -60,8 +84,11 @@ async function startServer() {
       }
       res.json({ configured: MODEL, available: names.sort() });
     } catch (error: any) {
-      console.error("Error in /api/ai/models:", error);
-      res.status(500).json({ error: error?.message || "Failed to list models" });
+      failAI(res, {
+        route: "/api/ai/models",
+        error,
+        userMessage: "Could not list models.",
+      });
     }
   });
 
@@ -104,18 +131,24 @@ ${context ? `Current Context: ${context}` : ''}`;
       // dressing it up as advice hides the outage from the caller.
       const reply = response.text?.trim();
       if (!reply) {
-        return res.status(502).json({
-          error: "Growth AI returned an empty response",
-          details: "The model produced no text. It may have been blocked by a safety filter or hit a token limit.",
+        return failAI(res, {
+          status: 502,
+          route: "/api/ai/chat",
+          error: new Error(
+            "Model returned no text (possible safety block or token limit)."
+          ),
+          userMessage:
+            "Growth AI could not complete that response. Please rephrase your question and try again.",
         });
       }
 
       res.json({ reply, simulated: false });
     } catch (error: any) {
-      console.error("Error in /api/ai/chat:", error);
-      res.status(500).json({
-        error: "Failed to generate AI response",
-        details: error?.message || "Internal server error"
+      failAI(res, {
+        route: "/api/ai/chat",
+        error,
+        userMessage:
+          "Growth AI is temporarily unavailable. Please try again in a moment.",
       });
     }
   });
@@ -162,10 +195,11 @@ Return a JSON object with:
       const scenario = JSON.parse(response.text || "{}");
       res.json({ scenario });
     } catch (error: any) {
-      console.error("Error in /api/ai/scenario:", error);
-      res.status(500).json({
-        error: "Failed to generate scenario",
-        details: error?.message || "Internal server error"
+      failAI(res, {
+        route: "/api/ai/scenario",
+        error,
+        userMessage:
+          "Growth AI could not generate a scenario right now. Please try again in a moment.",
       });
     }
   });
@@ -213,10 +247,11 @@ Provide a JSON response with:
       const analysis = JSON.parse(response.text || "{}");
       res.json({ analysis });
     } catch (error: any) {
-      console.error("Error in /api/ai/analyze:", error);
-      res.status(500).json({
-        error: "Failed to analyze strategy",
-        details: error?.message || "Internal server error"
+      failAI(res, {
+        route: "/api/ai/analyze",
+        error,
+        userMessage:
+          "Growth AI could not review that strategy right now. Please try again in a moment.",
       });
     }
   });
