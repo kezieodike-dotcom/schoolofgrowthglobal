@@ -20,10 +20,19 @@ import { GoogleGenAI } from "@google/genai";
  */
 
 // Override with GEMINI_MODEL to switch models without touching code.
+//
 // GET /api/ai/models lists candidate names, but being listed does not mean
 // callable: retired models still appear and then 404 on generateContent
-// ("no longer available to new users"). Only a real call proves a model works.
-export const MODEL = process.env.GEMINI_MODEL || "gemini-3.6-flash";
+// ("no longer available to new users"), and a model can be callable yet have
+// no free quota left. Only a real call proves a model works.
+//
+// The default is a -lite model deliberately. Probing this key found
+// gemini-3.6-flash and gemini-flash-latest capped at 20 free requests, and
+// gemini-2.0-flash at 0, while the lite models still answered. A public site
+// on the free tier exhausts a 20-request allowance almost immediately. Raise
+// this to a full flash model once billing is enabled and quality matters more
+// than availability.
+export const MODEL = process.env.GEMINI_MODEL || "gemini-3.1-flash-lite";
 
 export const IS_DEV = process.env.NODE_ENV !== "production";
 
@@ -41,13 +50,30 @@ const failAI = (
   opts: { status?: number; route: string; error: unknown; userMessage: string }
 ) => {
   console.error(`Error in ${opts.route}:`, opts.error);
-  const body: Record<string, unknown> = { error: opts.userMessage };
+
+  // Hitting the rate limit is a normal operating condition on the free tier,
+  // not an outage, and it resolves on its own. Saying "unavailable" invites the
+  // reader to give up; telling them it is busy invites them to retry, which is
+  // exactly what works.
+  const quota = isQuotaError(opts.error);
+  const body: Record<string, unknown> = {
+    error: quota
+      ? "Growth AI is handling a lot of requests right now. Please try again in a few moments."
+      : opts.userMessage,
+  };
   if (IS_DEV) {
     body.details =
       (opts.error as any)?.message ?? String(opts.error ?? "Unknown error");
   }
-  return res.status(opts.status ?? 500).json(body);
+  return res.status(quota ? 429 : opts.status ?? 500).json(body);
 };
+
+/** True for Gemini's RESOURCE_EXHAUSTED / HTTP 429 rate-limit responses. */
+function isQuotaError(error: unknown): boolean {
+  const message = (error as any)?.message;
+  if (typeof message !== "string") return false;
+  return message.includes('"code":429') || message.includes("RESOURCE_EXHAUSTED");
+}
 
 // Initialize Gemini API client lazily or safely
 const getAI = () => {
