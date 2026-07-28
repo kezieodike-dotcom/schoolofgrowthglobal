@@ -8,6 +8,7 @@ import {
   type ChatMessage,
 } from '../lib/growthAI';
 import { useVoiceInput } from '../lib/useVoiceInput';
+import { useChatAutoScroll } from '../lib/useChatAutoScroll';
 import { VoiceInputButton } from '../components/VoiceInputButton';
 import { 
   Terminal, 
@@ -61,6 +62,7 @@ export const CommandCenterView: React.FC<CommandCenterViewProps> = ({ onNavigate
   const [analysisSimulated, setAnalysisSimulated] = useState(false);
 
   const voice = useVoiceInput({ value: chatInput, onValueChange: setChatInput });
+  const { containerRef, lastMessageRef } = useChatAutoScroll(messages, chatLoading);
 
   // Audio Coach State
   const [audioPlaying, setAudioPlaying] = useState(false);
@@ -224,9 +226,13 @@ export const CommandCenterView: React.FC<CommandCenterViewProps> = ({ onNavigate
               <div className="bg-slate-950 border border-slate-800 rounded-3xl p-6 h-[560px] flex flex-col justify-between shadow-2xl">
                 
                 {/* Chat Messages */}
-                <div className="flex-1 overflow-y-auto space-y-4 pr-2 text-xs">
+                <div ref={containerRef} className="flex-1 overflow-y-auto space-y-4 pr-2 text-xs">
                   {messages.map((m, idx) => (
-                    <div key={idx} className={`flex gap-3 ${m.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
+                    <div
+                      key={idx}
+                      ref={idx === messages.length - 1 ? lastMessageRef : undefined}
+                      className={`flex gap-3 ${m.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+                    >
                       {m.sender === 'assistant' && (
                         <div className={`w-7 h-7 rounded-lg border flex items-center justify-center flex-shrink-0 ${
                           m.failed

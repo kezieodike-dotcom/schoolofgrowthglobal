@@ -3,6 +3,7 @@ import { ViewType } from '../types';
 import { STUDENT_DATA } from '../data/mockData';
 import { askGrowthAI, describeError, type ChatMessage } from '../lib/growthAI';
 import { useVoiceInput } from '../lib/useVoiceInput';
+import { useChatAutoScroll } from '../lib/useChatAutoScroll';
 import { VoiceInputButton } from '../components/VoiceInputButton';
 import {
   AlertTriangle,
@@ -42,6 +43,7 @@ export const StudentDashboardView: React.FC<StudentDashboardViewProps> = ({ onNa
       text: 'Hello Alex. Your Strategic Learning Path is 45% complete and you are 12 days ahead of schedule. How can I assist with your Module 4 Boardroom Defense today?'
     }
   ]);
+  const { containerRef, lastMessageRef } = useChatAutoScroll(messages, chatLoading);
 
   const handleSendChat = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -276,9 +278,13 @@ export const StudentDashboardView: React.FC<StudentDashboardViewProps> = ({ onNa
             </span>
           </div>
 
-          <div className="h-48 overflow-y-auto space-y-3 p-3 bg-slate-50 rounded-xl text-xs">
+          <div ref={containerRef} className="h-48 overflow-y-auto space-y-3 p-3 bg-slate-50 rounded-xl text-xs">
             {messages.map((m, idx) => (
-              <div key={idx} className={`flex gap-2 ${m.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
+              <div
+                key={idx}
+                ref={idx === messages.length - 1 ? lastMessageRef : undefined}
+                className={`flex gap-2 ${m.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+              >
                 {m.failed && (
                   <AlertTriangle className="w-4 h-4 flex-shrink-0 mt-3 text-red-500" />
                 )}

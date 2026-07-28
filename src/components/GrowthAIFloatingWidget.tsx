@@ -1,8 +1,9 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { X, Send, Sparkles, Bot, User, ArrowUpRight, AlertTriangle } from 'lucide-react';
 import { askGrowthAI, describeError, type ChatMessage } from '../lib/growthAI';
 import { useVoiceInput } from '../lib/useVoiceInput';
+import { useChatAutoScroll } from '../lib/useChatAutoScroll';
 import { VoiceInputButton } from './VoiceInputButton';
 
 export const GrowthAIFloatingWidget: React.FC = () => {
@@ -19,13 +20,7 @@ export const GrowthAIFloatingWidget: React.FC = () => {
 
   const voice = useVoiceInput({ value: input, onValueChange: setInput });
 
-  const scrollRef = useRef<HTMLDivElement>(null);
-
-  // Keep the newest message in view as the conversation grows.
-  useEffect(() => {
-    const el = scrollRef.current;
-    if (el) el.scrollTop = el.scrollHeight;
-  }, [messages, loading]);
+  const { containerRef, lastMessageRef } = useChatAutoScroll(messages, loading);
 
   const handleSend = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
@@ -117,10 +112,11 @@ export const GrowthAIFloatingWidget: React.FC = () => {
           </div>
 
           {/* Messages list */}
-          <div ref={scrollRef} className="flex-1 p-4 overflow-y-auto space-y-3 text-xs bg-slate-950">
+          <div ref={containerRef} className="flex-1 p-4 overflow-y-auto space-y-3 text-xs bg-slate-950">
             {messages.map((m, idx) => (
               <div
                 key={idx}
+                ref={idx === messages.length - 1 ? lastMessageRef : undefined}
                 className={`flex gap-2.5 ${m.sender === 'user' ? 'justify-end' : 'justify-start'}`}
               >
                 {m.sender === 'assistant' && (
