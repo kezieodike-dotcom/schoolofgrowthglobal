@@ -147,33 +147,35 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate, onSelectSchool }
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
 
                 {/* Overlaid Badge Card */}
-                <div className="absolute bottom-6 left-6 right-6 p-5 rounded-xl bg-slate-950/90 backdrop-blur-md border border-slate-800/90 space-y-3">
+                <div className="absolute bottom-3 left-3 right-3 p-3 space-y-1.5 sm:bottom-6 sm:left-6 sm:right-6 sm:p-5 sm:space-y-3 rounded-xl bg-slate-950/90 backdrop-blur-md border border-slate-800/90">
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-mono uppercase tracking-widest text-amber-400 font-bold bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
+                    <span className="text-[9px] sm:text-[10px] font-mono uppercase tracking-widest text-amber-400 font-bold bg-amber-500/10 px-1.5 sm:px-2 py-0.5 rounded border border-amber-500/20">
                       FEATURED COHORT
                     </span>
-                    <span className="text-xs font-mono text-emerald-400 flex items-center gap-1">
+                    <span className="text-[10px] sm:text-xs font-mono text-emerald-400 flex items-center gap-1">
                       <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
                       4 Seats Left
                     </span>
                   </div>
 
-                  <h3 className="text-base font-bold text-white font-serif">
+                  <h3 className="text-sm sm:text-base font-bold text-white font-serif leading-snug">
                     Executive Strategy & Global Growth
                   </h3>
 
-                  <p className="text-xs text-slate-300 line-clamp-2">
+                  {/* Hidden on phones: the blurb is the tallest part of the card and
+                      the image behind it matters more at that width. */}
+                  <p className="hidden sm:block text-xs text-slate-300 line-clamp-2">
                     Led by Dr. Adebayo Okonkwo, PhD. 12-week intensive C-suite governance & market expansion framework.
                   </p>
 
-                  <div className="flex items-center justify-between pt-2 border-t border-slate-800">
-                    <span className="text-xs text-slate-400 font-mono">Oct 15 Cohort</span>
+                  <div className="flex items-center justify-between pt-1.5 sm:pt-2 border-t border-slate-800">
+                    <span className="text-[10px] sm:text-xs text-slate-400 font-mono">Oct 15 Cohort</span>
                     <button
                       onClick={() => onNavigate('course-detail')}
-                      className="text-xs text-amber-400 font-bold hover:text-amber-300 flex items-center gap-1 group/link"
+                      className="text-[10px] sm:text-xs text-amber-400 font-bold hover:text-amber-300 flex items-center gap-1 group/link"
                     >
                       <span>View Curriculum</span>
-                      <ChevronRight className="w-4 h-4 group-hover/link:translate-x-0.5 transition-transform" />
+                      <ChevronRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 group-hover/link:translate-x-0.5 transition-transform" />
                     </button>
                   </div>
                 </div>
