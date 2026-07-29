@@ -140,9 +140,9 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate, onSelectSchool }
             <div className="lg:col-span-5">
               <div className="relative rounded-2xl overflow-hidden border border-slate-200 shadow-2xl bg-white group">
                 <img
-                  src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=1000"
-                  alt="Modern Glass Skyscraper"
-                  className="w-full h-[300px] sm:h-[460px] object-cover group-hover:scale-105 transition-transform duration-700 opacity-80"
+                  src="/scenes/hero-team.jpg"
+                  alt="A team reviewing growth dashboards together in a modern office"
+                  className="w-full aspect-square sm:aspect-auto sm:h-[460px] object-cover object-center group-hover:scale-105 transition-transform duration-700"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
 
