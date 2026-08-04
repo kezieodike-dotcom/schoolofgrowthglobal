@@ -85,12 +85,18 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
                   <ArrowRight className="w-4 h-4" />
                 </Link>
 
+                {/*
+                  Points at /pricing rather than /register, matching the
+                  header's Enrol button. Registering only tells admissions who
+                  you are; paying for a package is what actually opens the
+                  courses, so the CTA should land where that happens.
+                */}
                 <Link
-                  to="/register"
+                  to="/pricing"
                   className="px-6 py-3.5 rounded-xl bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 font-semibold text-sm flex items-center gap-2 transition-all"
                 >
                   <UserPlus className="w-4 h-4 text-amber-600" />
-                  <span>Register Now</span>
+                  <span>Enrol Now</span>
                 </Link>
               </div>
 
