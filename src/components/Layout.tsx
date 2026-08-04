@@ -3,6 +3,7 @@ import { Outlet, useLocation } from 'react-router-dom';
 import { HeaderNavbar } from './HeaderNavbar';
 import { Footer } from './Footer';
 import { GrowthAIFloatingWidget } from './GrowthAIFloatingWidget';
+import { TierPreviewSwitcher } from './TierPreviewSwitcher';
 
 /** Scrolls to top on every route change. */
 const ScrollToTop: React.FC = () => {
@@ -29,6 +30,9 @@ export const Layout: React.FC = () => {
 
       {!isCommandCenter && <GrowthAIFloatingWidget />}
       {!isCommandCenter && <Footer />}
+
+      {/* Development only — stripped from production builds. */}
+      <TierPreviewSwitcher />
     </div>
   );
 };

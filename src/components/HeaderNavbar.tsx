@@ -12,7 +12,6 @@ import { useEnrollment } from '../lib/useEnrollment';
 const NAV_ITEMS: { to: string; label: string }[] = [
   { to: '/courses', label: 'Courses' },
   { to: '/mentors', label: 'Mentors' },
-  { to: '/pricing', label: 'Pricing' },
   { to: '/events', label: 'Events' },
   { to: '/blog', label: 'Insights' },
   { to: '/about', label: 'About' },
