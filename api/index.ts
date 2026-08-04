@@ -1,5 +1,9 @@
 import express from "express";
 import { createAIRouter } from "../src/server/aiRoutes.js";
+import { createPaymentRouter, captureRawBody } from "../src/server/paymentRoutes.js";
+import { createAdminRouter, requireAdmin } from "../src/server/adminRoutes.js";
+import { createMentorRouter } from "../src/server/mentorRoutes.js";
+import { createLeadRouter } from "../src/server/leadRoutes.js";
 
 /**
  * Vercel serverless entry point for every /api/* route.
@@ -19,14 +23,24 @@ import { createAIRouter } from "../src/server/aiRoutes.js";
  * The import above needs its .js extension: package.json sets
  * "type": "module", and Node's ESM resolver does not guess extensions.
  *
- * GEMINI_API_KEY must be set in the Vercel project's environment variables.
- * .env is gitignored and never deployed, so a key that works locally is absent
- * here until it is configured in the dashboard.
+ * GEMINI_API_KEY and PAYSTACK_SECRET_KEY must be set in the Vercel project's
+ * environment variables. .env is gitignored and never deployed, so a key that
+ * works locally is absent here until it is configured in the dashboard.
  */
 
 const app = express();
-app.use(express.json());
+// captureRawBody keeps the original bytes on the request so the Paystack
+// webhook can verify its signature; parsing alone would discard them.
+app.use(express.json({ verify: captureRawBody }));
 app.use("/api", createAIRouter());
+app.use("/api", createPaymentRouter());
+app.use("/api", createAdminRouter());
+app.use("/api", createMentorRouter(requireAdmin));
+app.use("/api", createLeadRouter(requireAdmin));
 app.use(createAIRouter());
+app.use(createPaymentRouter());
+app.use(createAdminRouter());
+app.use(createMentorRouter(requireAdmin));
+app.use(createLeadRouter(requireAdmin));
 
 export default app;

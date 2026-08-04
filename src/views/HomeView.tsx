@@ -1,50 +1,26 @@
 import React, { useState } from 'react';
-import { ViewType, Faculty } from '../types';
-import { FACULTIES } from '../data/mockData';
+import { Link } from 'react-router-dom';
+import { ViewType } from '../types';
 import { TrustedExecutivesSlider } from '../components/TrustedExecutivesSlider';
 import { TestimonialsSection } from '../components/TestimonialsSection';
 import {
   Crown,
   ArrowRight,
   Sparkles,
-  Users,
-  Building2,
-  Globe,
-  Award,
-  CheckCircle2,
   ChevronRight,
-  TrendingUp,
-  Cpu,
-  Lightbulb,
-  ShieldCheck,
   Terminal,
   Send,
-  MessageSquare,
-  BarChart3
+  UserPlus
 } from 'lucide-react';
 
 interface HomeViewProps {
   onNavigate: (view: ViewType) => void;
-  onSelectSchool: (schoolId: string) => void;
 }
 
-export const HomeView: React.FC<HomeViewProps> = ({ onNavigate, onSelectSchool }) => {
-  const [corporateModalOpen, setCorporateModalOpen] = useState(false);
+export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
   const [aiQuestion, setAiQuestion] = useState('');
   const [aiAnswer, setAiAnswer] = useState<string | null>(null);
   const [aiLoading, setAiLoading] = useState(false);
-
-  const getFacultyIcon = (iconName: string) => {
-    switch (iconName) {
-      case 'Crown': return <Crown className="w-6 h-6 text-amber-600" />;
-      case 'TrendingUp': return <TrendingUp className="w-6 h-6 text-emerald-600" />;
-      case 'Cpu': return <Cpu className="w-6 h-6 text-indigo-600" />;
-      case 'Users': return <Users className="w-6 h-6 text-purple-600" />;
-      case 'Globe': return <Globe className="w-6 h-6 text-amber-600" />;
-      case 'Lightbulb': return <Lightbulb className="w-6 h-6 text-teal-600" />;
-      default: return <Crown className="w-6 h-6 text-amber-600" />;
-    }
-  };
 
   const handleAiQuestion = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -101,21 +77,21 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate, onSelectSchool }
 
               {/* Action Buttons */}
               <div className="flex flex-wrap items-center gap-4 pt-2">
-                <button
-                  onClick={() => onNavigate('leadership-school')}
+                <Link
+                  to="/courses"
                   className="px-6 py-3.5 rounded-xl bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 hover:brightness-110 text-slate-950 font-bold text-sm shadow-xl shadow-amber-500/20 flex items-center gap-2 transition-all transform hover:-translate-y-0.5"
                 >
                   <span>Explore Programs</span>
                   <ArrowRight className="w-4 h-4" />
-                </button>
+                </Link>
 
-                <button
-                  onClick={() => setCorporateModalOpen(true)}
+                <Link
+                  to="/register"
                   className="px-6 py-3.5 rounded-xl bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 font-semibold text-sm flex items-center gap-2 transition-all"
                 >
-                  <Building2 className="w-4 h-4 text-amber-600" />
-                  <span>Corporate Training</span>
-                </button>
+                  <UserPlus className="w-4 h-4 text-amber-600" />
+                  <span>Register Now</span>
+                </Link>
               </div>
 
               {/* Quick stats trust indicators */}
@@ -194,82 +170,6 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate, onSelectSchool }
             Trusted by Executives & Board Members From Global Institutions
           </p>
           <TrustedExecutivesSlider />
-        </div>
-      </section>
-
-      {/* The Global Faculties Section */}
-      <section className="py-20 bg-slate-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
-            <div>
-              <div className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-amber-600 mb-2">
-                <Crown className="w-3.5 h-3.5" />
-                <span>Academic Architecture</span>
-              </div>
-              <h2 className="text-3xl sm:text-4xl font-serif font-bold text-slate-900">
-                The Global Faculties
-              </h2>
-            </div>
-            <p className="text-sm text-slate-500 max-w-md">
-              Explore specialized academic faculties offering accredited executive certificates, high-stakes governance tracks, and peer boardrooms.
-            </p>
-          </div>
-
-          {/* Bento Grid of Faculties */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {FACULTIES.map((faculty) => (
-              <div
-                key={faculty.id}
-                onClick={() => {
-                  onSelectSchool(faculty.id);
-                  onNavigate('leadership-school');
-                }}
-                className={`group cursor-pointer p-6 rounded-2xl bg-white hover:bg-slate-50 border border-slate-200 shadow-sm hover:border-amber-400 transition-all duration-300 hover:shadow-xl hover:shadow-amber-500/5 flex flex-col justify-between relative overflow-hidden`}
-              >
-                {/* Subtle top border accent */}
-                <div className={`absolute top-0 left-0 right-0 h-1 bg-amber-500 opacity-0 group-hover:opacity-100 transition-opacity`}></div>
-
-                <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 group-hover:scale-110 transition-transform">
-                      {getFacultyIcon(faculty.iconName)}
-                    </div>
-                    <span className="text-xs font-mono px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 border border-slate-300">
-                      {faculty.programCount} Programs
-                    </span>
-                  </div>
-
-                  <h3 className="text-xl font-serif font-bold text-slate-900 group-hover:text-amber-700 transition-colors mb-2">
-                    {faculty.name}
-                  </h3>
-
-                  <p className="text-xs font-mono text-amber-600/90 mb-3">
-                    {faculty.tagline}
-                  </p>
-
-                  <p className="text-xs text-slate-500 leading-relaxed mb-4">
-                    {faculty.description}
-                  </p>
-
-                  {/* Key Topic Chips */}
-                  <div className="flex flex-wrap gap-1.5 mb-6">
-                    {faculty.keyTopics.map((topic, i) => (
-                      <span key={i} className="text-[10px] px-2 py-0.5 rounded bg-slate-50 text-slate-600 border border-slate-200">
-                        {topic}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="pt-4 border-t border-slate-200 flex items-center justify-between text-xs text-amber-600 font-semibold group-hover:text-amber-700">
-                  <span>Explore Faculty</span>
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </div>
-              </div>
-            ))}
-          </div>
-
         </div>
       </section>
 
@@ -354,52 +254,6 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate, onSelectSchool }
 
       {/* What Our Leaders Say - Animated Testimonials Columns */}
       <TestimonialsSection />
-
-      {/* Corporate Training Modal */}
-      {corporateModalOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="bg-white border border-slate-200 rounded-2xl max-w-lg w-full p-6 text-slate-900 space-y-4 relative shadow-2xl">
-            <div className="flex items-center justify-between border-b border-slate-200 pb-4">
-              <div className="flex items-center gap-2">
-                <Building2 className="w-5 h-5 text-amber-600" />
-                <h3 className="font-serif font-bold text-lg text-slate-900">Corporate & Enterprise Advisory</h3>
-              </div>
-              <button
-                onClick={() => setCorporateModalOpen(false)}
-                className="text-slate-500 hover:text-slate-900 text-sm"
-              >
-                ✕
-              </button>
-            </div>
-
-            <p className="text-xs text-slate-600 leading-relaxed">
-              Equip your executive teams, board members, and business unit directors with tailored institutional frameworks and custom AI decision models.
-            </p>
-
-            <form onSubmit={(e) => { e.preventDefault(); alert("Corporate request received! Our Executive Director will contact your office."); setCorporateModalOpen(false); }} className="space-y-3 text-xs">
-              <div>
-                <label className="block text-slate-500 mb-1">Organization Name</label>
-                <input required type="text" placeholder="e.g. Nexus Global Financial" className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-slate-900" />
-              </div>
-              <div>
-                <label className="block text-slate-500 mb-1">Corporate Email</label>
-                <input required type="email" placeholder="executive@nexus.com" className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-slate-900" />
-              </div>
-              <div>
-                <label className="block text-slate-500 mb-1">Team Size / Focus Area</label>
-                <select className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-slate-900">
-                  <option>Executive Committee (5 - 15 Leaders)</option>
-                  <option>Senior Management (15 - 50 Leaders)</option>
-                  <option>Global Business Units (50+ Leaders)</option>
-                </select>
-              </div>
-              <button type="submit" className="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold py-3 rounded-lg text-xs transition-colors">
-                Request Corporate Advisory Catalog
-              </button>
-            </form>
-          </div>
-        </div>
-      )}
 
     </div>
   );

@@ -1,6 +1,5 @@
 export type ViewType =
   | 'home'
-  | 'leadership-school'
   | 'course-detail'
   | 'student-dashboard'
   | 'command-center';
@@ -63,19 +62,6 @@ export interface BlogPost {
   featured?: boolean;
 }
 
-export interface Faculty {
-  id: string;
-  name: string;
-  code: string;
-  programCount: number;
-  iconName: string;
-  tagline: string;
-  description: string;
-  keyTopics: string[];
-  featuredCourse: string;
-  accentColor: string;
-}
-
 export interface Course {
   id: string;
   title: string;
@@ -131,6 +117,40 @@ export interface ChatMessage {
   category?: string;
 }
 
+export interface StudentTrack {
+  id: string;
+  title: string;
+  schoolName: string;
+  progressPercentage: number;
+  nextModule: string;
+  dueDate: string;
+  modulesCompleted: number;
+  moduleCount: number;
+  instructorName: string;
+  instructorAvatar: string;
+}
+
+export interface StudentSession {
+  id: string;
+  title: string;
+  type: 'Live Class' | 'Mentor Session' | 'Assessment' | 'Workshop';
+  date: string;
+  time: string;
+  mode: 'Virtual' | 'In-Person';
+  host: string;
+}
+
+export interface StudentCertificate {
+  id: string;
+  title: string;
+  status: 'Earned' | 'In Progress' | 'Locked';
+  issued?: string;
+  credentialId?: string;
+  /** Percent complete; only meaningful while status is In Progress. */
+  progressPercentage?: number;
+  target?: string;
+}
+
 export interface StudentProgress {
   name: string;
   title: string;
@@ -139,13 +159,16 @@ export interface StudentProgress {
   avatar: string;
   completionPercentage: number;
   daysAhead: number;
-  activeTracks: {
-    id: string;
-    title: string;
-    progressPercentage: number;
-    nextModule: string;
-    dueDate: string;
-  }[];
+  activeTracks: StudentTrack[];
   completedCourses: number;
   totalCertificates: number;
+  studyHours: number;
+  upcoming: StudentSession[];
+  certificates: StudentCertificate[];
+  mentor: {
+    name: string;
+    role: string;
+    avatar: string;
+    nextSession: string;
+  };
 }

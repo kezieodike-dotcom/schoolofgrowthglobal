@@ -1,79 +1,4 @@
-import { Faculty, Course, FacultyMember, Testimonial, StudentProgress, School, Mentor, EventItem, BlogPost } from '../types';
-
-export const FACULTIES: Faculty[] = [
-  {
-    id: 'leadership',
-    name: 'School of Leadership',
-    code: 'SOL',
-    programCount: 12,
-    iconName: 'Crown',
-    tagline: 'Transformational C-Suite Governance',
-    description: 'Master adaptive decision-making, crisis resilience, and high-stakes organizational alignment.',
-    keyTopics: ['Executive Foresight', 'High-Stakes Governance', 'Adaptive Crisis Management'],
-    featuredCourse: 'Executive Strategy & Global Growth',
-    accentColor: 'border-blue-500'
-  },
-  {
-    id: 'business',
-    name: 'School of Business',
-    code: 'SOB',
-    programCount: 18,
-    iconName: 'TrendingUp',
-    tagline: 'Venture Scaling & Global Finance',
-    description: 'Equip executives with global capital allocation frameworks, M&A strategy, and market disruption tactics.',
-    keyTopics: ['Capital Allocation', 'M&A & Restructuring', 'Venture Expansion'],
-    featuredCourse: 'Global Corporate Finance & Valuation',
-    accentColor: 'border-emerald-500'
-  },
-  {
-    id: 'tech',
-    name: 'School of Tech & AI',
-    code: 'SOT',
-    programCount: 24,
-    iconName: 'Cpu',
-    tagline: 'Institutional AI & Frontier Systems',
-    description: 'Lead enterprise AI deployment, algorithmic governance, and enterprise cloud transformation.',
-    keyTopics: ['Enterprise AI Strategy', 'Algorithmic Risk', 'Quantum & Web3 Frontiers'],
-    featuredCourse: 'Algorithmic Strategy & AI Governance',
-    accentColor: 'border-indigo-500'
-  },
-  {
-    id: 'coaching',
-    name: 'Executive Coaching',
-    code: 'EXC',
-    programCount: 8,
-    iconName: 'Users',
-    tagline: '1-on-1 Peer Boardrooms & Mentorship',
-    description: 'Elite individualized mentorship pairing rising leaders with former Fortune 500 CEOs and Founders.',
-    keyTopics: ['C-Suite Mentorship', 'Executive Presence', 'Boardroom Defense'],
-    featuredCourse: 'The Global Growth Masters Fellowship',
-    accentColor: 'border-purple-500'
-  },
-  {
-    id: 'logistics',
-    name: 'Global Logistics',
-    code: 'SGL',
-    programCount: 10,
-    iconName: 'Globe',
-    tagline: 'Supply Chain Resilience & Geopolitics',
-    description: 'Navigate global geopolitical risk, trade corridors, and automated supply chain architectures.',
-    keyTopics: ['Supply Chain Security', 'Geopolitical Trade Corridors', 'Automated Freight'],
-    featuredCourse: 'Geopolitical Logistics & Operations',
-    accentColor: 'border-amber-500'
-  },
-  {
-    id: 'innovation',
-    name: 'Innovation Systems',
-    code: 'SIS',
-    programCount: 15,
-    iconName: 'Lightbulb',
-    tagline: 'Venture Architecture & Corporate R&D',
-    description: 'Build intrapreneurial engines, R&D labs, and systematic innovation frameworks.',
-    keyTopics: ['Corporate R&D Strategy', 'Venture Architecture', 'Systemic Disruption'],
-    featuredCourse: 'Corporate Venture Building Mastery',
-    accentColor: 'border-teal-500'
-  }
-];
+﻿import { Course, FacultyMember, Testimonial, StudentProgress, School, Mentor, EventItem, BlogPost } from '../types';
 
 export const FEATURED_COURSE: Course = {
   id: 'exec-strategy-growth',
@@ -88,7 +13,7 @@ export const FEATURED_COURSE: Course = {
   instructorAvatar: '/people/m3-okonkwo.jpg',
   rating: 4.96,
   reviewCount: 342,
-  status: 'Next Cohort Starts Oct 15 • 4 Seats Remaining',
+  status: 'Next Cohort Starts Oct 15 â€¢ 4 Seats Remaining',
   heroImage: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=1200',
   description: 'An intensive 12-week executive mastery program engineered for C-Suite leaders, Managing Directors, and Founders navigating hyper-scale growth, market disruption, and geopolitical complexity.',
   price: '$4,800 USD (Sponsorship Available)',
@@ -208,7 +133,7 @@ export const COURSES: Course[] = [
     instructorAvatar: '/people/m4-nwachukwu.jpg',
     rating: 5.0,
     reviewCount: 89,
-    status: 'Application Only • Limited 15 Seats',
+    status: 'Application Only â€¢ Limited 15 Seats',
     heroImage: '/scenes/coaching-collab.jpg',
     description: 'An elite 6-month immersive fellowship pairing high-potential executives directly with global industry visionaries.',
     price: '$12,500 USD',
@@ -293,7 +218,7 @@ export const COURSES: Course[] = [
   }
 ];
 
-// ── Schools & Faculties (14) ──────────────────────────────────────────────
+// â”€â”€ Schools & Faculties (14) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export const SCHOOLS: School[] = [
   {
     id: 'leadership',
@@ -479,7 +404,7 @@ export const SCHOOLS: School[] = [
   }
 ];
 
-// ── Mentor Marketplace ────────────────────────────────────────────────────
+// â”€â”€ Mentor Marketplace â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export const MENTORS: Mentor[] = [
   {
     id: 'm1',
@@ -564,13 +489,13 @@ export const MENTORS: Mentor[] = [
   }
 ];
 
-// ── Events Platform ───────────────────────────────────────────────────────
+// â”€â”€ Events Platform â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export const EVENTS: EventItem[] = [
   {
     id: 'e1',
     title: 'Global Growth Summit 2024',
     type: 'Conference',
-    date: 'Oct 28–30, 2024',
+    date: 'Oct 28â€“30, 2024',
     time: '09:00 WAT',
     location: 'Lagos + Livestream',
     mode: 'Hybrid',
@@ -598,7 +523,7 @@ export const EVENTS: EventItem[] = [
     id: 'e3',
     title: 'Executive Crisis Command Bootcamp',
     type: 'Bootcamp',
-    date: 'Nov 18–20, 2024',
+    date: 'Nov 18â€“20, 2024',
     time: '10:00 WAT',
     location: 'Abuja, Nigeria',
     mode: 'In-Person',
@@ -652,7 +577,7 @@ export const EVENTS: EventItem[] = [
   }
 ];
 
-// ── Blog & Knowledge Centre ───────────────────────────────────────────────
+// â”€â”€ Blog & Knowledge Centre â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export const BLOG_POSTS: BlogPost[] = [
   {
     id: 'b1',
@@ -730,7 +655,7 @@ export const BLOG_POSTS: BlogPost[] = [
   }
 ];
 
-// ── "What our users say" — testimonials columns ──────────────────────────
+// â”€â”€ "What our users say" â€” testimonials columns â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export const USER_TESTIMONIALS = [
   {
     text: 'The Executive Strategy program reshaped how our board approaches global expansion. We entered three new markets with far more conviction and discipline.',
@@ -874,22 +799,106 @@ export const STUDENT_DATA: StudentProgress = {
   daysAhead: 12,
   completedCourses: 3,
   totalCertificates: 2,
+  studyHours: 47,
   activeTracks: [
     {
       id: 'track-1',
       title: 'High-Stakes Decision Making & Boardroom Strategy',
+      schoolName: 'Leadership School',
       progressPercentage: 68,
       nextModule: 'Module 4: Boardroom Simulation & Defense',
-      dueDate: 'Oct 24, 2024'
+      dueDate: 'Oct 24, 2024',
+      modulesCompleted: 4,
+      moduleCount: 6,
+      instructorName: 'Dr. Adebayo Okonkwo',
+      instructorAvatar: '/people/m3-okonkwo.jpg'
     },
     {
       id: 'track-2',
       title: 'Algorithmic Strategy Design & Enterprise AI',
+      schoolName: 'Technology School',
       progressPercentage: 22,
       nextModule: 'Module 2: Neural Architecture Audit',
-      dueDate: 'Nov 02, 2024'
+      dueDate: 'Nov 02, 2024',
+      modulesCompleted: 1,
+      moduleCount: 5,
+      instructorName: 'Dr. Amara Balogun',
+      instructorAvatar: '/people/w3-balogun.jpg'
     }
-  ]
+  ],
+  upcoming: [
+    {
+      id: 'session-1',
+      title: 'Boardroom Simulation: Defending a Capital Reallocation',
+      type: 'Live Class',
+      date: 'Oct 18, 2024',
+      time: '14:00 WAT',
+      mode: 'Virtual',
+      host: 'Dr. Adebayo Okonkwo'
+    },
+    {
+      id: 'session-2',
+      title: 'One-to-one Mentor Review',
+      type: 'Mentor Session',
+      date: 'Oct 21, 2024',
+      time: '09:30 WAT',
+      mode: 'Virtual',
+      host: 'Dr. Ngozi Okafor'
+    },
+    {
+      id: 'session-3',
+      title: 'Module 4 Written Assessment',
+      type: 'Assessment',
+      date: 'Oct 24, 2024',
+      time: '23:59 WAT',
+      mode: 'Virtual',
+      host: 'Leadership School'
+    },
+    {
+      id: 'session-4',
+      title: 'Enterprise AI Governance Workshop',
+      type: 'Workshop',
+      date: 'Oct 29, 2024',
+      time: '11:00 WAT',
+      mode: 'In-Person',
+      host: 'Dr. Amara Balogun'
+    }
+  ],
+  certificates: [
+    {
+      id: 'cert-1',
+      title: 'Strategic Foresight & Scenario Planning',
+      status: 'Earned',
+      issued: 'Jun 12, 2024',
+      credentialId: 'SGG-SF-2024-0418'
+    },
+    {
+      id: 'cert-2',
+      title: 'Executive Communication & Influence',
+      status: 'Earned',
+      issued: 'Aug 03, 2024',
+      credentialId: 'SGG-EC-2024-0771'
+    },
+    {
+      id: 'cert-3',
+      title: 'C-Suite Boardroom Defense',
+      status: 'In Progress',
+      progressPercentage: 68,
+      target: 'Oct 24, 2024'
+    },
+    {
+      id: 'cert-4',
+      title: 'Global Growth Fellow',
+      status: 'Locked',
+      target: 'Q1 2025'
+    }
+  ],
+  mentor: {
+    name: 'Dr. Ngozi Okafor',
+    role: 'Executive Coach & Organizational Psychologist',
+    avatar: '/people/w1-okafor.jpg',
+    nextSession: 'Oct 21, 2024 Â· 09:30 WAT'
+  }
 };
 
 export const CORPORATE_PARTNERS = [

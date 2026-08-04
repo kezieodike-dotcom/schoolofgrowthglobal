@@ -3,20 +3,31 @@ import express from "express";
 import path from "path";
 import { createServer as createViteServer } from "vite";
 import { createAIRouter } from "./src/server/aiRoutes.js";
+import { createPaymentRouter, captureRawBody } from "./src/server/paymentRoutes.js";
+import { createAdminRouter, requireAdmin } from "./src/server/adminRoutes.js";
+import { createMentorRouter } from "./src/server/mentorRoutes.js";
+import { createLeadRouter } from "./src/server/leadRoutes.js";
 
 /**
  * Local development server.
  *
- * The API routes live in src/server/aiRoutes.ts so that Vercel's serverless
- * function (api/index.ts) serves exactly the same endpoints. Anything added
- * here rather than there will work locally and be missing in production.
+ * The API routes live in src/server/aiRoutes.ts and src/server/paymentRoutes.ts
+ * so that Vercel's serverless function (api/index.ts) serves exactly the same
+ * endpoints. Anything added here rather than there will work locally and be
+ * missing in production.
  */
 async function startServer() {
   const app = express();
   const PORT = Number(process.env.PORT) || 3000;
 
-  app.use(express.json());
+  // captureRawBody keeps the original bytes on the request so the Paystack
+  // webhook can verify its signature; parsing alone would discard them.
+  app.use(express.json({ verify: captureRawBody }));
   app.use("/api", createAIRouter());
+  app.use("/api", createPaymentRouter());
+  app.use("/api", createAdminRouter());
+  app.use("/api", createMentorRouter(requireAdmin));
+  app.use("/api", createLeadRouter(requireAdmin));
 
   // Vite Middleware integration for Development
   if (process.env.NODE_ENV !== "production") {

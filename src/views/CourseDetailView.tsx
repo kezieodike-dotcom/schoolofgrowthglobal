@@ -1,33 +1,47 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { ViewType } from '../types';
 import { FEATURED_COURSE, CORPORATE_PARTNERS } from '../data/mockData';
 import {
-  Crown,
   Clock,
-  Calendar,
   CheckCircle2,
   Award,
   Sparkles,
-  FileText,
   ChevronDown,
   ChevronUp,
   ArrowRight,
   Download,
   ShieldCheck,
   Users,
-  Send,
-  HelpCircle
+  Lock,
+  LockOpen,
+  PlayCircle,
+  Loader2
 } from 'lucide-react';
+import { useFormSubmit, HONEYPOT_PROPS } from '../lib/useFormSubmit';
+import { useEnrollment } from '../lib/useEnrollment';
+import { cheapestPackageFor, formatNaira, type CourseLevel } from '../lib/pricing';
 
 interface CourseDetailViewProps {
   onNavigate: (view: ViewType) => void;
 }
 
+/** Modules a visitor may read before paying. The rest is the paid product. */
+const FREE_PREVIEW_MODULES = 1;
+
 export const CourseDetailView: React.FC<CourseDetailViewProps> = ({ onNavigate }) => {
   const [openModule, setOpenModule] = useState<number | null>(0);
   const [applyModalOpen, setApplyModalOpen] = useState(false);
+  const [syllabusModalOpen, setSyllabusModalOpen] = useState(false);
+  const application = useFormSubmit('application');
+  const syllabus = useFormSubmit('syllabus');
   const [aiSyllabusPlan, setAiSyllabusPlan] = useState<string | null>(null);
   const [aiGenerating, setAiGenerating] = useState(false);
+
+  const { canAccessLevel, currentPackageName } = useEnrollment();
+  const level = FEATURED_COURSE.level as CourseLevel;
+  const unlocked = canAccessLevel(level);
+  const unlockedBy = cheapestPackageFor(level);
 
   const toggleModule = (index: number) => {
     setOpenModule(openModule === index ? null : index);
@@ -61,9 +75,9 @@ export const CourseDetailView: React.FC<CourseDetailViewProps> = ({ onNavigate }
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
           <div className="flex flex-wrap items-center gap-2 text-xs font-mono text-amber-600 mb-4">
-            <span onClick={() => onNavigate('home')} className="cursor-pointer hover:underline">Faculties</span>
+            <Link to="/" className="hover:underline">Home</Link>
             <span>/</span>
-            <span onClick={() => onNavigate('leadership-school')} className="cursor-pointer hover:underline">School of Leadership</span>
+            <Link to="/courses" className="hover:underline">Courses</Link>
             <span>/</span>
             <span className="text-slate-900 font-bold">{FEATURED_COURSE.title}</span>
           </div>
@@ -121,33 +135,90 @@ export const CourseDetailView: React.FC<CourseDetailViewProps> = ({ onNavigate }
                 className="w-full h-44 object-cover rounded-2xl border border-slate-200"
               />
 
-              <div className="space-y-1">
-                <span className="text-xs text-slate-500 font-mono">Tuition & Sponsorship</span>
-                <div className="text-2xl font-bold font-serif text-amber-600">{FEATURED_COURSE.price}</div>
-              </div>
+              {/*
+                The enrolment box states the position plainly: either the
+                course is open, or it names the package that opens it and what
+                that costs. No "contact us for pricing".
+              */}
+              {unlocked ? (
+                <>
+                  <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700">
+                    <LockOpen className="w-4 h-4 shrink-0" />
+                    <span className="text-xs font-bold">
+                      Unlocked on your {currentPackageName} package
+                    </span>
+                  </div>
 
-              <div className="space-y-3 pt-2">
-                <button
-                  onClick={() => setApplyModalOpen(true)}
-                  className="w-full py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs shadow-lg shadow-amber-500/20 flex items-center justify-center gap-2 transition-all"
-                >
-                  <span>Apply Now for Oct 15 Cohort</span>
-                  <ArrowRight className="w-4 h-4" />
-                </button>
+                  <div className="space-y-3">
+                    <button
+                      onClick={() => setApplyModalOpen(true)}
+                      className="w-full py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs shadow-lg shadow-amber-500/20 flex items-center justify-center gap-2 transition-all"
+                    >
+                      <PlayCircle className="w-4 h-4" />
+                      <span>Join the Oct 15 Cohort</span>
+                    </button>
 
-                <button
-                  onClick={() => alert("Syllabus PDF requested.")}
-                  className="w-full py-3 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-600 border border-slate-200 font-semibold text-xs flex items-center justify-center gap-2 transition-colors"
-                >
-                  <Download className="w-4 h-4 text-amber-600" />
-                  <span>Download Full Syllabus PDF</span>
-                </button>
-              </div>
+                    <button
+                      onClick={() => setSyllabusModalOpen(true)}
+                      className="w-full py-3 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-600 border border-slate-200 font-semibold text-xs flex items-center justify-center gap-2 transition-colors"
+                    >
+                      <Download className="w-4 h-4 text-amber-600" />
+                      <span>Download Full Syllabus PDF</span>
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="space-y-1">
+                    <span className="text-xs text-slate-500 font-mono">
+                      Included in {unlockedBy.name} and above
+                    </span>
+                    <div className="flex items-baseline gap-2">
+                      <span className="text-3xl font-bold font-serif text-amber-600">
+                        {formatNaira(unlockedBy.amountKobo)}
+                      </span>
+                      <span className="text-[11px] text-slate-500 font-mono">
+                        {unlockedBy.billing}
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-slate-500 leading-relaxed pt-1">
+                      One payment unlocks this course and everything else in the{' '}
+                      {unlockedBy.name} tier.
+                    </p>
+                  </div>
+
+                  <div className="space-y-3">
+                    <Link
+                      to={`/checkout/${unlockedBy.code}`}
+                      className="w-full py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs shadow-lg shadow-amber-500/20 flex items-center justify-center gap-2 transition-all"
+                    >
+                      <Lock className="w-4 h-4" />
+                      <span>Unlock with {unlockedBy.name}</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </Link>
+
+                    <Link
+                      to="/pricing"
+                      className="w-full py-3 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-600 border border-slate-200 font-semibold text-xs flex items-center justify-center gap-2 transition-colors"
+                    >
+                      <span>Compare all packages</span>
+                    </Link>
+
+                    <button
+                      onClick={() => setSyllabusModalOpen(true)}
+                      className="w-full py-2.5 text-slate-500 hover:text-slate-900 font-medium text-[11px] flex items-center justify-center gap-1.5 transition-colors"
+                    >
+                      <Download className="w-3.5 h-3.5" />
+                      <span>Email me the free syllabus first</span>
+                    </button>
+                  </div>
+                </>
+              )}
 
               <div className="pt-4 border-t border-slate-200 space-y-2 text-[11px] text-slate-500">
                 <div className="flex items-center gap-2">
                   <ShieldCheck className="w-4 h-4 text-amber-600 flex-shrink-0" />
-                  <span>Money-Back Assurance if not accepted by Admissions</span>
+                  <span>7-day refund assurance on every package</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Sparkles className="w-4 h-4 text-amber-600 flex-shrink-0" />
@@ -196,23 +267,61 @@ export const CourseDetailView: React.FC<CourseDetailViewProps> = ({ onNavigate }
                 <div className="space-y-4">
                   {FEATURED_COURSE.modules.map((module, idx) => {
                     const isOpen = openModule === idx;
+                    // The first module is readable by anyone: it is the
+                    // sample that makes the rest worth paying for.
+                    const locked = !unlocked && idx >= FREE_PREVIEW_MODULES;
+
                     return (
                       <div
                         key={idx}
-                        className="rounded-2xl bg-white border border-slate-200 overflow-hidden transition-colors shadow-sm"
+                        className={`rounded-2xl bg-white border overflow-hidden transition-colors shadow-sm ${
+                          locked ? 'border-slate-200' : 'border-slate-200'
+                        }`}
                       >
                         <button
                           onClick={() => toggleModule(idx)}
                           className="w-full p-6 text-left flex items-center justify-between hover:bg-slate-100 transition-colors"
                         >
                           <div className="space-y-1">
-                            <span className="text-xs font-mono text-amber-600 font-bold">{module.week}</span>
-                            <h4 className="text-lg font-serif font-bold text-slate-900">{module.title}</h4>
+                            <span className="text-xs font-mono text-amber-600 font-bold flex items-center gap-2">
+                              {module.week}
+                              {!unlocked && idx < FREE_PREVIEW_MODULES && (
+                                <span className="px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px]">
+                                  FREE PREVIEW
+                                </span>
+                              )}
+                            </span>
+                            <h4
+                              className={`text-lg font-serif font-bold flex items-center gap-2 ${
+                                locked ? 'text-slate-400' : 'text-slate-900'
+                              }`}
+                            >
+                              {locked && <Lock className="w-4 h-4 shrink-0" />}
+                              {module.title}
+                            </h4>
                           </div>
                           {isOpen ? <ChevronUp className="w-5 h-5 text-amber-600" /> : <ChevronDown className="w-5 h-5 text-slate-500" />}
                         </button>
 
-                        {isOpen && (
+                        {isOpen && locked && (
+                          <div className="px-6 pb-6 pt-4 border-t border-slate-200 space-y-3 text-center">
+                            <Lock className="w-6 h-6 text-amber-600 mx-auto" />
+                            <p className="text-xs text-slate-500 leading-relaxed max-w-sm mx-auto">
+                              This module is part of the paid curriculum. Unlock it,
+                              and every other course in the {unlockedBy.name} tier, for{' '}
+                              {formatNaira(unlockedBy.amountKobo)}.
+                            </p>
+                            <Link
+                              to={`/checkout/${unlockedBy.code}`}
+                              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs transition-colors"
+                            >
+                              Unlock with {unlockedBy.name}
+                              <ArrowRight className="w-4 h-4" />
+                            </Link>
+                          </div>
+                        )}
+
+                        {isOpen && !locked && (
                           <div className="px-6 pb-6 pt-2 border-t border-slate-200 space-y-4 text-xs text-slate-600">
                             <p className="leading-relaxed">{module.description}</p>
                             <div>
@@ -293,23 +402,123 @@ export const CourseDetailView: React.FC<CourseDetailViewProps> = ({ onNavigate }
               <h3 className="text-xl font-serif font-bold text-slate-900">Apply for Executive Strategy & Global Growth</h3>
             </div>
 
-            <form onSubmit={(e) => { e.preventDefault(); alert("Application submitted! Our admissions director will review your background within 24 hours."); setApplyModalOpen(false); }} className="space-y-3 text-xs">
-              <div>
-                <label className="block text-slate-500 mb-1">Full Name</label>
-                <input required type="text" defaultValue="Chidi Okeke" className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-slate-900" />
+            {application.status === 'sent' ? (
+              <div className="text-center space-y-3 py-4">
+                <CheckCircle2 className="w-10 h-10 text-emerald-600 mx-auto" />
+                <h4 className="font-serif font-bold text-slate-900">Application Submitted</h4>
+                <p className="text-xs text-slate-600">
+                  Our admissions director will review your background within 24 hours.
+                </p>
+                <button
+                  onClick={() => { application.reset(); setApplyModalOpen(false); }}
+                  className="px-5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs"
+                >
+                  Close
+                </button>
               </div>
-              <div>
-                <label className="block text-slate-500 mb-1">Current Title & Organization</label>
-                <input required type="text" defaultValue="VP of Global Strategy, Nexus International" className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-slate-900" />
+            ) : (
+              // Placeholders, not defaultValue: the old demo values ("Chidi Okeke",
+              // "alex.rivera@nexus.com") were prefilled and valid, so now that this
+              // form really sends, a distracted applicant could submit someone
+              // else's details untouched.
+              <form
+                onSubmit={(e) => application.submit(e, { course: FEATURED_COURSE.title })}
+                className="space-y-3 text-xs"
+              >
+                <input {...HONEYPOT_PROPS} />
+                <div>
+                  <label className="block text-slate-500 mb-1">Full Name</label>
+                  <input required name="name" type="text" placeholder="Chidi Okeke" className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-slate-900" />
+                </div>
+                <div>
+                  <label className="block text-slate-500 mb-1">Current Title & Organization</label>
+                  <input required name="role" type="text" placeholder="VP of Global Strategy, Nexus International" className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-slate-900" />
+                </div>
+                <div>
+                  <label className="block text-slate-500 mb-1">Work Email</label>
+                  <input required name="email" type="email" placeholder="you@organization.com" className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-slate-900" />
+                </div>
+                {application.error && (
+                  <p className="text-rose-600 bg-rose-50 border border-rose-200 rounded-lg p-2.5">{application.error}</p>
+                )}
+                <button
+                  type="submit"
+                  disabled={application.sending}
+                  className="w-full py-3 bg-amber-500 hover:bg-amber-400 disabled:opacity-60 disabled:cursor-not-allowed text-slate-950 font-bold rounded-xl text-xs transition-colors flex items-center justify-center gap-2"
+                >
+                  {application.sending && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
+                  {application.sending ? 'Submitting...' : 'Submit Executive Application'}
+                </button>
+              </form>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Syllabus Request Modal */}
+      {syllabusModalOpen && (
+        <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-md flex items-center justify-center p-4">
+          <div className="bg-white border border-slate-200 rounded-3xl max-w-md w-full p-6 text-slate-900 space-y-4 shadow-2xl relative">
+            <button
+              onClick={() => { syllabus.reset(); setSyllabusModalOpen(false); }}
+              className="absolute top-4 right-4 text-slate-500 hover:text-slate-900"
+            >
+              ✕
+            </button>
+
+            {syllabus.status === 'sent' ? (
+              <div className="text-center space-y-3 py-4">
+                <CheckCircle2 className="w-10 h-10 text-emerald-600 mx-auto" />
+                <h4 className="font-serif font-bold text-slate-900">Syllabus On Its Way</h4>
+                <p className="text-xs text-slate-600">
+                  We'll email you the full syllabus for {FEATURED_COURSE.title} shortly.
+                </p>
+                <button
+                  onClick={() => { syllabus.reset(); setSyllabusModalOpen(false); }}
+                  className="px-5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs"
+                >
+                  Close
+                </button>
               </div>
-              <div>
-                <label className="block text-slate-500 mb-1">Work Email</label>
-                <input required type="email" defaultValue="alex.rivera@nexus.com" className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-slate-900" />
-              </div>
-              <button type="submit" className="w-full py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-xl text-xs transition-colors">
-                Submit Executive Application
-              </button>
-            </form>
+            ) : (
+              <>
+                <div className="space-y-1">
+                  <span className="text-xs font-mono text-amber-600 font-bold uppercase">Full Syllabus</span>
+                  <h3 className="text-lg font-serif font-bold text-slate-900">
+                    Where should we send it?
+                  </h3>
+                  <p className="text-xs text-slate-500">
+                    Tell us where to send the complete module breakdown for {FEATURED_COURSE.title}.
+                  </p>
+                </div>
+
+                <form
+                  onSubmit={(e) => syllabus.submit(e, { course: FEATURED_COURSE.title })}
+                  className="space-y-3 text-xs"
+                >
+                  <input {...HONEYPOT_PROPS} />
+                  <div>
+                    <label className="block text-slate-500 mb-1">Full Name</label>
+                    <input required name="name" type="text" placeholder="Chidi Okeke" className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-slate-900" />
+                  </div>
+                  <div>
+                    <label className="block text-slate-500 mb-1">Email</label>
+                    <input required name="email" type="email" placeholder="you@organization.com" className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-slate-900" />
+                  </div>
+                  {syllabus.error && (
+                    <p className="text-rose-600 bg-rose-50 border border-rose-200 rounded-lg p-2.5">{syllabus.error}</p>
+                  )}
+                  <button
+                    type="submit"
+                    disabled={syllabus.sending}
+                    className="w-full py-3 bg-amber-500 hover:bg-amber-400 disabled:opacity-60 disabled:cursor-not-allowed text-slate-950 font-bold rounded-xl text-xs transition-colors flex items-center justify-center gap-2"
+                  >
+                    {syllabus.sending && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
+                    {syllabus.sending ? 'Sending...' : 'Send Me the Syllabus'}
+                  </button>
+                </form>
+              </>
+            )}
           </div>
         </div>
       )}

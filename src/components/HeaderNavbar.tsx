@@ -3,14 +3,16 @@ import { Link, NavLink } from 'react-router-dom';
 import {
   Menu,
   X,
-  Terminal,
   ArrowRight,
+  UserPlus,
+  GraduationCap,
 } from 'lucide-react';
+import { useEnrollment } from '../lib/useEnrollment';
 
 const NAV_ITEMS: { to: string; label: string }[] = [
-  { to: '/schools', label: 'Schools' },
   { to: '/courses', label: 'Courses' },
   { to: '/mentors', label: 'Mentors' },
+  { to: '/pricing', label: 'Pricing' },
   { to: '/events', label: 'Events' },
   { to: '/blog', label: 'Insights' },
   { to: '/about', label: 'About' },
@@ -18,6 +20,9 @@ const NAV_ITEMS: { to: string; label: string }[] = [
 
 export const HeaderNavbar: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  // An enrolled student has no use for a "Register" button; show them the way
+  // into what they paid for instead.
+  const { currentPackageName } = useEnrollment();
 
   const linkClass = ({ isActive }: { isActive: boolean }) =>
     `px-3.5 py-2 rounded-full text-xs font-medium transition-all duration-200 ${
@@ -57,14 +62,25 @@ export const HeaderNavbar: React.FC = () => {
 
           {/* Right Action Buttons */}
           <div className="hidden lg:flex items-center gap-3">
-            <Link
-              to="/command-center"
-              className="flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold text-slate-950 bg-gradient-to-r from-amber-400 via-amber-300 to-amber-500 hover:brightness-110 shadow-lg shadow-amber-500/10 transition-all"
-            >
-              <Terminal className="w-3.5 h-3.5" />
-              <span>Growth AI</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
+            {currentPackageName ? (
+              <Link
+                to="/portal"
+                className="flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold text-amber-300 bg-slate-900 border border-amber-500/30 hover:border-amber-500/60 transition-all"
+              >
+                <GraduationCap className="w-3.5 h-3.5" />
+                <span>{currentPackageName} student</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            ) : (
+              <Link
+                to="/pricing"
+                className="flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold text-slate-950 bg-gradient-to-r from-amber-400 via-amber-300 to-amber-500 hover:brightness-110 shadow-lg shadow-amber-500/10 transition-all"
+              >
+                <UserPlus className="w-3.5 h-3.5" />
+                <span>Enrol</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -101,12 +117,21 @@ export const HeaderNavbar: React.FC = () => {
           ))}
           <div className="pt-2">
             <Link
-              to="/command-center"
+              to={currentPackageName ? '/portal' : '/pricing'}
               onClick={() => setMobileMenuOpen(false)}
               className="w-full py-2.5 rounded-lg bg-amber-500 text-slate-950 text-xs font-bold flex items-center justify-center gap-2"
             >
-              <Terminal className="w-4 h-4" />
-              <span>Growth AI</span>
+              {currentPackageName ? (
+                <>
+                  <GraduationCap className="w-4 h-4" />
+                  <span>{currentPackageName} student</span>
+                </>
+              ) : (
+                <>
+                  <UserPlus className="w-4 h-4" />
+                  <span>Enrol</span>
+                </>
+              )}
             </Link>
           </div>
         </div>

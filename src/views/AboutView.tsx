@@ -146,11 +146,11 @@ export const AboutView: React.FC = () => {
           <Sparkles className="w-8 h-8 text-amber-600 mx-auto" />
           <h3 className="text-2xl font-serif font-bold text-slate-900">Ready to begin your growth journey?</h3>
           <p className="text-sm text-slate-500 max-w-xl mx-auto">
-            Explore our schools and programs, or talk to an advisor about corporate and government training.
+            Explore our programs, or talk to an advisor about corporate and government training.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
-            <Link to="/schools" className="px-6 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-sm">
-              Explore Schools
+            <Link to="/courses" className="px-6 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-sm">
+              Explore Courses
             </Link>
             <Link to="/contact" className="px-6 py-3 rounded-xl bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 font-semibold text-sm">
               Contact Us

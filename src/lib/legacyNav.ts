@@ -7,7 +7,6 @@ import { ViewType } from '../types';
  */
 export const VIEW_PATHS: Record<ViewType, string> = {
   home: '/',
-  'leadership-school': '/schools/leadership',
   'course-detail': '/courses/exec-strategy-growth',
   'student-dashboard': '/portal',
   'command-center': '/command-center',

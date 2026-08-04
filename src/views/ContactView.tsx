@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { PageHero } from '../components/PageHero';
-import { Mail, Phone, MapPin, Building2, CheckCircle2, Send } from 'lucide-react';
+import { Mail, Phone, MapPin, Building2, CheckCircle2, Send, Loader2, AlertCircle } from 'lucide-react';
+import { useFormSubmit, HONEYPOT_PROPS } from '../lib/useFormSubmit';
 
 const INTERESTS = [
   'Individual Enrollment',
@@ -12,7 +13,8 @@ const INTERESTS = [
 ];
 
 export const ContactView: React.FC = () => {
-  const [sent, setSent] = useState(false);
+  const { status, error, submit, reset, sending } = useFormSubmit('contact');
+  const sent = status === 'sent';
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
@@ -72,7 +74,7 @@ export const ContactView: React.FC = () => {
               <h3 className="text-lg font-serif font-bold text-slate-900">Message Sent</h3>
               <p className="text-sm text-slate-500">Thank you — a member of our team will respond within one business day.</p>
               <button
-                onClick={() => setSent(false)}
+                onClick={reset}
                 className="px-5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs"
               >
                 Send another message
@@ -80,40 +82,52 @@ export const ContactView: React.FC = () => {
             </div>
           ) : (
             <form
-              onSubmit={(e) => { e.preventDefault(); setSent(true); }}
+              onSubmit={submit}
               className="p-8 rounded-2xl bg-white shadow-sm border border-slate-200 space-y-4 text-xs"
             >
+              <input {...HONEYPOT_PROPS} />
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-slate-500 mb-1">Full Name</label>
-                  <input required type="text" className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-slate-900 focus:outline-none focus:border-amber-500" />
+                  <input required name="name" type="text" className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-slate-900 focus:outline-none focus:border-amber-500" />
                 </div>
                 <div>
                   <label className="block text-slate-500 mb-1">Work Email</label>
-                  <input required type="email" className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-slate-900 focus:outline-none focus:border-amber-500" />
+                  <input required name="email" type="email" className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-slate-900 focus:outline-none focus:border-amber-500" />
                 </div>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-slate-500 mb-1">Organization (optional)</label>
-                  <input type="text" className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-slate-900 focus:outline-none focus:border-amber-500" />
+                  <input name="organization" type="text" className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-slate-900 focus:outline-none focus:border-amber-500" />
                 </div>
                 <div>
                   <label className="block text-slate-500 mb-1">I'm interested in</label>
-                  <select className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-slate-900 focus:outline-none focus:border-amber-500">
+                  <select name="interest" className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-slate-900 focus:outline-none focus:border-amber-500">
                     {INTERESTS.map((i) => <option key={i}>{i}</option>)}
                   </select>
                 </div>
               </div>
               <div>
                 <label className="block text-slate-500 mb-1">Message</label>
-                <textarea required rows={5} className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-slate-900 focus:outline-none focus:border-amber-500 resize-none" placeholder="Tell us about your goals..." />
+                <textarea required name="message" rows={5} className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-slate-900 focus:outline-none focus:border-amber-500 resize-none" placeholder="Tell us about your goals..." />
               </div>
+
+              {error && (
+                <p className="flex items-start gap-2 text-rose-600 bg-rose-50 border border-rose-200 rounded-lg p-3">
+                  <AlertCircle className="w-4 h-4 shrink-0 mt-px" />
+                  <span>{error}</span>
+                </p>
+              )}
+
               <button
                 type="submit"
-                className="w-full py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-xl text-sm flex items-center justify-center gap-2 transition-colors"
+                disabled={sending}
+                className="w-full py-3 bg-amber-500 hover:bg-amber-400 disabled:opacity-60 disabled:cursor-not-allowed text-slate-950 font-bold rounded-xl text-sm flex items-center justify-center gap-2 transition-colors"
               >
-                <Send className="w-4 h-4" /> Send Message
+                {sending
+                  ? <><Loader2 className="w-4 h-4 animate-spin" /> Sending...</>
+                  : <><Send className="w-4 h-4" /> Send Message</>}
               </button>
             </form>
           )}
