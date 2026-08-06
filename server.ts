@@ -7,6 +7,7 @@ import { createPaymentRouter, captureRawBody } from "./src/server/paymentRoutes.
 import { createAdminRouter, requireAdmin } from "./src/server/adminRoutes.js";
 import { createMentorRouter } from "./src/server/mentorRoutes.js";
 import { createLeadRouter } from "./src/server/leadRoutes.js";
+import { createMessageRouter } from "./src/server/messageRoutes.js";
 
 /**
  * Local development server.
@@ -28,6 +29,7 @@ async function startServer() {
   app.use("/api", createAdminRouter());
   app.use("/api", createMentorRouter(requireAdmin));
   app.use("/api", createLeadRouter(requireAdmin));
+  app.use("/api", createMessageRouter(requireAdmin));
 
   // Vite Middleware integration for Development
   if (process.env.NODE_ENV !== "production") {

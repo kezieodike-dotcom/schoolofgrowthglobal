@@ -30,6 +30,7 @@ import { AdminOverviewView } from './views/admin/AdminOverviewView';
 import { AdminEnrolmentsView } from './views/admin/AdminEnrolmentsView';
 import { AdminStudentsView } from './views/admin/AdminStudentsView';
 import { AdminMentorsView } from './views/admin/AdminMentorsView';
+import { AdminMessagesView } from './views/admin/AdminMessagesView';
 import { AdminCatalogueView } from './views/admin/AdminCatalogueView';
 import { AdminIntegrationsView } from './views/admin/AdminIntegrationsView';
 
@@ -55,6 +56,7 @@ export default function App() {
           <Route path="enrolments" element={<AdminEnrolmentsView />} />
           <Route path="students" element={<AdminStudentsView />} />
           <Route path="mentors" element={<AdminMentorsView />} />
+          <Route path="messages" element={<AdminMessagesView />} />
           <Route path="catalogue" element={<AdminCatalogueView />} />
           <Route path="integrations" element={<AdminIntegrationsView />} />
           <Route path="*" element={<Navigate to="/admin" replace />} />

@@ -4,6 +4,7 @@ import { createPaymentRouter, captureRawBody } from "../src/server/paymentRoutes
 import { createAdminRouter, requireAdmin } from "../src/server/adminRoutes.js";
 import { createMentorRouter } from "../src/server/mentorRoutes.js";
 import { createLeadRouter } from "../src/server/leadRoutes.js";
+import { createMessageRouter } from "../src/server/messageRoutes.js";
 
 /**
  * Vercel serverless entry point for every /api/* route.
@@ -37,10 +38,12 @@ app.use("/api", createPaymentRouter());
 app.use("/api", createAdminRouter());
 app.use("/api", createMentorRouter(requireAdmin));
 app.use("/api", createLeadRouter(requireAdmin));
+app.use("/api", createMessageRouter(requireAdmin));
 app.use(createAIRouter());
 app.use(createPaymentRouter());
 app.use(createAdminRouter());
 app.use(createMentorRouter(requireAdmin));
 app.use(createLeadRouter(requireAdmin));
+app.use(createMessageRouter(requireAdmin));
 
 export default app;

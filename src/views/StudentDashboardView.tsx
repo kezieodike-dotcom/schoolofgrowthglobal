@@ -9,7 +9,8 @@ import { VoiceInputButton } from '../components/VoiceInputButton';
 import { useEnrollment } from '../lib/useEnrollment';
 import { useMentorPairing } from '../lib/useMentorPairing';
 import { deriveExperience, aiQuota, type StudentFeature } from '../lib/studentExperience';
-import { PLANS, formatNaira, type CourseLevel, type PackageId } from '../lib/pricing';
+import { PLANS, formatNaira, type CourseLevel, type PackageId, type Entitlement } from '../lib/pricing';
+import { MentorConversation } from '../components/MentorConversation';
 import {
   LayoutDashboard,
   BookOpen,
@@ -32,6 +33,7 @@ import {
   AlertTriangle,
   ClipboardCheck,
   Trophy,
+  MessageSquare,
 } from 'lucide-react';
 
 /**
@@ -444,7 +446,11 @@ export const StudentDashboardView: React.FC<StudentDashboardViewProps> = ({
 
         {activeTab === 'mentor' &&
           (experience.mentorship.state === 'included' ? (
-            <MentorTab pairedIds={pairing.mentorIds} slots={enrollment.mentorSlots} />
+            <MentorTab
+              pairedIds={pairing.mentorIds}
+              slots={enrollment.mentorSlots}
+              entitlements={enrollment.entitlements}
+            />
           ) : (
             <UpgradePanel
               title="You have no mentor yet"
@@ -867,11 +873,20 @@ const ScheduleTab: React.FC<{
 
 // ── Mentor ───────────────────────────────────────────────────────────────
 
-const MentorTab: React.FC<{ pairedIds: string[]; slots: number }> = ({
-  pairedIds,
-  slots,
-}) => {
+const MentorTab: React.FC<{
+  pairedIds: string[];
+  slots: number;
+  entitlements: Entitlement[];
+}> = ({ pairedIds, slots, entitlements }) => {
   const paired = MENTORS.filter((m) => pairedIds.includes(m.id));
+  const [openThread, setOpenThread] = useState<string | null>(null);
+
+  // Messaging is opened with the email and reference from a real payment, so
+  // it needs the entitlement that granted mentor access.
+  const credential =
+    entitlements.find(
+      (e) => new Date(e.mentorshipExpiresAt).getTime() > Date.now() && e.email
+    ) ?? null;
 
   return (
     <div className="space-y-5">
@@ -930,12 +945,39 @@ const MentorTab: React.FC<{ pairedIds: string[]; slots: number }> = ({
                   {STUDENT_DATA.mentor.nextSession}
                 </p>
               </div>
-              <Link
-                to="/mentors"
-                className="w-full py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-xl flex items-center justify-center gap-2 transition-colors"
-              >
-                <Calendar className="w-3.5 h-3.5" /> Book a session
-              </Link>
+
+              <div className="grid grid-cols-2 gap-2">
+                <Link
+                  to="/mentors"
+                  className="py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl flex items-center justify-center gap-1.5 transition-colors"
+                >
+                  <Calendar className="w-3.5 h-3.5" /> Book
+                </Link>
+                <button
+                  onClick={() =>
+                    setOpenThread(openThread === mentor.id ? null : mentor.id)
+                  }
+                  className="py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-xl flex items-center justify-center gap-1.5 transition-colors"
+                >
+                  <MessageSquare className="w-3.5 h-3.5" />
+                  {openThread === mentor.id ? 'Close' : 'Message'}
+                </button>
+              </div>
+
+              {openThread === mentor.id &&
+                (credential ? (
+                  <MentorConversation
+                    mentor={mentor}
+                    entitlement={credential}
+                    studentName={STUDENT_DATA.name}
+                  />
+                ) : (
+                  <p className="text-[11px] text-slate-500 bg-slate-50 border border-slate-200 rounded-xl p-3 leading-relaxed">
+                    Messaging opens with the email you paid with. We could not find a
+                    payment record in this browser — sign in from the device you
+                    enrolled on, or contact us and we will link it up.
+                  </p>
+                ))}
             </div>
           ))}
         </div>

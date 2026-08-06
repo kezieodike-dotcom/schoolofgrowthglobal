@@ -12,6 +12,7 @@ import {
   Receipt,
   Users,
   UserCheck,
+  MessageSquare,
   BookOpen,
   Plug,
   LogOut,
@@ -40,6 +41,7 @@ const NAV = [
   { to: '/admin/enrolments', label: 'Enrolments', icon: Receipt },
   { to: '/admin/students', label: 'Students', icon: Users },
   { to: '/admin/mentors', label: 'Mentors', icon: UserCheck },
+  { to: '/admin/messages', label: 'Messages', icon: MessageSquare },
   { to: '/admin/catalogue', label: 'Catalogue', icon: BookOpen },
   { to: '/admin/integrations', label: 'Integrations', icon: Plug },
 ];
