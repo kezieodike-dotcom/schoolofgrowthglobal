@@ -18,3 +18,10 @@ View your app in AI Studio: https://ai.studio/apps/c300306d-2652-4844-bf0d-53e60
 2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
 3. Run the app:
    `npm run dev`
+
+## Paystack payments
+
+This project uses Paystack hosted checkout for course packages and mentorship
+subscriptions. See [docs/PAYSTACK_SETUP.md](docs/PAYSTACK_SETUP.md) for the
+local and production environment variables, callback URL, webhook URL, and test
+flow.

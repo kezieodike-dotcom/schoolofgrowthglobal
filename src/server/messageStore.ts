@@ -151,9 +151,20 @@ export function listThreads(): Thread[] {
   return store.read().sort((a, b) => b.lastMessageAt.localeCompare(a.lastMessageAt));
 }
 
+/** Threads for one mentor, newest activity first. */
+export function listThreadsForMentor(mentorId: string): Thread[] {
+  return listThreads().filter((t) => t.mentorId === mentorId);
+}
+
 /** Threads with at least one unread student message, for the inbox badge. */
 export function countAwaitingReply(): number {
   return store
     .read()
     .filter((t) => t.messages.some((m) => m.from === "student" && !m.readAt)).length;
+}
+
+export function countAwaitingReplyForMentor(mentorId: string): number {
+  return listThreadsForMentor(mentorId).filter((t) =>
+    t.messages.some((m) => m.from === "student" && !m.readAt)
+  ).length;
 }

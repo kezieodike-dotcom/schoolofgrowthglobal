@@ -376,13 +376,13 @@ export const MentorsView: React.FC = () => {
                           <Calendar className="w-3.5 h-3.5" />
                           {mentor.availability === 'Waitlist' ? 'Waitlist' : 'Book'}
                         </button>
-                        <button
-                          onClick={() => setBooked(mentor)}
+                        <Link
+                          to={`/portal?tab=messages&mentor=${mentor.id}`}
                           className="py-2.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs flex items-center justify-center gap-1.5 transition-colors"
                         >
                           <MessageSquare className="w-3.5 h-3.5" />
                           Message
-                        </button>
+                        </Link>
                       </div>
                       <button
                         onClick={() => pairing.unpair(mentor.id)}

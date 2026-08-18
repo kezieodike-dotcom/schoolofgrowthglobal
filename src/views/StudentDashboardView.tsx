@@ -1,5 +1,5 @@
-import React, { useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
 import { ViewType } from '../types';
 import { STUDENT_DATA, COURSES, MENTORS } from '../data/mockData';
 import { askGrowthAI, describeError, type ChatMessage } from '../lib/growthAI';
@@ -58,7 +58,14 @@ interface StudentDashboardViewProps {
   onNavigate: (view: ViewType) => void;
 }
 
-type Tab = 'overview' | 'courses' | 'schedule' | 'mentor' | 'certificates' | 'ai-coach';
+type Tab =
+  | 'overview'
+  | 'courses'
+  | 'schedule'
+  | 'mentor'
+  | 'messages'
+  | 'certificates'
+  | 'ai-coach';
 
 const SESSION_STYLE: Record<string, string> = {
   'Live Class': 'text-sky-700 bg-sky-50 border-sky-200',
@@ -66,6 +73,15 @@ const SESSION_STYLE: Record<string, string> = {
   Assessment: 'text-rose-700 bg-rose-50 border-rose-200',
   Workshop: 'text-emerald-700 bg-emerald-50 border-emerald-200',
 };
+
+const isTab = (value: string | null): value is Tab =>
+  value === 'overview' ||
+  value === 'courses' ||
+  value === 'schedule' ||
+  value === 'mentor' ||
+  value === 'messages' ||
+  value === 'certificates' ||
+  value === 'ai-coach';
 
 // ── Small pieces ─────────────────────────────────────────────────────────
 
@@ -196,6 +212,7 @@ const LockedPortal: React.FC = () => (
 export const StudentDashboardView: React.FC<StudentDashboardViewProps> = ({
   onNavigate,
 }) => {
+  const [searchParams, setSearchParams] = useSearchParams();
   const enrollment = useEnrollment();
   const experience = useMemo(
     () => deriveExperience(enrollment.entitlements),
@@ -203,7 +220,10 @@ export const StudentDashboardView: React.FC<StudentDashboardViewProps> = ({
   );
   const pairing = useMentorPairing(enrollment.mentorSlots);
 
-  const [activeTab, setActiveTab] = useState<Tab>('overview');
+  const [activeTab, setActiveTab] = useState<Tab>(() => {
+    const requested = searchParams.get('tab');
+    return isTab(requested) ? requested : 'overview';
+  });
   const [chatInput, setChatInput] = useState('');
   const [chatLoading, setChatLoading] = useState(false);
   const [questionsAsked, setQuestionsAsked] = useState(0);
@@ -215,6 +235,7 @@ export const StudentDashboardView: React.FC<StudentDashboardViewProps> = ({
     },
   ]);
   const { containerRef, lastMessageRef } = useChatAutoScroll(messages, chatLoading);
+  const requestedMentorId = searchParams.get('mentor');
 
   const earned = STUDENT_DATA.certificates.filter((c) => c.status === 'Earned');
   const quota = aiQuota(experience.packageId);
@@ -252,11 +273,30 @@ export const StudentDashboardView: React.FC<StudentDashboardViewProps> = ({
         icon: <Users className="w-4 h-4" />,
         locked: experience.mentorship.state === 'locked',
       },
+      {
+        id: 'messages',
+        label: 'Messages',
+        icon: <MessageSquare className="w-4 h-4" />,
+        locked: experience.mentorship.state === 'locked',
+      },
       { id: 'certificates', label: 'Certificates', icon: <Award className="w-4 h-4" /> },
       { id: 'ai-coach', label: 'Growth AI Coach', icon: <Bot className="w-4 h-4" /> },
     ];
     return base;
   }, [experience]);
+
+  useEffect(() => {
+    const next = searchParams.get('tab');
+    if (isTab(next)) setActiveTab(next);
+  }, [searchParams]);
+
+  const openTab = (tab: Tab) => {
+    setActiveTab(tab);
+    const next = new URLSearchParams(searchParams);
+    next.set('tab', tab);
+    if (tab !== 'messages') next.delete('mentor');
+    setSearchParams(next, { replace: true });
+  };
 
   const handleSendChat = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -317,7 +357,7 @@ export const StudentDashboardView: React.FC<StudentDashboardViewProps> = ({
             {tabs.map((tab) => (
               <button
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
+                onClick={() => openTab(tab.id)}
                 className={`flex items-center gap-2 md:gap-3 px-3 py-2.5 md:p-3 rounded-xl transition-colors whitespace-nowrap shrink-0 md:w-full ${
                   activeTab === tab.id
                     ? 'bg-amber-50 text-amber-700 font-bold border border-amber-300'
@@ -424,7 +464,7 @@ export const StudentDashboardView: React.FC<StudentDashboardViewProps> = ({
             experience={experience}
             earnedCount={earned.length}
             sessions={sessions}
-            onOpenTab={setActiveTab}
+            onOpenTab={openTab}
             onNavigate={onNavigate}
           />
         )}
@@ -455,6 +495,22 @@ export const StudentDashboardView: React.FC<StudentDashboardViewProps> = ({
             <UpgradePanel
               title="You have no mentor yet"
               body="Mentor access pairs you with an operator in your field for 1-on-1 sessions and messaging between them. It comes bundled with Maxi, or you can subscribe to it on its own."
+              feature={experience.mentorship}
+            />
+          ))}
+
+        {activeTab === 'messages' &&
+          (experience.mentorship.state === 'included' ? (
+            <MessagesTab
+              pairedIds={pairing.mentorIds}
+              slots={enrollment.mentorSlots}
+              entitlements={enrollment.entitlements}
+              preferredMentorId={requestedMentorId}
+            />
+          ) : (
+            <UpgradePanel
+              title="Mentor messaging is not active yet"
+              body="Messaging opens once you have mentor access and have paired with at least one mentor. Maxi includes it, or you can subscribe to mentorship on its own."
               feature={experience.mentorship}
             />
           ))}
@@ -872,6 +928,161 @@ const ScheduleTab: React.FC<{
 );
 
 // ── Mentor ───────────────────────────────────────────────────────────────
+
+const MessagesTab: React.FC<{
+  pairedIds: string[];
+  slots: number;
+  entitlements: Entitlement[];
+  preferredMentorId: string | null;
+}> = ({ pairedIds, slots, entitlements, preferredMentorId }) => {
+  const paired = MENTORS.filter((m) => pairedIds.includes(m.id));
+  const [selectedId, setSelectedId] = useState<string | null>(
+    preferredMentorId && pairedIds.includes(preferredMentorId)
+      ? preferredMentorId
+      : paired[0]?.id ?? null
+  );
+
+  useEffect(() => {
+    if (preferredMentorId && pairedIds.includes(preferredMentorId)) {
+      setSelectedId(preferredMentorId);
+      return;
+    }
+    if (!selectedId || !pairedIds.includes(selectedId)) {
+      setSelectedId(paired[0]?.id ?? null);
+    }
+  }, [pairedIds, paired, preferredMentorId, selectedId]);
+
+  const selected = paired.find((m) => m.id === selectedId) ?? null;
+  const credential =
+    entitlements.find(
+      (e) => new Date(e.mentorshipExpiresAt).getTime() > Date.now() && e.email
+    ) ?? null;
+
+  if (paired.length === 0) {
+    return (
+      <div className="bg-white border border-amber-300 rounded-3xl p-8 sm:p-10 text-center space-y-4 shadow-sm">
+        <MessageSquare className="w-9 h-9 text-amber-600 mx-auto" />
+        <div className="space-y-1.5">
+          <h3 className="text-xl font-serif font-bold text-slate-900">
+            Choose a mentor to start messaging
+          </h3>
+          <p className="text-sm text-slate-500 max-w-md mx-auto leading-relaxed">
+            Your messaging inbox appears as soon as you pair with a mentor from the
+            marketplace.
+          </p>
+        </div>
+        <Link
+          to="/mentors"
+          className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs transition-colors"
+        >
+          Browse mentors <ArrowRight className="w-4 h-4" />
+        </Link>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-5">
+      <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-3">
+        <div>
+          <span className="text-[10px] font-mono uppercase tracking-widest text-amber-600 font-bold">
+            Student to mentor chat
+          </span>
+          <h3 className="text-xl sm:text-2xl font-serif font-bold text-slate-900 mt-1">
+            Messages
+          </h3>
+          <p className="text-sm text-slate-500 max-w-2xl leading-relaxed mt-1">
+            Keep decisions, feedback and follow-ups with each mentor in one place.
+          </p>
+        </div>
+        <span className="text-[11px] font-mono text-slate-400">
+          {pairedIds.length} of {slots} mentor slots active
+        </span>
+      </div>
+
+      <div className="grid grid-cols-1 xl:grid-cols-[320px_1fr] gap-4 items-start">
+        <aside className="bg-white border border-slate-200 rounded-3xl overflow-hidden shadow-sm">
+          <div className="px-4 py-3 border-b border-slate-100 flex items-center justify-between">
+            <p className="text-xs font-bold text-slate-900">My mentors</p>
+            <MessageSquare className="w-4 h-4 text-amber-600" />
+          </div>
+          <div className="divide-y divide-slate-100">
+            {paired.map((mentor) => (
+              <button
+                key={mentor.id}
+                onClick={() => setSelectedId(mentor.id)}
+                className={`w-full p-4 text-left flex items-center gap-3 transition-all active:scale-[0.99] ${
+                  selectedId === mentor.id ? 'bg-amber-50' : 'hover:bg-slate-50'
+                }`}
+              >
+                <img
+                  src={mentor.avatar}
+                  alt=""
+                  className="w-11 h-11 rounded-xl object-cover border border-amber-200"
+                />
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs font-bold text-slate-900 truncate">
+                    {mentor.name}
+                  </p>
+                  <p className="text-[11px] text-slate-500 truncate">{mentor.role}</p>
+                  <p className="text-[10px] font-mono text-amber-600 mt-1">
+                    Replies within a working day
+                  </p>
+                </div>
+              </button>
+            ))}
+          </div>
+        </aside>
+
+        <section className="min-w-0">
+          {selected && credential ? (
+            <div className="space-y-3">
+              <div className="bg-slate-900 text-white rounded-3xl p-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div className="flex items-center gap-3 min-w-0">
+                  <img
+                    src={selected.avatar}
+                    alt=""
+                    className="w-12 h-12 rounded-2xl object-cover border border-amber-400"
+                  />
+                  <div className="min-w-0">
+                    <p className="text-sm font-serif font-bold truncate">
+                      {selected.name}
+                    </p>
+                    <p className="text-[11px] text-slate-400 truncate">{selected.role}</p>
+                  </div>
+                </div>
+                <Link
+                  to="/mentors"
+                  className="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/15 text-[11px] font-bold text-white flex items-center justify-center gap-1.5 transition-colors"
+                >
+                  <Calendar className="w-3.5 h-3.5" />
+                  Book a session
+                </Link>
+              </div>
+              <MentorConversation
+                mentor={selected}
+                entitlement={credential}
+                studentName={STUDENT_DATA.name}
+              />
+            </div>
+          ) : (
+            <div className="bg-white border border-slate-200 rounded-3xl p-8 text-center space-y-3 shadow-sm">
+              <AlertTriangle className="w-8 h-8 text-amber-600 mx-auto" />
+              <h4 className="text-base font-serif font-bold text-slate-900">
+                Messaging needs your payment email
+              </h4>
+              <p className="text-sm text-slate-500 max-w-md mx-auto leading-relaxed">
+                We could not find the entitlement that opened mentor access in this
+                browser. Re-open the portal from the device you paid on, or contact
+                support and we will link your access.
+              </p>
+            </div>
+          )}
+        </section>
+      </div>
+    </div>
+  );
+};
 
 const MentorTab: React.FC<{
   pairedIds: string[];

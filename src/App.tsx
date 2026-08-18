@@ -18,6 +18,7 @@ import { BlogView } from './views/BlogView';
 import { ContactView } from './views/ContactView';
 import { RegisterView } from './views/RegisterView';
 import { MentorRegistrationView } from './views/MentorRegistrationView';
+import { MentorInboxView } from './views/MentorInboxView';
 
 // Enrolment and payments
 import { PricingView } from './views/PricingView';
@@ -61,6 +62,8 @@ export default function App() {
           <Route path="integrations" element={<AdminIntegrationsView />} />
           <Route path="*" element={<Navigate to="/admin" replace />} />
         </Route>
+
+        <Route path="mentor/inbox" element={<MentorInboxView />} />
 
         <Route element={<Layout />}>
           <Route index element={<HomeRoute />} />
