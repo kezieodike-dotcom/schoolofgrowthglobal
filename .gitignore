@@ -12,3 +12,4 @@ coverage/
 # Real submitted data, not source — never commit it.
 .data/
 data/
+.vercel/

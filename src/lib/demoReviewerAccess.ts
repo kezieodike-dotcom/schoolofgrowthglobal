@@ -1,4 +1,4 @@
-import { entitlementFor, PLANS, type Entitlement } from './pricing';
+import { entitlementFor, PLANS, type Entitlement } from './pricing.js';
 
 export const DEMO_REVIEWER_EMAIL = 'reviewer@schoolofgrowth.demo';
 export const DEMO_REVIEWER_REFERENCE = 'demo-reviewer-preview';
