@@ -1,4 +1,5 @@
 import { useSyncExternalStore } from "react";
+import type { ContentKind } from "./content";
 import type { PlanCode } from "./pricing";
 
 /**
@@ -6,7 +7,7 @@ import type { PlanCode } from "./pricing";
  *
  * The session token is held in sessionStorage rather than localStorage, so
  * closing the tab ends the session. For a panel showing payment data that is
- * the right default — an admin who walks away from a shared machine has not
+ * the right default - an admin who walks away from a shared machine has not
  * left a permanent key behind.
  */
 
@@ -100,6 +101,43 @@ export async function adminPost<T>(path: string, body: unknown): Promise<T> {
     throw new Error(payload?.error ?? 'That action could not be completed.');
   }
   return payload as T;
+}
+
+export interface AdminImageUpload {
+  url: string;
+  path: string;
+  storage: 'supabase' | 'local';
+}
+
+function readFileAsDataUrl(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.addEventListener('load', () => resolve(String(reader.result ?? '')));
+    reader.addEventListener('error', () => reject(new Error('Could not read that image.')));
+    reader.readAsDataURL(file);
+  });
+}
+
+export async function adminUploadImage(
+  file: File,
+  options: { kind: ContentKind; field: string }
+): Promise<AdminImageUpload> {
+  if (!file.type.startsWith('image/')) {
+    throw new Error('Choose an image file.');
+  }
+
+  if (file.size > 5 * 1024 * 1024) {
+    throw new Error('Images must be 5MB or smaller.');
+  }
+
+  const data = await readFileAsDataUrl(file);
+  return adminPost<AdminImageUpload>('/uploads/image', {
+    kind: options.kind,
+    field: options.field,
+    fileName: file.name,
+    mimeType: file.type,
+    data,
+  });
 }
 
 export async function adminLogin(password: string): Promise<void> {

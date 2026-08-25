@@ -26,7 +26,7 @@ import {
 /**
  * Chrome and gate for every /admin route.
  *
- * Deliberately styled apart from the marketing site — dark rail, dense type,
+ * Deliberately styled apart from the marketing site - dark rail, dense type,
  * monospaced figures. An operator should never be unsure which side of the
  * site they are looking at, and a panel that looks like the public homepage
  * invites exactly that mistake.
@@ -42,7 +42,7 @@ const NAV = [
   { to: '/admin/students', label: 'Students', icon: Users },
   { to: '/admin/mentors', label: 'Mentors', icon: UserCheck },
   { to: '/admin/messages', label: 'Messages', icon: MessageSquare },
-  { to: '/admin/catalogue', label: 'Catalogue', icon: BookOpen },
+  { to: '/admin/catalogue', label: 'Content studio', icon: BookOpen },
   { to: '/admin/integrations', label: 'Integrations', icon: Plug },
 ];
 
@@ -83,7 +83,7 @@ export const AdminLayout: React.FC = () => {
         <div className="h-16 flex items-center gap-3 px-5 border-b border-slate-800">
           <img src="/logo.jpg" alt="" className="w-8 h-8 rounded-lg object-cover" />
           <div className="min-w-0">
-            <p className="text-xs font-serif font-bold text-white truncate">
+            <p className="text-xs font-bold text-white truncate">
               School of Growth
             </p>
             <p className="text-[10px] font-mono uppercase tracking-widest text-amber-500">
@@ -148,7 +148,7 @@ export const AdminLayout: React.FC = () => {
           >
             <Menu className="w-5 h-5" />
           </button>
-          <span className="text-sm font-serif font-bold">Admin</span>
+          <span className="text-sm font-bold">Admin</span>
         </header>
 
         <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-[1400px] w-full">
@@ -162,18 +162,18 @@ export const AdminLayout: React.FC = () => {
 /** Shown when ADMIN_PASSWORD is not set, which disables the panel entirely. */
 const AdminDisabled: React.FC = () => (
   <div className="min-h-screen bg-slate-950 text-slate-300 flex items-center justify-center px-4">
-    <div className="max-w-md w-full p-8 rounded-3xl bg-slate-900 border border-slate-800 space-y-4 text-center">
+    <div className="max-w-md w-full p-8 rounded-lg bg-slate-900 border border-slate-800 space-y-4 text-center">
       <div className="w-14 h-14 rounded-full bg-amber-500/10 border border-amber-500/30 flex items-center justify-center mx-auto">
         <ShieldAlert className="w-7 h-7 text-amber-500" />
       </div>
-      <h1 className="text-xl font-serif font-bold text-white">
+      <h1 className="text-xl font-bold text-white">
         The admin panel is switched off
       </h1>
       <p className="text-xs text-slate-400 leading-relaxed">
         There is no default password, so the panel stays closed until one is set.
         Add <code className="text-amber-400 font-mono">ADMIN_PASSWORD</code> to your
-        environment — in <code className="font-mono">.env</code> locally, and in the
-        Vercel project settings for the deployed site — then reload this page.
+        environment - in <code className="font-mono">.env</code> locally, and in the
+        Vercel project settings for the deployed site - then reload this page.
       </p>
       <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 text-left">
         <p className="text-[10px] font-mono text-slate-500 mb-1">

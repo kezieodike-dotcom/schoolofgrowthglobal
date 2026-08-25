@@ -10,7 +10,6 @@ interface PageHeroProps {
 /** Consistent inner-page hero header matching the institutional light/amber theme. */
 export const PageHero: React.FC<PageHeroProps> = ({ eyebrow, title, subtitle, icon }) => (
   <section className="relative overflow-hidden pt-14 pb-14 border-b border-slate-200 bg-gradient-to-b from-white via-slate-50 to-slate-50">
-    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[300px] bg-amber-300/20 blur-[120px] rounded-full pointer-events-none" />
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
       <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-50 border border-amber-200 text-xs font-mono text-amber-700 mb-5">
         {icon}

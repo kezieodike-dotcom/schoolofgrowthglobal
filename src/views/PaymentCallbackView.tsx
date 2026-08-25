@@ -39,7 +39,7 @@ export const PaymentCallbackView: React.FC = () => {
    * fire two verifications for one reference. The guard is a ref rather than
    * the usual cancelled-flag cleanup, and deliberately so: a flag would let
    * the first run start the request, the cleanup cancel it, and the second
-   * run return early on the ref — leaving nothing to update the UI and the
+   * run return early on the ref - leaving nothing to update the UI and the
    * page stuck on "Confirming your payment" forever.
    *
    * Nothing needs cancelling here anyway. Verification is a read, and a
@@ -85,7 +85,7 @@ export const PaymentCallbackView: React.FC = () => {
         setState({
           phase: 'error',
           message:
-            'We could not reach our server to confirm the payment. Check your connection and reload this page — your reference is safe.',
+            'We could not reach our server to confirm the payment. Check your connection and reload this page - your reference is safe.',
         });
       }
     })();
@@ -102,7 +102,7 @@ export const PaymentCallbackView: React.FC = () => {
             </h1>
             <p className="text-xs text-slate-500 max-w-sm mx-auto leading-relaxed">
               We are checking this transaction with Paystack. This usually takes a
-              second — please do not close this page.
+              second - please do not close this page.
             </p>
           </div>
         )}
@@ -249,7 +249,7 @@ const PaidPanel: React.FC<{ entitlement: Entitlement }> = ({ entitlement }) => {
 
       <p className="text-[11px] text-slate-400 text-center leading-relaxed">
         A receipt is on its way to {entitlement.email || 'your email address'}. Keep
-        your reference — quote it if you ever need to contact us about this payment.
+        your reference - quote it if you ever need to contact us about this payment.
       </p>
     </div>
   );

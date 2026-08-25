@@ -12,8 +12,8 @@ import { PLANS, isPlanCode, type PlanCode } from "../lib/pricing.js";
  * admin panel reports what Paystack knows.
  *
  * That makes the dashboard genuinely live, and it makes its limits precise:
- * anything Paystack does not record — course content, mentor applications,
- * event listings — is read-only here until a datastore exists. The panel says
+ * anything Paystack does not record - course content, mentor applications,
+ * event listings - is read-only here until a datastore exists. The panel says
  * so on the relevant screens instead of offering buttons that do nothing.
  *
  * Auth is a single shared password because there is one operator and no user
@@ -47,7 +47,7 @@ function signingKey(): string {
 const SESSION_HOURS = 8;
 
 // ── Session tokens ───────────────────────────────────────────────────────
-// A minimal signed token: base64url(payload).hmac. Not a JWT — there are no
+// A minimal signed token: base64url(payload).hmac. Not a JWT - there are no
 // third parties to interoperate with, and a smaller surface is easier to be
 // confident about than a hand-rolled subset of a spec.
 
@@ -91,7 +91,7 @@ function verifyToken(token: string | undefined): boolean {
 
 // ── Login rate limiting ──────────────────────────────────────────────────
 // In-memory, so it resets when a serverless instance recycles. That is a real
-// limitation and not a substitute for a strong password — it exists to make
+// limitation and not a substitute for a strong password - it exists to make
 // casual guessing impractical, and it is documented rather than overstated.
 
 const attempts = new Map<string, { count: number; resetAt: number }>();
@@ -210,7 +210,7 @@ const NOT_CONFIGURED =
  * Guards every authenticated admin endpoint.
  *
  * Exported so the mentor routes reuse this exact function rather than
- * reimplementing the check — one definition of "is this a valid admin
+ * reimplementing the check - one definition of "is this a valid admin
  * session" means a fix to it cannot miss a route.
  */
 export function requireAdmin(req: Request, res: Response, next: NextFunction) {
@@ -253,7 +253,7 @@ export function createAdminRouter(): Router {
 
     const supplied = String(req.body?.password ?? "");
     // Hashed before comparing so both buffers are the same length whatever
-    // was typed — timingSafeEqual throws on a length mismatch, and the
+    // was typed - timingSafeEqual throws on a length mismatch, and the
     // mismatch itself would leak the password's length.
     const a = crypto.createHash("sha256").update(supplied).digest();
     const b = crypto.createHash("sha256").update(configured).digest();
@@ -288,7 +288,7 @@ export function createAdminRouter(): Router {
       const revenueKobo = paid.reduce((sum, e) => sum + e.amountKobo, 0);
 
       // Per-plan counts and revenue, seeded with every plan so a package that
-      // has never sold still appears — a zero is information, a missing row
+      // has never sold still appears - a zero is information, a missing row
       // looks like a bug.
       const byPlan = Object.values(PLANS).map((plan) => {
         const sold = paid.filter((e) => e.plan === plan.code);
@@ -380,7 +380,7 @@ export function createAdminRouter(): Router {
   /**
    * Which integrations are live.
    *
-   * Reports presence, never values — a panel that prints an API key to the
+   * Reports presence, never values - a panel that prints an API key to the
    * browser has handed it to anyone who gets a session.
    */
   router.get("/admin/integrations", requireAdmin, (_req, res) => {
@@ -394,8 +394,8 @@ export function createAdminRouter(): Router {
           configured: present("PAYSTACK_SECRET_KEY"),
           detail: present("PAYSTACK_SECRET_KEY")
             ? secretKey()!.startsWith("sk_live")
-              ? "Live keys — taking real payments"
-              : "Test keys — no real money moves"
+              ? "Live keys - taking real payments"
+              : "Test keys - no real money moves"
             : "Set PAYSTACK_SECRET_KEY and PAYSTACK_PUBLIC_KEY",
           required: true,
         },

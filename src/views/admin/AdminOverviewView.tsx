@@ -4,19 +4,24 @@ import { useAdminData, PageHeader, Panel, StatTile, LoadingState, ErrorState, Em
 import type { Overview, PlanBreakdown } from '../../lib/adminApi';
 import {
   Wallet,
+  BookOpen,
+  BriefcaseBusiness,
+  CalendarDays,
+  Newspaper,
   Users,
   Receipt,
   Percent,
   ArrowRight,
   RefreshCw,
   PlugZap,
+  UserCheck,
 } from 'lucide-react';
 
 /**
  * The dashboard.
  *
  * Every figure comes from Paystack, which is the system of record for
- * enrolments here — a payment is what enrols someone. Nothing on this page is
+ * enrolments here - a payment is what enrols someone. Nothing on this page is
  * computed from a second store that could disagree with it.
  */
 
@@ -43,6 +48,8 @@ export const AdminOverviewView: React.FC = () => {
       {error && <ErrorState message={error} onRetry={reload} />}
 
       {data && !data.connected && <NotConnected message={data.message} />}
+
+      <ContentOperations />
 
       {data?.connected && data.totals && (
         <div className="space-y-6">
@@ -77,7 +84,7 @@ export const AdminOverviewView: React.FC = () => {
           {data.truncated && (
             <Note>
               These totals cover the most recent 500 transactions. Past that, figures
-              would need Paystack's own aggregate reports — so treat the numbers above
+              would need Paystack's own aggregate reports - so treat the numbers above
               as "recent", not "all time".
             </Note>
           )}
@@ -94,12 +101,128 @@ export const AdminOverviewView: React.FC = () => {
   );
 };
 
+interface ContentSummary {
+  writable: boolean;
+  mode: 'supabase' | 'local-json';
+  counts: {
+    course: number;
+    event: number;
+    team: number;
+    job: number;
+    insight: number;
+  };
+}
+
+const ContentOperations: React.FC = () => {
+  const { data, error } = useAdminData<ContentSummary>('/content/summary');
+
+  if (error) return null;
+
+  return (
+    <div className="mb-6 grid grid-cols-1 lg:grid-cols-[1.35fr_0.65fr] gap-4">
+      <Panel
+        title="Operations"
+        hint="Fast access to the areas admins update most often"
+        action={
+          <Link
+            to="/admin/catalogue"
+            className="inline-flex items-center gap-1 text-[11px] font-bold text-amber-600 hover:text-amber-700"
+          >
+            Open studio <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
+        }
+      >
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 divide-y sm:divide-y-0 sm:divide-x divide-slate-100">
+          <OperationLink
+            to="/admin/catalogue"
+            icon={<BookOpen className="w-4 h-4" />}
+            label="Courses"
+            value={data ? `${data.counts.course} managed` : 'Loading'}
+          />
+          <OperationLink
+            to="/admin/catalogue"
+            icon={<CalendarDays className="w-4 h-4" />}
+            label="Events"
+            value={data ? `${data.counts.event} managed` : 'Loading'}
+          />
+          <OperationLink
+            to="/admin/catalogue"
+            icon={<Users className="w-4 h-4" />}
+            label="Team"
+            value={data ? `${data.counts.team} managed` : 'Loading'}
+          />
+          <OperationLink
+            to="/admin/catalogue"
+            icon={<BriefcaseBusiness className="w-4 h-4" />}
+            label="Jobs"
+            value={data ? `${data.counts.job} managed` : 'Loading'}
+          />
+          <OperationLink
+            to="/admin/catalogue"
+            icon={<Newspaper className="w-4 h-4" />}
+            label="Insights"
+            value={data ? `${data.counts.insight} managed` : 'Loading'}
+          />
+        </div>
+      </Panel>
+
+      <Panel title="Mentor approvals" hint="Applications waiting for a decision">
+        <Link
+          to="/admin/mentors"
+          className="flex items-center justify-between gap-4 p-5 hover:bg-slate-50 transition-colors"
+        >
+          <span className="flex items-center gap-3">
+            <span className="w-10 h-10 rounded-lg bg-amber-50 border border-amber-200 text-amber-700 flex items-center justify-center">
+              <UserCheck className="w-4 h-4" />
+            </span>
+            <span>
+              <span className="block text-sm font-bold text-slate-900">Review queue</span>
+              <span className="block text-[11px] text-slate-500">
+                Admit approved mentors to the public directory.
+              </span>
+            </span>
+          </span>
+          <ArrowRight className="w-4 h-4 text-slate-300" />
+        </Link>
+      </Panel>
+
+      {data && data.mode === 'local-json' && (
+        <div className="lg:col-span-2">
+          <Note>
+            Content edits are currently using local JSON storage. Add Supabase
+            credentials in production so content changes persist on Vercel.
+          </Note>
+        </div>
+      )}
+    </div>
+  );
+};
+
+const OperationLink: React.FC<{
+  to: string;
+  icon: React.ReactNode;
+  label: string;
+  value: string;
+}> = ({ to, icon, label, value }) => (
+  <Link to={to} className="flex items-center justify-between gap-3 p-5 hover:bg-slate-50 transition-colors">
+    <span>
+      <span className="text-[10px] font-mono uppercase tracking-widest text-slate-400">
+        {label}
+      </span>
+      <span className="block text-lg font-bold text-slate-900 mt-1">{value}</span>
+    </span>
+    <span className="w-9 h-9 rounded-lg bg-slate-100 text-slate-500 flex items-center justify-center">
+      {icon}
+    </span>
+  </Link>
+);
+
 // ── Revenue over time ────────────────────────────────────────────────────
 
 /**
  * Daily revenue for the last 30 days.
  *
- * One measure, one hue — there is no second series, so there is nothing for
+ * One measure, one hue - there is no second series, so there is nothing for
  * colour to distinguish and no legend to carry. Bars rather than a line
  * because daily takings are discrete events, not a continuous quantity being
  * sampled: a line between two days implies revenue at 3am on Tuesday.
@@ -195,7 +318,7 @@ const formatDay = (iso?: string) =>
  * A table with an inline magnitude bar rather than a pie: five categories with
  * two measures each is a reading task, and exact figures matter more than
  * proportion when you are deciding whether a package is priced right. Plans
- * that have never sold still appear — a zero is information.
+ * that have never sold still appear - a zero is information.
  */
 const PlanTable: React.FC<{ plans: PlanBreakdown[] }> = ({ plans }) => {
   const peak = Math.max(...plans.map((p) => p.revenueKobo), 1);
@@ -289,7 +412,7 @@ export const NotConnected: React.FC<{ message?: string }> = ({ message }) => (
       <PlugZap className="w-7 h-7 text-amber-600" />
     </div>
     <div className="space-y-1.5">
-      <h2 className="text-lg font-serif font-bold text-slate-900">
+      <h2 className="text-lg font-bold text-slate-900">
         Paystack is not connected yet
       </h2>
       <p className="text-xs text-slate-500 max-w-md mx-auto leading-relaxed">

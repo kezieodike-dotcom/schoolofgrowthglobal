@@ -56,7 +56,8 @@ export const Footer: React.FC = () => {
             <h5 className="text-slate-900 font-semibold text-xs uppercase tracking-wider font-mono">Explore</h5>
             <ul className="space-y-2 text-xs">
               <li><Link to="/courses" className="hover:text-amber-700 transition-colors">Courses &amp; Programs</Link></li>
-              <li><Link to="/mentors" className="hover:text-amber-700 transition-colors">Mentor Marketplace</Link></li>
+              <li><Link to="/mentorship" className="hover:text-amber-700 transition-colors">Mentorship</Link></li>
+              <li><Link to="/jobs" className="hover:text-amber-700 transition-colors">Growth Career Jobs</Link></li>
               <li><Link to="/pricing" className="hover:text-amber-700 transition-colors">Tuition &amp; Packages</Link></li>
               <li><Link to="/events" className="hover:text-amber-700 transition-colors">Events &amp; Summits</Link></li>
               <li><Link to="/blog" className="hover:text-amber-700 transition-colors">Knowledge Centre</Link></li>

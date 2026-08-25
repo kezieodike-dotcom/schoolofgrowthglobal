@@ -34,7 +34,7 @@ export const AdminLoginView: React.FC = () => {
             className="w-14 h-14 rounded-2xl object-cover mx-auto ring-1 ring-amber-500/30"
           />
           <div>
-            <h1 className="text-xl font-serif font-bold text-white">
+            <h1 className="text-xl font-bold text-white">
               School of Growth
             </h1>
             <p className="text-[10px] font-mono uppercase tracking-widest text-amber-500 mt-1">

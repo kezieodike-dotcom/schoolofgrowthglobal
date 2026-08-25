@@ -86,7 +86,7 @@ export const AdminMentorsView: React.FC = () => {
             </p>
             <p className="text-[11px] text-rose-800 leading-relaxed">
               Applications are stored in a file on disk, and this server's filesystem
-              is read-only — which is normal on Vercel. Approve and reject are
+              is read-only - which is normal on Vercel. Approve and reject are
               disabled rather than pretending to work. Deploy somewhere with a
               persistent disk, or add a database, to review mentors here.
             </p>
@@ -150,7 +150,7 @@ export const AdminMentorsView: React.FC = () => {
 
           <Note>
             Applications are also emailed to your inbox. This queue is the reviewable
-            copy — approving here is what actually adds a mentor to the public
+            copy - approving here is what actually adds a mentor to the public
             directory at <code className="font-mono text-slate-700">/mentors</code>.
           </Note>
         </div>
@@ -189,7 +189,7 @@ const ApplicationCard: React.FC<{
       <div className="p-5 space-y-3">
         <div className="flex items-start justify-between gap-4">
           <div className="min-w-0 space-y-1">
-            <h3 className="text-sm font-serif font-bold text-slate-900">
+            <h3 className="text-sm font-bold text-slate-900">
               {application.name || 'Unnamed applicant'}
             </h3>
             <p className="text-[11px] text-slate-500 flex items-center gap-1.5">

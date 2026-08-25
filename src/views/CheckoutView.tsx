@@ -135,7 +135,7 @@ export const CheckoutView: React.FC = () => {
                     <Info className="w-4 h-4 shrink-0 mt-px" />
                     <span>
                       Card payments are not switched on for this site yet. Our Paystack
-                      account is being set up — until it is live, enrolment is handled by
+                      account is being set up - until it is live, enrolment is handled by
                       our admissions team.
                     </span>
                   </p>

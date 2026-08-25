@@ -8,7 +8,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
  * Android, while Firefox does not. Callers must hide their microphone control
  * when `supported` is false rather than showing a button that cannot work.
  *
- * A secure context is required — https in production, localhost in dev.
+ * A secure context is required - https in production, localhost in dev.
  *
  * Speech fills the input rather than sending it. Recognition mishears names
  * and figures often enough that auto-sending would put words in the user's

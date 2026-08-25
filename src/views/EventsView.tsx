@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { EVENTS } from '../data/mockData';
 import { PageHero } from '../components/PageHero';
+import { useContentCollection } from '../lib/useContent';
 import { CalendarDays, MapPin, Clock, Video, Users, Ticket, CheckCircle2 } from 'lucide-react';
 
 const TYPES = ['All', 'Conference', 'Webinar', 'Seminar', 'Workshop', 'Bootcamp', 'Virtual Summit'] as const;
@@ -10,9 +11,10 @@ const modeIcon = (mode: string) => (mode === 'In-Person' ? <MapPin className="w-
 export const EventsView: React.FC = () => {
   const [filter, setFilter] = useState<(typeof TYPES)[number]>('All');
   const [registered, setRegistered] = useState<string | null>(null);
+  const managedEvents = useContentCollection('event', EVENTS);
 
-  const events = EVENTS.filter((e) => filter === 'All' || e.type === filter);
-  const featured = EVENTS[0];
+  const events = managedEvents.items.filter((e) => filter === 'All' || e.type === filter);
+  const featured = managedEvents.items[0] ?? EVENTS[0];
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
@@ -116,7 +118,7 @@ export const EventsView: React.FC = () => {
             <h3 className="text-lg font-serif font-bold text-slate-900">You're Registered</h3>
             <p className="text-sm text-slate-500">
               A QR ticket and calendar invite for{' '}
-              <span className="text-amber-600 font-medium">{EVENTS.find((e) => e.id === registered)?.title}</span> are on
+              <span className="text-amber-600 font-medium">{managedEvents.items.find((e) => e.id === registered)?.title}</span> are on
               their way to your inbox.
             </p>
             <button

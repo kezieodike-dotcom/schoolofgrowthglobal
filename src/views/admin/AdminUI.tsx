@@ -9,7 +9,7 @@ import { Loader2, AlertCircle, Inbox, RefreshCw, Info } from 'lucide-react';
  * and reloads the same way instead of each inventing its own.
  */
 
-// ── Data loading ─────────────────────────────────────────────────────────
+// -- Data loading ---------------------------------------------------------
 
 interface AdminData<T> {
   data: T | null;
@@ -23,7 +23,7 @@ interface AdminData<T> {
  *
  * An expired session is not surfaced as an error. AdminAuthError means the
  * token has already been cleared, which re-renders AdminLayout into the login
- * screen — showing "your session expired" underneath that would be noise.
+ * screen - showing "your session expired" underneath that would be noise.
  */
 export function useAdminData<T>(path: string): AdminData<T> {
   const [data, setData] = useState<T | null>(null);
@@ -58,7 +58,7 @@ export function useAdminData<T>(path: string): AdminData<T> {
   return { data, error, loading, reload };
 }
 
-// ── Chrome ───────────────────────────────────────────────────────────────
+// -- Chrome ---------------------------------------------------------------
 
 export const PageHeader: React.FC<{
   title: string;
@@ -67,7 +67,7 @@ export const PageHeader: React.FC<{
 }> = ({ title, subtitle, action }) => (
   <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-6">
     <div className="space-y-1">
-      <h1 className="text-2xl font-serif font-bold text-slate-900">{title}</h1>
+      <h1 className="text-2xl font-bold text-slate-900">{title}</h1>
       {subtitle && (
         <p className="text-xs text-slate-500 leading-relaxed max-w-2xl">{subtitle}</p>
       )}
@@ -84,13 +84,13 @@ export const Panel: React.FC<{
   className?: string;
 }> = ({ title, hint, action, children, className = '' }) => (
   <section
-    className={`rounded-2xl bg-white border border-slate-200 shadow-sm ${className}`}
+    className={`rounded-lg bg-white border border-slate-200 shadow-sm ${className}`}
   >
     {(title || action) && (
       <header className="flex items-center justify-between gap-3 px-5 py-3.5 border-b border-slate-100">
         <div className="min-w-0">
           {title && (
-            <h2 className="text-sm font-bold text-slate-900 font-serif">{title}</h2>
+            <h2 className="text-sm font-bold text-slate-900">{title}</h2>
           )}
           {hint && <p className="text-[11px] text-slate-400 mt-0.5">{hint}</p>}
         </div>
@@ -115,7 +115,7 @@ export const StatTile: React.FC<{
   icon?: React.ReactNode;
   tone?: 'default' | 'positive';
 }> = ({ label, value, sub, icon, tone = 'default' }) => (
-  <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-2">
+  <div className="p-5 rounded-lg bg-white border border-slate-200 shadow-sm space-y-2">
     <div className="flex items-center justify-between gap-2">
       <span className="text-[10px] font-mono uppercase tracking-widest text-slate-400">
         {label}
@@ -123,7 +123,7 @@ export const StatTile: React.FC<{
       {icon && <span className="text-slate-300">{icon}</span>}
     </div>
     <p
-      className={`text-2xl font-serif font-bold tabular-nums ${
+      className={`text-2xl font-bold tabular-nums ${
         tone === 'positive' ? 'text-emerald-600' : 'text-slate-900'
       }`}
     >
@@ -164,7 +164,7 @@ export const EmptyState: React.FC<{ title: string; body: string }> = ({
 }) => (
   <div className="flex flex-col items-center justify-center gap-2 py-16 px-6 text-center">
     <Inbox className="w-7 h-7 text-slate-300" />
-    <p className="text-sm font-serif font-bold text-slate-700">{title}</p>
+    <p className="text-sm font-bold text-slate-700">{title}</p>
     <p className="text-xs text-slate-500 max-w-sm leading-relaxed">{body}</p>
   </div>
 );
@@ -172,7 +172,7 @@ export const EmptyState: React.FC<{ title: string; body: string }> = ({
 /**
  * States a limit or a caveat inline.
  *
- * Used where a screen would otherwise imply more than it knows — a truncated
+ * Used where a screen would otherwise imply more than it knows - a truncated
  * aggregate, or a section that cannot be edited yet. Saying it beside the
  * data is the point; a caveat in a tooltip is a caveat nobody reads.
  */
@@ -201,7 +201,7 @@ export const StatusPill: React.FC<{ status: string }> = ({ status }) => {
   );
 };
 
-// ── Formatting ───────────────────────────────────────────────────────────
+// -- Formatting -----------------------------------------------------------
 
 export const money = (kobo: number) => formatNaira(kobo);
 
@@ -212,7 +212,7 @@ export const shortDate = (iso: string | null) =>
         month: 'short',
         year: 'numeric',
       })
-    : '—';
+    : '-';
 
 export const dateTime = (iso: string | null) =>
   iso
@@ -222,4 +222,4 @@ export const dateTime = (iso: string | null) =>
         hour: '2-digit',
         minute: '2-digit',
       })
-    : '—';
+    : '-';

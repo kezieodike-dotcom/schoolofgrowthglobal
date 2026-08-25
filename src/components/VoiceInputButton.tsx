@@ -4,7 +4,7 @@ import { Mic, Square } from 'lucide-react';
 /**
  * Microphone toggle for the Growth AI chat inputs.
  *
- * Render only when the browser supports speech recognition — an always-visible
+ * Render only when the browser supports speech recognition - an always-visible
  * button that silently does nothing is worse than no button.
  */
 export const VoiceInputButton: React.FC<{

@@ -6,7 +6,7 @@ import { CheckCircle2, XCircle, AlertTriangle } from 'lucide-react';
 /**
  * Which services the site is wired to.
  *
- * Reports presence and mode only — never a key or any part of one. A panel
+ * Reports presence and mode only - never a key or any part of one. A panel
  * that prints an API key to the browser has handed that key to anyone who
  * gets a session, and the whole point of this page is to be safe to open.
  */
@@ -39,7 +39,7 @@ export const AdminIntegrationsView: React.FC = () => {
                   configured
                 </p>
                 <p className="text-[11px] text-amber-800 leading-relaxed">
-                  {missing.map((m) => m.name).join(', ')} —{' '}
+                  {missing.map((m) => m.name).join(', ')} -{' '}
                   {missing.length === 1 ? 'this feature is' : 'these features are'} not
                   working on the live site.
                 </p>
@@ -97,7 +97,7 @@ export const AdminIntegrationsView: React.FC = () => {
           <Note>
             Values are never shown here, only whether each key is present. Set them in{' '}
             <code className="font-mono text-slate-700">.env</code> locally and in your
-            Vercel project settings for the deployed site — a key that works locally is
+            Vercel project settings for the deployed site - a key that works locally is
             absent in production until it is added there too. Changes take effect on
             the next deploy.
           </Note>

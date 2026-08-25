@@ -13,7 +13,7 @@ import {
  *
  * Entitlements only ever enter this store from /api/payments/verify, which
  * confirms the charge with Paystack directly. Nothing here can mint access on
- * its own — grant() takes an entitlement the server built, and the UI has no
+ * its own - grant() takes an entitlement the server built, and the UI has no
  * path to construct one.
  *
  * IMPORTANT, and worth being plain about: this is a client-side record, so it
@@ -28,7 +28,7 @@ import {
  *   3. Course content served from an API that checks the entitlement per
  *      request, instead of shipping in the bundle.
  *
- * The payment half of that is already real — only the storage is local. So
+ * The payment half of that is already real - only the storage is local. So
  * this file is the seam to replace, and the shape it exposes (an array of
  * entitlements plus access questions) is the same shape an API would return.
  */
@@ -36,8 +36,8 @@ import {
 const STORAGE_KEY = "sog.entitlements.v1";
 
 /**
- * A student may hold several at once — a Medium package and a standalone
- * mentorship, say — so access is the union of what each grants rather than
+ * A student may hold several at once - a course package and a standalone
+ * mentorship, say - so access is the union of what each grants rather than
  * one "current plan".
  */
 type Store = Entitlement[];
@@ -111,7 +111,7 @@ export interface Enrollment {
   packages: PlanCode[];
   /** Can this student open a course at the given level? */
   canAccessLevel: (level: CourseLevel) => boolean;
-  /** Name of the best package held, for the dashboard chip. e.g. "Maxi". */
+  /** Name of the best package held, for the dashboard chip. e.g. "Elite". */
   currentPackageName: string | null;
   /** When course access lapses, or null when none is held. */
   coursesExpireAt: Date | null;
@@ -130,7 +130,7 @@ export function useEnrollment(): Enrollment {
     .filter((d) => d.getTime() > Date.now());
 
   // Slots come from the best live mentorship grant rather than the sum, so
-  // holding Maxi and a monthly subscription does not quietly stack to four.
+  // holding Elite and a standalone mentorship plan does not quietly stack slots.
   const mentorSlots = entitlements
     .filter((e) => new Date(e.mentorshipExpiresAt).getTime() > Date.now())
     .reduce((best, e) => Math.max(best, PLANS[e.plan]?.mentorSlots ?? 0), 0);

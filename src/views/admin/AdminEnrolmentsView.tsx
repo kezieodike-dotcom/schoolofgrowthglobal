@@ -22,7 +22,7 @@ import { Search, Download, RefreshCw } from 'lucide-react';
  * Filtering happens in the browser rather than by re-querying Paystack: the
  * whole set is already loaded for the totals, and a local filter responds
  * instantly instead of spending a round trip per keystroke. If the volume
- * ever outgrows that, the search moves server-side — the note about the
+ * ever outgrows that, the search moves server-side - the note about the
  * 500-row cap is the signal to watch.
  */
 
@@ -164,7 +164,7 @@ export const AdminEnrolmentsView: React.FC = () => {
                       <tr key={row.reference} className="hover:bg-slate-50/60">
                         <td className="px-4 py-3">
                           <p className="text-xs font-medium text-slate-900">
-                            {row.name || '—'}
+                            {row.name || '-'}
                           </p>
                           <p className="text-[10px] font-mono text-slate-400">
                             {row.email}
@@ -180,7 +180,7 @@ export const AdminEnrolmentsView: React.FC = () => {
                           <StatusPill status={row.status} />
                         </td>
                         <td className="px-4 py-3 text-[11px] font-mono text-slate-500 capitalize">
-                          {row.channel ?? '—'}
+                          {row.channel ?? '-'}
                         </td>
                         <td className="px-4 py-3 text-[11px] font-mono text-slate-500 whitespace-nowrap">
                           {dateTime(row.paidAt ?? row.createdAt)}
@@ -199,7 +199,7 @@ export const AdminEnrolmentsView: React.FC = () => {
           {data.truncated && (
             <Note>
               Only the most recent 500 transactions are loaded. Older records are still
-              in your Paystack dashboard — this cap keeps the page fast, and would be
+              in your Paystack dashboard - this cap keeps the page fast, and would be
               replaced by server-side paging if volume grows.
             </Note>
           )}
@@ -210,7 +210,7 @@ export const AdminEnrolmentsView: React.FC = () => {
 };
 
 /**
- * Exports the current view — filters included — as CSV.
+ * Exports the current view - filters included - as CSV.
  *
  * Every field is quoted and internal quotes are doubled. A student called
  * O'Brien, or any plan name containing a comma, would otherwise shift every

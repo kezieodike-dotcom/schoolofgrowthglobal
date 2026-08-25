@@ -5,7 +5,7 @@ import { createJsonStore } from "./jsonStore.js";
  * Everyone who has filled in a form on the site.
  *
  * Registrations, contact enquiries, syllabus requests and cohort applications
- * were previously emailed and then gone — the inbox was the only record, so
+ * were previously emailed and then gone - the inbox was the only record, so
  * "who registered but has not paid yet" was a question nobody could answer
  * without reading back through their mail.
  *
@@ -13,7 +13,7 @@ import { createJsonStore } from "./jsonStore.js";
  * out and is still the notification; this is the list.
  *
  * Note it captures from the moment it was deployed onward. Submissions made
- * before then exist only as email and cannot be recovered here — the admin
+ * before then exist only as email and cannot be recovered here - the admin
  * page says so rather than presenting a short list as the whole history.
  */
 
@@ -112,7 +112,7 @@ export function recordLead(input: {
     existing.source = lead.source;
     existing.sourceLabel = lead.sourceLabel;
     existing.answers = lead.answers;
-    // Keep whatever we already knew if this form did not ask for it — a
+    // Keep whatever we already knew if this form did not ask for it - a
     // newsletter signup must not blank out the name a registration supplied.
     existing.name ||= lead.name;
     existing.phone ||= lead.phone;

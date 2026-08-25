@@ -3,7 +3,7 @@
  *
  * Every step, field, rule and error message lives here; the view renders it
  * and knows nothing about what a mentor is asked. That separation is what
- * makes the form cheap to change — adding a question is one entry in this
+ * makes the form cheap to change - adding a question is one entry in this
  * file, and it automatically gains validation, draft saving, the review
  * screen and its line in the application email.
  *
@@ -450,7 +450,7 @@ export function validateField(field: MentorField, raw: FieldValue): string | nul
     return "Enter a full URL, starting with https://";
   }
   if (field.minLength && text.length < field.minLength) {
-    return `Write at least ${field.minLength} characters — ${
+    return `Write at least ${field.minLength} characters - ${
       field.minLength - text.length
     } to go.`;
   }

@@ -1,5 +1,7 @@
 ﻿import { Course, FacultyMember, Testimonial, StudentProgress, School, Mentor, EventItem, BlogPost } from '../types';
 
+import type { GrowthJob } from '../types';
+
 export const FEATURED_COURSE: Course = {
   id: 'exec-strategy-growth',
   title: 'Executive Strategy & Global Growth',
@@ -13,7 +15,7 @@ export const FEATURED_COURSE: Course = {
   instructorAvatar: '/people/m3-okonkwo.jpg',
   rating: 4.96,
   reviewCount: 342,
-  status: 'Next Cohort Starts Oct 15 â€¢ 4 Seats Remaining',
+  status: 'Next Cohort Starts Oct 15 • 4 Seats Remaining',
   heroImage: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=1200',
   description: 'An intensive 12-week executive mastery program engineered for C-Suite leaders, Managing Directors, and Founders navigating hyper-scale growth, market disruption, and geopolitical complexity.',
   price: '$4,800 USD (Sponsorship Available)',
@@ -133,7 +135,7 @@ export const COURSES: Course[] = [
     instructorAvatar: '/people/m4-nwachukwu.jpg',
     rating: 5.0,
     reviewCount: 89,
-    status: 'Application Only â€¢ Limited 15 Seats',
+    status: 'Application Only • Limited 15 Seats',
     heroImage: '/scenes/coaching-collab.jpg',
     description: 'An elite 6-month immersive fellowship pairing high-potential executives directly with global industry visionaries.',
     price: '$12,500 USD',
@@ -218,7 +220,7 @@ export const COURSES: Course[] = [
   }
 ];
 
-// â”€â”€ Schools & Faculties (14) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// -- Schools & Faculties (14) ----------------------------------------------
 export const SCHOOLS: School[] = [
   {
     id: 'leadership',
@@ -404,7 +406,7 @@ export const SCHOOLS: School[] = [
   }
 ];
 
-// â”€â”€ Mentor Marketplace â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// -- Mentor Marketplace ----------------------------------------------------
 export const MENTORS: Mentor[] = [
   {
     id: 'm1',
@@ -489,13 +491,13 @@ export const MENTORS: Mentor[] = [
   }
 ];
 
-// â”€â”€ Events Platform â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// -- Events Platform -------------------------------------------------------
 export const EVENTS: EventItem[] = [
   {
     id: 'e1',
     title: 'Global Growth Summit 2024',
     type: 'Conference',
-    date: 'Oct 28â€“30, 2024',
+    date: 'Oct 28-30, 2024',
     time: '09:00 WAT',
     location: 'Lagos + Livestream',
     mode: 'Hybrid',
@@ -523,7 +525,7 @@ export const EVENTS: EventItem[] = [
     id: 'e3',
     title: 'Executive Crisis Command Bootcamp',
     type: 'Bootcamp',
-    date: 'Nov 18â€“20, 2024',
+    date: 'Nov 18-20, 2024',
     time: '10:00 WAT',
     location: 'Abuja, Nigeria',
     mode: 'In-Person',
@@ -577,7 +579,96 @@ export const EVENTS: EventItem[] = [
   }
 ];
 
-// â”€â”€ Blog & Knowledge Centre â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// -- Growth Career Jobs -----------------------------------------------------
+export const GROWTH_JOBS: GrowthJob[] = [
+  {
+    id: 'growth-strategy-associate',
+    title: 'Growth Strategy Associate',
+    organization: 'School of Growth Global Partner Network',
+    location: 'Lagos, Nigeria',
+    workMode: 'Hybrid',
+    type: 'Full-time',
+    level: 'Early Career',
+    salary: 'Competitive monthly salary',
+    posted: 'Aug 18, 2026',
+    closes: 'Sep 12, 2026',
+    summary:
+      'Support market research, business modelling and growth projects for fast-moving founders and corporate teams.',
+    requirements: [
+      'Strong writing, research and presentation skills',
+      'Comfortable with spreadsheets and business analysis',
+      'Evidence of entrepreneurship, leadership or project execution',
+    ],
+    tags: ['Strategy', 'Research', 'Business Development'],
+    image: '/scenes/leadership-meeting.jpg',
+    featured: true,
+  },
+  {
+    id: 'digital-marketing-lead',
+    title: 'Digital Marketing Lead',
+    organization: 'Growth Ventures Studio',
+    location: 'Remote, Africa-friendly hours',
+    workMode: 'Remote',
+    type: 'Contract',
+    level: 'Mid Level',
+    salary: 'Project retainer plus performance bonus',
+    posted: 'Aug 20, 2026',
+    closes: 'Sep 18, 2026',
+    summary:
+      'Own campaign planning, content distribution and conversion reporting for education and advisory products.',
+    requirements: [
+      'Portfolio showing paid or organic campaign outcomes',
+      'Experience with landing pages, email campaigns and analytics',
+      'Clear communication and weekly reporting discipline',
+    ],
+    tags: ['Marketing', 'Content', 'Sales Funnel'],
+    image: '/scenes/coaching-collab.jpg',
+  },
+  {
+    id: 'finance-operations-analyst',
+    title: 'Finance Operations Analyst',
+    organization: 'Executive Finance Partner',
+    location: 'Abuja, Nigeria',
+    workMode: 'On-site',
+    type: 'Full-time',
+    level: 'Analyst',
+    salary: 'Market rate plus learning sponsorship',
+    posted: 'Aug 22, 2026',
+    closes: 'Sep 21, 2026',
+    summary:
+      'Work with finance managers on budgeting, reporting, vendor tracking and investment education programmes.',
+    requirements: [
+      'Accounting, finance or economics background',
+      'Strong attention to detail and confidentiality',
+      'Able to explain financial information simply',
+    ],
+    tags: ['Finance', 'Operations', 'Reporting'],
+    image: '/scenes/finance-documents.jpg',
+  },
+  {
+    id: 'founder-office-intern',
+    title: 'Founder Office Intern',
+    organization: 'Business Growth Advisory Desk',
+    location: 'Port Harcourt, Nigeria',
+    workMode: 'Hybrid',
+    type: 'Internship',
+    level: 'Student / Entry',
+    salary: 'Paid internship',
+    posted: 'Aug 24, 2026',
+    closes: 'Sep 30, 2026',
+    summary:
+      'Assist the founder office with partner follow-up, event coordination, research briefs and student community support.',
+    requirements: [
+      'Excellent written English and organized follow-up habits',
+      'Interest in entrepreneurship, events and leadership education',
+      'Available at least 20 hours per week',
+    ],
+    tags: ['Internship', 'Founder Office', 'Community'],
+    image: '/scenes/bootcamp-team.jpg',
+  },
+];
+
+// -- Blog & Knowledge Centre -----------------------------------------------
 export const BLOG_POSTS: BlogPost[] = [
   {
     id: 'b1',
@@ -655,7 +746,7 @@ export const BLOG_POSTS: BlogPost[] = [
   }
 ];
 
-// â”€â”€ "What our users say" â€” testimonials columns â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// -- "What our users say" - testimonials columns --------------------------
 export const USER_TESTIMONIALS = [
   {
     text: 'The Executive Strategy program reshaped how our board approaches global expansion. We entered three new markets with far more conviction and discipline.',
@@ -897,7 +988,7 @@ export const STUDENT_DATA: StudentProgress = {
     name: 'Dr. Ngozi Okafor',
     role: 'Executive Coach & Organizational Psychologist',
     avatar: '/people/w1-okafor.jpg',
-    nextSession: 'Oct 21, 2024 Â· 09:30 WAT'
+    nextSession: 'Oct 21, 2024 · 09:30 WAT'
   }
 };
 

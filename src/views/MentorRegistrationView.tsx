@@ -52,7 +52,7 @@ import {
 const DRAFT_KEY = 'sog.mentorApplication.draft.v1';
 const REVIEW_STEP = MENTOR_STEPS.length;
 
-/** True when at least one answer has been given — an empty form is not a draft. */
+/** True when at least one answer has been given - an empty form is not a draft. */
 function hasContent(values: unknown): boolean {
   if (!values || typeof values !== 'object') return false;
   return Object.values(values as Record<string, FieldValue>).some((v) =>
@@ -117,7 +117,7 @@ export const MentorRegistrationView: React.FC = () => {
       }
       localStorage.removeItem(DRAFT_KEY);
     } catch {
-      // Quota or private browsing — the form still works, just not resumable.
+      // Quota or private browsing - the form still works, just not resumable.
     }
   }, [values, step, ready]);
 
@@ -220,7 +220,7 @@ export const MentorRegistrationView: React.FC = () => {
         body: JSON.stringify({ answers: Object.fromEntries(entries) }),
       });
     } catch {
-      // Intentionally ignored — see above.
+      // Intentionally ignored - see above.
     }
 
     const delivered = await submitValues(entries, {
@@ -364,7 +364,7 @@ export const MentorRegistrationView: React.FC = () => {
               </h4>
               <ul className="space-y-2.5">
                 {[
-                  'Paid engagements — mentees subscribe, you get booked',
+                  'Paid engagements - mentees subscribe, you get booked',
                   'Set your own availability and session load',
                   'Listed on the public directory students choose from',
                   'Vetted, motivated professionals, not cold enquiries',
@@ -651,7 +651,7 @@ const Field: React.FC<{
       {/*
         Help stays visible when a field is in error. It usually states the
         very constraint that was missed ("Pick 2 to 6"), so hiding it at the
-        moment of failure removes the explanation just when it is needed —
+        moment of failure removes the explanation just when it is needed -
         and would leave aria-describedby pointing at an element that no
         longer exists.
       */}
@@ -675,7 +675,7 @@ const Field: React.FC<{
   );
 };
 
-/** Multi-select as toggleable chips — faster to scan than a tall checkbox list. */
+/** Multi-select as toggleable chips - faster to scan than a tall checkbox list. */
 const ChipGroup: React.FC<{
   id: string;
   field: MentorField;
@@ -700,7 +700,7 @@ const ChipGroup: React.FC<{
       {field.options?.map((option) => {
         const on = selected.includes(option);
         // Once the cap is reached, unpicked chips are disabled rather than
-        // silently ignoring the click — the limit becomes visible instead of
+        // silently ignoring the click - the limit becomes visible instead of
         // feeling like a broken button.
         const blocked = !on && full;
         return (

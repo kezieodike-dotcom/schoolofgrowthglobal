@@ -54,19 +54,26 @@ export const GrowthAIFloatingWidget: React.FC = () => {
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 font-sans">
+    <div
+      className={
+        isOpen
+          ? 'fixed inset-0 z-50 font-sans'
+          : 'fixed bottom-3 right-3 sm:bottom-6 sm:right-6 z-50 font-sans'
+      }
+    >
       {!isOpen ? (
         <button
+          aria-label="Open Growth AI strategy advisor"
           onClick={() => setIsOpen(true)}
-          className="group relative flex items-center gap-3 px-5 py-3.5 rounded-full bg-slate-900 hover:bg-slate-800 text-white border border-amber-500/40 shadow-2xl shadow-amber-500/20 transition-all duration-300 hover:scale-105"
+          className="group relative flex h-12 w-12 sm:h-auto sm:w-auto items-center justify-center sm:gap-3 sm:px-5 sm:py-3.5 rounded-full bg-slate-900 hover:bg-slate-800 text-white border border-amber-500/40 shadow-xl sm:shadow-2xl sm:shadow-amber-500/20 transition-all duration-300 hover:scale-105 active:scale-95"
         >
           <div className="relative">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-amber-400 to-amber-600 flex items-center justify-center text-slate-950 font-bold">
+            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-tr from-amber-400 to-amber-600 flex items-center justify-center text-slate-950 font-bold">
               <Sparkles className="w-4 h-4 animate-pulse" />
             </div>
             <span className="absolute -top-1 -right-1 w-3 h-3 bg-emerald-500 rounded-full border-2 border-slate-900"></span>
           </div>
-          <div className="text-left">
+          <div className="hidden sm:block text-left">
             <div className="text-xs font-bold font-mono text-amber-400 flex items-center gap-1">
               <span>GROWTH AI</span>
               <span className="text-[10px] px-1 bg-amber-500/20 rounded">ONLINE</span>
@@ -75,20 +82,21 @@ export const GrowthAIFloatingWidget: React.FC = () => {
           </div>
         </button>
       ) : (
-        <div className="w-96 max-w-[calc(100vw-2rem)] h-[500px] bg-slate-950 border border-slate-800 rounded-2xl shadow-2xl flex flex-col overflow-hidden text-slate-200">
+        <div className="h-[100dvh] w-full rounded-none bg-slate-950 border-0 shadow-none flex flex-col overflow-hidden text-slate-200">
           
           {/* Header */}
-          <div className="p-4 bg-slate-900 border-b border-slate-800 flex items-center justify-between">
-            <div className="flex items-center gap-3">
+          <div className="bg-slate-900 border-b border-slate-800">
+            <div className="max-w-5xl mx-auto w-full p-4 sm:px-6 flex items-center justify-between">
+            <div className="flex items-center gap-3 min-w-0">
               <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-amber-400 to-amber-600 flex items-center justify-center text-slate-950">
                 <Bot className="w-5 h-5" />
               </div>
-              <div>
+              <div className="min-w-0">
                 <h4 className="text-sm font-bold text-white flex items-center gap-2">
-                  <span>Growth AI Assistant</span>
+                  <span className="truncate">Growth AI Assistant</span>
                   <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
                 </h4>
-                <p className="text-[10px] text-slate-400 font-mono">Executive Intelligence Core v4.2</p>
+                <p className="text-[10px] text-slate-400 font-mono truncate">Executive Intelligence Core v4.2</p>
               </div>
             </div>
             <div className="flex items-center gap-1">
@@ -105,14 +113,16 @@ export const GrowthAIFloatingWidget: React.FC = () => {
               <button
                 onClick={() => setIsOpen(false)}
                 className="p-1.5 text-slate-400 hover:text-white transition-colors"
+                aria-label="Close Growth AI chat"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
+            </div>
           </div>
 
           {/* Messages list */}
-          <div ref={containerRef} className="flex-1 p-4 overflow-y-auto space-y-3 text-xs bg-slate-950">
+          <div ref={containerRef} className="flex-1 p-4 sm:px-6 overflow-y-auto space-y-3 text-xs bg-slate-950 max-w-5xl mx-auto w-full">
             {messages.map((m, idx) => (
               <div
                 key={idx}
@@ -160,7 +170,8 @@ export const GrowthAIFloatingWidget: React.FC = () => {
           </div>
 
           {/* Quick Prompts */}
-          <div className="px-3 py-2 bg-slate-900/60 border-t border-slate-800/60 flex items-center gap-1.5 overflow-x-auto text-[10px]">
+          <div className="px-3 sm:px-6 py-2 bg-slate-900/60 border-t border-slate-800/60 flex items-center gap-1.5 overflow-x-auto text-[10px]">
+            <div className="max-w-5xl mx-auto w-full flex items-center gap-1.5 overflow-x-auto">
             <button 
               onClick={() => { setInput('How do I structure a 5-year global expansion roadmap?'); }}
               className="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-amber-300 whitespace-nowrap"
@@ -173,12 +184,13 @@ export const GrowthAIFloatingWidget: React.FC = () => {
             >
               AI Governance
             </button>
+            </div>
           </div>
 
           {/* Input Form */}
           <div className="bg-slate-900 border-t border-slate-800">
             {voice.error && (
-              <div className="px-3 pt-2 text-[10px] text-red-300 flex items-start gap-1.5">
+              <div className="max-w-5xl mx-auto w-full px-3 sm:px-6 pt-2 text-[10px] text-red-300 flex items-start gap-1.5">
                 <AlertTriangle className="w-3 h-3 flex-shrink-0 mt-0.5" />
                 <span className="flex-1">{voice.error}</span>
                 <button
@@ -190,7 +202,7 @@ export const GrowthAIFloatingWidget: React.FC = () => {
                 </button>
               </div>
             )}
-            <form onSubmit={handleSend} className="p-3 flex items-center gap-2">
+            <form onSubmit={handleSend} className="max-w-5xl mx-auto w-full p-3 sm:px-6 flex items-center gap-2">
               <input
                 type="text"
                 value={input}

@@ -31,6 +31,31 @@ export interface Mentor {
   availability: 'Available' | 'Limited' | 'Waitlist';
   avatar: string;
   featured?: boolean;
+  specialization?: string;
+  yearsExperience?: number;
+  languages?: string[];
+  regionsServed?: string[];
+  menteeCount?: number;
+  intro?: string;
+  availableDays?: string[];
+}
+
+export interface GrowthJob {
+  id: string;
+  title: string;
+  organization: string;
+  location: string;
+  workMode: 'Remote' | 'Hybrid' | 'On-site';
+  type: 'Full-time' | 'Part-time' | 'Contract' | 'Internship';
+  level: string;
+  salary: string;
+  posted: string;
+  closes: string;
+  summary: string;
+  requirements: string[];
+  tags: string[];
+  image: string;
+  featured?: boolean;
 }
 
 export interface EventItem {

@@ -4,12 +4,12 @@
  *
  * Every view used to call fetch() directly and read `data.reply` without
  * checking res.ok. A 404/500 still parses as JSON, so `data.reply` came back
- * undefined and each caller substituted invented advice — the UI looked like a
+ * undefined and each caller substituted invented advice - the UI looked like a
  * working assistant while the backend was failing. Route calls through here so
  * a failure always surfaces as a failure.
  *
  * Error text is written for the learner reading it, not the developer
- * debugging it. Diagnostics — provider messages, HTTP status, port hints — go
+ * debugging it. Diagnostics - provider messages, HTTP status, port hints - go
  * to the console and the server log. Only the dev build puts them on screen.
  */
 
@@ -63,10 +63,10 @@ async function postJSON(path: string, body: unknown): Promise<any> {
       body: JSON.stringify(body),
     });
   } catch (err) {
-    logDiagnostic(`${path} — network request failed`, err);
+    logDiagnostic(`${path} - network request failed`, err);
     throw new GrowthAIError(
       DEV
-        ? 'Growth AI is unreachable — the dev server did not respond. Is it running on the expected port?'
+        ? 'Growth AI is unreachable - the dev server did not respond. Is it running on the expected port?'
         : GENERIC_FAILURE
     );
   }
@@ -78,7 +78,7 @@ async function postJSON(path: string, body: unknown): Promise<any> {
       data = JSON.parse(raw);
     } catch {
       logDiagnostic(
-        `${path} — expected JSON, got HTTP ${res.status}`,
+        `${path} - expected JSON, got HTTP ${res.status}`,
         raw.slice(0, 200)
       );
       throw new GrowthAIError(
@@ -93,7 +93,7 @@ async function postJSON(path: string, body: unknown): Promise<any> {
 
   if (!res.ok) {
     // `error` is written for the user; `details` is dev-only and stays off screen.
-    logDiagnostic(`${path} — HTTP ${res.status}`, data?.details ?? raw);
+    logDiagnostic(`${path} - HTTP ${res.status}`, data?.details ?? raw);
     throw new GrowthAIError(
       String(data?.error || GENERIC_FAILURE),
       res.status
@@ -126,7 +126,7 @@ export async function askGrowthAI(opts: {
   });
 
   if (typeof data.reply !== 'string' || !data.reply.trim()) {
-    logDiagnostic('/api/ai/chat — reply missing or empty', data);
+    logDiagnostic('/api/ai/chat - reply missing or empty', data);
     throw new GrowthAIError(GENERIC_FAILURE);
   }
 
@@ -139,7 +139,7 @@ export async function generateScenario(opts: {
 }): Promise<{ scenario: any; simulated: boolean }> {
   const data = await postJSON('/api/ai/scenario', opts);
   if (!data.scenario) {
-    logDiagnostic('/api/ai/scenario — scenario missing', data);
+    logDiagnostic('/api/ai/scenario - scenario missing', data);
     throw new GrowthAIError(
       'Growth AI could not generate a scenario right now. Please try again in a moment.'
     );
@@ -152,7 +152,7 @@ export async function analyzeStrategy(
 ): Promise<{ analysis: any; simulated: boolean }> {
   const data = await postJSON('/api/ai/analyze', { strategyText });
   if (!data.analysis) {
-    logDiagnostic('/api/ai/analyze — analysis missing', data);
+    logDiagnostic('/api/ai/analyze - analysis missing', data);
     throw new GrowthAIError(
       'Growth AI could not review that strategy right now. Please try again in a moment.'
     );

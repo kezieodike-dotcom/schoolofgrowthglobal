@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { PageHero } from '../components/PageHero';
 import { useEnrollment } from '../lib/useEnrollment';
 import {
+  PLANS,
   PACKAGES,
   MENTORSHIP_PLANS,
   MENTORSHIP_ANNUAL_SAVING_KOBO,
@@ -24,7 +25,7 @@ import {
 } from 'lucide-react';
 
 /**
- * The commercial page: three course packages and two mentorship plans.
+ * The commercial page: three course packages and mentorship plans.
  *
  * Every figure on this page is read from src/lib/pricing.ts, the same
  * catalogue the payment server charges from. Nothing here is typed twice, so
@@ -35,7 +36,7 @@ import {
 const COMPARISON: { label: string; value: (plan: Plan) => boolean | string }[] = [
   {
     label: 'Schools unlocked',
-    value: (p) => (p.includedLevels.length >= 3 ? 'All five' : 'One'),
+    value: (p) => (p.includedLevels.length >= 3 ? 'All levels' : 'One level'),
   },
   {
     label: 'Emerging Leaders courses',
@@ -176,7 +177,7 @@ const MentorshipCard: React.FC<{ plan: Plan; owned: boolean }> = ({ plan, owned 
             featured ? 'text-white' : 'text-slate-900'
           }`}
         >
-          {plan.name.replace('Mentorship — ', '')}
+          {plan.name}
         </h3>
         <p className={`text-xs ${featured ? 'text-slate-400' : 'text-slate-500'}`}>
           {plan.tagline}
@@ -256,7 +257,7 @@ export const PricingView: React.FC = () => {
             </span>
           </>
         }
-        subtitle="Choose the package that matches your ambition. Every course in your tier unlocks the moment your payment clears — no application queue, no waiting list."
+        subtitle="Choose the package that matches your ambition. Every course in your tier unlocks the moment your payment clears - no application queue, no waiting list."
       />
 
       {currentPackageName && (
@@ -277,7 +278,7 @@ export const PricingView: React.FC = () => {
         </div>
       )}
 
-      {/* ── Packages ─────────────────────────────────────────────────── */}
+      {/* Packages */}
       <section className="pt-12 sm:pt-16 pb-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-7 items-start">
           {PACKAGES.map((plan) => (
@@ -324,7 +325,7 @@ export const PricingView: React.FC = () => {
         </div>
       </section>
 
-      {/* ── Comparison table ─────────────────────────────────────────── */}
+      {/* Comparison table */}
       <section className="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="text-2xl font-serif font-bold text-slate-900 mb-6">
           Compare the packages
@@ -384,7 +385,7 @@ export const PricingView: React.FC = () => {
         </div>
       </section>
 
-      {/* ── Mentorship ───────────────────────────────────────────────── */}
+      {/* Mentorship */}
       <section className="py-12 sm:py-16 bg-white border-y border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
@@ -408,10 +409,10 @@ export const PricingView: React.FC = () => {
               <div className="p-4 rounded-2xl bg-amber-50 border border-amber-200 flex items-start gap-3">
                 <Star className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
                 <p className="text-xs text-amber-900 leading-relaxed">
-                  Paying annually saves{' '}
+                  The one-year mentorship saves{' '}
                   <strong>{formatNaira(MENTORSHIP_ANNUAL_SAVING_KOBO)}</strong> against
-                  twelve monthly payments — and the{' '}
-                  <strong>Maxi</strong> package includes a full year of mentorship at no
+                  twelve one-month plans - and the{' '}
+                  <strong>{PLANS.maxi.name}</strong> package includes a full year of mentorship at no
                   extra cost.
                 </p>
               </div>
@@ -434,7 +435,7 @@ export const PricingView: React.FC = () => {
         </div>
       </section>
 
-      {/* ── Questions ────────────────────────────────────────────────── */}
+      {/* Questions */}
       <section className="py-14 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="text-2xl font-serif font-bold text-slate-900 mb-6">
           Before you pay
@@ -444,7 +445,7 @@ export const PricingView: React.FC = () => {
           {[
             {
               q: 'What happens right after I pay?',
-              a: 'Your courses unlock immediately. Paystack confirms the payment to us, we verify it, and the catalogue opens on the same screen — no email wait, no approval step.',
+              a: 'Your courses unlock immediately. Paystack confirms the payment to us, we verify it, and the catalogue opens on the same screen - no email wait, no approval step.',
             },
             {
               q: 'Can I upgrade later?',
@@ -452,7 +453,7 @@ export const PricingView: React.FC = () => {
             },
             {
               q: 'Do I need a package to get a mentor?',
-              a: 'No. Mentorship stands alone at ₦3,000 monthly or ₦25,000 yearly. The Maxi package bundles a year of it if you want both.',
+              a: `No. Mentorship stands alone from ${formatNaira(PLANS['mentor-1-hour'].amountKobo)} for one hour to ${formatNaira(PLANS['mentor-1-year'].amountKobo)} for one year. The ${PLANS.maxi.name} package bundles a year of it if you want both.`,
             },
             {
               q: 'Which payment methods work?',
@@ -464,7 +465,7 @@ export const PricingView: React.FC = () => {
             },
             {
               q: 'My company wants to sponsor me.',
-              a: 'Contact us and we will raise a formal invoice in your organisation’s name, payable by transfer, and enrol you when it settles.',
+              a: "Contact us and we will raise a formal invoice in your organisation's name, payable by transfer, and enrol you when it settles.",
             },
           ].map((item) => (
             <div

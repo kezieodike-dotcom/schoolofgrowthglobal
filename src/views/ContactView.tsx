@@ -22,7 +22,7 @@ export const ContactView: React.FC = () => {
         eyebrow="Get In Touch"
         icon={<Mail className="w-4 h-4" />}
         title={<>Talk to Our Team</>}
-        subtitle="Whether you're an individual, an organization, or a government agency — we'll help you find the right pathway."
+        subtitle="Whether you're an individual, an organization, or a government agency - we'll help you find the right pathway."
       />
 
       <section className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-10">
@@ -72,7 +72,7 @@ export const ContactView: React.FC = () => {
                 <CheckCircle2 className="w-7 h-7 text-emerald-600" />
               </div>
               <h3 className="text-lg font-serif font-bold text-slate-900">Message Sent</h3>
-              <p className="text-sm text-slate-500">Thank you — a member of our team will respond within one business day.</p>
+              <p className="text-sm text-slate-500">Thank you - a member of our team will respond within one business day.</p>
               <button
                 onClick={reset}
                 className="px-5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs"

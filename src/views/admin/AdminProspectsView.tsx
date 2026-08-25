@@ -30,7 +30,7 @@ interface Lead {
   lastSeenAt: string;
   submissions: number;
   answers: Record<string, string>;
-  /** null when payments could not be checked — never render as "not paid". */
+  /** null when payments could not be checked - never render as "not paid". */
   hasPaid: boolean | null;
 }
 
@@ -164,7 +164,7 @@ export const AdminProspectsView: React.FC = () => {
                   <tr key={lead.id} className="hover:bg-slate-50/60">
                     <td className="px-4 py-3">
                       <p className="text-xs font-medium text-slate-900">
-                        {lead.name || '—'}
+                        {lead.name || '-'}
                       </p>
                       <div className="flex flex-wrap items-center gap-x-3 text-[10px] font-mono text-slate-400">
                         <a
@@ -191,7 +191,7 @@ export const AdminProspectsView: React.FC = () => {
                       </span>
                     </td>
                     <td className="px-4 py-3 text-[11px] text-slate-600 max-w-[220px] truncate">
-                      {lead.interest || '—'}
+                      {lead.interest || '-'}
                     </td>
                     <td className="px-4 py-3 text-xs font-mono text-slate-500 tabular-nums">
                       {lead.submissions}
@@ -224,7 +224,7 @@ export const AdminProspectsView: React.FC = () => {
 
       <Note>
         Enquiries are matched to payments <strong>by email address</strong>, the only
-        identifier both systems share — so someone who registers with one address and
+        identifier both systems share - so someone who registers with one address and
         pays with another shows here as awaiting payment. This list also starts from
         when lead capture was added; earlier submissions exist only in your inbox and
         cannot be recovered.

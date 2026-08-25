@@ -196,7 +196,7 @@ const MentorChooser: React.FC<{ onChoose: (mentor: Mentor, token: string) => voi
               ].map(([label, value]) => (
                 <div
                   key={label}
-                  className="rounded-2xl bg-slate-900 border border-slate-800 p-4"
+                  className="rounded-lg bg-slate-900 border border-slate-800 p-4"
                 >
                   <p className="text-[10px] font-mono text-slate-500 uppercase tracking-widest">
                     {label}
@@ -228,7 +228,7 @@ const MentorChooser: React.FC<{ onChoose: (mentor: Mentor, token: string) => voi
                     key={mentor.id}
                     type="button"
                     onClick={() => setSelected(mentor)}
-                    className={`p-3 text-left rounded-2xl border transition-all active:scale-[0.99] ${
+                    className={`p-3 text-left rounded-lg border transition-all active:scale-[0.99] ${
                       selected.id === mentor.id
                         ? 'border-amber-500 bg-amber-50'
                         : 'border-slate-200 hover:bg-slate-50'
@@ -408,7 +408,7 @@ const MentorInbox: React.FC<{ mentor: Mentor; token: string; onSwitch: () => voi
             onSwitch={onSwitch}
           />
 
-          <section className="bg-white border border-slate-200 rounded-2xl overflow-hidden">
+          <section className="bg-white border border-slate-200 rounded-lg overflow-hidden">
             <div className="p-4 border-b border-slate-100 space-y-3">
               <div className="flex items-center justify-between gap-3">
                 <div>
@@ -515,7 +515,7 @@ const MentorRail: React.FC<{
   total: number;
   onSwitch: () => void;
 }> = ({ mentor, unreadCount, total, onSwitch }) => (
-  <aside className="bg-slate-950 text-white rounded-2xl overflow-hidden">
+  <aside className="bg-slate-950 text-white rounded-lg overflow-hidden">
     <div className="p-5 space-y-5">
       <Link
         to="/"
@@ -529,7 +529,7 @@ const MentorRail: React.FC<{
         <img
           src={mentor.avatar}
           alt=""
-          className="w-16 h-16 rounded-2xl object-cover ring-1 ring-amber-500/30"
+          className="w-16 h-16 rounded-lg object-cover ring-1 ring-amber-500/30"
         />
         <div>
           <p className="text-lg font-black leading-tight">{mentor.name}</p>
@@ -567,7 +567,7 @@ const MentorRail: React.FC<{
 );
 
 const Metric: React.FC<{ label: string; value: string }> = ({ label, value }) => (
-  <div className="rounded-2xl bg-white/5 border border-white/10 p-3">
+  <div className="rounded-lg bg-white/5 border border-white/10 p-3">
     <p className="text-[10px] font-mono uppercase tracking-widest text-slate-500">
       {label}
     </p>
@@ -591,7 +591,7 @@ const ThreadButton: React.FC<{
       }`}
     >
       <div className="flex items-start gap-3">
-        <div className="w-10 h-10 rounded-2xl bg-slate-900 text-white flex items-center justify-center text-xs font-black shrink-0">
+        <div className="w-10 h-10 rounded-lg bg-slate-900 text-white flex items-center justify-center text-xs font-black shrink-0">
           {initials(thread.studentName || thread.studentEmail)}
         </div>
         <div className="min-w-0 flex-1">
@@ -671,7 +671,7 @@ const ConversationPanel: React.FC<{
 
   if (!thread && !loading) {
     return (
-      <section className="bg-white border border-slate-200 rounded-2xl min-h-[520px] flex items-center justify-center p-8">
+      <section className="bg-white border border-slate-200 rounded-lg min-h-[520px] flex items-center justify-center p-8">
         <InlineState
           icon={<MessageSquare className="w-5 h-5" />}
           title="Select a mentee"
@@ -682,7 +682,7 @@ const ConversationPanel: React.FC<{
   }
 
   return (
-    <section className="bg-white border border-slate-200 rounded-2xl overflow-hidden min-h-[calc(100dvh-48px)] flex flex-col">
+    <section className="bg-white border border-slate-200 rounded-lg overflow-hidden min-h-[calc(100dvh-48px)] flex flex-col">
       <header className="px-5 py-4 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div className="min-w-0">
           <p className="text-sm font-black text-slate-950 truncate">
@@ -703,9 +703,9 @@ const ConversationPanel: React.FC<{
       <div className="flex-1 overflow-y-auto p-4 sm:p-5 space-y-3 bg-slate-50/70">
         {loading && (
           <div className="space-y-3">
-            <div className="w-2/3 h-16 rounded-2xl bg-slate-200 animate-pulse" />
-            <div className="w-1/2 h-14 rounded-2xl bg-amber-100 ml-auto animate-pulse" />
-            <div className="w-3/4 h-20 rounded-2xl bg-slate-200 animate-pulse" />
+            <div className="w-2/3 h-16 rounded-lg bg-slate-200 animate-pulse" />
+            <div className="w-1/2 h-14 rounded-lg bg-amber-100 ml-auto animate-pulse" />
+            <div className="w-3/4 h-20 rounded-lg bg-slate-200 animate-pulse" />
           </div>
         )}
 
@@ -719,7 +719,7 @@ const ConversationPanel: React.FC<{
               >
                 <div className="max-w-[82%] space-y-1">
                   <div
-                    className={`rounded-2xl px-3.5 py-2.5 text-xs leading-relaxed whitespace-pre-line ${
+                    className={`rounded-lg px-3.5 py-2.5 text-xs leading-relaxed whitespace-pre-line ${
                       fromMentor
                         ? 'bg-amber-500 text-slate-950'
                         : 'bg-white text-slate-700 border border-slate-200'
@@ -815,7 +815,7 @@ const ThreadSkeleton: React.FC = () => (
   <div className="divide-y divide-slate-100">
     {[0, 1, 2, 3].map((item) => (
       <div key={item} className="p-4 flex items-start gap-3">
-        <div className="w-10 h-10 rounded-2xl bg-slate-200 animate-pulse" />
+        <div className="w-10 h-10 rounded-lg bg-slate-200 animate-pulse" />
         <div className="flex-1 space-y-2">
           <div className="w-2/3 h-3 rounded-full bg-slate-200 animate-pulse" />
           <div className="w-1/2 h-2.5 rounded-full bg-slate-100 animate-pulse" />
@@ -832,7 +832,7 @@ const InlineState: React.FC<{
   body: string;
 }> = ({ icon, title, body }) => (
   <div className="p-8 text-center">
-    <div className="w-12 h-12 rounded-2xl bg-slate-100 text-slate-500 flex items-center justify-center mx-auto">
+    <div className="w-12 h-12 rounded-lg bg-slate-100 text-slate-500 flex items-center justify-center mx-auto">
       {icon}
     </div>
     <p className="text-sm font-black text-slate-950 mt-4">{title}</p>

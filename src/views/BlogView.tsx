@@ -2,13 +2,15 @@ import React, { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { BLOG_POSTS } from '../data/mockData';
 import { PageHero } from '../components/PageHero';
+import { useContentCollection } from '../lib/useContent';
+import type { BlogPost } from '../types';
 import { Newspaper, Clock, ArrowLeft, ArrowRight, Tag } from 'lucide-react';
 
 const CATEGORIES = ['All', 'Leadership', 'Strategy', 'Finance', 'Technology', 'Wealth Creation', 'Personal Growth'];
 
 // ── Article reader ────────────────────────────────────────────────────────
-const Article: React.FC<{ slug: string }> = ({ slug }) => {
-  const post = BLOG_POSTS.find((p) => p.slug === slug);
+const Article: React.FC<{ slug: string; posts: BlogPost[] }> = ({ slug, posts }) => {
+  const post = posts.find((p) => p.slug === slug);
   if (!post) {
     return (
       <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center gap-4 text-center px-4">
@@ -20,7 +22,7 @@ const Article: React.FC<{ slug: string }> = ({ slug }) => {
     );
   }
 
-  const related = BLOG_POSTS.filter((p) => p.slug !== post.slug).slice(0, 3);
+  const related = posts.filter((p) => p.slug !== post.slug).slice(0, 3);
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
@@ -52,13 +54,13 @@ const Article: React.FC<{ slug: string }> = ({ slug }) => {
             stakes are highest.
           </p>
           <p>
-            The most effective leaders treat this not as a one-off decision but as a repeatable system — one that
+            The most effective leaders treat this not as a one-off decision but as a repeatable system - one that
             compounds clarity, protects the downside, and keeps the organization aligned as conditions change. Below,
             we outline the mental models, sequencing, and guardrails that separate durable outcomes from reactive ones.
           </p>
           <blockquote className="border-l-2 border-amber-500 pl-4 italic text-slate-600">
             "Strategy is not a document. It is the discipline of choosing what not to do, then executing the rest with
-            conviction." — {post.author}
+            conviction." - {post.author}
           </blockquote>
           <p>
             Members of the institution can explore the full framework, worksheets, and a guided Growth AI walkthrough
@@ -95,11 +97,12 @@ const Article: React.FC<{ slug: string }> = ({ slug }) => {
 export const BlogView: React.FC = () => {
   const { slug } = useParams();
   const [category, setCategory] = useState('All');
+  const insightContent = useContentCollection('insight', BLOG_POSTS);
 
-  if (slug) return <Article slug={slug} />;
+  if (slug) return <Article slug={slug} posts={insightContent.items} />;
 
-  const posts = BLOG_POSTS.filter((p) => category === 'All' || p.category === category);
-  const featured = BLOG_POSTS.find((p) => p.featured) ?? BLOG_POSTS[0];
+  const posts = insightContent.items.filter((p) => category === 'All' || p.category === category);
+  const featured = insightContent.items.find((p) => p.featured) ?? insightContent.items[0];
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">

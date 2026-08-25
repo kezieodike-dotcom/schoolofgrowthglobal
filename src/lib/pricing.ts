@@ -1,48 +1,36 @@
 /**
  * What School of Growth sells, and what each purchase unlocks.
  *
- * This is the single source of truth for money. It is imported by the browser
- * (to render pricing and lock content) AND by the payment server (to decide
- * what to charge and to check what Paystack actually collected). That sharing
- * is the point: the client never tells the server a price. It names a plan,
- * and the server looks the amount up here. Otherwise anyone could open dev
- * tools and enrol in the Maxi package for ₦1.
- *
- * This file must stay free of Node and React imports — it is bundled into the
- * browser build and imported by the serverless function, exactly like
- * formDefs.ts.
- *
- * To change prices or what a package includes, change it here. Nothing else
- * hard-codes an amount.
+ * This is the single source of truth for money. The browser renders it, and
+ * the payment server verifies Paystack amounts against it. The browser never
+ * sends a price; it sends a plan code and the server looks that code up here.
  */
-
-// ── Money ────────────────────────────────────────────────────────────────
-// Paystack charges in the currency's smallest unit, so every NGN amount
-// crosses the wire as kobo. Storing kobo here (rather than naira, converted
-// at the call site) keeps rounding out of the payment path entirely.
 
 export const CURRENCY = "NGN" as const;
 export const KOBO_PER_NAIRA = 100;
 
-/** ₦10,000 — for display. Whole naira only; we do not price in kobo. */
 export function formatNaira(kobo: number): string {
-  return `₦${(kobo / KOBO_PER_NAIRA).toLocaleString("en-NG")}`;
+  return `\u20a6${(kobo / KOBO_PER_NAIRA).toLocaleString("en-NG")}`;
 }
 
-// ── Plans ────────────────────────────────────────────────────────────────
-
-/** Course packages: one-off payments that unlock the curriculum. */
+/** Course packages. Codes stay stable so existing checkout links do not break. */
 export type PackageId = "mini" | "medium" | "maxi";
 
-/** Mentorship: a recurring subscription that unlocks the mentor directory. */
-export type MentorshipPlanId = "mentor-monthly" | "mentor-annual";
+export type MentorshipPlanId =
+  | "mentor-1-hour"
+  | "mentor-2-hours"
+  | "mentor-3-hours"
+  | "mentor-4-hours"
+  | "mentor-5-hours"
+  | "mentor-1-week"
+  | "mentor-1-month"
+  | "mentor-1-year";
 
-/** Anything a student can pay for. This is what /api/payments accepts. */
+/** Anything a student or mentee can pay for. This is what /api/payments accepts. */
 export type PlanCode = PackageId | MentorshipPlanId;
 
 export type PlanKind = "package" | "mentorship";
 
-/** Course levels, mirroring Course['level'] in types.ts. */
 export type CourseLevel =
   | "Emerging Leaders"
   | "Executive"
@@ -53,27 +41,15 @@ export interface Plan {
   code: PlanCode;
   kind: PlanKind;
   name: string;
-  /** One line under the name on the pricing card. */
   tagline: string;
   amountKobo: number;
-  /** How long the entitlement lasts once paid. */
   durationDays: number;
-  /** Shown on the card as the billing unit, e.g. "one-off" or "per month". */
   billing: string;
   features: string[];
-  /** Deliberately named so the card can say what you do NOT get. */
   excludes?: string[];
-  /** Course levels this plan unlocks. Mentorship plans unlock none. */
   includedLevels: CourseLevel[];
-  /**
-   * Days of mentor-directory access bundled with the plan. Maxi includes a
-   * full year so the top package is a complete offer rather than a bigger
-   * course list; mentorship is still sold standalone for everyone else.
-   */
   mentorshipDays: number;
-  /** How many mentors this plan lets a student pair with at once. */
   mentorSlots: number;
-  /** Ribbon on the pricing grid. Exactly one plan should carry this. */
   highlight?: string;
 }
 
@@ -84,15 +60,17 @@ const ALL_LEVELS: CourseLevel[] = [
   "Senior Directorate",
 ];
 
+const naira = (amount: number) => amount * KOBO_PER_NAIRA;
+
 export const PLANS: Record<PlanCode, Plan> = {
   mini: {
     code: "mini",
     kind: "package",
-    name: "Mini",
-    tagline: "Test the water with a full self-paced track.",
-    amountKobo: 10_000 * KOBO_PER_NAIRA,
+    name: "Growth Foundation Cohort",
+    tagline: "Start with the core growth curriculum and build disciplined execution habits.",
+    amountKobo: naira(10_000),
     durationDays: 90,
-    billing: "one-off · 3 months access",
+    billing: "one-off / 3 months access",
     includedLevels: ["Emerging Leaders"],
     mentorshipDays: 0,
     mentorSlots: 0,
@@ -104,23 +82,23 @@ export const PLANS: Record<PlanCode, Plan> = {
       "Growth AI coach (20 questions / month)",
       "3 months of access",
     ],
-    excludes: ["Live cohorts", "Mentor directory", "Executive certification"],
+    excludes: ["Live cohorts", "Mentor booking", "Executive certification"],
   },
 
   medium: {
     code: "medium",
     kind: "package",
-    name: "Medium",
-    tagline: "The full professional curriculum, taught live.",
-    amountKobo: 50_000 * KOBO_PER_NAIRA,
+    name: "Executive Cycle",
+    tagline: "The professional curriculum for serious career and leadership acceleration.",
+    amountKobo: naira(50_000),
     durationDays: 365,
-    billing: "one-off · 12 months access",
+    billing: "one-off / 12 months access",
     includedLevels: ["Emerging Leaders", "Executive", "Frontier"],
     mentorshipDays: 0,
     mentorSlots: 0,
     features: [
-      "Everything in Mini",
-      "All five schools unlocked",
+      "Everything in Growth Foundation Cohort",
+      "All core schools unlocked",
       "Executive and Frontier courses",
       "Live cohort classes and Q&A",
       "Graded assessments with feedback",
@@ -128,116 +106,220 @@ export const PLANS: Record<PlanCode, Plan> = {
       "Unlimited Growth AI coaching",
       "12 months of access",
     ],
-    excludes: ["Senior Directorate programmes", "Mentor directory"],
+    excludes: ["Senior Directorate programmes", "Mentor booking"],
     highlight: "Most popular",
   },
 
   maxi: {
     code: "maxi",
     kind: "package",
-    name: "Maxi",
-    tagline: "The complete institution, mentor included.",
-    amountKobo: 150_000 * KOBO_PER_NAIRA,
+    name: "Elite",
+    tagline: "The complete School of Growth experience with advanced access and mentorship.",
+    amountKobo: naira(150_000),
     durationDays: 365,
-    billing: "one-off · 12 months access",
+    billing: "one-off / 12 months access",
     includedLevels: ALL_LEVELS,
     mentorshipDays: 365,
     mentorSlots: 3,
     features: [
-      "Everything in Medium",
+      "Everything in Executive Cycle",
       "Senior Directorate programmes",
       "In-person executive intensives",
       "Capstone project with faculty review",
-      "12 months mentor access included (₦25,000 value)",
+      "One-year mentorship access included",
       "Priority admission to every cohort",
       "Alumni and corporate partner network",
       "12 months of access",
     ],
   },
 
-  "mentor-monthly": {
-    code: "mentor-monthly",
+  "mentor-1-hour": {
+    code: "mentor-1-hour",
     kind: "mentorship",
-    name: "Mentorship — Monthly",
-    tagline: "Pick a mentor and meet them every month.",
-    amountKobo: 3_000 * KOBO_PER_NAIRA,
+    name: "One-Hour Mentorship",
+    tagline: "A focused one-hour session for one urgent growth, career or business decision.",
+    amountKobo: naira(1_500),
+    durationDays: 7,
+    billing: "one-hour session",
+    includedLevels: [],
+    mentorshipDays: 7,
+    mentorSlots: 1,
+    features: [
+      "One 60-minute mentor session",
+      "Choose one mentor from the marketplace",
+      "Direct student-to-mentor messaging during access",
+      "Best for a single decision or quick review",
+    ],
+  },
+
+  "mentor-2-hours": {
+    code: "mentor-2-hours",
+    kind: "mentorship",
+    name: "Two Hours Mentorship",
+    tagline: "Two hours of guided support for deeper diagnosis and next steps.",
+    amountKobo: naira(3_000),
+    durationDays: 7,
+    billing: "two-hour package",
+    includedLevels: [],
+    mentorshipDays: 7,
+    mentorSlots: 1,
+    features: [
+      "Two mentorship hours",
+      "Choose one mentor from the marketplace",
+      "Direct messaging during access",
+      "Useful for CV, interview, sales or strategy review",
+    ],
+  },
+
+  "mentor-3-hours": {
+    code: "mentor-3-hours",
+    kind: "mentorship",
+    name: "Three Hours Mentorship",
+    tagline: "Structured support across three focused mentor hours.",
+    amountKobo: naira(6_000),
+    durationDays: 14,
+    billing: "three-hour package",
+    includedLevels: [],
+    mentorshipDays: 14,
+    mentorSlots: 1,
+    features: [
+      "Three mentorship hours",
+      "Session planning with your selected mentor",
+      "Direct messaging during access",
+      "Recommended for strategy, career transition or business planning",
+    ],
+  },
+
+  "mentor-4-hours": {
+    code: "mentor-4-hours",
+    kind: "mentorship",
+    name: "Four Hours Mentorship",
+    tagline: "Four mentor hours for a compact transformation sprint.",
+    amountKobo: naira(7_500),
+    durationDays: 14,
+    billing: "four-hour package",
+    includedLevels: [],
+    mentorshipDays: 14,
+    mentorSlots: 1,
+    features: [
+      "Four mentorship hours",
+      "Choose one mentor from the marketplace",
+      "Direct messaging during access",
+      "Strong fit for business, leadership and workplace performance goals",
+    ],
+  },
+
+  "mentor-5-hours": {
+    code: "mentor-5-hours",
+    kind: "mentorship",
+    name: "Five Hours Mentorship",
+    tagline: "Five hours for a more complete mentorship sprint.",
+    amountKobo: naira(9_500),
+    durationDays: 21,
+    billing: "five-hour package",
+    includedLevels: [],
+    mentorshipDays: 21,
+    mentorSlots: 1,
+    features: [
+      "Five mentorship hours",
+      "Choose one mentor from the marketplace",
+      "Direct messaging during access",
+      "Best for business growth, leadership habits or personal development",
+    ],
+    highlight: "Best hourly value",
+  },
+
+  "mentor-1-week": {
+    code: "mentor-1-week",
+    kind: "mentorship",
+    name: "One-Week Mentorship",
+    tagline: "Seven days of mentor access for a short growth sprint.",
+    amountKobo: naira(5_000),
+    durationDays: 7,
+    billing: "one week",
+    includedLevels: [],
+    mentorshipDays: 7,
+    mentorSlots: 1,
+    features: [
+      "One week mentor access",
+      "Choose one mentor from the marketplace",
+      "Direct messaging during the week",
+      "Good for quick accountability and focused execution",
+    ],
+  },
+
+  "mentor-1-month": {
+    code: "mentor-1-month",
+    kind: "mentorship",
+    name: "One-Month Mentorship",
+    tagline: "A full month of mentor support for sustained progress.",
+    amountKobo: naira(25_000),
     durationDays: 30,
-    billing: "per month",
+    billing: "one month",
     includedLevels: [],
     mentorshipDays: 30,
     mentorSlots: 1,
     features: [
-      "Full mentor directory access",
-      "Pair with 1 mentor",
-      "One 1-on-1 session per month",
-      "Direct messaging between sessions",
-      "Cancel any time",
+      "One month mentor access",
+      "Choose one mentor from the marketplace",
+      "Direct messaging during the month",
+      "Best for career, business or leadership development plans",
     ],
+    highlight: "Popular",
   },
 
-  "mentor-annual": {
-    code: "mentor-annual",
+  "mentor-1-year": {
+    code: "mentor-1-year",
     kind: "mentorship",
-    name: "Mentorship — Annual",
-    tagline: "A year with up to three mentors, at a discount.",
-    amountKobo: 25_000 * KOBO_PER_NAIRA,
+    name: "One-Year Mentorship",
+    tagline: "A year of mentor access for long-term growth, business and career support.",
+    amountKobo: naira(200_000),
     durationDays: 365,
-    billing: "per year",
+    billing: "one year",
     includedLevels: [],
     mentorshipDays: 365,
     mentorSlots: 3,
     features: [
-      "Full mentor directory access",
+      "One year mentor access",
       "Pair with up to 3 mentors",
-      "Two 1-on-1 sessions per month",
-      "Priority booking ahead of monthly members",
-      "Session recordings and notes",
-      "Save ₦11,000 against monthly",
+      "Priority booking",
+      "Direct messaging throughout the year",
+      "Best for executive, wealth, career or business transformation",
     ],
-    highlight: "Best value",
+    highlight: "Deepest support",
   },
 };
 
-/** The three course packages, in the order they appear on the pricing grid. */
 export const PACKAGES: Plan[] = [PLANS.mini, PLANS.medium, PLANS.maxi];
 
-/** The two mentorship subscriptions. */
 export const MENTORSHIP_PLANS: Plan[] = [
-  PLANS["mentor-monthly"],
-  PLANS["mentor-annual"],
+  PLANS["mentor-1-hour"],
+  PLANS["mentor-2-hours"],
+  PLANS["mentor-3-hours"],
+  PLANS["mentor-4-hours"],
+  PLANS["mentor-5-hours"],
+  PLANS["mentor-1-week"],
+  PLANS["mentor-1-month"],
+  PLANS["mentor-1-year"],
 ];
 
-/** Narrowing guard for values arriving from a URL, form, or request body. */
 export function isPlanCode(value: unknown): value is PlanCode {
   return typeof value === "string" && value in PLANS;
 }
 
-/** ₦11,000 — what the annual mentorship saves against 12 monthly payments. */
 export const MENTORSHIP_ANNUAL_SAVING_KOBO =
-  PLANS["mentor-monthly"].amountKobo * 12 - PLANS["mentor-annual"].amountKobo;
-
-// ── Entitlements ─────────────────────────────────────────────────────────
-// What a *paid* plan grants. Produced by the server after Paystack confirms
-// the charge, and read by the UI to decide what to unlock.
+  PLANS["mentor-1-month"].amountKobo * 12 - PLANS["mentor-1-year"].amountKobo;
 
 export interface Entitlement {
-  /** The plan that was paid for. */
   plan: PlanCode;
-  /** Paystack transaction reference — the receipt for this entitlement. */
   reference: string;
-  /** Email the payment was made with. */
   email: string;
-  /** ISO timestamp the payment was verified. */
   purchasedAt: string;
-  /** ISO timestamp course access lapses. Equal to purchasedAt when none. */
   coursesExpireAt: string;
-  /** ISO timestamp mentor access lapses. Equal to purchasedAt when none. */
   mentorshipExpiresAt: string;
-  /** Course levels unlocked, copied so a later price change cannot revoke. */
   levels: CourseLevel[];
 }
 
-/** Builds the entitlement a plan grants, starting from `now`. */
 export function entitlementFor(
   plan: Plan,
   opts: { reference: string; email: string; now?: Date }
@@ -251,9 +333,6 @@ export function entitlementFor(
     reference: opts.reference,
     email: opts.email,
     purchasedAt: now.toISOString(),
-    // A mentorship plan grants no course time and vice versa, so the matching
-    // "expiry" is simply now — already lapsed, which the checks below read as
-    // no access rather than as a special case.
     coursesExpireAt:
       plan.includedLevels.length > 0 ? addDays(plan.durationDays) : now.toISOString(),
     mentorshipExpiresAt:
@@ -264,7 +343,6 @@ export function entitlementFor(
 
 const isLive = (iso: string, now: Date) => new Date(iso).getTime() > now.getTime();
 
-/** True when any held entitlement still unlocks courses at `level`. */
 export function hasCourseAccess(
   entitlements: Entitlement[],
   level: CourseLevel,
@@ -275,7 +353,6 @@ export function hasCourseAccess(
   );
 }
 
-/** True when any held entitlement still unlocks the mentor directory. */
 export function hasMentorshipAccess(
   entitlements: Entitlement[],
   now: Date = new Date()
@@ -283,15 +360,9 @@ export function hasMentorshipAccess(
   return entitlements.some((e) => isLive(e.mentorshipExpiresAt, now));
 }
 
-/**
- * The cheapest package that unlocks `level`, so a locked course can tell the
- * reader exactly what to buy instead of a generic "upgrade to continue".
- */
 export function cheapestPackageFor(level: CourseLevel): Plan {
   const match = PACKAGES.filter((p) => p.includedLevels.includes(level)).sort(
     (a, b) => a.amountKobo - b.amountKobo
   )[0];
-  // Every level appears in Maxi, so this only guards against a future level
-  // being added to types.ts and forgotten here.
   return match ?? PLANS.maxi;
 }

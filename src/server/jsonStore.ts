@@ -5,7 +5,7 @@ import path from "path";
  * A small append-and-update store backed by one JSON file.
  *
  * Shared by the mentor queue and the lead list so there is a single
- * implementation of the parts that are easy to get subtly wrong — the atomic
+ * implementation of the parts that are easy to get subtly wrong - the atomic
  * write, and the honest answer to "can this host actually persist anything".
  *
  * WHERE THIS WORKS
@@ -57,7 +57,7 @@ export function createJsonStore<T>(filename: string): JsonStore<T> {
 
     isWritable() {
       // Probed by writing, because the question is not "does the directory
-      // exist" but "will a write succeed" — and on a read-only filesystem
+      // exist" but "will a write succeed" - and on a read-only filesystem
       // those have different answers.
       try {
         fs.mkdirSync(DATA_DIR, { recursive: true });

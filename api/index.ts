@@ -5,6 +5,8 @@ import { createAdminRouter, requireAdmin } from "../src/server/adminRoutes.js";
 import { createMentorRouter } from "../src/server/mentorRoutes.js";
 import { createLeadRouter } from "../src/server/leadRoutes.js";
 import { createMessageRouter } from "../src/server/messageRoutes.js";
+import { createContentRouter } from "../src/server/contentRoutes.js";
+import { createDemoReviewerRouter } from "../src/server/demoReviewerRoutes.js";
 
 /**
  * Vercel serverless entry point for every /api/* route.
@@ -32,18 +34,22 @@ import { createMessageRouter } from "../src/server/messageRoutes.js";
 const app = express();
 // captureRawBody keeps the original bytes on the request so the Paystack
 // webhook can verify its signature; parsing alone would discard them.
-app.use(express.json({ verify: captureRawBody }));
+app.use(express.json({ limit: '8mb', verify: captureRawBody }));
 app.use("/api", createAIRouter());
 app.use("/api", createPaymentRouter());
 app.use("/api", createAdminRouter());
 app.use("/api", createMentorRouter(requireAdmin));
 app.use("/api", createLeadRouter(requireAdmin));
 app.use("/api", createMessageRouter(requireAdmin));
+app.use("/api", createContentRouter(requireAdmin));
+app.use("/api", createDemoReviewerRouter());
 app.use(createAIRouter());
 app.use(createPaymentRouter());
 app.use(createAdminRouter());
 app.use(createMentorRouter(requireAdmin));
 app.use(createLeadRouter(requireAdmin));
 app.use(createMessageRouter(requireAdmin));
+app.use(createContentRouter(requireAdmin));
+app.use(createDemoReviewerRouter());
 
 export default app;

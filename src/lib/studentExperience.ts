@@ -9,8 +9,8 @@ import {
 /**
  * What a student's dashboard should actually contain, given what they paid.
  *
- * The portal is not one screen with things greyed out — a Mini student and a
- * Maxi student are running different programmes, and the dashboard should
+ * The portal is not one screen with things greyed out - each package is a
+ * different programme, and the dashboard should
  * reflect that. This file is the single place that decides the difference, so
  * the view renders a description rather than re-deriving package rules in a
  * dozen conditionals.
@@ -30,7 +30,7 @@ export interface StudentFeature {
 }
 
 export interface StudentExperience {
-  /** False when nothing has been paid for — the portal shows a locked state. */
+  /** False when nothing has been paid for - the portal shows a locked state. */
   enrolled: boolean;
   packageId: PackageId | null;
   packageName: string | null;
@@ -40,7 +40,7 @@ export interface StudentExperience {
   daysRemaining: number | null;
   /** True in the last 30 days of access, so the portal can prompt a renewal. */
   expiringSoon: boolean;
-  /** The next package up, for the upgrade card. Null on Maxi. */
+  /** The next package up, for the upgrade card. Null on the top package. */
   upgradeTo: PackageId | null;
 
   liveCohorts: StudentFeature;
@@ -110,8 +110,8 @@ export function deriveExperience(entitlements: Entitlement[]): StudentExperience
   }
 
   const plan = PLANS[packageId];
-  const isMini = packageId === "mini";
-  const isMaxi = packageId === "maxi";
+  const isFoundation = packageId === "mini";
+  const isElite = packageId === "maxi";
 
   // The next package up by price, so the upgrade card never points sideways
   // or at something the student already holds.
@@ -129,23 +129,23 @@ export function deriveExperience(entitlements: Entitlement[]): StudentExperience
     expiringSoon: daysRemaining !== null && daysRemaining <= 30,
     upgradeTo: upgradeTo as PackageId | null,
 
-    liveCohorts: isMini
-      ? LOCKED("medium", "Self-paced modules only on Mini")
+    liveCohorts: isFoundation
+      ? LOCKED("medium", "Self-paced modules only on Growth Foundation Cohort")
       : INCLUDED(),
-    inPersonIntensives: isMaxi ? INCLUDED() : LOCKED("maxi"),
-    assessments: isMini
-      ? LOCKED("medium", "Graded feedback starts on Medium")
+    inPersonIntensives: isElite ? INCLUDED() : LOCKED("maxi"),
+    assessments: isFoundation
+      ? LOCKED("medium", "Graded feedback starts on Executive Cycle")
       : INCLUDED(),
-    capstone: isMaxi ? INCLUDED("Reviewed by faculty") : LOCKED("maxi"),
+    capstone: isElite ? INCLUDED("Reviewed by faculty") : LOCKED("maxi"),
     mentorship: mentorshipLive
-      ? INCLUDED(isMaxi ? "Included with Maxi" : "Active subscription")
-      : LOCKED("maxi", "Also sold separately from ₦3,000/month"),
-    aiCoach: isMini
+      ? INCLUDED(isElite ? "Included with Elite" : "Active subscription")
+      : LOCKED("maxi", "Also sold separately from \u20a61,500"),
+    aiCoach: isFoundation
       ? INCLUDED("20 questions per month")
       : INCLUDED("Unlimited questions"),
-    certification: isMini
+    certification: isFoundation
       ? { label: "Certificate of completion", note: "Awarded per course finished." }
-      : isMaxi
+      : isElite
         ? {
             label: "Executive certification",
             note: "Awarded on capstone review by faculty.",
@@ -157,7 +157,7 @@ export function deriveExperience(entitlements: Entitlement[]): StudentExperience
   };
 }
 
-/** Monthly Growth AI allowance, for the quota meter. Infinity above Mini. */
+/** Monthly Growth AI allowance, for the quota meter. Infinity above Foundation. */
 export function aiQuota(packageId: PackageId | null): number {
   return packageId === "mini" ? 20 : Infinity;
 }

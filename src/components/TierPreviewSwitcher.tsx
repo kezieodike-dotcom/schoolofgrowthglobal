@@ -7,7 +7,7 @@ import { FlaskConical, X, RotateCcw } from 'lucide-react';
  * Development-only control for viewing the portal as each package.
  *
  * The dashboard changes shape depending on what was paid for, and the only
- * way into a paid state is a real Paystack transaction — which makes the
+ * way into a paid state is a real Paystack transaction - which makes the
  * thing impossible to look at while building it, and impossible to demo.
  *
  * This grants the same entitlement object the server would return on a
@@ -16,7 +16,7 @@ import { FlaskConical, X, RotateCcw } from 'lucide-react';
  *
  * IT CANNOT SHIP. `import.meta.env.DEV` is replaced with a literal `false` at
  * build time, so this whole component is dead code that Rollup removes from
- * the production bundle — the switcher is not hidden in production, it is
+ * the production bundle - the switcher is not hidden in production, it is
  * absent. Verify with:  grep -c "Preview as" dist/assets/*.js   → 0
  */
 
@@ -29,7 +29,8 @@ export const TierPreviewSwitcher: React.FC = () => {
   if (!import.meta.env.DEV) return null;
 
   const apply = (code: PlanCode) => {
-    // Cleared first so previewing Mini after Maxi actually shows Mini rather
+    // Cleared first so previewing a lower package after a higher one actually
+    // shows the lower package rather
     // than the union of both.
     clearEntitlements();
     grantEntitlement(
@@ -47,7 +48,7 @@ export const TierPreviewSwitcher: React.FC = () => {
       <button
         onClick={() => setOpen(true)}
         className="fixed bottom-4 left-4 z-[60] flex items-center gap-2 px-3 py-2 rounded-full bg-violet-600 hover:bg-violet-500 text-white text-[11px] font-bold shadow-lg transition-colors"
-        title="Development only — not in production builds"
+        title="Development only - not in production builds"
       >
         <FlaskConical className="w-3.5 h-3.5" />
         Preview as…

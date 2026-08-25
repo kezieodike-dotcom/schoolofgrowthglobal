@@ -7,7 +7,7 @@
  * A single definition means a field cannot be added to a form and then be
  * silently dropped from the email because the server never heard of it.
  *
- * This file must stay free of Node and React imports — it is bundled into
+ * This file must stay free of Node and React imports - it is bundled into
  * the browser build and imported by the serverless function.
  */
 
@@ -71,6 +71,21 @@ export const FORMS = {
     ],
   },
 
+  jobApplication: {
+    title: "Growth Career Job Application",
+    replyToField: "email",
+    fields: [
+      { name: "name", label: "Full Name", required: true },
+      { name: "email", label: "Email", type: "email", required: true },
+      { name: "phone", label: "Phone / WhatsApp", type: "tel", required: true },
+      { name: "job", label: "Job Applied For", required: true },
+      { name: "studentStatus", label: "Student / Mentee Status", required: true },
+      { name: "cvFileName", label: "CV File Name", required: true },
+      { name: "portfolio", label: "LinkedIn / Portfolio URL", type: "url" },
+      { name: "note", label: "Short Application Note", type: "textarea" },
+    ],
+  },
+
   // Asking for the syllabus is a lead like any other, so it is captured
   // rather than handed over anonymously.
   syllabus: {
@@ -106,7 +121,7 @@ export const FORMS = {
           "School of Technology & Innovation",
           "School of Finance & Wealth",
           "School of Personal Development",
-          "Not sure yet — advise me",
+          "Not sure yet - advise me",
         ],
       },
       {

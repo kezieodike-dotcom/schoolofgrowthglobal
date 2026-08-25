@@ -12,8 +12,8 @@ import { createJsonStore } from "./jsonStore.js";
  * this app has, so they are what opens a thread.
  *
  * A thread id is HMAC(studentEmail + mentorId) under a server secret. That
- * makes it deterministic — the same pair always resolves to the same thread,
- * so a student who clears their browser does not lose their history — while
+ * makes it deterministic - the same pair always resolves to the same thread,
+ * so a student who clears their browser does not lose their history - while
  * still being unguessable from the email alone. Reading or writing needs the
  * id, and getting the id needs the payment reference. Knowing someone's email
  * is not enough to read their messages.

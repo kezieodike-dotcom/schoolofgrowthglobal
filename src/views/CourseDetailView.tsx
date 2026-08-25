@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { ViewType } from '../types';
-import { FEATURED_COURSE, CORPORATE_PARTNERS } from '../data/mockData';
+import { Link, useParams } from 'react-router-dom';
+import { ViewType, type Course } from '../types';
+import { FEATURED_COURSE, COURSES, CORPORATE_PARTNERS } from '../data/mockData';
+import { useContentCollection } from '../lib/useContent';
 import {
   Clock,
   CheckCircle2,
@@ -20,16 +21,24 @@ import {
 } from 'lucide-react';
 import { useFormSubmit, HONEYPOT_PROPS } from '../lib/useFormSubmit';
 import { useEnrollment } from '../lib/useEnrollment';
-import { cheapestPackageFor, formatNaira, type CourseLevel } from '../lib/pricing';
+import { cheapestPackageFor, formatNaira, type CourseLevel, type Plan } from '../lib/pricing';
 
 interface CourseDetailViewProps {
   onNavigate: (view: ViewType) => void;
 }
 
-/** Modules a visitor may read before paying. The rest is the paid product. */
-const FREE_PREVIEW_MODULES = 1;
-
 export const CourseDetailView: React.FC<CourseDetailViewProps> = ({ onNavigate }) => {
+  const { courseId } = useParams();
+  const seedCourses: Course[] = [
+    FEATURED_COURSE,
+    ...COURSES.filter((item) => item.id !== FEATURED_COURSE.id),
+  ];
+  const managedCourses = useContentCollection('course', seedCourses);
+  const course =
+    managedCourses.items.find((item) => item.id === courseId) ??
+    managedCourses.items.find((item) => item.featured) ??
+    FEATURED_COURSE;
+
   const [openModule, setOpenModule] = useState<number | null>(0);
   const [applyModalOpen, setApplyModalOpen] = useState(false);
   const [syllabusModalOpen, setSyllabusModalOpen] = useState(false);
@@ -39,7 +48,7 @@ export const CourseDetailView: React.FC<CourseDetailViewProps> = ({ onNavigate }
   const [aiGenerating, setAiGenerating] = useState(false);
 
   const { canAccessLevel, currentPackageName } = useEnrollment();
-  const level = FEATURED_COURSE.level as CourseLevel;
+  const level = course.level as CourseLevel;
   const unlocked = canAccessLevel(level);
   const unlockedBy = cheapestPackageFor(level);
 
@@ -67,6 +76,10 @@ export const CourseDetailView: React.FC<CourseDetailViewProps> = ({ onNavigate }
     }
   };
 
+  if (!unlocked) {
+    return <LockedCourseAccess course={course} unlockedBy={unlockedBy} />;
+  }
+
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 font-sans">
 
@@ -79,7 +92,7 @@ export const CourseDetailView: React.FC<CourseDetailViewProps> = ({ onNavigate }
             <span>/</span>
             <Link to="/courses" className="hover:underline">Courses</Link>
             <span>/</span>
-            <span className="text-slate-900 font-bold">{FEATURED_COURSE.title}</span>
+            <span className="text-slate-900 font-bold">{course.title}</span>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
@@ -88,39 +101,39 @@ export const CourseDetailView: React.FC<CourseDetailViewProps> = ({ onNavigate }
 
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-600 text-xs font-mono font-bold">
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-                <span>{FEATURED_COURSE.status}</span>
+                <span>{course.status}</span>
               </div>
 
               <h1 className="text-3xl sm:text-5xl font-serif font-bold text-slate-900 tracking-tight leading-tight">
-                {FEATURED_COURSE.title}
+                {course.title}
               </h1>
 
               <p className="text-base text-slate-600 leading-relaxed">
-                {FEATURED_COURSE.description}
+                {course.description}
               </p>
 
               {/* Key metadata chips */}
               <div className="flex flex-wrap items-center gap-6 pt-2 text-xs text-slate-600 font-mono">
                 <div className="flex items-center gap-2">
                   <Clock className="w-4 h-4 text-amber-600" />
-                  <span>Duration: {FEATURED_COURSE.duration}</span>
+                  <span>Duration: {course.duration}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Award className="w-4 h-4 text-amber-600" />
-                  <span>Level: {FEATURED_COURSE.level}</span>
+                  <span>Level: {course.level}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Users className="w-4 h-4 text-amber-600" />
-                  <span>Format: {FEATURED_COURSE.format}</span>
+                  <span>Format: {course.format}</span>
                 </div>
               </div>
 
               {/* Instructor Bio strip */}
               <div className="p-4 rounded-xl bg-white border border-slate-200 flex items-center gap-4 shadow-sm">
-                <img src={FEATURED_COURSE.instructorAvatar} alt={FEATURED_COURSE.instructorName} className="w-12 h-12 rounded-full object-cover border-2 border-amber-300" />
+                <img src={course.instructorAvatar} alt={course.instructorName} className="w-12 h-12 rounded-full object-cover border-2 border-amber-300" />
                 <div>
-                  <h4 className="text-sm font-bold text-slate-900 font-serif">{FEATURED_COURSE.instructorName}</h4>
-                  <p className="text-xs text-slate-500">{FEATURED_COURSE.instructorRole}</p>
+                  <h4 className="text-sm font-bold text-slate-900 font-serif">{course.instructorName}</h4>
+                  <p className="text-xs text-slate-500">{course.instructorRole}</p>
                 </div>
               </div>
 
@@ -130,90 +143,35 @@ export const CourseDetailView: React.FC<CourseDetailViewProps> = ({ onNavigate }
             <div className="lg:col-span-4 bg-white border border-slate-200 rounded-3xl p-6 shadow-2xl space-y-6 sticky top-28">
 
               <img
-                src={FEATURED_COURSE.heroImage}
+                src={course.heroImage}
                 alt="Executive Boardroom"
                 className="w-full h-44 object-cover rounded-2xl border border-slate-200"
               />
 
-              {/*
-                The enrolment box states the position plainly: either the
-                course is open, or it names the package that opens it and what
-                that costs. No "contact us for pricing".
-              */}
-              {unlocked ? (
-                <>
-                  <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700">
-                    <LockOpen className="w-4 h-4 shrink-0" />
-                    <span className="text-xs font-bold">
-                      Unlocked on your {currentPackageName} package
-                    </span>
-                  </div>
+              <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700">
+                <LockOpen className="w-4 h-4 shrink-0" />
+                <span className="text-xs font-bold">
+                  Unlocked on your {currentPackageName} package
+                </span>
+              </div>
 
-                  <div className="space-y-3">
-                    <button
-                      onClick={() => setApplyModalOpen(true)}
-                      className="w-full py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs shadow-lg shadow-amber-500/20 flex items-center justify-center gap-2 transition-all"
-                    >
-                      <PlayCircle className="w-4 h-4" />
-                      <span>Join the Oct 15 Cohort</span>
-                    </button>
+              <div className="space-y-3">
+                <button
+                  onClick={() => setApplyModalOpen(true)}
+                  className="w-full py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs shadow-lg shadow-amber-500/20 flex items-center justify-center gap-2 transition-all"
+                >
+                  <PlayCircle className="w-4 h-4" />
+                  <span>Join the Oct 15 Cohort</span>
+                </button>
 
-                    <button
-                      onClick={() => setSyllabusModalOpen(true)}
-                      className="w-full py-3 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-600 border border-slate-200 font-semibold text-xs flex items-center justify-center gap-2 transition-colors"
-                    >
-                      <Download className="w-4 h-4 text-amber-600" />
-                      <span>Download Full Syllabus PDF</span>
-                    </button>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <div className="space-y-1">
-                    <span className="text-xs text-slate-500 font-mono">
-                      Included in {unlockedBy.name} and above
-                    </span>
-                    <div className="flex items-baseline gap-2">
-                      <span className="text-3xl font-bold font-serif text-amber-600">
-                        {formatNaira(unlockedBy.amountKobo)}
-                      </span>
-                      <span className="text-[11px] text-slate-500 font-mono">
-                        {unlockedBy.billing}
-                      </span>
-                    </div>
-                    <p className="text-[11px] text-slate-500 leading-relaxed pt-1">
-                      One payment unlocks this course and everything else in the{' '}
-                      {unlockedBy.name} tier.
-                    </p>
-                  </div>
-
-                  <div className="space-y-3">
-                    <Link
-                      to={`/checkout/${unlockedBy.code}`}
-                      className="w-full py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs shadow-lg shadow-amber-500/20 flex items-center justify-center gap-2 transition-all"
-                    >
-                      <Lock className="w-4 h-4" />
-                      <span>Unlock with {unlockedBy.name}</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </Link>
-
-                    <Link
-                      to="/pricing"
-                      className="w-full py-3 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-600 border border-slate-200 font-semibold text-xs flex items-center justify-center gap-2 transition-colors"
-                    >
-                      <span>Compare all packages</span>
-                    </Link>
-
-                    <button
-                      onClick={() => setSyllabusModalOpen(true)}
-                      className="w-full py-2.5 text-slate-500 hover:text-slate-900 font-medium text-[11px] flex items-center justify-center gap-1.5 transition-colors"
-                    >
-                      <Download className="w-3.5 h-3.5" />
-                      <span>Email me the free syllabus first</span>
-                    </button>
-                  </div>
-                </>
-              )}
+                <button
+                  onClick={() => setSyllabusModalOpen(true)}
+                  className="w-full py-3 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-600 border border-slate-200 font-semibold text-xs flex items-center justify-center gap-2 transition-colors"
+                >
+                  <Download className="w-4 h-4 text-amber-600" />
+                  <span>Download Full Syllabus PDF</span>
+                </button>
+              </div>
 
               <div className="pt-4 border-t border-slate-200 space-y-2 text-[11px] text-slate-500">
                 <div className="flex items-center gap-2">
@@ -246,7 +204,7 @@ export const CourseDetailView: React.FC<CourseDetailViewProps> = ({ onNavigate }
                 </h3>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {FEATURED_COURSE.outcomes.map((outcome, idx) => (
+                  {course.outcomes.map((outcome, idx) => (
                     <div key={idx} className="p-4 rounded-xl bg-white border border-slate-200 flex items-start gap-3 shadow-sm">
                       <CheckCircle2 className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
                       <span className="text-xs text-slate-600 leading-relaxed">{outcome}</span>
@@ -265,18 +223,13 @@ export const CourseDetailView: React.FC<CourseDetailViewProps> = ({ onNavigate }
                 </div>
 
                 <div className="space-y-4">
-                  {FEATURED_COURSE.modules.map((module, idx) => {
+                  {course.modules.map((module, idx) => {
                     const isOpen = openModule === idx;
-                    // The first module is readable by anyone: it is the
-                    // sample that makes the rest worth paying for.
-                    const locked = !unlocked && idx >= FREE_PREVIEW_MODULES;
 
                     return (
                       <div
                         key={idx}
-                        className={`rounded-2xl bg-white border overflow-hidden transition-colors shadow-sm ${
-                          locked ? 'border-slate-200' : 'border-slate-200'
-                        }`}
+                        className="rounded-2xl bg-white border border-slate-200 overflow-hidden transition-colors shadow-sm"
                       >
                         <button
                           onClick={() => toggleModule(idx)}
@@ -285,43 +238,17 @@ export const CourseDetailView: React.FC<CourseDetailViewProps> = ({ onNavigate }
                           <div className="space-y-1">
                             <span className="text-xs font-mono text-amber-600 font-bold flex items-center gap-2">
                               {module.week}
-                              {!unlocked && idx < FREE_PREVIEW_MODULES && (
-                                <span className="px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px]">
-                                  FREE PREVIEW
-                                </span>
-                              )}
                             </span>
                             <h4
-                              className={`text-lg font-serif font-bold flex items-center gap-2 ${
-                                locked ? 'text-slate-400' : 'text-slate-900'
-                              }`}
+                              className="text-lg font-serif font-bold flex items-center gap-2 text-slate-900"
                             >
-                              {locked && <Lock className="w-4 h-4 shrink-0" />}
                               {module.title}
                             </h4>
                           </div>
                           {isOpen ? <ChevronUp className="w-5 h-5 text-amber-600" /> : <ChevronDown className="w-5 h-5 text-slate-500" />}
                         </button>
 
-                        {isOpen && locked && (
-                          <div className="px-6 pb-6 pt-4 border-t border-slate-200 space-y-3 text-center">
-                            <Lock className="w-6 h-6 text-amber-600 mx-auto" />
-                            <p className="text-xs text-slate-500 leading-relaxed max-w-sm mx-auto">
-                              This module is part of the paid curriculum. Unlock it,
-                              and every other course in the {unlockedBy.name} tier, for{' '}
-                              {formatNaira(unlockedBy.amountKobo)}.
-                            </p>
-                            <Link
-                              to={`/checkout/${unlockedBy.code}`}
-                              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs transition-colors"
-                            >
-                              Unlock with {unlockedBy.name}
-                              <ArrowRight className="w-4 h-4" />
-                            </Link>
-                          </div>
-                        )}
-
-                        {isOpen && !locked && (
+                        {isOpen && (
                           <div className="px-6 pb-6 pt-2 border-t border-slate-200 space-y-4 text-xs text-slate-600">
                             <p className="leading-relaxed">{module.description}</p>
                             <div>
@@ -422,7 +349,7 @@ export const CourseDetailView: React.FC<CourseDetailViewProps> = ({ onNavigate }
               // form really sends, a distracted applicant could submit someone
               // else's details untouched.
               <form
-                onSubmit={(e) => application.submit(e, { course: FEATURED_COURSE.title })}
+                onSubmit={(e) => application.submit(e, { course: course.title })}
                 className="space-y-3 text-xs"
               >
                 <input {...HONEYPOT_PROPS} />
@@ -471,7 +398,7 @@ export const CourseDetailView: React.FC<CourseDetailViewProps> = ({ onNavigate }
                 <CheckCircle2 className="w-10 h-10 text-emerald-600 mx-auto" />
                 <h4 className="font-serif font-bold text-slate-900">Syllabus On Its Way</h4>
                 <p className="text-xs text-slate-600">
-                  We'll email you the full syllabus for {FEATURED_COURSE.title} shortly.
+                  We'll email you the full syllabus for {course.title} shortly.
                 </p>
                 <button
                   onClick={() => { syllabus.reset(); setSyllabusModalOpen(false); }}
@@ -488,12 +415,12 @@ export const CourseDetailView: React.FC<CourseDetailViewProps> = ({ onNavigate }
                     Where should we send it?
                   </h3>
                   <p className="text-xs text-slate-500">
-                    Tell us where to send the complete module breakdown for {FEATURED_COURSE.title}.
+                    Tell us where to send the complete module breakdown for {course.title}.
                   </p>
                 </div>
 
                 <form
-                  onSubmit={(e) => syllabus.submit(e, { course: FEATURED_COURSE.title })}
+                  onSubmit={(e) => syllabus.submit(e, { course: course.title })}
                   className="space-y-3 text-xs"
                 >
                   <input {...HONEYPOT_PROPS} />
@@ -526,3 +453,113 @@ export const CourseDetailView: React.FC<CourseDetailViewProps> = ({ onNavigate }
     </div>
   );
 };
+
+const LockedCourseAccess: React.FC<{ course: Course; unlockedBy: Plan }> = ({
+  course,
+  unlockedBy,
+}) => (
+  <div className="min-h-screen bg-slate-50 text-slate-900 font-sans">
+    <section className="relative overflow-hidden py-12 sm:py-16 bg-gradient-to-b from-white to-slate-50 border-b border-slate-200">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-wrap items-center gap-2 text-xs font-mono text-amber-600 mb-5">
+          <Link to="/" className="hover:underline">Home</Link>
+          <span>/</span>
+          <Link to="/courses" className="hover:underline">Courses</Link>
+          <span>/</span>
+          <span className="text-slate-900 font-bold">Locked Course</span>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          <div className="lg:col-span-7 space-y-6">
+            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 border border-amber-200 text-amber-700 text-xs font-mono font-bold uppercase tracking-wider">
+              <Lock className="w-3.5 h-3.5" />
+              Paid student access only
+            </span>
+
+            <div className="space-y-4">
+              <h1 className="text-3xl sm:text-5xl font-serif font-bold text-slate-900 tracking-tight leading-tight">
+                {course.title}
+              </h1>
+              <p className="text-base text-slate-600 leading-relaxed max-w-2xl">
+                This course is reserved for paid School of Growth students. Choose the{' '}
+                <strong className="text-slate-900">{unlockedBy.name}</strong> package or higher
+                to open the curriculum, lessons, study tools and cohort application.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-2xl">
+              <div className="rounded-2xl bg-white border border-slate-200 p-4 shadow-sm">
+                <p className="text-[10px] font-mono uppercase tracking-wider text-slate-500">Level</p>
+                <p className="mt-1 text-sm font-bold text-slate-900">{course.level}</p>
+              </div>
+              <div className="rounded-2xl bg-white border border-slate-200 p-4 shadow-sm">
+                <p className="text-[10px] font-mono uppercase tracking-wider text-slate-500">Duration</p>
+                <p className="mt-1 text-sm font-bold text-slate-900">{course.duration}</p>
+              </div>
+              <div className="rounded-2xl bg-white border border-slate-200 p-4 shadow-sm">
+                <p className="text-[10px] font-mono uppercase tracking-wider text-slate-500">Unlocks From</p>
+                <p className="mt-1 text-sm font-bold text-slate-900">{unlockedBy.name}</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="lg:col-span-5">
+            <div className="bg-white border border-slate-200 rounded-3xl p-5 sm:p-6 shadow-xl space-y-5">
+              <div className="relative overflow-hidden rounded-2xl border border-slate-200">
+                <img
+                  src={course.heroImage}
+                  alt={course.title}
+                  className="w-full h-48 sm:h-56 object-cover opacity-55 grayscale"
+                />
+                <div className="absolute inset-0 bg-slate-950/35 flex items-center justify-center">
+                  <div className="w-14 h-14 rounded-full bg-white/95 text-amber-700 flex items-center justify-center shadow-lg">
+                    <Lock className="w-7 h-7" />
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <p className="text-xs text-slate-500 font-mono">Required package</p>
+                <div className="flex flex-wrap items-baseline gap-2">
+                  <span className="text-3xl font-serif font-bold text-amber-700">
+                    {formatNaira(unlockedBy.amountKobo)}
+                  </span>
+                  <span className="text-xs text-slate-500">{unlockedBy.billing}</span>
+                </div>
+                <p className="text-xs text-slate-500 leading-relaxed">
+                  Payment is verified through Paystack before course access is added to this browser.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <Link
+                  to={`/checkout/${unlockedBy.code}`}
+                  className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-sm active:translate-y-px transition-all"
+                >
+                  Unlock Course <ArrowRight className="w-4 h-4" />
+                </Link>
+                <Link
+                  to="/pricing"
+                  className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-sm active:translate-y-px transition-all"
+                >
+                  Compare Plans
+                </Link>
+              </div>
+
+              <div className="pt-4 border-t border-slate-200 space-y-2 text-[11px] text-slate-500">
+                <p className="flex items-start gap-2">
+                  <ShieldCheck className="w-4 h-4 text-amber-600 shrink-0 mt-px" />
+                  Course modules, outcomes, AI study tools and cohort application are hidden until payment is active.
+                </p>
+                <p className="flex items-start gap-2">
+                  <Sparkles className="w-4 h-4 text-amber-600 shrink-0 mt-px" />
+                  Elite students also receive one year of mentorship access.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+);

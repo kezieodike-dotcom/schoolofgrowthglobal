@@ -19,7 +19,7 @@ import { Search, Mail } from 'lucide-react';
 /**
  * Students, derived from payments.
  *
- * There is no student table to read — an account system does not exist yet —
+ * There is no student table to read - an account system does not exist yet -
  * so a "student" here is an email address that has paid for something, rolled
  * up across all of its payments. That is a real, defensible definition, and
  * it is stated on the page so nobody reads this as a registration list.
@@ -189,7 +189,7 @@ const PayingStudents: React.FC = () => {
                             </span>
                             <div className="min-w-0">
                               <p className="text-xs font-medium text-slate-900 truncate">
-                                {s.name || '—'}
+                                {s.name || '-'}
                               </p>
                               <a
                                 href={`mailto:${s.email}`}

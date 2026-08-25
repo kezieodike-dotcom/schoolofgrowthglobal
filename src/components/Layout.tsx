@@ -16,7 +16,7 @@ const ScrollToTop: React.FC = () => {
 
 export const Layout: React.FC = () => {
   const { pathname } = useLocation();
-  // The Command Center is a full-screen workspace — hide the marketing chrome there.
+  // The Command Center is a full-screen workspace - hide the marketing chrome there.
   const isCommandCenter = pathname.startsWith('/command-center');
 
   return (
@@ -31,7 +31,7 @@ export const Layout: React.FC = () => {
       {!isCommandCenter && <GrowthAIFloatingWidget />}
       {!isCommandCenter && <Footer />}
 
-      {/* Development only — stripped from production builds. */}
+      {/* Development only - stripped from production builds. */}
       <TierPreviewSwitcher />
     </div>
   );

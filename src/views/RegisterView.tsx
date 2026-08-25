@@ -24,14 +24,14 @@ import {
  * rather than leaving someone waiting for an approval email that never gates
  * anything.
  *
- * Mentors have their own route (/register/mentor) rather than a tab here —
+ * Mentors have their own route (/register/mentor) rather than a tab here -
  * their application is a five-step wizard with draft state of its own.
  */
 
 const STUDENT = {
   cta: 'Submit Registration',
   confirmation:
-    'Our admissions team will review your registration and contact you with programme guidance. You do not have to wait for us to start — choose a package and your courses open immediately.',
+    'Our admissions team will review your registration and contact you with programme guidance. You do not have to wait for us to start - choose a package and your courses open immediately.',
   points: [
     'Guidance on which school and level fits your goals',
     'Live cohorts, self-paced tracks, or in-person intensives',
@@ -229,7 +229,7 @@ export const RegisterView: React.FC = () => {
               </h4>
               <p className="text-[11px] text-slate-400 leading-relaxed">
                 Registration tells us who you are. A package is what opens the
-                curriculum — pay and your courses unlock immediately, no queue.
+                curriculum - pay and your courses unlock immediately, no queue.
               </p>
               <div className="space-y-1.5 pt-1">
                 {PACKAGES.map((plan) => (

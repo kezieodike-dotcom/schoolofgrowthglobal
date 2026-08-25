@@ -40,11 +40,12 @@ function mentorSigningKey(): string {
     process.env.MENTOR_INBOX_SESSION_SECRET ??
     process.env.ADMIN_SESSION_SECRET ??
     process.env.ADMIN_PASSWORD ??
+    process.env.DEMO_REVIEWER_PASSWORD ??
     ""
   );
 }
 
-function issueMentorToken(mentorId: string): { token: string; expiresAt: string } {
+export function issueMentorToken(mentorId: string): { token: string; expiresAt: string } {
   const expiresAt = new Date(Date.now() + SESSION_HOURS * 3600_000);
   const payload = Buffer.from(
     JSON.stringify({ sub: "mentor", mentorId, exp: expiresAt.getTime() })
@@ -134,7 +135,7 @@ export function createMessageRouter(
    *
    * The Paystack reference is required so that knowing a student's email is
    * not enough to reach their messages. It is not verified against Paystack
-   * on every call — that would be a network round trip per open — but it is
+   * on every call - that would be a network round trip per open - but it is
    * required to be present and non-trivial, and it is what the student
    * received from a real verified payment.
    */

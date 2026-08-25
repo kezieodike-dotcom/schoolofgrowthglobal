@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { FACULTY_MEMBERS, CORPORATE_PARTNERS, IMPACT_STATS } from '../data/mockData';
 import { PageHero } from '../components/PageHero';
+import { useContentCollection } from '../lib/useContent';
 import {
   Building2,
   Target,
@@ -28,6 +29,8 @@ const CORE_VALUES = [
 ];
 
 export const AboutView: React.FC = () => {
+  const managedTeam = useContentCollection('team', FACULTY_MEMBERS);
+
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
       <PageHero
@@ -96,7 +99,7 @@ export const AboutView: React.FC = () => {
           <p className="text-sm text-slate-500">Former McKinsey directors, Harvard fellows, and global venture partners.</p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {FACULTY_MEMBERS.map((member) => (
+          {managedTeam.items.map((member) => (
             <div key={member.id} className="bg-white shadow-sm border border-slate-200 rounded-2xl p-6 space-y-4">
               <img src={member.avatar} alt={member.name} className="w-20 h-20 rounded-full object-cover mx-auto border-2 border-amber-300" />
               <div className="text-center space-y-1">

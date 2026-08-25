@@ -12,7 +12,7 @@ import {
  * The interesting work is the cross-reference: a lead is only a prospect
  * until they pay, and the payments live in Paystack. So the admin endpoint
  * pulls both and matches on email, which turns two lists nobody could
- * reconcile by hand into one answer — here is who to follow up with.
+ * reconcile by hand into one answer - here is who to follow up with.
  */
 
 const SOURCES: LeadSource[] = [
@@ -95,7 +95,7 @@ export function createLeadRouter(
 
     if (!isWritable()) {
       // Soft failure. The submission was still emailed by the browser, so the
-      // enquiry is not lost — only our copy of it. Reporting an error to a
+      // enquiry is not lost - only our copy of it. Reporting an error to a
       // visitor because our lead list is unavailable would cost a real
       // enquiry over an internal problem.
       return res.json({ stored: false });
@@ -119,7 +119,7 @@ export function createLeadRouter(
    *
    * Matching is by email, which is the only identifier both systems share.
    * That means someone who registers with one address and pays with another
-   * shows as unpaid — stated on the page, because a follow-up list that is
+   * shows as unpaid - stated on the page, because a follow-up list that is
    * quietly wrong is worse than one with a known caveat.
    */
   router.get("/admin/leads", requireAdmin, async (_req, res) => {

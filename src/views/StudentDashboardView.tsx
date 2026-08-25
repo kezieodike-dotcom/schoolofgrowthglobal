@@ -39,18 +39,18 @@ import {
 /**
  * The student portal.
  *
- * A Mini student and a Maxi student are not on the same programme, so they do
- * not get the same dashboard with pieces greyed out — the navigation itself
- * changes. Mini has no live schedule to show and no mentor to meet; Maxi has a
- * capstone and a mentor pairing that Mini has never seen.
+ * Foundation and Elite students are not on the same programme, so they do
+ * not get the same dashboard with pieces greyed out - the navigation itself
+ * changes. Foundation has no live schedule to show and no mentor to meet; Elite
+ * has a capstone and a mentor pairing that Foundation has never seen.
  *
  * What each package means is decided in src/lib/studentExperience.ts, derived
  * from the pricing catalogue. This file renders that description and holds no
- * package rules of its own, so changing what Medium includes changes this
+ * package rules of its own, so changing what Executive Cycle includes changes this
  * screen without touching it.
  *
  * The learning content itself (tracks, sessions, certificates) is still mock
- * data — there is no LMS behind this yet. What is real is the entitlement:
+ * data - there is no LMS behind this yet. What is real is the entitlement:
  * which package you hold, when it lapses, and what it opens.
  */
 
@@ -83,7 +83,7 @@ const isTab = (value: string | null): value is Tab =>
   value === 'certificates' ||
   value === 'ai-coach';
 
-// ── Small pieces ─────────────────────────────────────────────────────────
+// -- Small pieces ---------------------------------------------------------
 
 const ProgressBar: React.FC<{ value: number; className?: string }> = ({
   value,
@@ -105,12 +105,12 @@ const StatTile: React.FC<{
   hint?: string;
   icon: React.ReactNode;
 }> = ({ label, value, hint, icon }) => (
-  <div className="bg-white border border-slate-200 rounded-2xl p-4 sm:p-5 shadow-sm space-y-2">
+  <div className="bg-white border border-slate-200 rounded-lg p-4 sm:p-5 shadow-sm space-y-2">
     <div className="flex items-center justify-between">
       <span className="text-[11px] text-slate-500">{label}</span>
       <span className="text-amber-600">{icon}</span>
     </div>
-    <div className="text-2xl font-serif font-bold text-slate-900">{value}</div>
+    <div className="text-2xl font-bold text-slate-900">{value}</div>
     {hint && <div className="text-[11px] text-slate-500">{hint}</div>}
   </div>
 );
@@ -119,7 +119,7 @@ const StatTile: React.FC<{
  * Shown in place of a tab's content when the package does not include it.
  *
  * Names the specific package that opens the feature and what it costs, rather
- * than a generic "upgrade to continue" — a locked door is more tolerable when
+ * than a generic "upgrade to continue" - a locked door is more tolerable when
  * it tells you which key fits.
  */
 const UpgradePanel: React.FC<{
@@ -130,12 +130,12 @@ const UpgradePanel: React.FC<{
   const plan = feature.unlockedBy ? PLANS[feature.unlockedBy] : null;
 
   return (
-    <div className="bg-white border border-amber-300 rounded-3xl p-8 sm:p-10 text-center space-y-5 shadow-sm">
+    <div className="bg-white border border-amber-300 rounded-lg p-8 sm:p-10 text-center space-y-5 shadow-sm">
       <div className="w-14 h-14 rounded-full bg-amber-50 border border-amber-200 flex items-center justify-center mx-auto">
         <Lock className="w-7 h-7 text-amber-600" />
       </div>
       <div className="space-y-1.5">
-        <h3 className="text-xl font-serif font-bold text-slate-900">{title}</h3>
+        <h3 className="text-xl font-bold text-slate-900">{title}</h3>
         <p className="text-sm text-slate-500 max-w-md mx-auto leading-relaxed">{body}</p>
         {feature.note && (
           <p className="text-[11px] text-slate-400 font-mono pt-1">{feature.note}</p>
@@ -147,7 +147,7 @@ const UpgradePanel: React.FC<{
             to={`/checkout/${plan.code}`}
             className="px-6 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs flex items-center gap-2 transition-colors"
           >
-            Upgrade to {plan.name} — {formatNaira(plan.amountKobo)}
+            Upgrade to {plan.name} - {formatNaira(plan.amountKobo)}
             <ArrowRight className="w-4 h-4" />
           </Link>
           <Link
@@ -162,21 +162,21 @@ const UpgradePanel: React.FC<{
   );
 };
 
-// ── Not enrolled ─────────────────────────────────────────────────────────
+// -- Not enrolled ---------------------------------------------------------
 
 const LockedPortal: React.FC = () => (
   <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4 py-16">
     <div className="w-full max-w-lg text-center space-y-6">
-      <div className="w-16 h-16 rounded-2xl bg-white border border-slate-200 shadow-sm flex items-center justify-center mx-auto">
+      <div className="w-16 h-16 rounded-lg bg-white border border-slate-200 shadow-sm flex items-center justify-center mx-auto">
         <Lock className="w-8 h-8 text-amber-600" />
       </div>
       <div className="space-y-2">
-        <h1 className="text-2xl font-serif font-bold text-slate-900">
+        <h1 className="text-2xl font-bold text-slate-900">
           Your portal opens with a package
         </h1>
         <p className="text-sm text-slate-500 leading-relaxed">
           The student portal holds your courses, schedule, certificates and AI coach.
-          Choose a package and it opens immediately — no application queue.
+          Choose a package and it opens immediately - no application queue.
         </p>
       </div>
 
@@ -185,9 +185,9 @@ const LockedPortal: React.FC = () => (
           <Link
             key={code}
             to={`/checkout/${code}`}
-            className="p-4 rounded-2xl bg-white border border-slate-200 hover:border-amber-400 shadow-sm transition-all space-y-1"
+            className="p-4 rounded-lg bg-white border border-slate-200 hover:border-amber-400 shadow-sm transition-all space-y-1"
           >
-            <span className="block text-sm font-serif font-bold text-slate-900">
+            <span className="block text-sm font-bold text-slate-900">
               {PLANS[code].name}
             </span>
             <span className="block text-[11px] font-mono text-amber-600">
@@ -207,7 +207,7 @@ const LockedPortal: React.FC = () => (
   </div>
 );
 
-// ── Portal ───────────────────────────────────────────────────────────────
+// -- Portal ---------------------------------------------------------------
 
 export const StudentDashboardView: React.FC<StudentDashboardViewProps> = ({
   onNavigate,
@@ -241,7 +241,7 @@ export const StudentDashboardView: React.FC<StudentDashboardViewProps> = ({
   const quota = aiQuota(experience.packageId);
   const quotaSpent = Math.min(questionsAsked, quota);
 
-  // Live sessions a Mini student cannot attend are filtered out rather than
+  // Live sessions a Foundation student cannot attend are filtered out rather than
   // listed as locked: a schedule of things you cannot go to is not a schedule.
   const sessions = useMemo(
     () =>
@@ -333,7 +333,7 @@ export const StudentDashboardView: React.FC<StudentDashboardViewProps> = ({
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 font-sans flex flex-col md:flex-row">
-      {/* ── Sidebar ───────────────────────────────────────────────────── */}
+      {/* -- Sidebar ----------------------------------------------------- */}
       <aside className="w-full md:w-64 bg-white border-b md:border-b-0 md:border-r border-slate-200 md:p-6 flex md:flex-col md:justify-between shrink-0 md:min-h-screen md:sticky md:top-0">
         <div className="w-full space-y-6">
           <div className="hidden md:flex items-center gap-3 pb-6 border-b border-slate-200">
@@ -343,7 +343,7 @@ export const StudentDashboardView: React.FC<StudentDashboardViewProps> = ({
               className="w-10 h-10 rounded-full object-cover border-2 border-amber-300"
             />
             <div className="min-w-0">
-              <h4 className="text-sm font-bold text-slate-900 font-serif truncate">
+              <h4 className="text-sm font-bold text-slate-900 truncate">
                 {STUDENT_DATA.name}
               </h4>
               <p className="text-[11px] text-amber-600 font-mono">
@@ -409,9 +409,9 @@ export const StudentDashboardView: React.FC<StudentDashboardViewProps> = ({
         </div>
       </aside>
 
-      {/* ── Workspace ─────────────────────────────────────────────────── */}
+      {/* -- Workspace --------------------------------------------------- */}
       <main className="flex-1 p-4 sm:p-6 md:p-10 space-y-6 sm:space-y-8 min-w-0">
-        <header className="bg-gradient-to-r from-white via-slate-50 to-slate-50 border border-slate-200 rounded-3xl p-5 sm:p-8 space-y-4 shadow-sm">
+        <header className="bg-gradient-to-r from-white via-slate-50 to-slate-50 border border-slate-200 rounded-lg p-5 sm:p-8 space-y-4 shadow-sm">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               <img
@@ -423,7 +423,7 @@ export const StudentDashboardView: React.FC<StudentDashboardViewProps> = ({
                 <span className="text-[10px] sm:text-xs font-mono uppercase tracking-widest text-amber-600 font-bold">
                   {experience.packageName} Student Portal
                 </span>
-                <h1 className="text-xl sm:text-3xl font-serif font-bold text-slate-900 mt-0.5">
+                <h1 className="text-xl sm:text-3xl font-bold text-slate-900 mt-0.5">
                   Hello, {STUDENT_DATA.name.split(' ')[0]}.
                 </h1>
               </div>
@@ -478,8 +478,8 @@ export const StudentDashboardView: React.FC<StudentDashboardViewProps> = ({
             <ScheduleTab sessions={sessions} experience={experience} />
           ) : (
             <UpgradePanel
-              title="Live classes are not on Mini"
-              body="Mini is a self-paced programme — your modules have no fixed times, so there is no live schedule to keep. Medium adds live cohort classes, Q&A and graded assessment dates."
+              title="Live classes are not on Growth Foundation Cohort"
+              body="Growth Foundation Cohort is a self-paced programme - your modules have no fixed times, so there is no live schedule to keep. Executive Cycle adds live cohort classes, Q&A and graded assessment dates."
               feature={experience.liveCohorts}
             />
           ))}
@@ -494,7 +494,7 @@ export const StudentDashboardView: React.FC<StudentDashboardViewProps> = ({
           ) : (
             <UpgradePanel
               title="You have no mentor yet"
-              body="Mentor access pairs you with an operator in your field for 1-on-1 sessions and messaging between them. It comes bundled with Maxi, or you can subscribe to it on its own."
+              body="Mentor access pairs you with an operator in your field for 1-on-1 sessions and messaging between them. It comes bundled with Elite, or you can subscribe to it on its own."
               feature={experience.mentorship}
             />
           ))}
@@ -510,7 +510,7 @@ export const StudentDashboardView: React.FC<StudentDashboardViewProps> = ({
           ) : (
             <UpgradePanel
               title="Mentor messaging is not active yet"
-              body="Messaging opens once you have mentor access and have paired with at least one mentor. Maxi includes it, or you can subscribe to mentorship on its own."
+              body="Messaging opens once you have mentor access and have paired with at least one mentor. Elite includes it, or you can subscribe to mentorship on its own."
               feature={experience.mentorship}
             />
           ))}
@@ -539,7 +539,7 @@ export const StudentDashboardView: React.FC<StudentDashboardViewProps> = ({
   );
 };
 
-// ── Overview ─────────────────────────────────────────────────────────────
+// -- Overview -------------------------------------------------------------
 
 const OverviewTab: React.FC<{
   experience: ReturnType<typeof deriveExperience>;
@@ -589,9 +589,9 @@ const OverviewTab: React.FC<{
       </div>
 
       {/* What the package includes */}
-      <section className="bg-white border border-slate-200 rounded-3xl p-5 sm:p-6 shadow-sm space-y-4">
+      <section className="bg-white border border-slate-200 rounded-lg p-5 sm:p-6 shadow-sm space-y-4">
         <div className="flex items-center justify-between gap-3">
-          <h3 className="text-base sm:text-lg font-serif font-bold text-slate-900">
+          <h3 className="text-base sm:text-lg font-bold text-slate-900">
             Your {experience.packageName} programme
           </h3>
           <Link
@@ -646,7 +646,7 @@ const OverviewTab: React.FC<{
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
         <div className="xl:col-span-2 space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="text-lg sm:text-xl font-serif font-bold text-slate-900">
+            <h3 className="text-lg sm:text-xl font-bold text-slate-900">
               Active Tracks
             </h3>
             <button
@@ -660,14 +660,14 @@ const OverviewTab: React.FC<{
           {STUDENT_DATA.activeTracks.map((track) => (
             <div
               key={track.id}
-              className="bg-white border border-slate-200 rounded-2xl p-5 space-y-4 shadow-sm"
+              className="bg-white border border-slate-200 rounded-lg p-5 space-y-4 shadow-sm"
             >
               <div className="flex items-start justify-between gap-4">
                 <div className="space-y-1">
                   <span className="text-[10px] font-mono uppercase tracking-widest text-amber-600 font-bold">
                     {track.schoolName}
                   </span>
-                  <h4 className="text-base font-serif font-bold text-slate-900 leading-snug">
+                  <h4 className="text-base font-bold text-slate-900 leading-snug">
                     {track.title}
                   </h4>
                 </div>
@@ -703,22 +703,22 @@ const OverviewTab: React.FC<{
         </div>
 
         <div className="space-y-4">
-          <h3 className="text-lg sm:text-xl font-serif font-bold text-slate-900">
+          <h3 className="text-lg sm:text-xl font-bold text-slate-900">
             {experience.liveCohorts.state === 'included' ? 'Coming up' : 'Your deadlines'}
           </h3>
 
           {sessions.length === 0 ? (
-            <div className="bg-white border border-slate-200 rounded-2xl p-6 text-center space-y-2 shadow-sm">
+            <div className="bg-white border border-slate-200 rounded-lg p-6 text-center space-y-2 shadow-sm">
               <Calendar className="w-6 h-6 text-slate-300 mx-auto" />
               <p className="text-xs text-slate-500 leading-relaxed">
-                Nothing scheduled. Mini is self-paced, so you set your own rhythm.
+                Nothing scheduled. Growth Foundation Cohort is self-paced, so you set your own rhythm.
               </p>
             </div>
           ) : (
             sessions.slice(0, 4).map((session) => (
               <div
                 key={session.id}
-                className="bg-white border border-slate-200 rounded-2xl p-4 space-y-2 shadow-sm"
+                className="bg-white border border-slate-200 rounded-lg p-4 space-y-2 shadow-sm"
               >
                 <div className="flex items-center justify-between gap-2">
                   <span
@@ -743,8 +743,8 @@ const OverviewTab: React.FC<{
           )}
 
           {experience.upgradeTo && (
-            <div className="p-5 rounded-2xl bg-slate-900 text-white space-y-2">
-              <h4 className="text-sm font-serif font-bold flex items-center gap-2">
+            <div className="p-5 rounded-lg bg-slate-900 text-white space-y-2">
+              <h4 className="text-sm font-bold flex items-center gap-2">
                 <ArrowUpRight className="w-4 h-4 text-amber-400" />
                 Move up to {PLANS[experience.upgradeTo].name}
               </h4>
@@ -768,7 +768,7 @@ const OverviewTab: React.FC<{
   );
 };
 
-// ── My Courses ───────────────────────────────────────────────────────────
+// -- My Courses -----------------------------------------------------------
 
 const CoursesTab: React.FC<{
   canAccess: (level: CourseLevel) => boolean;
@@ -781,7 +781,7 @@ const CoursesTab: React.FC<{
     <div className="space-y-8">
       <section className="space-y-4">
         <div className="flex items-center justify-between">
-          <h3 className="text-lg sm:text-xl font-serif font-bold text-slate-900">
+          <h3 className="text-lg sm:text-xl font-bold text-slate-900">
             Open to you
           </h3>
           <span className="text-[11px] font-mono text-slate-400">
@@ -794,7 +794,7 @@ const CoursesTab: React.FC<{
             <button
               key={course.id}
               onClick={() => onNavigate('course-detail')}
-              className="text-left bg-white border border-slate-200 hover:border-amber-300 rounded-2xl overflow-hidden shadow-sm transition-all group"
+              className="text-left bg-white border border-slate-200 hover:border-amber-300 rounded-lg overflow-hidden shadow-sm transition-all group"
             >
               <div className="h-24 overflow-hidden relative">
                 <img
@@ -808,7 +808,7 @@ const CoursesTab: React.FC<{
                 <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200">
                   {course.level}
                 </span>
-                <h4 className="text-sm font-serif font-bold text-slate-900 leading-snug">
+                <h4 className="text-sm font-bold text-slate-900 leading-snug">
                   {course.title}
                 </h4>
                 <span className="text-[11px] font-bold text-amber-600 flex items-center gap-1">
@@ -822,14 +822,14 @@ const CoursesTab: React.FC<{
 
       {locked.length > 0 && (
         <section className="space-y-4">
-          <h3 className="text-lg sm:text-xl font-serif font-bold text-slate-900">
+          <h3 className="text-lg sm:text-xl font-bold text-slate-900">
             Available on a higher package
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
             {locked.map((course) => (
               <div
                 key={course.id}
-                className="bg-slate-50 border border-slate-200 rounded-2xl p-4 space-y-2"
+                className="bg-slate-50 border border-slate-200 rounded-lg p-4 space-y-2"
               >
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-white text-slate-500 border border-slate-200">
@@ -837,7 +837,7 @@ const CoursesTab: React.FC<{
                   </span>
                   <Lock className="w-3.5 h-3.5 text-slate-300" />
                 </div>
-                <h4 className="text-sm font-serif font-bold text-slate-400 leading-snug">
+                <h4 className="text-sm font-bold text-slate-400 leading-snug">
                   {course.title}
                 </h4>
                 <Link
@@ -855,19 +855,19 @@ const CoursesTab: React.FC<{
   );
 };
 
-// ── Schedule ─────────────────────────────────────────────────────────────
+// -- Schedule -------------------------------------------------------------
 
 const ScheduleTab: React.FC<{
   sessions: typeof STUDENT_DATA.upcoming;
   experience: ReturnType<typeof deriveExperience>;
 }> = ({ sessions, experience }) => (
   <div className="space-y-4">
-    <h3 className="text-lg sm:text-xl font-serif font-bold text-slate-900">
+    <h3 className="text-lg sm:text-xl font-bold text-slate-900">
       Your live schedule
     </h3>
 
     {sessions.length === 0 ? (
-      <div className="bg-white border border-slate-200 rounded-2xl p-10 text-center space-y-2 shadow-sm">
+      <div className="bg-white border border-slate-200 rounded-lg p-10 text-center space-y-2 shadow-sm">
         <Calendar className="w-7 h-7 text-slate-300 mx-auto" />
         <p className="text-sm text-slate-500">Nothing scheduled yet.</p>
       </div>
@@ -876,7 +876,7 @@ const ScheduleTab: React.FC<{
         {sessions.map((session) => (
           <div
             key={session.id}
-            className="bg-white border border-slate-200 rounded-2xl p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-sm"
+            className="bg-white border border-slate-200 rounded-lg p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-sm"
           >
             <div className="space-y-1.5 min-w-0">
               <span
@@ -886,7 +886,7 @@ const ScheduleTab: React.FC<{
               >
                 {session.type}
               </span>
-              <h4 className="text-sm font-serif font-bold text-slate-900">
+              <h4 className="text-sm font-bold text-slate-900">
                 {session.title}
               </h4>
               <p className="text-[11px] text-slate-500 flex items-center gap-2">
@@ -913,12 +913,12 @@ const ScheduleTab: React.FC<{
     )}
 
     {experience.inPersonIntensives.state === 'locked' && (
-      <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex items-start gap-3">
+      <div className="p-4 rounded-lg bg-slate-50 border border-slate-200 flex items-start gap-3">
         <MapPin className="w-4 h-4 text-slate-400 shrink-0 mt-0.5" />
         <p className="text-[11px] text-slate-500 leading-relaxed">
-          In-person executive intensives are part of the Maxi package.{' '}
+          In-person executive intensives are part of the Elite package.{' '}
           <Link to="/checkout/maxi" className="text-amber-600 font-bold hover:underline">
-            See what Maxi adds
+            See what Elite adds
           </Link>
           .
         </p>
@@ -927,7 +927,7 @@ const ScheduleTab: React.FC<{
   </div>
 );
 
-// ── Mentor ───────────────────────────────────────────────────────────────
+// -- Mentor ---------------------------------------------------------------
 
 const MessagesTab: React.FC<{
   pairedIds: string[];
@@ -960,10 +960,10 @@ const MessagesTab: React.FC<{
 
   if (paired.length === 0) {
     return (
-      <div className="bg-white border border-amber-300 rounded-3xl p-8 sm:p-10 text-center space-y-4 shadow-sm">
+      <div className="bg-white border border-amber-300 rounded-lg p-8 sm:p-10 text-center space-y-4 shadow-sm">
         <MessageSquare className="w-9 h-9 text-amber-600 mx-auto" />
         <div className="space-y-1.5">
-          <h3 className="text-xl font-serif font-bold text-slate-900">
+          <h3 className="text-xl font-bold text-slate-900">
             Choose a mentor to start messaging
           </h3>
           <p className="text-sm text-slate-500 max-w-md mx-auto leading-relaxed">
@@ -988,7 +988,7 @@ const MessagesTab: React.FC<{
           <span className="text-[10px] font-mono uppercase tracking-widest text-amber-600 font-bold">
             Student to mentor chat
           </span>
-          <h3 className="text-xl sm:text-2xl font-serif font-bold text-slate-900 mt-1">
+          <h3 className="text-xl sm:text-2xl font-bold text-slate-900 mt-1">
             Messages
           </h3>
           <p className="text-sm text-slate-500 max-w-2xl leading-relaxed mt-1">
@@ -1001,7 +1001,7 @@ const MessagesTab: React.FC<{
       </div>
 
       <div className="grid grid-cols-1 xl:grid-cols-[320px_1fr] gap-4 items-start">
-        <aside className="bg-white border border-slate-200 rounded-3xl overflow-hidden shadow-sm">
+        <aside className="bg-white border border-slate-200 rounded-lg overflow-hidden shadow-sm">
           <div className="px-4 py-3 border-b border-slate-100 flex items-center justify-between">
             <p className="text-xs font-bold text-slate-900">My mentors</p>
             <MessageSquare className="w-4 h-4 text-amber-600" />
@@ -1037,15 +1037,15 @@ const MessagesTab: React.FC<{
         <section className="min-w-0">
           {selected && credential ? (
             <div className="space-y-3">
-              <div className="bg-slate-900 text-white rounded-3xl p-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div className="bg-slate-900 text-white rounded-lg p-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div className="flex items-center gap-3 min-w-0">
                   <img
                     src={selected.avatar}
                     alt=""
-                    className="w-12 h-12 rounded-2xl object-cover border border-amber-400"
+                    className="w-12 h-12 rounded-lg object-cover border border-amber-400"
                   />
                   <div className="min-w-0">
-                    <p className="text-sm font-serif font-bold truncate">
+                    <p className="text-sm font-bold truncate">
                       {selected.name}
                     </p>
                     <p className="text-[11px] text-slate-400 truncate">{selected.role}</p>
@@ -1066,9 +1066,9 @@ const MessagesTab: React.FC<{
               />
             </div>
           ) : (
-            <div className="bg-white border border-slate-200 rounded-3xl p-8 text-center space-y-3 shadow-sm">
+            <div className="bg-white border border-slate-200 rounded-lg p-8 text-center space-y-3 shadow-sm">
               <AlertTriangle className="w-8 h-8 text-amber-600 mx-auto" />
-              <h4 className="text-base font-serif font-bold text-slate-900">
+              <h4 className="text-base font-bold text-slate-900">
                 Messaging needs your payment email
               </h4>
               <p className="text-sm text-slate-500 max-w-md mx-auto leading-relaxed">
@@ -1102,7 +1102,7 @@ const MentorTab: React.FC<{
   return (
     <div className="space-y-5">
       <div className="flex items-center justify-between gap-3">
-        <h3 className="text-lg sm:text-xl font-serif font-bold text-slate-900">
+        <h3 className="text-lg sm:text-xl font-bold text-slate-900">
           Your mentors
         </h3>
         <span className="text-[11px] font-mono text-slate-400">
@@ -1111,10 +1111,10 @@ const MentorTab: React.FC<{
       </div>
 
       {paired.length === 0 ? (
-        <div className="bg-white border border-amber-300 rounded-3xl p-8 text-center space-y-4 shadow-sm">
+        <div className="bg-white border border-amber-300 rounded-lg p-8 text-center space-y-4 shadow-sm">
           <Users className="w-8 h-8 text-amber-600 mx-auto" />
           <div className="space-y-1">
-            <h4 className="text-base font-serif font-bold text-slate-900">
+            <h4 className="text-base font-bold text-slate-900">
               You have not chosen a mentor yet
             </h4>
             <p className="text-sm text-slate-500 max-w-sm mx-auto leading-relaxed">
@@ -1134,7 +1134,7 @@ const MentorTab: React.FC<{
           {paired.map((mentor) => (
             <div
               key={mentor.id}
-              className="bg-white border border-slate-200 rounded-2xl p-5 space-y-4 shadow-sm"
+              className="bg-white border border-slate-200 rounded-lg p-5 space-y-4 shadow-sm"
             >
               <div className="flex items-start gap-3">
                 <img
@@ -1143,7 +1143,7 @@ const MentorTab: React.FC<{
                   className="w-12 h-12 rounded-xl object-cover border-2 border-amber-300"
                 />
                 <div className="min-w-0">
-                  <h4 className="text-sm font-serif font-bold text-slate-900">
+                  <h4 className="text-sm font-bold text-slate-900">
                     {mentor.name}
                   </h4>
                   <p className="text-[11px] text-amber-600">{mentor.role}</p>
@@ -1185,7 +1185,7 @@ const MentorTab: React.FC<{
                 ) : (
                   <p className="text-[11px] text-slate-500 bg-slate-50 border border-slate-200 rounded-xl p-3 leading-relaxed">
                     Messaging opens with the email you paid with. We could not find a
-                    payment record in this browser — sign in from the device you
+                    payment record in this browser - sign in from the device you
                     enrolled on, or contact us and we will link it up.
                   </p>
                 ))}
@@ -1197,15 +1197,15 @@ const MentorTab: React.FC<{
   );
 };
 
-// ── Certificates ─────────────────────────────────────────────────────────
+// -- Certificates ---------------------------------------------------------
 
 const CertificatesTab: React.FC<{
   experience: ReturnType<typeof deriveExperience>;
   earnedCount: number;
 }> = ({ experience, earnedCount }) => (
   <div className="space-y-5">
-    <div className="p-5 rounded-2xl bg-white border border-amber-300 shadow-sm space-y-1">
-      <h3 className="text-base font-serif font-bold text-slate-900 flex items-center gap-2">
+    <div className="p-5 rounded-lg bg-white border border-amber-300 shadow-sm space-y-1">
+      <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
         <Award className="w-4 h-4 text-amber-600" />
         {experience.certification.label}
       </h3>
@@ -1218,7 +1218,7 @@ const CertificatesTab: React.FC<{
       {STUDENT_DATA.certificates.map((cert) => (
         <div
           key={cert.id}
-          className={`rounded-2xl p-5 space-y-3 border shadow-sm ${
+          className={`rounded-lg p-5 space-y-3 border shadow-sm ${
             cert.status === 'Earned'
               ? 'bg-white border-emerald-200'
               : cert.status === 'Locked'
@@ -1228,7 +1228,7 @@ const CertificatesTab: React.FC<{
         >
           <div className="flex items-start justify-between gap-3">
             <h4
-              className={`text-sm font-serif font-bold leading-snug ${
+              className={`text-sm font-bold leading-snug ${
                 cert.status === 'Locked' ? 'text-slate-400' : 'text-slate-900'
               }`}
             >
@@ -1267,7 +1267,7 @@ const CertificatesTab: React.FC<{
   </div>
 );
 
-// ── Growth AI ────────────────────────────────────────────────────────────
+// -- Growth AI ------------------------------------------------------------
 
 const AiCoachTab: React.FC<{
   experience: ReturnType<typeof deriveExperience>;
@@ -1300,11 +1300,11 @@ const AiCoachTab: React.FC<{
   return (
     <div className="space-y-4">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <h3 className="text-lg sm:text-xl font-serif font-bold text-slate-900">
+        <h3 className="text-lg sm:text-xl font-bold text-slate-900">
           Growth AI Coach
         </h3>
 
-        {/* Mini is metered, so the allowance is shown rather than discovered
+        {/* Growth Foundation Cohort is metered, so the allowance is shown rather than discovered
             when a question is refused. */}
         {capped ? (
           <div className="flex items-center gap-2.5">
@@ -1327,7 +1327,7 @@ const AiCoachTab: React.FC<{
         )}
       </div>
 
-      <div className="bg-white border border-slate-200 rounded-3xl shadow-sm overflow-hidden flex flex-col h-[520px]">
+      <div className="bg-white border border-slate-200 rounded-lg shadow-sm overflow-hidden flex flex-col h-[520px]">
         <div ref={containerRef} className="flex-1 overflow-y-auto p-5 space-y-4">
           {messages.map((message, index) => (
             <div
@@ -1336,7 +1336,7 @@ const AiCoachTab: React.FC<{
               className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
             >
               <div
-                className={`max-w-[85%] rounded-2xl px-4 py-3 text-xs leading-relaxed whitespace-pre-line ${
+                className={`max-w-[85%] rounded-lg px-4 py-3 text-xs leading-relaxed whitespace-pre-line ${
                   message.sender === 'user'
                     ? 'bg-amber-500 text-slate-950 font-medium'
                     : message.failed
@@ -1351,7 +1351,7 @@ const AiCoachTab: React.FC<{
 
           {chatLoading && (
             <div className="flex justify-start">
-              <div className="bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3 flex gap-1">
+              <div className="bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 flex gap-1">
                 {[0, 150, 300].map((delay) => (
                   <span
                     key={delay}
@@ -1367,13 +1367,13 @@ const AiCoachTab: React.FC<{
         {exhausted ? (
           <div className="p-5 border-t border-slate-200 bg-amber-50 text-center space-y-2">
             <p className="text-xs text-amber-900 leading-relaxed">
-              You have used all {quota} Growth AI questions on Mini this month.
+              You have used all {quota} Growth AI questions on Growth Foundation Cohort this month.
             </p>
             <Link
               to="/checkout/medium"
               className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs transition-colors"
             >
-              Go unlimited with Medium <ArrowRight className="w-3.5 h-3.5" />
+              Go unlimited with Executive Cycle <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
         ) : (
@@ -1388,7 +1388,7 @@ const AiCoachTab: React.FC<{
               className="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-xs focus:outline-none focus:border-amber-500 transition-colors"
             />
             {/* Hidden rather than disabled where the browser has no speech
-                API — a permanently dead button is worse than no button. */}
+                API - a permanently dead button is worse than no button. */}
             {voice.supported && (
               <VoiceInputButton
                 listening={voice.listening}

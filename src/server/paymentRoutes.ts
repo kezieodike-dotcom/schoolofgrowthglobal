@@ -24,7 +24,7 @@ import {
  *
  * 2. A payment is only real once Paystack says so on OUR call to them. The
  *    browser coming back from checkout with "?status=success" proves nothing
- *    — that URL can be typed. /verify re-asks Paystack directly and also
+ *    - that URL can be typed. /verify re-asks Paystack directly and also
  *    re-checks the amount, because a transaction can succeed for the wrong
  *    sum if the initialize call was ever replayed with different values.
  *
@@ -59,7 +59,7 @@ function callbackUrl(req: Request): string {
 /**
  * Captures the unparsed request body so the webhook can verify Paystack's
  * signature. express.json() consumes the stream, so by the time a route runs
- * the original bytes are gone — and the signature is over those exact bytes,
+ * the original bytes are gone - and the signature is over those exact bytes,
  * not over a re-serialised copy of the parsed object (key order and spacing
  * would differ and every signature would fail).
  *
@@ -166,7 +166,7 @@ export function createPaymentRouter(): Router {
           method: "POST",
           body: {
             email,
-            // The authoritative amount, from the catalogue — not from the body.
+            // The authoritative amount, from the catalogue - not from the body.
             amount: plan.amountKobo,
             currency: CURRENCY,
             callback_url: callbackUrl(req),
@@ -180,7 +180,7 @@ export function createPaymentRouter(): Router {
                 {
                   display_name: "Plan",
                   variable_name: "plan",
-                  value: `${plan.name} — ${formatNaira(plan.amountKobo)}`,
+                  value: `${plan.name} - ${formatNaira(plan.amountKobo)}`,
                 },
               ],
             },
@@ -205,7 +205,7 @@ export function createPaymentRouter(): Router {
    * Confirms a payment and returns the entitlement it grants.
    *
    * This is the only place access is ever granted. Called when the student
-   * returns from Paystack, and safe to call repeatedly — verification is a
+   * returns from Paystack, and safe to call repeatedly - verification is a
    * read, so a refresh re-confirms rather than double-charging.
    */
   router.get("/payments/verify/:reference", async (req, res) => {
@@ -222,7 +222,7 @@ export function createPaymentRouter(): Router {
 
       if (tx.status !== "success") {
         // A real, common outcome (cancelled card, insufficient funds), not an
-        // error on our side — so it answers 200 with a paid:false result the
+        // error on our side - so it answers 200 with a paid:false result the
         // UI can render calmly rather than as a failure.
         return res.json({ paid: false, status: tx.status });
       }
@@ -275,7 +275,7 @@ export function createPaymentRouter(): Router {
    *
    * The browser can close mid-redirect, so this is the only delivery of a
    * successful charge we are guaranteed to receive. Today it logs the payment
-   * — enough to reconcile enrolments by hand against the Paystack dashboard.
+   * - enough to reconcile enrolments by hand against the Paystack dashboard.
    * When accounts exist, this is where the entitlement gets written to the
    * database, and /verify becomes a read of that record.
    *
@@ -311,7 +311,7 @@ export function createPaymentRouter(): Router {
     if (event?.event === "charge.success") {
       const tx = event.data ?? {};
       console.log(
-        `[paystack] charge.success ${tx.reference} — ${tx.customer?.email} ` +
+        `[paystack] charge.success ${tx.reference} - ${tx.customer?.email} ` +
           `paid ${tx.amount} ${tx.currency} for plan "${tx.metadata?.plan}".`
       );
     }

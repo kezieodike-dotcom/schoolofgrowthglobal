@@ -13,19 +13,21 @@ import { CommandCenterView } from './views/CommandCenterView';
 import { AboutView } from './views/AboutView';
 import { CoursesView } from './views/CoursesView';
 import { MentorsView } from './views/MentorsView';
+import { GrowthJobsView } from './views/GrowthJobsView';
 import { EventsView } from './views/EventsView';
 import { BlogView } from './views/BlogView';
 import { ContactView } from './views/ContactView';
 import { RegisterView } from './views/RegisterView';
 import { MentorRegistrationView } from './views/MentorRegistrationView';
 import { MentorInboxView } from './views/MentorInboxView';
+import { DemoReviewerAccessView } from './views/DemoReviewerAccessView';
 
 // Enrolment and payments
 import { PricingView } from './views/PricingView';
 import { CheckoutView } from './views/CheckoutView';
 import { PaymentCallbackView } from './views/PaymentCallbackView';
 
-// Admin panel — its own chrome, so it sits outside <Layout>
+// Admin panel - its own chrome, so it sits outside <Layout>
 import { AdminLayout } from './views/admin/AdminLayout';
 import { AdminOverviewView } from './views/admin/AdminOverviewView';
 import { AdminEnrolmentsView } from './views/admin/AdminEnrolmentsView';
@@ -49,7 +51,7 @@ export default function App() {
           The admin panel is deliberately outside <Layout>: it has its own
           navigation and must never render the public header, footer or the
           Growth AI widget. Access is gated inside AdminLayout, and every
-          /api/admin route verifies the session independently — hiding the UI
+          /api/admin route verifies the session independently - hiding the UI
           is convenience, not the security boundary.
         */}
         <Route path="admin" element={<AdminLayout />}>
@@ -72,11 +74,14 @@ export default function App() {
           <Route path="courses" element={<CoursesView />} />
           <Route path="courses/:courseId" element={<CourseDetailRoute />} />
 
+          <Route path="mentorship" element={<MentorsView />} />
           <Route path="mentors" element={<MentorsView />} />
+          <Route path="jobs" element={<GrowthJobsView />} />
           <Route path="events" element={<EventsView />} />
           <Route path="blog" element={<BlogView />} />
           <Route path="blog/:slug" element={<BlogView />} />
           <Route path="contact" element={<ContactView />} />
+          <Route path="demo-reviewer" element={<DemoReviewerAccessView />} />
 
           {/*
             Bare /register defaults to the student form inside the view.

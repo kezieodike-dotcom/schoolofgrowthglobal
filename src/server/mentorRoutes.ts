@@ -19,7 +19,7 @@ import {
  * email leaves no state anyone else can see.
  *
  * Admin endpoints live under /admin/mentors and are protected by the same
- * requireAdmin guard as the rest of the panel — passed in rather than
+ * requireAdmin guard as the rest of the panel - passed in rather than
  * redefined, so there is exactly one implementation of "is this a valid
  * admin session" in the codebase.
  */
@@ -89,7 +89,7 @@ export function createMentorRouter(
 
     if (!isWritable()) {
       // Answered as a soft failure on purpose. The application was still
-      // emailed by the browser, so the applicant is not lost — only the
+      // emailed by the browser, so the applicant is not lost - only the
       // reviewable copy is. Failing hard here would show them an error for
       // something that did, in the way that matters, go through.
       console.error(

@@ -36,6 +36,8 @@ export type SubmitStatus = 'idle' | 'sending' | 'sent' | 'error';
 
 const DELIVERY_FAILED =
   'We could not deliver your message. Please email infoschoolofgrowth@gmail.com directly.';
+const ATTACHMENT_TOO_LARGE =
+  'Please upload a CV file under 5 MB.';
 
 /**
  * Keeps a copy of the submission on our server, so the admin panel can list
@@ -60,7 +62,7 @@ async function captureLead(
       body: JSON.stringify({ source: form, sourceLabel: title, answers }),
     });
   } catch {
-    // Intentionally ignored — see above.
+    // Intentionally ignored - see above.
   }
 }
 
@@ -171,7 +173,7 @@ export function useFormSubmit(form: FormKey) {
    * place rather than forking a second implementation.
    *
    * `entries` is [label, value] pairs, already formatted for a human reading
-   * the email — the caller owns presentation because only it knows how to
+   * the email - the caller owns presentation because only it knows how to
    * render its own field types.
    */
   const submitValues = async (
@@ -227,12 +229,79 @@ export function useFormSubmit(form: FormKey) {
     }
   };
 
+  const submitValuesWithAttachment = async (
+    entries: [string, string][],
+    attachment: File,
+    opts?: { replyTo?: string }
+  ) => {
+    const def = FORMS[form];
+    if (attachment.size > 5 * 1024 * 1024) {
+      setError(ATTACHMENT_TOO_LARGE);
+      setStatus('error');
+      return false;
+    }
+
+    setStatus('sending');
+    setError(null);
+
+    void captureLead(form, def.title, Object.fromEntries(entries));
+
+    if (!ACCESS_KEY) {
+      console.error(
+        'VITE_WEB3FORMS_ACCESS_KEY is not set, so this submission was not delivered:',
+        Object.fromEntries(entries)
+      );
+      setError(DELIVERY_FAILED);
+      setStatus('error');
+      return false;
+    }
+
+    const payload = new FormData();
+    payload.append('access_key', ACCESS_KEY);
+    payload.append('subject', `[Website] ${def.title}`);
+    payload.append('from_name', 'School of Growth Global');
+    for (const [label, value] of entries) {
+      const trimmed = value.trim();
+      if (trimmed) payload.append(label, trimmed);
+    }
+    if (opts?.replyTo?.trim()) payload.append('replyto', opts.replyTo.trim());
+    payload.append('attachment', attachment);
+
+    try {
+      const res = await fetch(WEB3FORMS_ENDPOINT, {
+        method: 'POST',
+        body: payload,
+      });
+
+      const body = await res.json().catch(() => null);
+      if (!res.ok || !body?.success) {
+        console.error('Web3Forms rejected the submission:', body);
+        throw new Error(DELIVERY_FAILED);
+      }
+
+      setStatus('sent');
+      return true;
+    } catch (err) {
+      setError(err instanceof Error ? err.message : DELIVERY_FAILED);
+      setStatus('error');
+      return false;
+    }
+  };
+
   const reset = () => {
     setStatus('idle');
     setError(null);
   };
 
-  return { status, error, submit, submitValues, reset, sending: status === 'sending' };
+  return {
+    status,
+    error,
+    submit,
+    submitValues,
+    submitValuesWithAttachment,
+    reset,
+    sending: status === 'sending',
+  };
 }
 
 /**

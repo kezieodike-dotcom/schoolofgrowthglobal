@@ -17,7 +17,7 @@ import { Send, Loader2, AlertTriangle, CornerDownLeft } from 'lucide-react';
  *
  * Mentors have no login yet, so their conversations are answered from here.
  * Replies are attributed to the mentor rather than to the admin, because that
- * is who the student believes they are talking to — a thread that changes
+ * is who the student believes they are talking to - a thread that changes
  * voice halfway through would be worse than one answered slowly.
  *
  * When mentor accounts exist this screen becomes the mentor's own inbox with
@@ -172,7 +172,7 @@ export const AdminMessagesView: React.FC = () => {
           <Note>
             Mentors do not have logins yet, so their replies go out from here. The
             student sees them as coming from the mentor, which is who they are talking
-            to. Giving mentors their own inbox is a session check away — the
+            to. Giving mentors their own inbox is a session check away - the
             conversations already exist.
           </Note>
         </div>

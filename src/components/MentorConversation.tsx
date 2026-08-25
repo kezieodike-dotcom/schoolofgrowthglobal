@@ -7,7 +7,7 @@ import { Send, Loader2, AlertCircle, MessageSquare, RefreshCw } from 'lucide-rea
  * A student's conversation with one mentor.
  *
  * Opens the thread on mount using the email and Paystack reference from the
- * student's entitlement — see src/server/messageStore.ts for why those two
+ * student's entitlement - see src/server/messageStore.ts for why those two
  * are what stands in for a login here.
  *
  * Polls rather than holding a socket. Mentors reply through the admin panel
@@ -131,7 +131,7 @@ export const MentorConversation: React.FC<{
   };
 
   return (
-    <div className="bg-white border border-slate-200 rounded-2xl shadow-sm flex flex-col h-[460px] overflow-hidden">
+    <div className="bg-white border border-slate-200 rounded-lg shadow-sm flex flex-col h-[460px] overflow-hidden">
       <header className="px-4 py-3 border-b border-slate-100 flex items-center gap-2.5">
         <MessageSquare className="w-4 h-4 text-amber-600 shrink-0" />
         <div className="min-w-0">
@@ -156,7 +156,7 @@ export const MentorConversation: React.FC<{
           <div className="text-center py-10 space-y-2">
             <MessageSquare className="w-7 h-7 text-slate-200 mx-auto" />
             <p className="text-xs text-slate-500 max-w-xs mx-auto leading-relaxed">
-              No messages yet. Ask {mentor.name.split(' ').slice(-1)[0]} anything —
+              No messages yet. Ask {mentor.name.split(' ').slice(-1)[0]} anything -
               a decision you are weighing, feedback on your work, or what to
               prepare before your next session.
             </p>
@@ -169,7 +169,7 @@ export const MentorConversation: React.FC<{
             <div key={message.id} className={`flex ${mine ? 'justify-end' : 'justify-start'}`}>
               <div className="max-w-[85%] space-y-1">
                 <div
-                  className={`rounded-2xl px-3.5 py-2.5 text-xs leading-relaxed whitespace-pre-line ${
+                  className={`rounded-lg px-3.5 py-2.5 text-xs leading-relaxed whitespace-pre-line ${
                     mine
                       ? 'bg-amber-500 text-slate-950'
                       : 'bg-slate-50 text-slate-700 border border-slate-200'
@@ -220,7 +220,7 @@ export const MentorConversation: React.FC<{
           value={draft}
           onChange={(e) => setDraft(e.target.value)}
           onKeyDown={(e) => {
-            // Enter sends, Shift+Enter breaks the line — the convention every
+            // Enter sends, Shift+Enter breaks the line - the convention every
             // messaging app uses, so it needs no explaining.
             if (e.key === 'Enter' && !e.shiftKey) {
               e.preventDefault();

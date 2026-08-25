@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { COURSES, SCHOOLS } from '../data/mockData';
 import { PageHero } from '../components/PageHero';
 import { useEnrollment } from '../lib/useEnrollment';
+import { useContentCollection } from '../lib/useContent';
 import { cheapestPackageFor, formatNaira, type CourseLevel } from '../lib/pricing';
 import {
   BookOpen,
@@ -22,8 +23,9 @@ export const CoursesView: React.FC = () => {
   const [school, setSchool] = useState('All');
   const [query, setQuery] = useState('');
   const { canAccessLevel, currentPackageName, coursesExpireAt } = useEnrollment();
+  const managedCourses = useContentCollection('course', COURSES);
 
-  const courses = COURSES.filter((c) => {
+  const courses = managedCourses.items.filter((c) => {
     const matchLevel = level === 'All' || c.level === level;
     const matchSchool = school === 'All' || c.schoolId === school;
     const matchQuery =
@@ -38,7 +40,7 @@ export const CoursesView: React.FC = () => {
         eyebrow="Curriculum Catalog"
         icon={<BookOpen className="w-4 h-4" />}
         title={<>Executive Programs & Courses</>}
-        subtitle="Accredited, practitioner-led programs across all 14 schools — from live executive cohorts to self-paced mastery tracks."
+        subtitle="Accredited, practitioner-led programs across all 14 schools - from live executive cohorts to self-paced mastery tracks."
       />
 
       <section className="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -54,7 +56,7 @@ export const CoursesView: React.FC = () => {
                 <strong className="font-bold">{currentPackageName}</strong> package
                 active
                 {coursesExpireAt &&
-                  ` — access until ${coursesExpireAt.toLocaleDateString('en-NG', {
+                  ` - access until ${coursesExpireAt.toLocaleDateString('en-NG', {
                     day: 'numeric',
                     month: 'long',
                     year: 'numeric',
@@ -135,7 +137,7 @@ export const CoursesView: React.FC = () => {
           {courses.map((course) => {
             const unlocked = canAccessLevel(course.level as CourseLevel);
             // Names the specific package that opens this course, so a locked
-            // card is an answer ("Medium unlocks this") rather than a wall.
+            // card is an answer ("Executive Cycle unlocks this") rather than a wall.
             const unlockedBy = cheapestPackageFor(course.level as CourseLevel);
 
             return (
@@ -213,7 +215,9 @@ export const CoursesView: React.FC = () => {
         </div>
 
         {courses.length === 0 && (
-          <div className="text-center py-16 text-slate-500 text-sm">No programs match your filters.</div>
+          <div className="text-center py-16 text-slate-500 text-sm">
+            {managedCourses.error ?? 'No programs match your filters.'}
+          </div>
         )}
 
         {/* Tuition is published, not gated behind a sales call. */}
