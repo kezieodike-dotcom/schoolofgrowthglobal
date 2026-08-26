@@ -232,6 +232,11 @@ export const CheckoutView: React.FC = () => {
 
               <div className="space-y-1">
                 <h2 className="text-xl font-serif font-bold">{plan.name}</h2>
+                {plan.position && (
+                  <p className="text-[10px] font-mono uppercase tracking-wider text-amber-400 font-bold">
+                    {plan.position}
+                  </p>
+                )}
                 <p className="text-xs text-slate-400 leading-relaxed">{plan.tagline}</p>
               </div>
 
@@ -269,6 +274,11 @@ export const CheckoutView: React.FC = () => {
                     Total due
                   </p>
                   <p className="text-[11px] text-slate-500 mt-0.5">{plan.billing}</p>
+                  {plan.paymentOptions?.map((option) => (
+                    <p key={option} className="text-[11px] text-emerald-300 mt-1">
+                      Payment option: {option}
+                    </p>
+                  ))}
                 </div>
                 <span className="text-3xl font-serif font-bold text-amber-400">
                   {formatNaira(plan.amountKobo)}

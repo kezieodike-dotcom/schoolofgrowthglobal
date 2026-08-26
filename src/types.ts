@@ -55,6 +55,7 @@ export interface GrowthJob {
   requirements: string[];
   tags: string[];
   image: string;
+  applicationEmail?: string;
   featured?: boolean;
 }
 

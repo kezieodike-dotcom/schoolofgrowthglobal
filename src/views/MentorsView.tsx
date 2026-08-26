@@ -22,7 +22,7 @@ import { MENTORS } from '../data/mockData';
 import { PageHero } from '../components/PageHero';
 import { useEnrollment } from '../lib/useEnrollment';
 import { useMentorPairing } from '../lib/useMentorPairing';
-import { MENTORSHIP_PLANS, PLANS, formatNaira } from '../lib/pricing';
+import { MENTORSHIP_PLANS, PACKAGES, PLANS, formatNaira } from '../lib/pricing';
 import type { Mentor } from '../types';
 
 const MENTORSHIP_CATEGORIES = [
@@ -75,6 +75,30 @@ const MENTORSHIP_CATEGORIES = [
       'Investment Education',
       'Income Growth',
       'Entrepreneurship',
+    ],
+  },
+  {
+    id: 'beauty-fitness',
+    title: 'Beauty & Fitness',
+    items: [
+      'Beauty Business',
+      'Fitness Coaching',
+      'Personal Training',
+      'Skincare & Grooming',
+      'Body Confidence',
+      'Wellness Branding',
+    ],
+  },
+  {
+    id: 'health-wellbeing',
+    title: 'Health, Diet & Well-Being',
+    items: [
+      'Nutrition',
+      'Diet Planning',
+      'Healthy Habits',
+      'Stress Management',
+      'Preventive Health',
+      'Lifestyle Balance',
     ],
   },
 ] as const;
@@ -266,6 +290,12 @@ export const MentorsView: React.FC = () => {
   const { hasMentorship, mentorSlots, currentPackageName } = useEnrollment();
   const pairing = useMentorPairing(mentorSlots);
   const { mentors: directory, loading } = useDirectory();
+  const currentPackageIncludesMentorship = Boolean(
+    currentPackageName &&
+      PACKAGES.some(
+        (plan) => plan.name === currentPackageName && plan.mentorshipDays > 0
+      )
+  );
 
   const focusOptions = useMemo(() => {
     if (activeCategory === 'All') return ['All'];
@@ -418,7 +448,9 @@ export const MentorsView: React.FC = () => {
                   <UserCheck className="w-4 h-4 shrink-0" />
                   <span>
                     Mentor access is active
-                    {currentPackageName === PLANS.maxi.name ? ` with your ${PLANS.maxi.name} package` : ''}. You have used{' '}
+                    {currentPackageIncludesMentorship && currentPackageName
+                      ? ` with your ${currentPackageName} package`
+                      : ''}. You have used{' '}
                     <strong>{pairing.mentorIds.length} of {mentorSlots}</strong> mentor slots.
                   </span>
                 </p>
@@ -695,7 +727,9 @@ export const MentorsView: React.FC = () => {
             <p className="flex items-start gap-2 text-[11px] text-slate-500 leading-relaxed pt-1 border-t border-slate-100">
               <Sparkles className="w-3.5 h-3.5 shrink-0 mt-px text-amber-600" />
               <span>
-                The {PLANS.maxi.name} course package includes a full year of mentor access and {PLANS.maxi.mentorSlots} mentor slots.
+                The {PLANS.maxi.name} course package includes a full year of mentor
+                access and {PLANS.maxi.mentorSlots} mentor slots. {PLANS.premium.name}{' '}
+                includes {PLANS.premium.mentorSlots} mentor slots.
               </span>
             </p>
           </div>

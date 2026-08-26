@@ -553,7 +553,7 @@ const LockedCourseAccess: React.FC<{ course: Course; unlockedBy: Plan }> = ({
                 </p>
                 <p className="flex items-start gap-2">
                   <Sparkles className="w-4 h-4 text-amber-600 shrink-0 mt-px" />
-                  Elite students also receive one year of mentorship access.
+                  Executive Circle and Elite Council students also receive one year of mentorship access.
                 </p>
               </div>
             </div>

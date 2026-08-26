@@ -14,7 +14,7 @@ export function formatNaira(kobo: number): string {
 }
 
 /** Course packages. Codes stay stable so existing checkout links do not break. */
-export type PackageId = "mini" | "medium" | "maxi";
+export type PackageId = "mini" | "medium" | "maxi" | "premium";
 
 export type MentorshipPlanId =
   | "mentor-1-hour"
@@ -42,9 +42,11 @@ export interface Plan {
   kind: PlanKind;
   name: string;
   tagline: string;
+  position?: string;
   amountKobo: number;
   durationDays: number;
   billing: string;
+  paymentOptions?: string[];
   features: string[];
   excludes?: string[];
   includedLevels: CourseLevel[];
@@ -66,17 +68,20 @@ export const PLANS: Record<PlanCode, Plan> = {
   mini: {
     code: "mini",
     kind: "package",
-    name: "Growth Foundation Cohort",
-    tagline: "Start with the core growth curriculum and build disciplined execution habits.",
+    name: "Growth Foundation",
+    tagline: "The Gateway to Growth for students, NYSC members, job seekers and early builders.",
+    position: "Entry / Common Man",
     amountKobo: naira(10_000),
     durationDays: 90,
-    billing: "one-off / 3 months access",
+    billing: "Nigeria launch price / 3 months access",
     includedLevels: ["Emerging Leaders"],
     mentorshipDays: 0,
     mentorSlots: 0,
     features: [
-      "Every Emerging Leaders course, self-paced",
-      "Course workbooks and templates",
+      "Mass-market entry point into School of Growth",
+      "Built for students, NYSC members and job seekers",
+      "Core growth curriculum, self-paced",
+      "Foundational course workbooks and templates",
       "Certificate of completion",
       "Student community access",
       "Growth AI coach (20 questions / month)",
@@ -88,49 +93,83 @@ export const PLANS: Record<PlanCode, Plan> = {
   medium: {
     code: "medium",
     kind: "package",
-    name: "Executive Cycle",
-    tagline: "The professional curriculum for serious career and leadership acceleration.",
+    name: "Growth Accelerator",
+    tagline: "From Learning to Implementation with live strategy, templates and accountability.",
+    position: "Serious Learner",
     amountKobo: naira(50_000),
     durationDays: 365,
-    billing: "one-off / 12 months access",
+    billing: "Nigeria launch price / 12 months access",
+    paymentOptions: ["\u20a625,000 \u00d7 2"],
     includedLevels: ["Emerging Leaders", "Executive", "Frontier"],
-    mentorshipDays: 0,
-    mentorSlots: 0,
+    mentorshipDays: 30,
+    mentorSlots: 1,
     features: [
-      "Everything in Growth Foundation Cohort",
-      "All core schools unlocked",
-      "Executive and Frontier courses",
+      "Everything in Growth Foundation",
+      "More advanced courses",
       "Live cohort classes and Q&A",
-      "Graded assessments with feedback",
-      "Verified certification",
+      "Implementation assignments",
+      "Growth templates and career/business resources",
+      "Community access and accountability",
+      "Selected mentorship session access",
+      "Certificate",
       "Unlimited Growth AI coaching",
       "12 months of access",
     ],
-    excludes: ["Senior Directorate programmes", "Mentor booking"],
+    excludes: ["Senior Directorate programmes", "Private strategic advisory"],
     highlight: "Most popular",
   },
 
   maxi: {
     code: "maxi",
     kind: "package",
-    name: "Elite",
-    tagline: "The complete School of Growth experience with advanced access and mentorship.",
-    amountKobo: naira(150_000),
+    name: "Executive Circle",
+    tagline: "Strategic Growth & Leadership for professionals, founders and entrepreneurs.",
+    position: "Professionals / Entrepreneurs",
+    amountKobo: naira(200_000),
     durationDays: 365,
-    billing: "one-off / 12 months access",
+    billing: "Nigeria launch price / 12 months access",
+    paymentOptions: ["\u20a6100,000 \u00d7 2"],
     includedLevels: ALL_LEVELS,
     mentorshipDays: 365,
     mentorSlots: 3,
     features: [
-      "Everything in Executive Cycle",
-      "Senior Directorate programmes",
-      "In-person executive intensives",
-      "Capstone project with faculty review",
-      "One-year mentorship access included",
-      "Priority admission to every cohort",
-      "Alumni and corporate partner network",
+      "Everything in Growth Accelerator",
+      "Executive-level courses",
+      "Strategic business or career blueprint",
+      "Live executive sessions",
+      "Group mentorship and priority support",
+      "Business growth and leadership development",
+      "Networking and industry opportunities",
+      "Executive certificate",
       "12 months of access",
     ],
+  },
+
+  premium: {
+    code: "premium",
+    kind: "package",
+    name: "Elite Council",
+    tagline: "The Highest Level of School of Growth Global: private transformation and strategic advisory.",
+    position: "High-Level Transformation",
+    amountKobo: naira(1_000_000),
+    durationDays: 365,
+    billing: "Nigeria launch price / 12 months access",
+    includedLevels: ALL_LEVELS,
+    mentorshipDays: 365,
+    mentorSlots: 5,
+    features: [
+      "Everything in Executive Circle",
+      "Private mentorship and strategic advisory",
+      "Personal growth blueprint",
+      "Business and career positioning",
+      "Leadership advisory and business review",
+      "Strategic planning and personal brand positioning",
+      "High-level networking and private community",
+      "Dedicated accountability and priority access",
+      "Certificate of Elite Completion",
+      "12 months of access",
+    ],
+    highlight: "Highest level",
   },
 
   "mentor-1-hour": {
@@ -290,7 +329,7 @@ export const PLANS: Record<PlanCode, Plan> = {
   },
 };
 
-export const PACKAGES: Plan[] = [PLANS.mini, PLANS.medium, PLANS.maxi];
+export const PACKAGES: Plan[] = [PLANS.mini, PLANS.medium, PLANS.maxi, PLANS.premium];
 
 export const MENTORSHIP_PLANS: Plan[] = [
   PLANS["mentor-1-hour"],

@@ -139,6 +139,7 @@ const FIELDS: Record<ContentKind, Field[]> = {
     { key: 'salary', label: 'Salary / compensation', wide: true },
     { key: 'posted', label: 'Posted date' },
     { key: 'closes', label: 'Closing date' },
+    { key: 'applicationEmail', label: 'Application email', wide: true },
     { key: 'image', label: 'Image', type: 'image', wide: true },
     { key: 'summary', label: 'Summary', type: 'textarea', wide: true },
     { key: 'requirements', label: 'Requirements, one per line', type: 'textarea', wide: true },
@@ -222,6 +223,7 @@ function defaultsFor(kind: ContentKind): ManagedItem {
       requirements: [],
       tags: [],
       image: '/scenes/bootcamp-team.jpg',
+      applicationEmail: '',
       featured: false,
     } satisfies GrowthJob;
   }

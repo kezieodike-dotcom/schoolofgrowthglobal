@@ -137,7 +137,7 @@ export const CoursesView: React.FC = () => {
           {courses.map((course) => {
             const unlocked = canAccessLevel(course.level as CourseLevel);
             // Names the specific package that opens this course, so a locked
-            // card is an answer ("Executive Cycle unlocks this") rather than a wall.
+            // card is an answer ("Growth Accelerator unlocks this") rather than a wall.
             const unlockedBy = cheapestPackageFor(course.level as CourseLevel);
 
             return (

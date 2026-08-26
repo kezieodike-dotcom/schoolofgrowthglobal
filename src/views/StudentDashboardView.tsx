@@ -9,7 +9,7 @@ import { VoiceInputButton } from '../components/VoiceInputButton';
 import { useEnrollment } from '../lib/useEnrollment';
 import { useMentorPairing } from '../lib/useMentorPairing';
 import { deriveExperience, aiQuota, type StudentFeature } from '../lib/studentExperience';
-import { PLANS, formatNaira, type CourseLevel, type PackageId, type Entitlement } from '../lib/pricing';
+import { PACKAGES, PLANS, formatNaira, type CourseLevel, type Entitlement } from '../lib/pricing';
 import { MentorConversation } from '../components/MentorConversation';
 import {
   LayoutDashboard,
@@ -39,14 +39,14 @@ import {
 /**
  * The student portal.
  *
- * Foundation and Elite students are not on the same programme, so they do
+ * Foundation and Executive Circle students are not on the same programme, so they do
  * not get the same dashboard with pieces greyed out - the navigation itself
- * changes. Foundation has no live schedule to show and no mentor to meet; Elite
+ * changes. Foundation has no live schedule to show and no mentor to meet; Executive Circle
  * has a capstone and a mentor pairing that Foundation has never seen.
  *
  * What each package means is decided in src/lib/studentExperience.ts, derived
  * from the pricing catalogue. This file renders that description and holds no
- * package rules of its own, so changing what Executive Cycle includes changes this
+ * package rules of its own, so changing what Growth Accelerator includes changes this
  * screen without touching it.
  *
  * The learning content itself (tracks, sessions, certificates) is still mock
@@ -166,7 +166,7 @@ const UpgradePanel: React.FC<{
 
 const LockedPortal: React.FC = () => (
   <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4 py-16">
-    <div className="w-full max-w-lg text-center space-y-6">
+    <div className="w-full max-w-2xl text-center space-y-6">
       <div className="w-16 h-16 rounded-lg bg-white border border-slate-200 shadow-sm flex items-center justify-center mx-auto">
         <Lock className="w-8 h-8 text-amber-600" />
       </div>
@@ -180,18 +180,18 @@ const LockedPortal: React.FC = () => (
         </p>
       </div>
 
-      <div className="grid grid-cols-3 gap-3">
-        {(['mini', 'medium', 'maxi'] as PackageId[]).map((code) => (
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        {PACKAGES.map((plan) => (
           <Link
-            key={code}
-            to={`/checkout/${code}`}
+            key={plan.code}
+            to={`/checkout/${plan.code}`}
             className="p-4 rounded-lg bg-white border border-slate-200 hover:border-amber-400 shadow-sm transition-all space-y-1"
           >
             <span className="block text-sm font-bold text-slate-900">
-              {PLANS[code].name}
+              {plan.name}
             </span>
             <span className="block text-[11px] font-mono text-amber-600">
-              {formatNaira(PLANS[code].amountKobo)}
+              {formatNaira(plan.amountKobo)}
             </span>
           </Link>
         ))}
@@ -478,8 +478,8 @@ export const StudentDashboardView: React.FC<StudentDashboardViewProps> = ({
             <ScheduleTab sessions={sessions} experience={experience} />
           ) : (
             <UpgradePanel
-              title="Live classes are not on Growth Foundation Cohort"
-              body="Growth Foundation Cohort is a self-paced programme - your modules have no fixed times, so there is no live schedule to keep. Executive Cycle adds live cohort classes, Q&A and graded assessment dates."
+              title="Live classes are not on Growth Foundation"
+              body="Growth Foundation is a self-paced programme - your modules have no fixed times, so there is no live schedule to keep. Growth Accelerator adds live cohort classes, Q&A and graded assessment dates."
               feature={experience.liveCohorts}
             />
           ))}
@@ -494,7 +494,7 @@ export const StudentDashboardView: React.FC<StudentDashboardViewProps> = ({
           ) : (
             <UpgradePanel
               title="You have no mentor yet"
-              body="Mentor access pairs you with an operator in your field for 1-on-1 sessions and messaging between them. It comes bundled with Elite, or you can subscribe to it on its own."
+              body="Mentor access pairs you with an operator in your field for 1-on-1 sessions and messaging between them. It comes bundled with Executive Circle and Elite Council, or you can subscribe to it on its own."
               feature={experience.mentorship}
             />
           ))}
@@ -510,7 +510,7 @@ export const StudentDashboardView: React.FC<StudentDashboardViewProps> = ({
           ) : (
             <UpgradePanel
               title="Mentor messaging is not active yet"
-              body="Messaging opens once you have mentor access and have paired with at least one mentor. Elite includes it, or you can subscribe to mentorship on its own."
+              body="Messaging opens once you have mentor access and have paired with at least one mentor. Executive Circle and Elite Council include it, or you can subscribe to mentorship on its own."
               feature={experience.mentorship}
             />
           ))}
@@ -711,7 +711,7 @@ const OverviewTab: React.FC<{
             <div className="bg-white border border-slate-200 rounded-lg p-6 text-center space-y-2 shadow-sm">
               <Calendar className="w-6 h-6 text-slate-300 mx-auto" />
               <p className="text-xs text-slate-500 leading-relaxed">
-                Nothing scheduled. Growth Foundation Cohort is self-paced, so you set your own rhythm.
+                Nothing scheduled. Growth Foundation is self-paced, so you set your own rhythm.
               </p>
             </div>
           ) : (
@@ -916,7 +916,7 @@ const ScheduleTab: React.FC<{
       <div className="p-4 rounded-lg bg-slate-50 border border-slate-200 flex items-start gap-3">
         <MapPin className="w-4 h-4 text-slate-400 shrink-0 mt-0.5" />
         <p className="text-[11px] text-slate-500 leading-relaxed">
-          In-person executive intensives are part of the Elite package.{' '}
+          In-person executive intensives start from the {PLANS.maxi.name} package.{' '}
           <Link to="/checkout/maxi" className="text-amber-600 font-bold hover:underline">
             See what Elite adds
           </Link>
@@ -1304,7 +1304,7 @@ const AiCoachTab: React.FC<{
           Growth AI Coach
         </h3>
 
-        {/* Growth Foundation Cohort is metered, so the allowance is shown rather than discovered
+        {/* Growth Foundation is metered, so the allowance is shown rather than discovered
             when a question is refused. */}
         {capped ? (
           <div className="flex items-center gap-2.5">
@@ -1367,13 +1367,13 @@ const AiCoachTab: React.FC<{
         {exhausted ? (
           <div className="p-5 border-t border-slate-200 bg-amber-50 text-center space-y-2">
             <p className="text-xs text-amber-900 leading-relaxed">
-              You have used all {quota} Growth AI questions on Growth Foundation Cohort this month.
+              You have used all {quota} Growth AI questions on Growth Foundation this month.
             </p>
             <Link
               to="/checkout/medium"
               className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs transition-colors"
             >
-              Go unlimited with Executive Cycle <ArrowRight className="w-3.5 h-3.5" />
+              Go unlimited with Growth Accelerator <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
         ) : (

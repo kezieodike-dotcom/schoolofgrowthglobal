@@ -111,7 +111,8 @@ export function deriveExperience(entitlements: Entitlement[]): StudentExperience
 
   const plan = PLANS[packageId];
   const isFoundation = packageId === "mini";
-  const isElite = packageId === "maxi";
+  const isPremium = packageId === "premium";
+  const isTopTier = packageId === "maxi" || packageId === "premium";
 
   // The next package up by price, so the upgrade card never points sideways
   // or at something the student already holds.
@@ -130,22 +131,27 @@ export function deriveExperience(entitlements: Entitlement[]): StudentExperience
     upgradeTo: upgradeTo as PackageId | null,
 
     liveCohorts: isFoundation
-      ? LOCKED("medium", "Self-paced modules only on Growth Foundation Cohort")
+      ? LOCKED("medium", "Self-paced modules only on Growth Foundation")
       : INCLUDED(),
-    inPersonIntensives: isElite ? INCLUDED() : LOCKED("maxi"),
+    inPersonIntensives: isTopTier ? INCLUDED() : LOCKED("maxi"),
     assessments: isFoundation
-      ? LOCKED("medium", "Graded feedback starts on Executive Cycle")
+      ? LOCKED("medium", "Graded feedback starts on Growth Accelerator")
       : INCLUDED(),
-    capstone: isElite ? INCLUDED("Reviewed by faculty") : LOCKED("maxi"),
+    capstone: isTopTier ? INCLUDED("Reviewed by faculty") : LOCKED("maxi"),
     mentorship: mentorshipLive
-      ? INCLUDED(isElite ? "Included with Elite" : "Active subscription")
+      ? INCLUDED(plan.mentorshipDays > 0 ? `Included with ${plan.name}` : "Active subscription")
       : LOCKED("maxi", "Also sold separately from \u20a61,500"),
     aiCoach: isFoundation
       ? INCLUDED("20 questions per month")
       : INCLUDED("Unlimited questions"),
     certification: isFoundation
       ? { label: "Certificate of completion", note: "Awarded per course finished." }
-      : isElite
+      : isPremium
+        ? {
+            label: "Certificate of Elite Completion",
+            note: "Awarded through the Elite Council transformation pathway.",
+          }
+      : isTopTier
         ? {
             label: "Executive certification",
             note: "Awarded on capstone review by faculty.",

@@ -6,6 +6,7 @@ import {
   CheckCircle2,
   FileText,
   Lock,
+  Mail,
   MapPin,
   Send,
   Upload,
@@ -38,7 +39,7 @@ export const GrowthJobsView: React.FC = () => {
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
       <PageHero
-        eyebrow="Growth Career Jobs"
+        eyebrow="Career Jobs"
         icon={<BriefcaseBusiness className="w-4 h-4" />}
         title={
           <>
@@ -50,6 +51,25 @@ export const GrowthJobsView: React.FC = () => {
         }
         subtitle="See new jobs posted through the School of Growth network. Applications are reserved for enrolled students and subscribed mentees of the community."
       />
+
+      <section className="bg-white border-b border-slate-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-6 lg:gap-10 items-start">
+          <p className="text-base sm:text-lg text-slate-700 leading-relaxed max-w-4xl">
+            School of Growth Global Career Jobs is a professional career and talent
+            ecosystem connecting employers seeking capable professionals with a
+            community of skilled individuals ready to demonstrate their effectiveness,
+            efficiency, expertise, and value.
+          </p>
+          <div className="lg:border-l lg:border-slate-200 lg:pl-8">
+            <p className="text-[11px] font-mono uppercase tracking-wider text-amber-700">
+              Core concept
+            </p>
+            <p className="mt-2 text-xl font-serif font-bold text-slate-900 leading-snug">
+              Where Employers Find Talent. Where Professionals Find Opportunity.
+            </p>
+          </div>
+        </div>
+      </section>
 
       <section className="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-8 items-start">
@@ -121,6 +141,9 @@ export const GrowthJobsView: React.FC = () => {
                       <Meta icon={<MapPin className="w-3.5 h-3.5" />} label={job.location} />
                       <Meta icon={<BriefcaseBusiness className="w-3.5 h-3.5" />} label={`${job.workMode} / ${job.level}`} />
                       <Meta icon={<CalendarDays className="w-3.5 h-3.5" />} label={`Closes ${job.closes}`} />
+                      {job.applicationEmail && (
+                        <Meta icon={<Mail className="w-3.5 h-3.5" />} label={`Send CV: ${job.applicationEmail}`} />
+                      )}
                       <p className="text-slate-500">{job.salary}</p>
                       <button
                         type="button"
@@ -215,6 +238,7 @@ const JobApplicationModal: React.FC<{
       ['Job Applied For', job.title],
       ['Student / Mentee Status', String(data.get('studentStatus') ?? '')],
       ['CV File Name', cvFileName],
+      ['Application Email', job.applicationEmail ?? ''],
       ['LinkedIn / Portfolio URL', String(data.get('portfolio') ?? '')],
       ['Short Application Note', String(data.get('note') ?? '')],
     ];
@@ -240,6 +264,11 @@ const JobApplicationModal: React.FC<{
           <p className="text-[11px] font-mono uppercase tracking-wider text-amber-700">Apply for role</p>
           <h3 className="text-2xl font-serif font-bold text-slate-900 mt-1">{job.title}</h3>
           <p className="text-sm text-slate-500 mt-1">{job.organization}</p>
+          {job.applicationEmail && (
+            <p className="text-xs text-amber-700 font-semibold mt-2">
+              Send CV: {job.applicationEmail}
+            </p>
+          )}
         </div>
 
         <img
@@ -253,7 +282,7 @@ const JobApplicationModal: React.FC<{
             <Lock className="w-6 h-6 text-amber-400" />
             <h4 className="font-serif font-bold text-lg mt-3">This application is reserved</h4>
             <p className="text-sm text-slate-300 mt-2">
-              Enroll as a student or subscribe as a mentee to apply for Growth Career Jobs.
+              Enroll as a student or subscribe as a mentee to apply for Career Jobs.
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-5">
               <Link to="/pricing" className="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-amber-500 text-slate-950 text-xs font-black">
@@ -271,7 +300,7 @@ const JobApplicationModal: React.FC<{
             </div>
             <h4 className="text-xl font-serif font-bold text-slate-900">Application received</h4>
             <p className="text-sm text-slate-500 max-w-md mx-auto">
-              Your application for {job.title} has been sent to the Growth Career Jobs desk.
+              Your application for {job.title} has been sent to the Career Jobs desk.
             </p>
             <button
               type="button"

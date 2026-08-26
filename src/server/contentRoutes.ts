@@ -149,6 +149,7 @@ function sanitizeJob(input: Record<string, unknown>): GrowthJob {
     requirements: list(input.requirements),
     tags: list(input.tags),
     image: ensureImage(input.image, '/scenes/bootcamp-team.jpg'),
+    applicationEmail: text(input.applicationEmail),
     featured: Boolean(input.featured),
   };
 }

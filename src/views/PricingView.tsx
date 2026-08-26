@@ -19,13 +19,12 @@ import {
   Users,
   Sparkles,
   Star,
-  Lock,
   Landmark,
   CircleCheck,
 } from 'lucide-react';
 
 /**
- * The commercial page: three course packages and mentorship plans.
+ * The commercial page: course packages and mentorship plans.
  *
  * Every figure on this page is read from src/lib/pricing.ts, the same
  * catalogue the payment server charges from. Nothing here is typed twice, so
@@ -39,6 +38,10 @@ const COMPARISON: { label: string; value: (plan: Plan) => boolean | string }[] =
     value: (p) => (p.includedLevels.length >= 3 ? 'All levels' : 'One level'),
   },
   {
+    label: 'Position',
+    value: (p) => p.position ?? '',
+  },
+  {
     label: 'Emerging Leaders courses',
     value: (p) => p.includedLevels.includes('Emerging Leaders'),
   },
@@ -49,12 +52,18 @@ const COMPARISON: { label: string; value: (plan: Plan) => boolean | string }[] =
     value: (p) => p.includedLevels.includes('Senior Directorate'),
   },
   { label: 'Live cohort classes', value: (p) => p.code !== 'mini' },
-  { label: 'In-person intensives', value: (p) => p.code === 'maxi' },
+  { label: 'In-person intensives', value: (p) => p.code === 'maxi' || p.code === 'premium' },
   { label: 'Graded assessments', value: (p) => p.code !== 'mini' },
   {
     label: 'Certification',
     value: (p) =>
-      p.code === 'mini' ? 'Completion' : p.code === 'medium' ? 'Verified' : 'Executive',
+      p.code === 'mini'
+        ? 'Completion'
+        : p.code === 'medium'
+          ? 'Certificate'
+          : p.code === 'premium'
+            ? 'Elite'
+            : 'Executive',
   },
   {
     label: 'Growth AI coach',
@@ -62,7 +71,8 @@ const COMPARISON: { label: string; value: (plan: Plan) => boolean | string }[] =
   },
   {
     label: 'Mentor access',
-    value: (p) => (p.mentorshipDays > 0 ? '12 months' : false),
+    value: (p) =>
+      p.mentorshipDays >= 365 ? '12 months' : p.mentorshipDays > 0 ? 'Selected' : false,
   },
   { label: 'Access window', value: (p) => `${Math.round(p.durationDays / 30)} months` },
 ];
@@ -98,6 +108,11 @@ const PackageCard: React.FC<{ plan: Plan; owned: boolean }> = ({ plan, owned }) 
       <div className="p-7 sm:p-8 space-y-5 flex-1 flex flex-col">
         <div className="space-y-1.5">
           <h3 className="text-2xl font-serif font-bold text-slate-900">{plan.name}</h3>
+          {plan.position && (
+            <p className="text-[11px] font-mono uppercase tracking-wider text-amber-700 font-bold">
+              {plan.position}
+            </p>
+          )}
           <p className="text-xs text-slate-500 leading-relaxed min-h-[2rem]">
             {plan.tagline}
           </p>
@@ -114,6 +129,11 @@ const PackageCard: React.FC<{ plan: Plan; owned: boolean }> = ({ plan, owned }) 
             </span>
           </div>
           <p className="text-[11px] text-slate-500 font-mono">{plan.billing}</p>
+          {plan.paymentOptions?.map((option) => (
+            <p key={option} className="text-[11px] text-emerald-700 font-semibold">
+              Payment option: {option}
+            </p>
+          ))}
         </div>
 
         {owned ? (
@@ -280,7 +300,7 @@ export const PricingView: React.FC = () => {
 
       {/* Packages */}
       <section className="pt-12 sm:pt-16 pb-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-7 items-start">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 lg:gap-7 items-start">
           {PACKAGES.map((plan) => (
             <PackageCard
               key={plan.code}
@@ -333,7 +353,7 @@ export const PricingView: React.FC = () => {
 
         {/* Scrolls on phones rather than squeezing four columns off-screen. */}
         <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm">
-          <table className="w-full min-w-[600px] text-left">
+          <table className="w-full min-w-[760px] text-left">
             <thead>
               <tr className="border-b border-slate-200 bg-slate-50">
                 <th className="p-4 text-[11px] font-mono uppercase tracking-wider text-slate-500 font-medium">
@@ -412,8 +432,9 @@ export const PricingView: React.FC = () => {
                   The one-year mentorship saves{' '}
                   <strong>{formatNaira(MENTORSHIP_ANNUAL_SAVING_KOBO)}</strong> against
                   twelve one-month plans - and the{' '}
-                  <strong>{PLANS.maxi.name}</strong> package includes a full year of mentorship at no
-                  extra cost.
+                  <strong>{PLANS.maxi.name}</strong> and{' '}
+                  <strong>{PLANS.premium.name}</strong> packages include a full year of
+                  mentorship at no extra cost.
                 </p>
               </div>
 
@@ -453,7 +474,7 @@ export const PricingView: React.FC = () => {
             },
             {
               q: 'Do I need a package to get a mentor?',
-              a: `No. Mentorship stands alone from ${formatNaira(PLANS['mentor-1-hour'].amountKobo)} for one hour to ${formatNaira(PLANS['mentor-1-year'].amountKobo)} for one year. The ${PLANS.maxi.name} package bundles a year of it if you want both.`,
+              a: `No. Mentorship stands alone from ${formatNaira(PLANS['mentor-1-hour'].amountKobo)} for one hour to ${formatNaira(PLANS['mentor-1-year'].amountKobo)} for one year. The ${PLANS.maxi.name} and ${PLANS.premium.name} packages bundle a year of it if you want both.`,
             },
             {
               q: 'Which payment methods work?',
@@ -476,25 +497,6 @@ export const PricingView: React.FC = () => {
               <p className="text-xs text-slate-500 leading-relaxed">{item.a}</p>
             </div>
           ))}
-        </div>
-
-        <div className="mt-10 p-8 rounded-3xl bg-gradient-to-r from-white to-slate-50 border border-amber-300 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="space-y-1">
-            <h3 className="text-xl font-serif font-bold text-slate-900 flex items-center gap-2">
-              <Lock className="w-5 h-5 text-amber-600" />
-              Still deciding?
-            </h3>
-            <p className="text-sm text-slate-500">
-              Talk to an advisor about which package fits your goals, or request a
-              sponsorship invoice for your employer.
-            </p>
-          </div>
-          <Link
-            to="/contact"
-            className="px-6 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm whitespace-nowrap"
-          >
-            Speak with an advisor
-          </Link>
         </div>
       </section>
     </div>
