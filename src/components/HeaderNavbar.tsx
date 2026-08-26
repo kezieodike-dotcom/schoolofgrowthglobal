@@ -8,6 +8,7 @@ import {
   GraduationCap,
 } from 'lucide-react';
 import { useEnrollment } from '../lib/useEnrollment';
+import { ContentNotificationCenter } from './ContentNotificationCenter';
 
 const NAV_ITEMS: { to: string; label: string }[] = [
   { to: '/courses', label: 'Courses' },
@@ -62,6 +63,7 @@ export const HeaderNavbar: React.FC = () => {
 
           {/* Right Action Buttons */}
           <div className="hidden lg:flex items-center gap-3">
+            <ContentNotificationCenter />
             {currentPackageName ? (
               <Link
                 to="/portal"
@@ -85,6 +87,7 @@ export const HeaderNavbar: React.FC = () => {
 
           {/* Mobile Menu Button */}
           <div className="flex lg:hidden items-center gap-2">
+            <ContentNotificationCenter />
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="p-2 rounded-lg bg-slate-900 text-slate-300 border border-slate-800"

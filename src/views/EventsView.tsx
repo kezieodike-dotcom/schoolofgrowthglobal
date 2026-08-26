@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { EVENTS } from '../data/mockData';
 import { PageHero } from '../components/PageHero';
 import { useContentCollection } from '../lib/useContent';
-import { CalendarDays, MapPin, Clock, Video, Users, Ticket, CheckCircle2 } from 'lucide-react';
+import { CalendarDays, MapPin, Video, Users, Ticket, CheckCircle2, ExternalLink } from 'lucide-react';
 
 const TYPES = ['All', 'Conference', 'Webinar', 'Seminar', 'Workshop', 'Bootcamp', 'Virtual Summit'] as const;
 
@@ -40,12 +40,23 @@ export const EventsView: React.FC = () => {
               <span className="flex items-center gap-1.5"><CalendarDays className="w-4 h-4 text-amber-400" /> {featured.date}</span>
               <span className="flex items-center gap-1.5"><MapPin className="w-4 h-4 text-amber-400" /> {featured.location}</span>
             </div>
-            <button
-              onClick={() => setRegistered(featured.id)}
-              className="px-6 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-sm w-fit flex items-center gap-2"
-            >
-              <Ticket className="w-4 h-4" /> Register Now
-            </button>
+            {featured.liveClassUrl ? (
+              <a
+                href={featured.liveClassUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="px-6 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-sm w-fit flex items-center gap-2"
+              >
+                <ExternalLink className="w-4 h-4" /> Join Live Class
+              </a>
+            ) : (
+              <button
+                onClick={() => setRegistered(featured.id)}
+                className="px-6 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-sm w-fit flex items-center gap-2"
+              >
+                <Ticket className="w-4 h-4" /> Register Now
+              </button>
+            )}
           </div>
         </div>
       </section>
@@ -95,12 +106,23 @@ export const EventsView: React.FC = () => {
                     <span className="text-sm font-bold font-serif text-amber-600">{event.price}</span>
                     <span className="block text-[10px] text-emerald-600 font-mono">{event.seatsLeft} seats left</span>
                   </div>
-                  <button
-                    onClick={() => setRegistered(event.id)}
-                    className="px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs flex items-center gap-1.5 transition-colors"
-                  >
-                    <Ticket className="w-3.5 h-3.5" /> Register
-                  </button>
+                  {event.liveClassUrl ? (
+                    <a
+                      href={event.liveClassUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs flex items-center gap-1.5 transition-colors"
+                    >
+                      <ExternalLink className="w-3.5 h-3.5" /> Join Live
+                    </a>
+                  ) : (
+                    <button
+                      onClick={() => setRegistered(event.id)}
+                      className="px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs flex items-center gap-1.5 transition-colors"
+                    >
+                      <Ticket className="w-3.5 h-3.5" /> Register
+                    </button>
+                  )}
                 </div>
               </div>
             </div>

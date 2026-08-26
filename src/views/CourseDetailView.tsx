@@ -17,7 +17,8 @@ import {
   Lock,
   LockOpen,
   PlayCircle,
-  Loader2
+  Loader2,
+  ExternalLink
 } from 'lucide-react';
 import { useFormSubmit, HONEYPOT_PROPS } from '../lib/useFormSubmit';
 import { useEnrollment } from '../lib/useEnrollment';
@@ -156,13 +157,25 @@ export const CourseDetailView: React.FC<CourseDetailViewProps> = ({ onNavigate }
               </div>
 
               <div className="space-y-3">
-                <button
-                  onClick={() => setApplyModalOpen(true)}
-                  className="w-full py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs shadow-lg shadow-amber-500/20 flex items-center justify-center gap-2 transition-all"
-                >
-                  <PlayCircle className="w-4 h-4" />
-                  <span>Join the Oct 15 Cohort</span>
-                </button>
+                {course.liveClassUrl ? (
+                  <a
+                    href={course.liveClassUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="w-full py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs shadow-lg shadow-amber-500/20 flex items-center justify-center gap-2 transition-all"
+                  >
+                    <ExternalLink className="w-4 h-4" />
+                    <span>Join live class</span>
+                  </a>
+                ) : (
+                  <button
+                    onClick={() => setApplyModalOpen(true)}
+                    className="w-full py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs shadow-lg shadow-amber-500/20 flex items-center justify-center gap-2 transition-all"
+                  >
+                    <PlayCircle className="w-4 h-4" />
+                    <span>Join the Oct 15 Cohort</span>
+                  </button>
+                )}
 
                 <button
                   onClick={() => setSyllabusModalOpen(true)}

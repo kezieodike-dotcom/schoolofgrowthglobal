@@ -95,6 +95,7 @@ const FIELDS: Record<ContentKind, Field[]> = {
     { key: 'instructorRole', label: 'Instructor role' },
     { key: 'status', label: 'Status' },
     { key: 'price', label: 'Display price' },
+    { key: 'liveClassUrl', label: 'Live class / meeting link', wide: true },
     { key: 'heroImage', label: 'Hero image', type: 'image', wide: true },
     { key: 'instructorAvatar', label: 'Instructor image', type: 'image', wide: true },
     { key: 'description', label: 'Description', type: 'textarea', wide: true },
@@ -118,6 +119,7 @@ const FIELDS: Record<ContentKind, Field[]> = {
     { key: 'speaker', label: 'Speaker' },
     { key: 'price', label: 'Price' },
     { key: 'seatsLeft', label: 'Seats left', type: 'number' },
+    { key: 'liveClassUrl', label: 'Live class / meeting link', wide: true },
     { key: 'image', label: 'Image', type: 'image', wide: true },
     { key: 'description', label: 'Description', type: 'textarea', wide: true },
   ],
@@ -187,6 +189,7 @@ function defaultsFor(kind: ContentKind): ManagedItem {
       modules: [],
       price: 'Included in package',
       featured: false,
+      liveClassUrl: '',
     } satisfies Course;
   }
 
@@ -204,6 +207,7 @@ function defaultsFor(kind: ContentKind): ManagedItem {
       price: 'Free',
       seatsLeft: 50,
       image: '/scenes/hero-team.jpg',
+      liveClassUrl: '',
     } satisfies EventItem;
   }
 

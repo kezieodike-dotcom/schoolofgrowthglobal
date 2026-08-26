@@ -72,6 +72,7 @@ export interface EventItem {
   price: string;
   seatsLeft: number;
   image: string;
+  liveClassUrl?: string;
 }
 
 export interface BlogPost {
@@ -113,6 +114,7 @@ export interface Course {
   }[];
   price: string;
   featured?: boolean;
+  liveClassUrl?: string;
 }
 
 export interface FacultyMember {

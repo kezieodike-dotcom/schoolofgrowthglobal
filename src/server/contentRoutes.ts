@@ -6,6 +6,7 @@ import {
   type ContentKind,
   type ContentPayloadMap,
 } from '../lib/content.js';
+import { toContentNotification } from '../lib/contentNotifications.js';
 import {
   contentStoreMode,
   deleteContentOverride,
@@ -48,6 +49,21 @@ function ensureImage(value: unknown, fallback: string): string {
   return next || fallback;
 }
 
+function optionalUrl(value: unknown, label: string): string | undefined {
+  const next = text(value);
+  if (!next) return undefined;
+
+  try {
+    const url = new URL(next);
+    if (url.protocol !== 'http:' && url.protocol !== 'https:') {
+      throw new Error();
+    }
+    return url.toString();
+  } catch {
+    throw new Error(`${label} must be a valid http or https link.`);
+  }
+}
+
 function sanitizeCourse(input: Record<string, unknown>): Course {
   const title = text(input.title);
   if (!title) throw new Error('Course title is required.');
@@ -78,6 +94,7 @@ function sanitizeCourse(input: Record<string, unknown>): Course {
     modules: Array.isArray(input.modules) ? (input.modules as Course['modules']) : [],
     price: text(input.price, 'Included in package'),
     featured: Boolean(input.featured),
+    liveClassUrl: optionalUrl(input.liveClassUrl, 'Live class link'),
   };
 }
 
@@ -105,6 +122,7 @@ function sanitizeEvent(input: Record<string, unknown>): EventItem {
     price: text(input.price, 'Free'),
     seatsLeft: Math.max(0, Math.round(numberValue(input.seatsLeft, 50))),
     image: ensureImage(input.image, '/scenes/hero-team.jpg'),
+    liveClassUrl: optionalUrl(input.liveClassUrl, 'Live class link'),
   };
 }
 
@@ -188,6 +206,22 @@ export function createContentRouter(
   requireAdmin: (req: any, res: any, next: any) => void
 ): Router {
   const router = Router();
+
+  router.get('/content/notifications', async (_req, res) => {
+    try {
+      const notifications = (await listContent())
+        .map(toContentNotification)
+        .filter((item): item is NonNullable<typeof item> => Boolean(item))
+        .sort((a, b) => Date.parse(b.updatedAt) - Date.parse(a.updatedAt))
+        .slice(0, 20);
+
+      res.json({ notifications });
+    } catch (err) {
+      res.status(500).json({
+        error: err instanceof Error ? err.message : 'Could not load notifications.',
+      });
+    }
+  });
 
   router.get('/content/:kind', async (req, res) => {
     const kind = req.params.kind;
