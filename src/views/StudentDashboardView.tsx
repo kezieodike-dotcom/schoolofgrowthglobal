@@ -470,7 +470,7 @@ export const StudentDashboardView: React.FC<StudentDashboardViewProps> = ({
         )}
 
         {activeTab === 'courses' && (
-          <CoursesTab canAccess={enrollment.canAccessLevel} onNavigate={onNavigate} />
+          <CoursesTab canAccess={enrollment.canAccessLevel} />
         )}
 
         {activeTab === 'schedule' &&
@@ -772,13 +772,73 @@ const OverviewTab: React.FC<{
 
 const CoursesTab: React.FC<{
   canAccess: (level: CourseLevel) => boolean;
-  onNavigate: (view: ViewType) => void;
-}> = ({ canAccess, onNavigate }) => {
+}> = ({ canAccess }) => {
   const open = COURSES.filter((c) => canAccess(c.level as CourseLevel));
   const locked = COURSES.filter((c) => !canAccess(c.level as CourseLevel));
+  const foundation = open.find((course) => course.id === 'growth-foundation-cohort');
 
   return (
     <div className="space-y-8">
+      {foundation && foundation.modules.length > 0 && (
+        <section className="space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2">
+            <div>
+              <span className="text-[10px] font-mono uppercase tracking-widest text-amber-600 font-bold">
+                Level 1 - Growth Foundation
+              </span>
+              <h3 className="text-lg sm:text-xl font-bold text-slate-900 mt-1">
+                Your Foundation curriculum
+              </h3>
+              <p className="text-sm text-slate-500 max-w-2xl leading-relaxed mt-1">
+                Practical capability for personal growth, employability, money discipline,
+                communication and digital work.
+              </p>
+            </div>
+            <Link
+              to={`/courses/${foundation.id}`}
+              className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-700 hover:text-amber-800"
+            >
+              Open full course <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3">
+            {foundation.modules.map((module) => (
+              <Link
+                key={module.title}
+                to={`/courses/${foundation.id}`}
+                className="bg-white border border-slate-200 rounded-lg p-4 shadow-sm hover:border-amber-300 transition-colors space-y-3"
+              >
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-[10px] font-mono text-amber-700 font-bold">
+                    {module.week}
+                  </span>
+                  <Play className="w-3.5 h-3.5 text-slate-300" />
+                </div>
+                <div className="space-y-1">
+                  <h4 className="text-sm font-bold text-slate-900 leading-snug">
+                    {module.title}
+                  </h4>
+                  <p className="text-[11px] text-slate-500 leading-relaxed line-clamp-2">
+                    {module.description}
+                  </p>
+                </div>
+                <div className="flex flex-wrap gap-1">
+                  {module.topics.slice(0, 3).map((topic) => (
+                    <span
+                      key={topic}
+                      className="rounded-full bg-slate-50 border border-slate-200 px-2 py-0.5 text-[10px] text-slate-500"
+                    >
+                      {topic}
+                    </span>
+                  ))}
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
+
       <section className="space-y-4">
         <div className="flex items-center justify-between">
           <h3 className="text-lg sm:text-xl font-bold text-slate-900">
@@ -791,9 +851,9 @@ const CoursesTab: React.FC<{
 
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
           {open.map((course) => (
-            <button
+            <Link
               key={course.id}
-              onClick={() => onNavigate('course-detail')}
+              to={`/courses/${course.id}`}
               className="text-left bg-white border border-slate-200 hover:border-amber-300 rounded-lg overflow-hidden shadow-sm transition-all group"
             >
               <div className="h-24 overflow-hidden relative">
@@ -811,11 +871,16 @@ const CoursesTab: React.FC<{
                 <h4 className="text-sm font-bold text-slate-900 leading-snug">
                   {course.title}
                 </h4>
+                {course.modules.length > 0 && (
+                  <p className="text-[11px] text-slate-500 leading-relaxed">
+                    {course.modules.length} practical modules available
+                  </p>
+                )}
                 <span className="text-[11px] font-bold text-amber-600 flex items-center gap-1">
                   Start <ChevronRight className="w-3 h-3" />
                 </span>
               </div>
-            </button>
+            </Link>
           ))}
         </div>
       </section>

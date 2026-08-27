@@ -213,7 +213,7 @@ export const CourseDetailView: React.FC<CourseDetailViewProps> = ({ onNavigate }
               {/* Learning Outcomes */}
               <div className="space-y-6">
                 <h3 className="text-2xl font-serif font-bold text-slate-900">
-                  Executive Learning Outcomes
+                  Learning Outcomes
                 </h3>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -230,9 +230,11 @@ export const CourseDetailView: React.FC<CourseDetailViewProps> = ({ onNavigate }
               <div className="space-y-6">
                 <div className="flex items-center justify-between">
                   <h3 className="text-2xl font-serif font-bold text-slate-900">
-                    12-Week Curriculum Breakdown
+                    Curriculum Breakdown
                   </h3>
-                  <span className="text-xs text-slate-500 font-mono">4 Core Modules</span>
+                  <span className="text-xs text-slate-500 font-mono">
+                    {course.modules.length} Modules
+                  </span>
                 </div>
 
                 <div className="space-y-4">
@@ -303,11 +305,11 @@ export const CourseDetailView: React.FC<CourseDetailViewProps> = ({ onNavigate }
                 </div>
 
                 <h4 className="text-sm font-bold text-slate-900 font-serif">
-                  Personalize Your Executive Schedule
+                  Personalize Your Study Schedule
                 </h4>
 
                 <p className="text-xs text-slate-500 leading-relaxed">
-                  Let Growth AI generate a tailored 12-week commitment outline matching your executive availability.
+                  Let Growth AI generate a tailored study commitment outline that matches your weekly availability.
                 </p>
 
                 <button
@@ -496,7 +498,7 @@ const LockedCourseAccess: React.FC<{ course: Course; unlockedBy: Plan }> = ({
               <p className="text-base text-slate-600 leading-relaxed max-w-2xl">
                 This course is reserved for paid School of Growth students. Choose the{' '}
                 <strong className="text-slate-900">{unlockedBy.name}</strong> package or higher
-                to open the curriculum, lessons, study tools and cohort application.
+                to open the full lessons, study tools and certificate pathway.
               </p>
             </div>
 
@@ -562,7 +564,7 @@ const LockedCourseAccess: React.FC<{ course: Course; unlockedBy: Plan }> = ({
               <div className="pt-4 border-t border-slate-200 space-y-2 text-[11px] text-slate-500">
                 <p className="flex items-start gap-2">
                   <ShieldCheck className="w-4 h-4 text-amber-600 shrink-0 mt-px" />
-                  Course modules, outcomes, AI study tools and cohort application are hidden until payment is active.
+                  Module titles and focus areas are visible now. Full lessons, activities, AI study tools and certificates unlock after payment.
                 </p>
                 <p className="flex items-start gap-2">
                   <Sparkles className="w-4 h-4 text-amber-600 shrink-0 mt-px" />
@@ -574,5 +576,58 @@ const LockedCourseAccess: React.FC<{ course: Course; unlockedBy: Plan }> = ({
         </div>
       </div>
     </section>
+
+    {course.modules.length > 0 && (
+      <section className="py-12 sm:py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-3xl space-y-2 mb-6">
+            <span className="text-[10px] font-mono uppercase tracking-widest text-amber-700 font-bold">
+              What you will learn
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-serif font-bold text-slate-900">
+              Course modules preview
+            </h2>
+            <p className="text-sm text-slate-600 leading-relaxed">
+              You can review the structure before paying. The full lessons, worksheets,
+              exercises and certificate pathway open after your package payment is verified.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {course.modules.map((module) => (
+              <article
+                key={module.title}
+                className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-3"
+              >
+                <div className="flex items-center justify-between gap-3">
+                  <span className="text-[10px] font-mono text-amber-700 font-bold">
+                    {module.week}
+                  </span>
+                  <Lock className="w-3.5 h-3.5 text-slate-300" />
+                </div>
+                <div className="space-y-1.5">
+                  <h3 className="text-base font-serif font-bold text-slate-900">
+                    {module.title}
+                  </h3>
+                  <p className="text-xs text-slate-500 leading-relaxed">
+                    {module.description}
+                  </p>
+                </div>
+                <div className="flex flex-wrap gap-1.5">
+                  {module.topics.slice(0, 5).map((topic) => (
+                    <span
+                      key={topic}
+                      className="rounded-full bg-slate-50 border border-slate-200 px-2 py-1 text-[10px] text-slate-600"
+                    >
+                      {topic}
+                    </span>
+                  ))}
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+    )}
   </div>
 );

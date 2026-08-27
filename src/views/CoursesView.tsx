@@ -193,6 +193,28 @@ export const CoursesView: React.FC = () => {
                     {course.title}
                   </h4>
                   <p className="text-xs text-slate-500 line-clamp-2 mb-4 flex-1">{course.description}</p>
+                  {course.modules.length > 0 && (
+                    <div className="mb-4 rounded-xl bg-slate-50 border border-slate-200 p-3 space-y-2">
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="text-[10px] font-mono uppercase tracking-wider text-slate-500">
+                          Course preview
+                        </span>
+                        <span className="text-[10px] font-mono text-amber-700">
+                          {course.modules.length} modules
+                        </span>
+                      </div>
+                      <div className="flex flex-wrap gap-1.5">
+                        {course.modules.slice(0, 4).map((module) => (
+                          <span
+                            key={module.title}
+                            className="rounded-full bg-white border border-slate-200 px-2 py-1 text-[10px] text-slate-600"
+                          >
+                            {module.title}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                   <div className="pt-4 border-t border-slate-200 flex items-center justify-between text-xs">
                     <span className="flex items-center gap-1.5 text-slate-500 font-mono">
                       <Clock className="w-3.5 h-3.5" /> {course.duration}

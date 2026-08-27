@@ -13,11 +13,25 @@
   --color-primary: #f59e0b;           /* amber-500 */
   --color-primary-foreground: #020617;/* slate-950 */
   --color-muted-foreground: #64748b;  /* slate-500 */
+  --font-sans: "Aptos", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --font-serif: Georgia, "Times New Roman", serif;
 }
 
 /* Give the bare `border` utility a sensible default color (shadcn convention). */
 @layer base {
   * {
     border-color: var(--color-border);
+  }
+
+  html {
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    font-weight: 400;
+    line-height: 1.6;
   }
 }
