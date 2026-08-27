@@ -4,6 +4,11 @@ import {
   type ContentPayloadMap,
   type ContentRecord,
 } from '../lib/content.js';
+import {
+  normalizeSupabaseUrl,
+  readSupabaseEnv,
+  readSupabaseEnvWithDefault,
+} from './supabaseEnv.js';
 
 const localStore = createJsonStore<ContentRecord>('content.json');
 
@@ -19,13 +24,13 @@ interface SupabaseRow {
 }
 
 function supabaseConfig() {
-  const url = process.env.SUPABASE_URL?.replace(/\/+$/, '');
-  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!url || !serviceKey) return null;
+  const rawUrl = readSupabaseEnv('SUPABASE_URL');
+  const serviceKey = readSupabaseEnv('SUPABASE_SERVICE_ROLE_KEY');
+  if (!rawUrl || !serviceKey) return null;
   return {
-    url,
+    url: normalizeSupabaseUrl(rawUrl),
     serviceKey,
-    table: process.env.SUPABASE_CONTENT_TABLE ?? DEFAULT_TABLE,
+    table: readSupabaseEnvWithDefault('SUPABASE_CONTENT_TABLE', DEFAULT_TABLE),
   };
 }
 

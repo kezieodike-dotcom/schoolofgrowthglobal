@@ -2,6 +2,11 @@ import { randomUUID } from 'crypto';
 import { mkdir, writeFile } from 'fs/promises';
 import path from 'path';
 import type { ContentKind } from '../lib/content.js';
+import {
+  normalizeSupabaseUrl,
+  readSupabaseEnv,
+  readSupabaseEnvWithDefault,
+} from './supabaseEnv.js';
 
 export const MAX_IMAGE_UPLOAD_BYTES = 5 * 1024 * 1024;
 
@@ -76,12 +81,12 @@ function decodeImageData(data: string): Buffer {
 }
 
 function supabaseStorageConfig(): SupabaseStorageConfig | null {
-  const url = process.env.SUPABASE_URL?.trim().replace(/\/+$/, '');
-  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim();
-  const bucket = process.env.SUPABASE_STORAGE_BUCKET?.trim() || 'site-images';
+  const rawUrl = readSupabaseEnv('SUPABASE_URL');
+  const serviceKey = readSupabaseEnv('SUPABASE_SERVICE_ROLE_KEY');
+  const bucket = readSupabaseEnvWithDefault('SUPABASE_STORAGE_BUCKET', 'site-images');
 
-  if (!url || !serviceKey) return null;
-  return { url, serviceKey, bucket };
+  if (!rawUrl || !serviceKey) return null;
+  return { url: normalizeSupabaseUrl(rawUrl), serviceKey, bucket };
 }
 
 function publicSupabaseUrl(config: SupabaseStorageConfig, objectPath: string): string {
