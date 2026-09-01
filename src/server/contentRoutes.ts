@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import type { BlogPost, Course, EventItem, FacultyMember, GrowthJob } from '../types.js';
+import type { BlogPost, BookItem, Course, EventItem, FacultyMember, GrowthJob } from '../types.js';
 import {
   CONTENT_LABEL,
   slugify,
@@ -17,14 +17,15 @@ import {
 } from './contentStore.js';
 import { uploadImage } from './imageUpload.js';
 
-const COURSE_LEVELS = ['Executive', 'Emerging Leaders', 'Senior Directorate', 'Frontier'] as const;
+const COURSE_LEVELS = ['Executive', 'Emerging Leaders', 'Senior Directorate', 'Frontier', 'Elite'] as const;
 const EVENT_TYPES = ['Conference', 'Webinar', 'Seminar', 'Workshop', 'Bootcamp', 'Virtual Summit'] as const;
 const EVENT_MODES = ['In-Person', 'Virtual', 'Hybrid'] as const;
 const JOB_WORK_MODES = ['Remote', 'Hybrid', 'On-site'] as const;
 const JOB_TYPES = ['Full-time', 'Part-time', 'Contract', 'Internship'] as const;
+const BOOK_FORMATS = ['PDF', 'Ebook', 'Workbook', 'Print'] as const;
 
 function isKind(value: string): value is ContentKind {
-  return value === 'course' || value === 'event' || value === 'team' || value === 'job' || value === 'insight';
+  return value === 'course' || value === 'event' || value === 'team' || value === 'job' || value === 'insight' || value === 'book';
 }
 
 function text(value: unknown, fallback = ''): string {
@@ -191,6 +192,38 @@ function sanitizeInsight(input: Record<string, unknown>): BlogPost {
   };
 }
 
+export function sanitizeBook(input: Record<string, unknown>): BookItem {
+  const title = text(input.title);
+  if (!title) throw new Error('Book title is required.');
+
+  const ownerType = input.ownerType === 'Mentor' ? 'Mentor' : 'Admin';
+  const priceKobo = Math.max(100, Math.round(numberValue(input.priceKobo, 0)));
+  const format = BOOK_FORMATS.includes(input.format as any)
+    ? (input.format as BookItem['format'])
+    : 'Ebook';
+
+  return {
+    id: text(input.id, slugify(title)),
+    title,
+    subtitle: text(input.subtitle),
+    authorName: text(input.authorName, text(input.ownerName, 'School of Growth Global')),
+    ownerName: text(input.ownerName, 'School of Growth Global'),
+    ownerId: text(input.ownerId) || undefined,
+    ownerType,
+    ownerEmail: text(input.ownerEmail),
+    category: text(input.category, 'Personal Growth'),
+    description: text(input.description),
+    highlights: list(input.highlights),
+    coverImage: ensureImage(input.coverImage, '/scenes/hero-team.jpg'),
+    priceKobo,
+    format,
+    pages: Math.max(0, Math.round(numberValue(input.pages, 0))),
+    downloadUrl: optionalUrl(input.downloadUrl, 'Buyer download link'),
+    sampleUrl: optionalUrl(input.sampleUrl, 'Sample / preview link'),
+    featured: Boolean(input.featured),
+  };
+}
+
 function sanitize<K extends ContentKind>(
   kind: K,
   payload: Record<string, unknown>
@@ -199,7 +232,8 @@ function sanitize<K extends ContentKind>(
   if (kind === 'event') return sanitizeEvent(payload) as ContentPayloadMap[K];
   if (kind === 'team') return sanitizeTeam(payload) as ContentPayloadMap[K];
   if (kind === 'job') return sanitizeJob(payload) as ContentPayloadMap[K];
-  return sanitizeInsight(payload) as ContentPayloadMap[K];
+  if (kind === 'insight') return sanitizeInsight(payload) as ContentPayloadMap[K];
+  return sanitizeBook(payload) as ContentPayloadMap[K];
 }
 
 export function createContentRouter(
@@ -248,6 +282,7 @@ export function createContentRouter(
           team: records.filter((row) => row.kind === 'team' && row.published).length,
           job: records.filter((row) => row.kind === 'job' && row.published).length,
           insight: records.filter((row) => row.kind === 'insight' && row.published).length,
+          book: records.filter((row) => row.kind === 'book' && row.published).length,
         },
       });
     } catch (err) {

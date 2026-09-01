@@ -46,7 +46,7 @@ export const AdminEnrolmentsView: React.FC = () => {
         row.name.toLowerCase().includes(q) ||
         row.reference.toLowerCase().includes(q);
       const matchStatus = status === 'all' || row.status === status;
-      const matchPlan = plan === 'all' || row.plan === plan;
+      const matchPlan = plan === 'all' || row.plan === plan || row.kind === plan;
       return matchQuery && matchStatus && matchPlan;
     });
   }, [data, query, status, plan]);
@@ -120,7 +120,8 @@ export const AdminEnrolmentsView: React.FC = () => {
               onChange={(e) => setPlan(e.target.value)}
               className="bg-white border border-slate-200 rounded-lg px-3 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-amber-500"
             >
-              <option value="all">All plans</option>
+              <option value="all">All items</option>
+              <option value="book">Book sales</option>
               {Object.values(PLANS).map((p) => (
                 <option key={p.code} value={p.code}>
                   {p.name}
@@ -144,10 +145,10 @@ export const AdminEnrolmentsView: React.FC = () => {
               />
             ) : (
               <div className="overflow-x-auto">
-                <table className="w-full min-w-[760px] text-left">
+                <table className="w-full min-w-[860px] text-left">
                   <thead>
                     <tr className="border-b border-slate-100 bg-slate-50/60">
-                      {['Student', 'Plan', 'Amount', 'Status', 'Method', 'Date', 'Reference'].map(
+                      {['Buyer', 'Item', 'Amount', 'Split', 'Status', 'Method', 'Date', 'Reference'].map(
                         (h) => (
                           <th
                             key={h}
@@ -172,9 +173,24 @@ export const AdminEnrolmentsView: React.FC = () => {
                         </td>
                         <td className="px-4 py-3">
                           <span className="text-xs text-slate-700">{row.planName}</span>
+                          {row.kind === 'book' && row.bookOwnerName && (
+                            <p className="text-[10px] text-slate-400 mt-1">
+                              Owner: {row.bookOwnerName}
+                            </p>
+                          )}
                         </td>
                         <td className="px-4 py-3 text-xs font-mono font-bold text-slate-900 tabular-nums whitespace-nowrap">
                           {money(row.amountKobo)}
+                        </td>
+                        <td className="px-4 py-3 text-[10px] font-mono text-slate-500 whitespace-nowrap">
+                          {row.kind === 'book' && row.companyShareKobo !== null && row.ownerShareKobo !== null ? (
+                            <>
+                              <p>Company {money(row.companyShareKobo)}</p>
+                              <p>Owner {money(row.ownerShareKobo)}</p>
+                            </>
+                          ) : (
+                            '-'
+                          )}
                         </td>
                         <td className="px-4 py-3">
                           <StatusPill status={row.status} />
@@ -220,8 +236,13 @@ function downloadCsv(rows: Enrolment[]) {
   const headers = [
     'Name',
     'Email',
-    'Plan',
+    'Item',
+    'Kind',
     'Amount (NGN)',
+    'Company Share (NGN)',
+    'Owner Share (NGN)',
+    'Book Owner',
+    'Book Owner Email',
     'Currency',
     'Status',
     'Method',
@@ -238,9 +259,14 @@ function downloadCsv(rows: Enrolment[]) {
         r.name,
         r.email,
         r.planName,
+        r.kind ?? '',
         // Naira, not kobo: a spreadsheet column of kobo invites someone to
         // report revenue a hundred times too high.
         (r.amountKobo / 100).toFixed(2),
+        r.companyShareKobo === null ? '' : (r.companyShareKobo / 100).toFixed(2),
+        r.ownerShareKobo === null ? '' : (r.ownerShareKobo / 100).toFixed(2),
+        r.bookOwnerName ?? '',
+        r.bookOwnerEmail ?? '',
         r.currency,
         r.status,
         r.channel ?? '',

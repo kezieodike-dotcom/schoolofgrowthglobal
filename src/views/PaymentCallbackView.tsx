@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { grantEntitlement } from '../lib/useEnrollment';
 import { PLANS, formatNaira, type Entitlement } from '../lib/pricing';
+import type { BookPurchase } from '../lib/bookRevenue';
 import {
   CheckCircle2,
   Loader2,
@@ -24,6 +25,7 @@ import {
 type State =
   | { phase: 'verifying' }
   | { phase: 'paid'; entitlement: Entitlement }
+  | { phase: 'book-paid'; purchase: BookPurchase }
   | { phase: 'unpaid'; status: string }
   | { phase: 'error'; message: string };
 
@@ -78,7 +80,12 @@ export const PaymentCallbackView: React.FC = () => {
           return;
         }
 
-        // The single point where access is granted anywhere in the app.
+        if (body.purchase) {
+          setState({ phase: 'book-paid', purchase: body.purchase });
+          return;
+        }
+
+        // The single point where course and mentorship access is granted anywhere in the app.
         grantEntitlement(body.entitlement);
         setState({ phase: 'paid', entitlement: body.entitlement });
       } catch {
@@ -108,6 +115,8 @@ export const PaymentCallbackView: React.FC = () => {
         )}
 
         {state.phase === 'paid' && <PaidPanel entitlement={state.entitlement} />}
+
+        {state.phase === 'book-paid' && <BookPaidPanel purchase={state.purchase} />}
 
         {state.phase === 'unpaid' && (
           <div className="p-10 rounded-3xl bg-white border border-amber-300 shadow-sm text-center space-y-4">
@@ -254,3 +263,74 @@ const PaidPanel: React.FC<{ entitlement: Entitlement }> = ({ entitlement }) => {
     </div>
   );
 };
+
+const BookPaidPanel: React.FC<{ purchase: BookPurchase }> = ({ purchase }) => (
+  <div className="p-8 sm:p-10 rounded-3xl bg-white border border-emerald-200 shadow-lg space-y-6">
+    <div className="text-center space-y-4">
+      <div className="w-16 h-16 rounded-full bg-emerald-50 border border-emerald-200 flex items-center justify-center mx-auto">
+        <CheckCircle2 className="w-8 h-8 text-emerald-600" />
+      </div>
+      <div className="space-y-1.5">
+        <h1 className="text-2xl font-serif font-bold text-slate-900">
+          Book purchase confirmed.
+        </h1>
+        <p className="text-sm text-slate-500 leading-relaxed">
+          Your payment for <strong className="text-slate-900">{purchase.title}</strong>{' '}
+          has been verified.
+        </p>
+      </div>
+    </div>
+
+    <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2 text-[11px] font-mono">
+      <div className="flex justify-between gap-4">
+        <span className="text-slate-500">Amount paid</span>
+        <span className="text-slate-900 font-bold">{formatNaira(purchase.amountKobo)}</span>
+      </div>
+      <div className="flex justify-between gap-4">
+        <span className="text-slate-500">Company 20%</span>
+        <span className="text-slate-700">{formatNaira(purchase.split.companyShareKobo)}</span>
+      </div>
+      <div className="flex justify-between gap-4">
+        <span className="text-slate-500">Owner 80%</span>
+        <span className="text-slate-700">{formatNaira(purchase.split.ownerShareKobo)}</span>
+      </div>
+      <div className="flex justify-between gap-4">
+        <span className="text-slate-500">Reference</span>
+        <span className="text-slate-700 break-all text-right">{purchase.reference}</span>
+      </div>
+    </div>
+
+    {purchase.downloadUrl ? (
+      <a
+        href={purchase.downloadUrl}
+        target="_blank"
+        rel="noreferrer"
+        className="w-full py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs flex items-center justify-center gap-2 transition-colors"
+      >
+        <BookOpen className="w-4 h-4" />
+        Open book
+        <ArrowRight className="w-4 h-4" />
+      </a>
+    ) : (
+      <Link
+        to="/contact"
+        className="w-full py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs flex items-center justify-center gap-2 transition-colors"
+      >
+        <Receipt className="w-4 h-4" />
+        Contact support for delivery
+      </Link>
+    )}
+
+    <Link
+      to="/books"
+      className="w-full py-3.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs flex items-center justify-center gap-2 transition-colors"
+    >
+      Browse more books
+    </Link>
+
+    <p className="text-[11px] text-slate-400 text-center leading-relaxed">
+      A receipt is on its way to {purchase.email || 'your email address'}. The admin
+      ledger tracks the 20/80 split for payout to {purchase.ownerName}.
+    </p>
+  </div>
+);

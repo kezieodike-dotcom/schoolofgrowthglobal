@@ -13,6 +13,7 @@ import { CommandCenterView } from './views/CommandCenterView';
 import { AboutView } from './views/AboutView';
 import { CoursesView } from './views/CoursesView';
 import { MentorsView } from './views/MentorsView';
+import { BooksView } from './views/BooksView';
 import { GrowthJobsView } from './views/GrowthJobsView';
 import { EventsView } from './views/EventsView';
 import { BlogView } from './views/BlogView';
@@ -25,6 +26,7 @@ import { DemoReviewerAccessView } from './views/DemoReviewerAccessView';
 // Enrolment and payments
 import { PricingView } from './views/PricingView';
 import { CheckoutView } from './views/CheckoutView';
+import { BookCheckoutView } from './views/BookCheckoutView';
 import { PaymentCallbackView } from './views/PaymentCallbackView';
 
 // Admin panel - its own chrome, so it sits outside <Layout>
@@ -76,6 +78,7 @@ export default function App() {
 
           <Route path="mentorship" element={<MentorsView />} />
           <Route path="mentors" element={<MentorsView />} />
+          <Route path="books" element={<BooksView />} />
           <Route path="jobs" element={<GrowthJobsView />} />
           <Route path="events" element={<EventsView />} />
           <Route path="blog" element={<BlogView />} />
@@ -100,6 +103,7 @@ export default function App() {
           */}
           <Route path="pricing" element={<PricingView />} />
           <Route path="checkout/:plan" element={<CheckoutView />} />
+          <Route path="checkout/book/:bookId" element={<BookCheckoutView />} />
           <Route path="payment/callback" element={<PaymentCallbackView />} />
 
           <Route path="portal" element={<PortalRoute />} />

@@ -35,7 +35,8 @@ export type CourseLevel =
   | "Emerging Leaders"
   | "Executive"
   | "Frontier"
-  | "Senior Directorate";
+  | "Senior Directorate"
+  | "Elite";
 
 export interface Plan {
   code: PlanCode;
@@ -55,12 +56,14 @@ export interface Plan {
   highlight?: string;
 }
 
-const ALL_LEVELS: CourseLevel[] = [
+const EXECUTIVE_CIRCLE_LEVELS: CourseLevel[] = [
   "Emerging Leaders",
   "Executive",
   "Frontier",
   "Senior Directorate",
 ];
+
+const ALL_LEVELS: CourseLevel[] = [...EXECUTIVE_CIRCLE_LEVELS, "Elite"];
 
 const naira = (amount: number) => amount * KOBO_PER_NAIRA;
 
@@ -129,7 +132,7 @@ export const PLANS: Record<PlanCode, Plan> = {
     durationDays: 365,
     billing: "Nigeria launch price / 12 months access",
     paymentOptions: ["\u20a6100,000 \u00d7 2"],
-    includedLevels: ALL_LEVELS,
+    includedLevels: EXECUTIVE_CIRCLE_LEVELS,
     mentorshipDays: 365,
     mentorSlots: 3,
     features: [

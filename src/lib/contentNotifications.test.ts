@@ -45,6 +45,15 @@ const cases: Array<[ContentRecord, string, string]> = [
     '/blog/brand-growth',
     'New insight update',
   ],
+  [
+    {
+      ...base,
+      kind: 'book',
+      payload: { id: 'growth-book', title: 'Growth Book' } as ContentRecord<'book'>['payload'],
+    },
+    '/books',
+    'New book update',
+  ],
 ];
 
 for (const [record, href, message] of cases) {

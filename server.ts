@@ -11,6 +11,7 @@ import { createLeadRouter } from "./src/server/leadRoutes.js";
 import { createMessageRouter } from "./src/server/messageRoutes.js";
 import { createContentRouter } from "./src/server/contentRoutes.js";
 import { createDemoReviewerRouter } from "./src/server/demoReviewerRoutes.js";
+import { createMentorReviewRouter } from "./src/server/mentorReviewRoutes.js";
 
 function portInUseMessage(port: number): string {
   const nextPort = port + 1;
@@ -74,6 +75,7 @@ async function startServer() {
   app.use("/api", createMessageRouter(requireAdmin));
   app.use("/api", createContentRouter(requireAdmin));
   app.use("/api", createDemoReviewerRouter());
+  app.use("/api", createMentorReviewRouter());
 
   // Vite Middleware integration for Development
   if (process.env.NODE_ENV !== "production") {

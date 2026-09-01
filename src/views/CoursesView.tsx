@@ -16,7 +16,7 @@ import {
   CircleCheck,
 } from 'lucide-react';
 
-const LEVELS = ['All', 'Executive', 'Senior Directorate', 'Emerging Leaders', 'Frontier'] as const;
+const LEVELS = ['All', 'Emerging Leaders', 'Executive', 'Frontier', 'Senior Directorate', 'Elite'] as const;
 
 export const CoursesView: React.FC = () => {
   const [level, setLevel] = useState<(typeof LEVELS)[number]>('All');

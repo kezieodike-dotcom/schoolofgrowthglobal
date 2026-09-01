@@ -162,7 +162,7 @@ export interface Enrolment {
   name: string;
   plan: PlanCode | null;
   planName: string;
-  kind: "package" | "mentorship" | null;
+  kind: "package" | "mentorship" | "book" | null;
   amountKobo: number;
   currency: string;
   status: string;
@@ -170,6 +170,11 @@ export interface Enrolment {
   paidAt: string | null;
   createdAt: string;
   mentorId: string | null;
+  bookId: string | null;
+  bookOwnerName: string | null;
+  bookOwnerEmail: string | null;
+  companyShareKobo: number | null;
+  ownerShareKobo: number | null;
 }
 
 export interface PlanBreakdown {

@@ -5,11 +5,20 @@ import { useEnrollment } from '../lib/useEnrollment';
 import {
   PLANS,
   PACKAGES,
-  MENTORSHIP_PLANS,
-  MENTORSHIP_ANNUAL_SAVING_KOBO,
   formatNaira,
   type Plan,
 } from '../lib/pricing';
+import {
+  CONSULTATION_LADDER,
+  CONSULTATION_PRICING_BANDS,
+  CORPORATE_PRICING_BANDS,
+  MENTORSHIP_LADDER,
+  MENTORSHIP_PRICING_BANDS,
+  REVENUE_SPLIT,
+  formatPriceRange,
+  type LadderItem,
+  type PricingBand,
+} from '../lib/mentorshipCatalogue';
 import {
   Wallet,
   Check,
@@ -35,7 +44,7 @@ import {
 const COMPARISON: { label: string; value: (plan: Plan) => boolean | string }[] = [
   {
     label: 'Schools unlocked',
-    value: (p) => (p.includedLevels.length >= 3 ? 'All levels' : 'One level'),
+    value: (p) => (p.includedLevels.includes('Elite') ? 'All levels' : `${p.includedLevels.length} level${p.includedLevels.length === 1 ? '' : 's'}`),
   },
   {
     label: 'Position',
@@ -51,6 +60,7 @@ const COMPARISON: { label: string; value: (plan: Plan) => boolean | string }[] =
     label: 'Senior Directorate programmes',
     value: (p) => p.includedLevels.includes('Senior Directorate'),
   },
+  { label: 'Elite Council experience', value: (p) => p.includedLevels.includes('Elite') },
   { label: 'Live cohort classes', value: (p) => p.code !== 'mini' },
   { label: 'In-person intensives', value: (p) => p.code === 'maxi' || p.code === 'premium' },
   { label: 'Graded assessments', value: (p) => p.code !== 'mini' },
@@ -174,95 +184,39 @@ const PackageCard: React.FC<{ plan: Plan; owned: boolean }> = ({ plan, owned }) 
   );
 };
 
-const MentorshipCard: React.FC<{ plan: Plan; owned: boolean }> = ({ plan, owned }) => {
-  const featured = Boolean(plan.highlight);
-
-  return (
-    <div
-      className={`relative flex flex-col rounded-3xl border p-7 sm:p-8 space-y-5 ${
-        featured
-          ? 'bg-slate-900 border-slate-800 text-white shadow-2xl'
-          : 'bg-white border-slate-200 shadow-sm'
-      }`}
-    >
-      {plan.highlight && (
-        <span className="absolute -top-3 left-8 px-3 py-1 rounded-full bg-amber-500 text-slate-950 text-[10px] font-mono font-bold uppercase tracking-wider shadow-lg">
-          {plan.highlight}
-        </span>
-      )}
-
-      <div className="space-y-1.5">
-        <h3
-          className={`text-xl font-serif font-bold ${
-            featured ? 'text-white' : 'text-slate-900'
-          }`}
-        >
-          {plan.name}
-        </h3>
-        <p className={`text-xs ${featured ? 'text-slate-400' : 'text-slate-500'}`}>
-          {plan.tagline}
-        </p>
-      </div>
-
-      <div className="flex items-baseline gap-2">
-        <span
-          className={`text-3xl font-bold font-serif ${
-            featured ? 'text-amber-400' : 'text-slate-900'
-          }`}
-        >
-          {formatNaira(plan.amountKobo)}
-        </span>
-        <span
-          className={`text-[11px] font-mono ${
-            featured ? 'text-slate-400' : 'text-slate-500'
-          }`}
-        >
-          {plan.billing}
-        </span>
-      </div>
-
-      <ul className="space-y-2.5 flex-1">
-        {plan.features.map((feature) => (
-          <li
-            key={feature}
-            className={`flex items-start gap-2.5 text-xs ${
-              featured ? 'text-slate-300' : 'text-slate-600'
-            }`}
-          >
-            <Check
-              className={`w-4 h-4 shrink-0 mt-px ${
-                featured ? 'text-amber-400' : 'text-emerald-600'
-              }`}
-            />
-            <span className="leading-relaxed">{feature}</span>
-          </li>
-        ))}
-      </ul>
-
-      {owned ? (
-        <div className="w-full py-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 font-bold text-xs flex items-center justify-center gap-2">
-          <CircleCheck className="w-4 h-4" />
-          Subscription active
-        </div>
-      ) : (
-        <Link
-          to={`/checkout/${plan.code}`}
-          className={`w-full py-3 rounded-xl font-bold text-xs flex items-center justify-center gap-2 transition-all ${
-            featured
-              ? 'bg-amber-500 hover:bg-amber-400 text-slate-950'
-              : 'bg-slate-900 hover:bg-slate-800 text-white'
-          }`}
-        >
-          Subscribe
-          <ArrowRight className="w-4 h-4" />
-        </Link>
-      )}
+const LadderPreview: React.FC<{ item: LadderItem }> = ({ item }) => (
+  <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+    <div className="flex flex-wrap items-center gap-2">
+      <span className="rounded-full bg-slate-100 px-2.5 py-1 text-[10px] font-bold uppercase text-slate-700">
+        {item.level}
+      </span>
+      <span className="text-[11px] font-mono text-amber-700">{item.duration}</span>
     </div>
-  );
-};
+    <h4 className="mt-3 text-sm font-bold text-slate-900">{item.title}</h4>
+    <p className="mt-1 text-xs leading-relaxed text-slate-500">{item.description}</p>
+  </div>
+);
+
+const PricingBandCard: React.FC<{ band: PricingBand; dark?: boolean }> = ({ band, dark }) => (
+  <div
+    className={`rounded-2xl border p-5 ${
+      dark ? 'border-white/10 bg-white/[0.04]' : 'border-slate-200 bg-white shadow-sm'
+    }`}
+  >
+    <p className={`text-[11px] font-bold uppercase tracking-wider ${dark ? 'text-amber-300' : 'text-amber-700'}`}>
+      {band.name}
+    </p>
+    <p className={`mt-2 text-2xl font-serif font-bold ${dark ? 'text-white' : 'text-slate-900'}`}>
+      {formatPriceRange(band.range)}
+    </p>
+    <p className={`mt-2 text-xs leading-relaxed ${dark ? 'text-slate-300' : 'text-slate-500'}`}>
+      {band.description}
+    </p>
+  </div>
+);
 
 export const PricingView: React.FC = () => {
-  const { packages, hasMentorship, currentPackageName } = useEnrollment();
+  const { packages, currentPackageName } = useEnrollment();
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
@@ -405,52 +359,114 @@ export const PricingView: React.FC = () => {
         </div>
       </section>
 
-      {/* Mentorship */}
+      {/* Consultation and Mentorship */}
       <section className="py-12 sm:py-16 bg-white border-y border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
-            <div className="lg:col-span-5 space-y-5">
+            <div className="lg:col-span-4 space-y-5">
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-50 border border-amber-200 text-xs font-mono text-amber-700">
                 <Users className="w-4 h-4" />
-                <span>Mentor Access</span>
+                <span>Consultation & Mentorship</span>
               </div>
 
               <h2 className="text-3xl font-serif font-bold text-slate-900 leading-tight">
-                Choose your own mentor from the directory.
+                Expert support is matched by problem, seniority and scope.
               </h2>
 
               <p className="text-sm text-slate-600 leading-relaxed">
-                Mentorship is sold separately from tuition, so you can work with an
-                operator in your field whether or not you are taking a course with us.
-                Browse every registered mentor, read their background, and pair with the
-                one you want.
+                Clients can start with a focused consultation, continue into mentorship,
+                or request corporate advisory. Final pricing depends on the expert's
+                credentials, specialization, client type and measurable value.
               </p>
 
               <div className="p-4 rounded-2xl bg-amber-50 border border-amber-200 flex items-start gap-3">
                 <Star className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
                 <p className="text-xs text-amber-900 leading-relaxed">
-                  The one-year mentorship saves{' '}
-                  <strong>{formatNaira(MENTORSHIP_ANNUAL_SAVING_KOBO)}</strong> against
-                  twelve one-month plans - and the{' '}
-                  <strong>{PLANS.maxi.name}</strong> and{' '}
-                  <strong>{PLANS.premium.name}</strong> packages include a full year of
-                  mentorship at no extra cost.
+                  For each paid consultation, mentorship or advisory engagement, the expert
+                  receives <strong>{REVENUE_SPLIT.expertPercent}%</strong> and School of
+                  Growth Global receives <strong>{REVENUE_SPLIT.companyPercent}%</strong>.
                 </p>
               </div>
 
               <Link
                 to="/mentors"
-                className="inline-flex items-center gap-2 text-xs font-bold text-slate-900 hover:text-amber-600 transition-colors"
+                className="inline-flex items-center gap-2 rounded-xl bg-slate-950 px-5 py-3 text-xs font-bold text-white transition hover:bg-slate-800"
               >
-                Browse the mentor directory first
+                Request an expert match
                 <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
 
-            <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-6">
-              {MENTORSHIP_PLANS.map((plan) => (
-                <MentorshipCard key={plan.code} plan={plan} owned={hasMentorship} />
-              ))}
+            <div className="lg:col-span-8 space-y-8">
+              <div>
+                <h3 className="text-sm font-serif font-bold text-slate-900">
+                  Consultation ladder
+                </h3>
+                <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+                  {CONSULTATION_LADDER.map((item) => (
+                    <LadderPreview key={item.title} item={item} />
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <h3 className="text-sm font-serif font-bold text-slate-900">
+                  Mentorship ladder
+                </h3>
+                <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                  {MENTORSHIP_LADDER.map((item) => (
+                    <LadderPreview key={item.title} item={item} />
+                  ))}
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
+                <div>
+                  <h3 className="text-sm font-serif font-bold text-slate-900">
+                    Individual consultation bands
+                  </h3>
+                  <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {CONSULTATION_PRICING_BANDS.map((band) => (
+                      <PricingBandCard key={band.name} band={band} />
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <h3 className="text-sm font-serif font-bold text-slate-900">
+                    Mentorship bands
+                  </h3>
+                  <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {MENTORSHIP_PRICING_BANDS.map((band) => (
+                      <PricingBandCard key={band.name} band={band} />
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="rounded-3xl bg-slate-950 p-5 sm:p-6">
+                <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+                  <div>
+                    <p className="text-[11px] font-bold uppercase tracking-wider text-amber-300">
+                      Corporate pricing
+                    </p>
+                    <h3 className="mt-1 text-xl font-serif font-bold text-white">
+                      Built for organizations, teams and executive transformation.
+                    </h3>
+                  </div>
+                  <Link
+                    to="/contact"
+                    className="inline-flex items-center gap-2 text-xs font-bold text-amber-300 hover:text-amber-200"
+                  >
+                    Request corporate quote <ArrowRight className="w-4 h-4" />
+                  </Link>
+                </div>
+                <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+                  {CORPORATE_PRICING_BANDS.map((band) => (
+                    <PricingBandCard key={band.name} band={band} dark />
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -474,7 +490,7 @@ export const PricingView: React.FC = () => {
             },
             {
               q: 'Do I need a package to get a mentor?',
-              a: `No. Mentorship stands alone from ${formatNaira(PLANS['mentor-1-hour'].amountKobo)} for one hour to ${formatNaira(PLANS['mentor-1-year'].amountKobo)} for one year. The ${PLANS.maxi.name} and ${PLANS.premium.name} packages bundle a year of it if you want both.`,
+              a: 'No. Mentorship and consultation can stand alone. Choose a growth division, request an expert, and the team will quote based on the scope, duration and level of expertise required.',
             },
             {
               q: 'Which payment methods work?',

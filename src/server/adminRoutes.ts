@@ -1,6 +1,7 @@
 import { Router, type Request, type Response, type NextFunction } from "express";
 import crypto from "crypto";
 import { PLANS, isPlanCode, type PlanCode } from "../lib/pricing.js";
+import { calculateBookRevenueSplit } from "../lib/bookRevenue.js";
 
 /**
  * The admin API.
@@ -121,7 +122,16 @@ interface PaystackTransaction {
   created_at: string;
   channel: string | null;
   customer?: { email?: string };
-  metadata?: { plan?: string; name?: string; mentorId?: string } | null;
+  metadata?: {
+    plan?: string;
+    name?: string;
+    mentorId?: string;
+    itemKind?: string;
+    bookId?: string;
+    bookTitle?: string;
+    bookOwnerName?: string;
+    bookOwnerEmail?: string;
+  } | null;
 }
 
 async function paystack<T>(path: string): Promise<T> {
@@ -150,14 +160,16 @@ function toEnrolment(tx: PaystackTransaction) {
   const plan: PlanCode | null = isPlanCode(tx.metadata?.plan)
     ? tx.metadata.plan
     : null;
+  const isBook = tx.metadata?.itemKind === "book";
+  const split = isBook ? calculateBookRevenueSplit(tx.amount) : null;
   return {
     id: tx.id,
     reference: tx.reference,
     email: tx.customer?.email ?? "",
     name: tx.metadata?.name ?? "",
     plan,
-    planName: plan ? PLANS[plan].name : "Unknown",
-    kind: plan ? PLANS[plan].kind : null,
+    planName: isBook ? tx.metadata?.bookTitle ?? tx.metadata?.bookId ?? "Book purchase" : plan ? PLANS[plan].name : "Unknown",
+    kind: isBook ? "book" : plan ? PLANS[plan].kind : null,
     amountKobo: tx.amount,
     currency: tx.currency,
     status: tx.status,
@@ -165,6 +177,11 @@ function toEnrolment(tx: PaystackTransaction) {
     paidAt: tx.paid_at,
     createdAt: tx.created_at,
     mentorId: tx.metadata?.mentorId ?? null,
+    bookId: tx.metadata?.bookId ?? null,
+    bookOwnerName: tx.metadata?.bookOwnerName ?? null,
+    bookOwnerEmail: tx.metadata?.bookOwnerEmail ?? null,
+    companyShareKobo: split?.companyShareKobo ?? null,
+    ownerShareKobo: split?.ownerShareKobo ?? null,
   };
 }
 

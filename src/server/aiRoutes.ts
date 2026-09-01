@@ -1,5 +1,9 @@
 import express, { Router } from "express";
 import { GoogleGenAI } from "@google/genai";
+import {
+  diagnoseGrowthChallenge,
+  formatGrowthDiagnosis,
+} from "../lib/growthDiagnosis.js";
 
 /**
  * Every Growth AI HTTP route, defined once and mounted by both entry points:
@@ -146,17 +150,31 @@ export function createAIRouter(): Router {
       }
 
       if (!process.env.GEMINI_API_KEY) {
+        const diagnosis = diagnoseGrowthChallenge(message);
         return res.json({
           simulated: true,
-          reply: `[Growth AI Simulation Mode]: In response to "${message}", strategic advice emphasizes scaling governance, aligning high-level OKRs, and establishing resilient leadership protocols.`
+          reply:
+            `${formatGrowthDiagnosis(diagnosis)}\n\n` +
+            "Why this matters: your complaint should be converted into a clear growth pathway, not left as a vague problem.\n\n" +
+            "Action: book the recommended intervention so the team can match you with the right expert mix."
         });
       }
 
+      const suggestedDiagnosis = formatGrowthDiagnosis(diagnoseGrowthChallenge(message));
       const ai = getAI();
       const systemInstruction = `You are "Growth AI", the institutional intelligence coach for "School of Growth Global".
 You serve executive leaders, high-potential managers, C-suite executives, and entrepreneurs.
 Your tone is authoritative yet empowering, highly strategic, precise, and structured (using bullet points, bold key terms, and actionable executive insights).
 Keep responses clear and focused on leadership, strategy, decision-making, tech integration, and organizational growth.
+When a user describes a customer complaint, business problem, career problem, leadership issue, personal-growth issue, or organizational challenge, respond first with this exact diagnostic structure:
+Growth Area: <clear SOGG growth area>
+Primary Challenge: <main challenge category>
+Recommended Experts: <expert type 1> + <expert type 2> + <expert type 3>
+Recommended Intervention: <Quick Clarity, Strategic Consultation, Growth Strategy Session, Growth Audit, Blueprint, or relevant mentorship/program>
+Next Step: <recommended next action>
+Then add a short explanation and 2-4 practical immediate actions.
+Use this SOGG internal suggestion as guidance when it fits the user's complaint:
+${suggestedDiagnosis}
 ${context ? `Current Context: ${context}` : ''}`;
 
       const contents = history && Array.isArray(history) && history.length > 0

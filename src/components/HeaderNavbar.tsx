@@ -13,6 +13,7 @@ import { ContentNotificationCenter } from './ContentNotificationCenter';
 const NAV_ITEMS: { to: string; label: string }[] = [
   { to: '/courses', label: 'Courses' },
   { to: '/mentorship', label: 'Mentorship' },
+  { to: '/books', label: 'Books' },
   { to: '/jobs', label: 'Career Jobs' },
   { to: '/events', label: 'Events' },
   { to: '/blog', label: 'Insights' },

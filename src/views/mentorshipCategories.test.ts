@@ -1,10 +1,9 @@
-import { readFileSync } from 'fs';
-import path from 'path';
+import { MASTER_GROWTH_DIVISIONS } from '../lib/mentorshipCatalogue.js';
 
-const source = readFileSync(path.join(process.cwd(), 'src', 'views', 'MentorsView.tsx'), 'utf8');
+const services = MASTER_GROWTH_DIVISIONS.flatMap((division) => division.services);
 
 for (const label of ['Beauty & Fitness', 'Health, Diet & Well-Being']) {
-  if (!source.includes(`title: '${label}'`)) {
+  if (!services.includes(label)) {
     throw new Error(`Mentorship category missing: ${label}`);
   }
 }

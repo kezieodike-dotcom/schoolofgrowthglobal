@@ -24,8 +24,10 @@ export type LeadSource =
   | "student"
   | "contact"
   | "application"
+  | "jobApplication"
   | "syllabus"
   | "corporate"
+  | "consultation"
   | "newsletter"
   | "mentor";
 
@@ -91,7 +93,10 @@ export function recordLead(input: {
     interest: pick(
       "School of Interest",
       "Programme",
+      "Job Applied For",
       "Interested In",
+      "Growth Division",
+      "Requested Product",
       "Current Title & Organization",
       "Team Size / Focus Area"
     ),

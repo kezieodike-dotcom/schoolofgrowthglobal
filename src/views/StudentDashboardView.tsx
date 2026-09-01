@@ -9,7 +9,9 @@ import { VoiceInputButton } from '../components/VoiceInputButton';
 import { useEnrollment } from '../lib/useEnrollment';
 import { useMentorPairing } from '../lib/useMentorPairing';
 import { deriveExperience, aiQuota, type StudentFeature } from '../lib/studentExperience';
-import { PACKAGES, PLANS, formatNaira, type CourseLevel, type Entitlement } from '../lib/pricing';
+import { PACKAGES, PLANS, cheapestPackageFor, formatNaira, type CourseLevel, type Entitlement } from '../lib/pricing';
+import { saveMentorReview, summarizeMentorReviews, type MentorReview } from '../lib/mentorReviews';
+import { useMentorReviews } from '../lib/useMentorReviews';
 import { MentorConversation } from '../components/MentorConversation';
 import {
   LayoutDashboard,
@@ -34,6 +36,7 @@ import {
   ClipboardCheck,
   Trophy,
   MessageSquare,
+  Star,
 } from 'lucide-react';
 
 /**
@@ -891,28 +894,66 @@ const CoursesTab: React.FC<{
             Available on a higher package
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-            {locked.map((course) => (
-              <div
-                key={course.id}
-                className="bg-slate-50 border border-slate-200 rounded-lg p-4 space-y-2"
-              >
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-white text-slate-500 border border-slate-200">
-                    {course.level}
-                  </span>
-                  <Lock className="w-3.5 h-3.5 text-slate-300" />
-                </div>
-                <h4 className="text-sm font-bold text-slate-400 leading-snug">
-                  {course.title}
-                </h4>
-                <Link
-                  to="/pricing"
-                  className="text-[11px] font-bold text-amber-600 hover:text-amber-700 flex items-center gap-1"
+            {locked.map((course) => {
+              const unlockedBy = cheapestPackageFor(course.level as CourseLevel);
+              const previewModules = course.modules.slice(0, 4);
+
+              return (
+                <div
+                  key={course.id}
+                  className="bg-slate-50 border border-slate-200 rounded-lg p-4 space-y-4"
                 >
-                  Unlock <ArrowRight className="w-3 h-3" />
-                </Link>
-              </div>
-            ))}
+                  <div className="flex items-center justify-between gap-3">
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-white text-slate-500 border border-slate-200">
+                      {course.level}
+                    </span>
+                    <Lock className="w-3.5 h-3.5 text-slate-300" />
+                  </div>
+                  <div className="space-y-1.5">
+                    <h4 className="text-sm font-bold text-slate-700 leading-snug">
+                      {course.title}
+                    </h4>
+                    <p className="text-[11px] text-slate-500 leading-relaxed line-clamp-2">
+                      {course.description}
+                    </p>
+                  </div>
+                  {previewModules.length > 0 && (
+                    <div className="space-y-2">
+                      {previewModules.map((module) => (
+                        <div key={module.title} className="rounded-md border border-white bg-white/80 p-2.5">
+                          <p className="text-[10px] font-mono text-amber-700 font-bold">
+                            {module.week}
+                          </p>
+                          <p className="mt-0.5 text-xs font-bold text-slate-700 leading-snug">
+                            {module.title}
+                          </p>
+                          <p className="mt-1 text-[10px] text-slate-500 leading-relaxed line-clamp-2">
+                            {module.topics.slice(0, 3).join(' / ')}
+                          </p>
+                        </div>
+                      ))}
+                      {course.modules.length > previewModules.length && (
+                        <p className="text-[10px] font-bold text-slate-500">
+                          +{course.modules.length - previewModules.length} more modules inside
+                        </p>
+                      )}
+                    </div>
+                  )}
+                  <div className="flex flex-col gap-2 pt-1">
+                    <p className="text-[11px] text-slate-500">
+                      Unlock with <strong className="text-slate-800">{unlockedBy.name}</strong>.
+                    </p>
+                    <Link
+                      to={`/checkout/${unlockedBy.code}`}
+                      className="inline-flex items-center gap-1 text-[11px] font-bold text-amber-600 hover:text-amber-700"
+                    >
+                      {formatNaira(unlockedBy.amountKobo)}
+                      <ArrowRight className="w-3 h-3" />
+                    </Link>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </section>
       )}
@@ -1156,6 +1197,7 @@ const MentorTab: React.FC<{
 }> = ({ pairedIds, slots, entitlements }) => {
   const paired = MENTORS.filter((m) => pairedIds.includes(m.id));
   const [openThread, setOpenThread] = useState<string | null>(null);
+  const mentorReviews = useMentorReviews();
 
   // Messaging is opened with the email and reference from a real payment, so
   // it needs the entitlement that granted mentor access.
@@ -1196,69 +1238,193 @@ const MentorTab: React.FC<{
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {paired.map((mentor) => (
-            <div
-              key={mentor.id}
-              className="bg-white border border-slate-200 rounded-lg p-5 space-y-4 shadow-sm"
-            >
-              <div className="flex items-start gap-3">
-                <img
-                  src={mentor.avatar}
-                  alt=""
-                  className="w-12 h-12 rounded-xl object-cover border-2 border-amber-300"
-                />
-                <div className="min-w-0">
-                  <h4 className="text-sm font-bold text-slate-900">
-                    {mentor.name}
-                  </h4>
-                  <p className="text-[11px] text-amber-600">{mentor.role}</p>
-                </div>
-              </div>
-              <p className="text-[11px] text-slate-500 leading-relaxed">{mentor.bio}</p>
-              <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 text-[11px]">
-                <p className="text-slate-500">Next session</p>
-                <p className="text-amber-700 font-medium">
-                  {STUDENT_DATA.mentor.nextSession}
-                </p>
-              </div>
+          {paired.map((mentor) => {
+            const ratingSummary = summarizeMentorReviews(
+              mentor.id,
+              mentor.rating,
+              mentor.sessions,
+              mentorReviews
+            );
 
-              <div className="grid grid-cols-2 gap-2">
-                <Link
-                  to="/mentors"
-                  className="py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl flex items-center justify-center gap-1.5 transition-colors"
-                >
-                  <Calendar className="w-3.5 h-3.5" /> Book
-                </Link>
-                <button
-                  onClick={() =>
-                    setOpenThread(openThread === mentor.id ? null : mentor.id)
-                  }
-                  className="py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-xl flex items-center justify-center gap-1.5 transition-colors"
-                >
-                  <MessageSquare className="w-3.5 h-3.5" />
-                  {openThread === mentor.id ? 'Close' : 'Message'}
-                </button>
-              </div>
-
-              {openThread === mentor.id &&
-                (credential ? (
-                  <MentorConversation
-                    mentor={mentor}
-                    entitlement={credential}
-                    studentName={STUDENT_DATA.name}
+            return (
+              <div
+                key={mentor.id}
+                className="bg-white border border-slate-200 rounded-lg p-5 space-y-4 shadow-sm"
+              >
+                <div className="flex items-start gap-3">
+                  <img
+                    src={mentor.avatar}
+                    alt=""
+                    className="w-12 h-12 rounded-xl object-cover border-2 border-amber-300"
                   />
-                ) : (
-                  <p className="text-[11px] text-slate-500 bg-slate-50 border border-slate-200 rounded-xl p-3 leading-relaxed">
-                    Messaging opens with the email you paid with. We could not find a
-                    payment record in this browser - sign in from the device you
-                    enrolled on, or contact us and we will link it up.
+                  <div className="min-w-0 flex-1">
+                    <h4 className="text-sm font-bold text-slate-900">
+                      {mentor.name}
+                    </h4>
+                    <p className="text-[11px] text-amber-600">{mentor.role}</p>
+                  </div>
+                  <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 border border-amber-200 px-2 py-1 text-[11px] font-bold text-amber-700">
+                    <Star className="w-3 h-3 fill-amber-400" />
+                    {ratingSummary.reviewCount > 0 ? ratingSummary.rating : 'New'}
+                  </span>
+                </div>
+                <p className="text-[11px] text-slate-500 leading-relaxed">{mentor.bio}</p>
+                <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 text-[11px]">
+                  <p className="text-slate-500">Next session</p>
+                  <p className="text-amber-700 font-medium">
+                    {STUDENT_DATA.mentor.nextSession}
                   </p>
-                ))}
-            </div>
-          ))}
+                </div>
+
+                <MentorReviewForm
+                  mentor={mentor}
+                  reviews={mentorReviews}
+                  studentName={STUDENT_DATA.name}
+                  studentEmail={credential?.email ?? null}
+                />
+
+                <div className="grid grid-cols-2 gap-2">
+                  <Link
+                    to="/mentors"
+                    className="py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl flex items-center justify-center gap-1.5 transition-colors"
+                  >
+                    <Calendar className="w-3.5 h-3.5" /> Book
+                  </Link>
+                  <button
+                    onClick={() =>
+                      setOpenThread(openThread === mentor.id ? null : mentor.id)
+                    }
+                    className="py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-xl flex items-center justify-center gap-1.5 transition-colors"
+                  >
+                    <MessageSquare className="w-3.5 h-3.5" />
+                    {openThread === mentor.id ? 'Close' : 'Message'}
+                  </button>
+                </div>
+
+                {openThread === mentor.id &&
+                  (credential ? (
+                    <MentorConversation
+                      mentor={mentor}
+                      entitlement={credential}
+                      studentName={STUDENT_DATA.name}
+                    />
+                  ) : (
+                    <p className="text-[11px] text-slate-500 bg-slate-50 border border-slate-200 rounded-xl p-3 leading-relaxed">
+                      Messaging opens with the email you paid with. We could not find a
+                      payment record in this browser - sign in from the device you
+                      enrolled on, or contact us and we will link it up.
+                    </p>
+                  ))}
+              </div>
+            );
+          })}
         </div>
       )}
     </div>
+  );
+};
+
+const MentorReviewForm: React.FC<{
+  mentor: (typeof MENTORS)[number];
+  reviews: MentorReview[];
+  studentName: string;
+  studentEmail: string | null;
+}> = ({ mentor, reviews, studentName, studentEmail }) => {
+  const existing = useMemo(
+    () =>
+      studentEmail
+        ? reviews.find(
+            (review) =>
+              review.mentorId === mentor.id &&
+              review.studentEmail === studentEmail.trim().toLowerCase()
+          )
+        : undefined,
+    [mentor.id, reviews, studentEmail]
+  );
+  const [rating, setRating] = useState(existing?.rating ?? 5);
+  const [comment, setComment] = useState(existing?.comment ?? '');
+  const [saved, setSaved] = useState(false);
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    setRating(existing?.rating ?? 5);
+    setComment(existing?.comment ?? '');
+    setSaved(false);
+  }, [existing?.comment, existing?.rating, mentor.id]);
+
+  const submit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    if (!studentEmail || saving) return;
+    setSaving(true);
+    try {
+      await saveMentorReview({
+        mentorId: mentor.id,
+        studentEmail,
+        studentName,
+        rating,
+        comment,
+        createdAt: new Date().toISOString(),
+      });
+      setSaved(true);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  if (!studentEmail) {
+    return (
+      <p className="text-[11px] text-slate-500 bg-slate-50 border border-slate-200 rounded-xl p-3 leading-relaxed">
+        Review opens with the email you paid with. We could not find a payment
+        record in this browser.
+      </p>
+    );
+  }
+
+  return (
+    <form onSubmit={submit} className="rounded-xl bg-slate-50 border border-slate-200 p-3 space-y-3">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+        <p className="text-xs font-bold text-slate-900">Review mentor</p>
+        <div className="flex items-center gap-1">
+          {[1, 2, 3, 4, 5].map((value) => (
+            <button
+              key={value}
+              type="button"
+              onClick={() => setRating(value)}
+              className="p-1 rounded-md text-amber-500 hover:bg-amber-100"
+              aria-label={`${value} star rating`}
+            >
+              <Star
+                className={`w-4 h-4 ${
+                  value <= rating ? 'fill-amber-400 text-amber-500' : 'text-slate-300'
+                }`}
+              />
+            </button>
+          ))}
+        </div>
+      </div>
+      <textarea
+        value={comment}
+        onChange={(event) => setComment(event.target.value)}
+        rows={3}
+        placeholder={`How was your mentorship with ${mentor.name.split(' ').slice(-1)[0]}?`}
+        className="w-full resize-y rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs leading-relaxed text-slate-700 placeholder:text-slate-400 focus:outline-none focus:border-amber-500"
+      />
+      <div className="flex items-center justify-between gap-3">
+        <span className="text-[10px] text-slate-400">
+          {existing ? 'Your previous review will be updated.' : 'Your review helps other mentees choose.'}
+        </span>
+        <button
+          type="submit"
+          disabled={saving}
+          className="shrink-0 rounded-lg bg-slate-950 px-3 py-2 text-[11px] font-bold text-white hover:bg-slate-800 disabled:opacity-50"
+        >
+          {saving ? 'Saving' : existing ? 'Update review' : 'Submit review'}
+        </button>
+      </div>
+      {saved && (
+        <p className="text-[11px] font-semibold text-emerald-700">Review saved.</p>
+      )}
+    </form>
   );
 };
 

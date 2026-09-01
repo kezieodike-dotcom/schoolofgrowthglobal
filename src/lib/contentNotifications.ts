@@ -16,10 +16,11 @@ const MESSAGE_BY_KIND: Record<NotifiableContentKind, string> = {
   event: 'New event update',
   job: 'New career job update',
   insight: 'New insight update',
+  book: 'New book update',
 };
 
 function isNotifiableKind(kind: ContentKind): kind is NotifiableContentKind {
-  return kind === 'course' || kind === 'event' || kind === 'job' || kind === 'insight';
+  return kind === 'course' || kind === 'event' || kind === 'job' || kind === 'insight' || kind === 'book';
 }
 
 function notificationHref(record: ContentRecord<NotifiableContentKind>): string {
@@ -32,6 +33,8 @@ function notificationHref(record: ContentRecord<NotifiableContentKind>): string 
       return '/events';
     case 'job':
       return '/jobs';
+    case 'book':
+      return '/books';
   }
 }
 

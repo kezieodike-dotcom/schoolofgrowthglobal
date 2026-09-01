@@ -33,7 +33,7 @@ export const ContactView: React.FC = () => {
               <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-200"><Mail className="w-5 h-5 text-amber-600" /></div>
               <div>
                 <p className="text-xs text-slate-500">Email</p>
-                <p className="text-sm text-slate-900">admissions@schoolofgrowth.global</p>
+                <p className="text-sm text-slate-900">infoschoolofgrowth@gmail.com</p>
               </div>
             </div>
             <div className="flex items-center gap-3">

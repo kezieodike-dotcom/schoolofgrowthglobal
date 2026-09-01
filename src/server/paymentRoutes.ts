@@ -8,6 +8,11 @@ import {
   CURRENCY,
   type Entitlement,
 } from "../lib/pricing.js";
+import { BOOKS } from "../data/mockData.js";
+import { calculateBookRevenueSplit, type BookPurchase } from "../lib/bookRevenue.js";
+import { mergeContent } from "../lib/content.js";
+import { listContent } from "./contentStore.js";
+import type { BookItem } from "../types.js";
 
 /**
  * Paystack checkout for course packages and mentorship subscriptions.
@@ -81,7 +86,14 @@ interface PaystackTransaction {
   currency: string;
   reference: string;
   customer?: { email?: string };
-  metadata?: { plan?: string } | null;
+  metadata?: {
+    plan?: string;
+    itemKind?: string;
+    bookId?: string;
+    bookTitle?: string;
+    name?: string;
+    mentorId?: string;
+  } | null;
 }
 
 /**
@@ -117,6 +129,27 @@ async function paystack<T>(
 const NOT_CONFIGURED =
   "Payments are not switched on yet. Please contact infoschoolofgrowth@gmail.com to enrol.";
 
+async function findPublishedBook(bookId: string): Promise<BookItem | null> {
+  const records = await listContent("book");
+  return mergeContent(BOOKS, records).find((book) => book.id === bookId) ?? null;
+}
+
+function purchaseFor(book: BookItem, tx: PaystackTransaction): BookPurchase {
+  return {
+    reference: tx.reference,
+    email: tx.customer?.email ?? "",
+    bookId: book.id,
+    title: book.title,
+    amountKobo: tx.amount,
+    currency: tx.currency,
+    ownerName: book.ownerName,
+    ownerEmail: book.ownerEmail,
+    ownerType: book.ownerType,
+    downloadUrl: book.downloadUrl,
+    split: calculateBookRevenueSplit(tx.amount),
+  };
+}
+
 export function createPaymentRouter(): Router {
   const router = Router();
 
@@ -134,15 +167,12 @@ export function createPaymentRouter(): Router {
   });
 
   /**
-   * Starts a payment. Body: { plan, email, name?, mentorId? }
+   * Starts a payment. Body: { plan, email, name?, mentorId? } or { bookId, email, name? }
    * Returns Paystack's hosted checkout URL for the browser to visit.
    */
   router.post("/payments/initialize", async (req, res) => {
-    const { plan: planCode, email, name, mentorId } = req.body ?? {};
+    const { plan: planCode, bookId, email, name, mentorId } = req.body ?? {};
 
-    if (!isPlanCode(planCode)) {
-      return res.status(400).json({ error: "Unknown plan." });
-    }
     // Deliberately loose: full RFC-compliant validation belongs to Paystack,
     // which rejects undeliverable addresses. This only catches obvious typos
     // before we spend a network call.
@@ -157,9 +187,20 @@ export function createPaymentRouter(): Router {
       return res.status(503).json({ error: NOT_CONFIGURED });
     }
 
-    const plan = PLANS[planCode];
-
     try {
+      const book =
+        typeof bookId === "string" && bookId.trim()
+          ? await findPublishedBook(bookId.trim())
+          : null;
+      const plan = isPlanCode(planCode) ? PLANS[planCode] : null;
+
+      if (!plan && !book) {
+        return res.status(400).json({ error: bookId ? "Unknown book." : "Unknown plan." });
+      }
+
+      const amountKobo = book ? book.priceKobo : plan!.amountKobo;
+      const title = book ? book.title : plan!.name;
+
       const data = await paystack<{ authorization_url: string; reference: string }>(
         "/transaction/initialize",
         {
@@ -167,20 +208,28 @@ export function createPaymentRouter(): Router {
           body: {
             email,
             // The authoritative amount, from the catalogue - not from the body.
-            amount: plan.amountKobo,
+            amount: amountKobo,
             currency: CURRENCY,
             callback_url: callbackUrl(req),
             metadata: {
-              plan: plan.code,
+              plan: plan?.code,
+              itemKind: book ? "book" : "plan",
+              bookId: book?.id,
+              bookTitle: book?.title,
+              bookOwnerName: book?.ownerName,
+              bookOwnerEmail: book?.ownerEmail,
+              bookOwnerType: book?.ownerType,
+              companyShareKobo: book ? calculateBookRevenueSplit(book.priceKobo).companyShareKobo : undefined,
+              ownerShareKobo: book ? calculateBookRevenueSplit(book.priceKobo).ownerShareKobo : undefined,
               name: typeof name === "string" ? name : undefined,
               // Carried through so the confirmation email and the student's
               // first session can name the mentor they chose at checkout.
-              mentorId: typeof mentorId === "string" ? mentorId : undefined,
+              mentorId: plan && typeof mentorId === "string" ? mentorId : undefined,
               custom_fields: [
                 {
-                  display_name: "Plan",
-                  variable_name: "plan",
-                  value: `${plan.name} - ${formatNaira(plan.amountKobo)}`,
+                  display_name: book ? "Book" : "Plan",
+                  variable_name: book ? "book" : "plan",
+                  value: `${title} - ${formatNaira(amountKobo)}`,
                 },
               ],
             },
@@ -225,6 +274,31 @@ export function createPaymentRouter(): Router {
         // error on our side - so it answers 200 with a paid:false result the
         // UI can render calmly rather than as a failure.
         return res.json({ paid: false, status: tx.status });
+      }
+
+      if (tx.metadata?.itemKind === "book") {
+        const bookId = tx.metadata.bookId;
+        const book = typeof bookId === "string" ? await findPublishedBook(bookId) : null;
+        if (!book) {
+          console.error(`Transaction ${reference} succeeded but carries no known book:`, tx.metadata);
+          return res.status(422).json({
+            error:
+              "Your payment went through but we could not match it to a book. Please contact infoschoolofgrowth@gmail.com with your reference.",
+          });
+        }
+
+        if (tx.amount !== book.priceKobo || tx.currency !== CURRENCY) {
+          console.error(
+            `Transaction ${reference} paid ${tx.amount} ${tx.currency}, expected ` +
+              `${book.priceKobo} ${CURRENCY} for book ${book.id}.`
+          );
+          return res.status(422).json({
+            error:
+              "Your payment amount does not match this book. Please contact infoschoolofgrowth@gmail.com with your reference.",
+          });
+        }
+
+        return res.json({ paid: true, purchase: purchaseFor(book, tx) });
       }
 
       const planCode = tx.metadata?.plan;
@@ -312,7 +386,8 @@ export function createPaymentRouter(): Router {
       const tx = event.data ?? {};
       console.log(
         `[paystack] charge.success ${tx.reference} - ${tx.customer?.email} ` +
-          `paid ${tx.amount} ${tx.currency} for plan "${tx.metadata?.plan}".`
+          `paid ${tx.amount} ${tx.currency} for ${tx.metadata?.itemKind ?? "plan"} ` +
+          `"${tx.metadata?.bookId ?? tx.metadata?.plan}".`
       );
     }
 

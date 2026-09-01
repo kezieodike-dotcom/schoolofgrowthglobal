@@ -1,10 +1,13 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { MENTORS } from '../data/mockData';
-import type { Mentor } from '../types';
+import type { BookItem, Mentor } from '../types';
+import type { ContentRecord } from '../lib/content';
+import { formatNaira } from '../lib/pricing';
 import {
   AlertTriangle,
   ArrowLeft,
+  BookMarked,
   CheckCircle2,
   Clock3,
   CornerDownLeft,
@@ -12,6 +15,7 @@ import {
   Loader2,
   LogOut,
   MessageSquare,
+  Save,
   RefreshCw,
   Search,
   Send,
@@ -41,6 +45,11 @@ interface InboxResponse {
   writable: boolean;
   awaitingReply: number;
   threads: Thread[];
+}
+
+interface MentorBooksResponse {
+  writable: boolean;
+  records: ContentRecord<'book'>[];
 }
 
 const MENTOR_KEY = 'sog.mentor.inbox.profile';
@@ -401,12 +410,15 @@ const MentorInbox: React.FC<{ mentor: Mentor; token: string; onSwitch: () => voi
     <main className="min-h-[100dvh] bg-slate-100 text-slate-950">
       <div className="max-w-[1500px] mx-auto p-3 sm:p-5 lg:p-6">
         <div className="grid grid-cols-1 xl:grid-cols-[280px_minmax(320px,420px)_1fr] gap-4 items-start">
-          <MentorRail
-            mentor={mentor}
-            unreadCount={unreadCount}
-            total={data?.threads.length ?? 0}
-            onSwitch={onSwitch}
-          />
+          <div className="space-y-4">
+            <MentorRail
+              mentor={mentor}
+              unreadCount={unreadCount}
+              total={data?.threads.length ?? 0}
+              onSwitch={onSwitch}
+            />
+            <MentorBookPublisher mentor={mentor} token={token} />
+          </div>
 
           <section className="bg-white border border-slate-200 rounded-lg overflow-hidden">
             <div className="p-4 border-b border-slate-100 space-y-3">
@@ -574,6 +586,186 @@ const Metric: React.FC<{ label: string; value: string }> = ({ label, value }) =>
     <p className="text-xl font-black mt-1">{value}</p>
   </div>
 );
+
+const MentorBookPublisher: React.FC<{ mentor: Mentor; token: string }> = ({ mentor, token }) => {
+  const [data, setData] = useState<MentorBooksResponse | null>(null);
+  const [title, setTitle] = useState('');
+  const [price, setPrice] = useState('10000');
+  const [category, setCategory] = useState('Personal Growth');
+  const [coverImage, setCoverImage] = useState('/scenes/hero-team.jpg');
+  const [downloadUrl, setDownloadUrl] = useState('');
+  const [ownerEmail, setOwnerEmail] = useState('');
+  const [description, setDescription] = useState('');
+  const [saving, setSaving] = useState(false);
+  const [message, setMessage] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  const loadBooks = async () => {
+    try {
+      const res = await fetch(`/api/mentor-inbox/${mentor.id}/books`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const body = await res.json().catch(() => null);
+      if (!res.ok) throw new Error(body?.error ?? 'Could not load books.');
+      setData(body);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Could not load books.');
+    }
+  };
+
+  useEffect(() => {
+    loadBooks();
+  }, [mentor.id, token]);
+
+  const submit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    setSaving(true);
+    setError(null);
+    setMessage(null);
+    try {
+      const item: Partial<BookItem> = {
+        title,
+        subtitle: description.slice(0, 120),
+        authorName: mentor.name,
+        ownerName: mentor.name,
+        ownerEmail,
+        ownerType: 'Mentor',
+        category,
+        description,
+        highlights: description
+          .split('\n')
+          .map((line) => line.trim())
+          .filter(Boolean)
+          .slice(0, 3),
+        coverImage,
+        priceKobo: Math.max(100, Math.round(Number(price || 0) * 100)),
+        format: 'Ebook',
+        pages: 0,
+        downloadUrl,
+      };
+
+      const res = await fetch(`/api/mentor-inbox/${mentor.id}/books`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ item }),
+      });
+      const body = await res.json().catch(() => null);
+      if (!res.ok) throw new Error(body?.error ?? 'Could not submit book.');
+      setMessage('Book submitted for admin approval.');
+      setTitle('');
+      setDescription('');
+      setDownloadUrl('');
+      await loadBooks();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Could not submit book.');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <section className="bg-white border border-slate-200 rounded-lg overflow-hidden">
+      <div className="p-4 border-b border-slate-100">
+        <p className="text-[10px] font-mono uppercase tracking-wider text-amber-700">
+          Book marketplace
+        </p>
+        <h2 className="mt-1 text-sm font-black text-slate-950">Publish a book</h2>
+        <p className="mt-1 text-[11px] text-slate-500 leading-relaxed">
+          Mentor books are hidden until admin approves them. Sales split 20% company and 80% owner.
+        </p>
+      </div>
+
+      <form onSubmit={submit} className="p-4 space-y-3">
+        <input
+          value={title}
+          onChange={(event) => setTitle(event.target.value)}
+          required
+          placeholder="Book title"
+          className="w-full rounded-lg bg-slate-50 border border-slate-200 px-3 py-2 text-xs focus:outline-none focus:border-amber-500"
+        />
+        <div className="grid grid-cols-2 gap-2">
+          <input
+            value={price}
+            onChange={(event) => setPrice(event.target.value)}
+            required
+            type="number"
+            min="1"
+            placeholder="Price in naira"
+            className="w-full rounded-lg bg-slate-50 border border-slate-200 px-3 py-2 text-xs focus:outline-none focus:border-amber-500"
+          />
+          <input
+            value={category}
+            onChange={(event) => setCategory(event.target.value)}
+            required
+            placeholder="Category"
+            className="w-full rounded-lg bg-slate-50 border border-slate-200 px-3 py-2 text-xs focus:outline-none focus:border-amber-500"
+          />
+        </div>
+        <input
+          value={ownerEmail}
+          onChange={(event) => setOwnerEmail(event.target.value)}
+          required
+          type="email"
+          placeholder="Payout email"
+          className="w-full rounded-lg bg-slate-50 border border-slate-200 px-3 py-2 text-xs focus:outline-none focus:border-amber-500"
+        />
+        <input
+          value={coverImage}
+          onChange={(event) => setCoverImage(event.target.value)}
+          required
+          placeholder="Cover image URL"
+          className="w-full rounded-lg bg-slate-50 border border-slate-200 px-3 py-2 text-xs focus:outline-none focus:border-amber-500"
+        />
+        <input
+          value={downloadUrl}
+          onChange={(event) => setDownloadUrl(event.target.value)}
+          type="url"
+          placeholder="Buyer download link"
+          className="w-full rounded-lg bg-slate-50 border border-slate-200 px-3 py-2 text-xs focus:outline-none focus:border-amber-500"
+        />
+        <textarea
+          value={description}
+          onChange={(event) => setDescription(event.target.value)}
+          required
+          rows={3}
+          placeholder="Description and key benefits"
+          className="w-full resize-y rounded-lg bg-slate-50 border border-slate-200 px-3 py-2 text-xs focus:outline-none focus:border-amber-500"
+        />
+
+        {message && <p className="text-[11px] text-emerald-700">{message}</p>}
+        {error && <p className="text-[11px] text-rose-600">{error}</p>}
+
+        <button
+          type="submit"
+          disabled={saving || data?.writable === false}
+          className="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-amber-500 px-3 py-2.5 text-xs font-black text-slate-950 hover:bg-amber-400 disabled:opacity-50 transition-colors"
+        >
+          {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+          Submit for approval
+        </button>
+      </form>
+
+      {(data?.records.length ?? 0) > 0 && (
+        <div className="border-t border-slate-100 p-4 space-y-2">
+          <p className="text-[10px] font-mono uppercase tracking-wider text-slate-400">
+            My submissions
+          </p>
+          {data?.records.map((record) => (
+            <div key={record.id} className="rounded-lg bg-slate-50 border border-slate-200 p-3">
+              <p className="text-xs font-bold text-slate-900">{record.payload.title}</p>
+              <p className="text-[10px] text-slate-500 mt-1">
+                {formatNaira(record.payload.priceKobo)} / {record.published ? 'Published' : 'Awaiting approval'}
+              </p>
+            </div>
+          ))}
+        </div>
+      )}
+    </section>
+  );
+};
 
 const ThreadButton: React.FC<{
   thread: Thread;

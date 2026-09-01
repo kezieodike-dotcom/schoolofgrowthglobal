@@ -5,6 +5,7 @@ import type { Overview, PlanBreakdown } from '../../lib/adminApi';
 import {
   Wallet,
   BookOpen,
+  BookMarked,
   BriefcaseBusiness,
   CalendarDays,
   Newspaper,
@@ -110,6 +111,7 @@ interface ContentSummary {
     team: number;
     job: number;
     insight: number;
+    book: number;
   };
 }
 
@@ -132,7 +134,7 @@ const ContentOperations: React.FC = () => {
           </Link>
         }
       >
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 divide-y sm:divide-y-0 sm:divide-x divide-slate-100">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-6 divide-y sm:divide-y-0 sm:divide-x divide-slate-100">
           <OperationLink
             to="/admin/catalogue"
             icon={<BookOpen className="w-4 h-4" />}
@@ -162,6 +164,12 @@ const ContentOperations: React.FC = () => {
             icon={<Newspaper className="w-4 h-4" />}
             label="Insights"
             value={data ? `${data.counts.insight} managed` : 'Loading'}
+          />
+          <OperationLink
+            to="/admin/catalogue"
+            icon={<BookMarked className="w-4 h-4" />}
+            label="Books"
+            value={data ? `${data.counts.book} managed` : 'Loading'}
           />
         </div>
       </Panel>

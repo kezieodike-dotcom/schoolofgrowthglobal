@@ -11,6 +11,9 @@ import {
   countAwaitingReplyForMentor,
   isWritable,
 } from "./messageStore.js";
+import { slugify } from "../lib/content.js";
+import { isContentWritable, listContent, upsertContent } from "./contentStore.js";
+import { sanitizeBook } from "./contentRoutes.js";
 
 /**
  * Student-to-mentor messaging.
@@ -201,6 +204,51 @@ export function createMessageRouter(
       awaitingReply: countAwaitingReplyForMentor(mentorId),
       threads: listThreadsForMentor(mentorId),
     });
+  });
+
+  router.get("/mentor-inbox/:mentorId/books", async (req, res) => {
+    const mentorId = req.params.mentorId?.trim();
+    if (!mentorId) return res.status(400).json({ error: "A mentor is required." });
+    if (!requireMentor(req, res, mentorId)) return;
+
+    try {
+      const records = (await listContent("book")).filter(
+        (record) => (record.payload as any).ownerId === mentorId
+      );
+      res.json({ writable: isContentWritable(), records });
+    } catch (err) {
+      res.status(500).json({
+        error: err instanceof Error ? err.message : "Could not load mentor books.",
+      });
+    }
+  });
+
+  router.post("/mentor-inbox/:mentorId/books", async (req, res) => {
+    const mentorId = req.params.mentorId?.trim();
+    if (!mentorId) return res.status(400).json({ error: "A mentor is required." });
+    if (!requireMentor(req, res, mentorId)) return;
+    if (!isContentWritable()) {
+      return res.status(503).json({
+        error: "Book publishing needs writable content storage.",
+      });
+    }
+
+    try {
+      const raw = req.body?.item ?? {};
+      const title = String(raw.title ?? "").trim();
+      const book = sanitizeBook({
+        ...raw,
+        id: String(raw.id ?? "").trim() || `${mentorId}-${slugify(title)}`,
+        ownerId: mentorId,
+        ownerType: "Mentor",
+      });
+      const record = await upsertContent("book", book, false);
+      res.json({ record });
+    } catch (err) {
+      res.status(400).json({
+        error: err instanceof Error ? err.message : "Could not submit that book.",
+      });
+    }
   });
 
   router.get("/mentor-inbox/:mentorId/threads/:threadId", (req, res) => {

@@ -1,6 +1,6 @@
-import type { BlogPost, Course, EventItem, FacultyMember, GrowthJob } from '../types';
+import type { BlogPost, BookItem, Course, EventItem, FacultyMember, GrowthJob } from '../types';
 
-export type ContentKind = 'course' | 'event' | 'team' | 'job' | 'insight';
+export type ContentKind = 'course' | 'event' | 'team' | 'job' | 'insight' | 'book';
 
 export interface ContentPayloadMap {
   course: Course;
@@ -8,6 +8,7 @@ export interface ContentPayloadMap {
   team: FacultyMember;
   job: GrowthJob;
   insight: BlogPost;
+  book: BookItem;
 }
 
 export interface ContentRecord<K extends ContentKind = ContentKind> {
@@ -25,6 +26,7 @@ export const CONTENT_LABEL: Record<ContentKind, string> = {
   team: 'Team',
   job: 'Jobs',
   insight: 'Insights',
+  book: 'Books',
 };
 
 export function slugify(value: string): string {

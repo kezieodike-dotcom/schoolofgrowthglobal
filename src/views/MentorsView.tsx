@@ -9,10 +9,10 @@ import {
   Globe2,
   Languages,
   Lock,
+  Mail,
   MapPin,
   MessageSquare,
   Search,
-  Sparkles,
   Star,
   UserCheck,
   Users,
@@ -22,97 +22,24 @@ import { MENTORS } from '../data/mockData';
 import { PageHero } from '../components/PageHero';
 import { useEnrollment } from '../lib/useEnrollment';
 import { useMentorPairing } from '../lib/useMentorPairing';
-import { MENTORSHIP_PLANS, PACKAGES, PLANS, formatNaira } from '../lib/pricing';
+import { PACKAGES, PLANS } from '../lib/pricing';
+import { summarizeMentorReviews } from '../lib/mentorReviews';
+import { useMentorReviews } from '../lib/useMentorReviews';
+import { HONEYPOT_PROPS, useFormSubmit } from '../lib/useFormSubmit';
+import {
+  CONSULTATION_LADDER,
+  CONSULTATION_PRICING_BANDS,
+  CORPORATE_PRICING_BANDS,
+  MASTER_GROWTH_DIVISIONS,
+  MENTORSHIP_LADDER,
+  MENTORSHIP_PRICING_BANDS,
+  MENTORSHIP_SERVICE_MODEL,
+  REVENUE_SPLIT,
+  formatPriceRange,
+  type GrowthDivision,
+  type LadderItem,
+} from '../lib/mentorshipCatalogue';
 import type { Mentor } from '../types';
-
-const MENTORSHIP_CATEGORIES = [
-  {
-    id: 'business',
-    title: 'Business Mentorship',
-    items: [
-      'Entrepreneurship',
-      'Business Strategy',
-      'Sales',
-      'Marketing',
-      'Business Development',
-      'Business Finance',
-      'Scaling',
-    ],
-  },
-  {
-    id: 'leadership',
-    title: 'Leadership Mentorship',
-    items: [
-      'Executive Leadership',
-      'People Management',
-      'Organizational Leadership',
-      'Strategic Leadership',
-      'Public Leadership',
-    ],
-  },
-  {
-    id: 'career',
-    title: 'Career Mentorship',
-    items: [
-      'Career Development',
-      'CV & Interview',
-      'Career Transition',
-      'Professional Branding',
-      'Workplace Performance',
-    ],
-  },
-  {
-    id: 'personal',
-    title: 'Personal Growth Mentorship',
-    items: ['Mindset', 'Productivity', 'Purpose', 'Personal Development', 'Confidence', 'Communication'],
-  },
-  {
-    id: 'wealth',
-    title: 'Wealth & Financial Growth',
-    items: [
-      'Wealth Creation',
-      'Financial Management',
-      'Investment Education',
-      'Income Growth',
-      'Entrepreneurship',
-    ],
-  },
-  {
-    id: 'beauty-fitness',
-    title: 'Beauty & Fitness',
-    items: [
-      'Beauty Business',
-      'Fitness Coaching',
-      'Personal Training',
-      'Skincare & Grooming',
-      'Body Confidence',
-      'Wellness Branding',
-    ],
-  },
-  {
-    id: 'health-wellbeing',
-    title: 'Health, Diet & Well-Being',
-    items: [
-      'Nutrition',
-      'Diet Planning',
-      'Healthy Habits',
-      'Stress Management',
-      'Preventive Health',
-      'Lifestyle Balance',
-    ],
-  },
-] as const;
-
-const BOOKING_OPTIONS = [
-  'One-Hour Mentorship',
-  'Two Hours Mentorship',
-  'Three Hours Mentorship',
-  'Four Hours Mentorship',
-  'Five Hours Mentorship',
-  'One-Week Mentorship',
-  'One-Month Mentorship',
-  'One-Year Mentorship',
-];
 
 const MENTOR_FOCUS: Record<string, string[]> = {
   m1: ['Business Strategy', 'Business Development', 'Scaling', 'Strategic Leadership'],
@@ -122,6 +49,25 @@ const MENTOR_FOCUS: Record<string, string[]> = {
   m5: ['Wealth Creation', 'Financial Management', 'Business Finance', 'Income Growth'],
   m6: ['Public Leadership', 'Organizational Leadership', 'Strategic Leadership', 'Business Development'],
 };
+
+const REQUEST_PRODUCTS = [
+  ...CONSULTATION_LADDER.map((item) => ({
+    group: 'Consultation',
+    label: `${item.title} (${item.duration})`,
+    value: item.title,
+  })),
+  ...MENTORSHIP_LADDER.map((item) => ({
+    group: 'Mentorship',
+    label: `${item.title} (${item.duration})`,
+    value: item.title,
+  })),
+];
+
+const BUDGET_OPTIONS = [
+  ...CONSULTATION_PRICING_BANDS.map((band) => `${band.name}: ${formatPriceRange(band.range)}`),
+  ...MENTORSHIP_PRICING_BANDS.map((band) => `${band.name}: ${formatPriceRange(band.range)}`),
+  ...CORPORATE_PRICING_BANDS.slice(0, 3).map((band) => `${band.name}: ${formatPriceRange(band.range)}`),
+];
 
 const MENTOR_DETAILS: Record<
   string,
@@ -282,24 +228,28 @@ export const MentorsView: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState<string>('All');
   const [activeFocus, setActiveFocus] = useState<string>('All');
   const [bookingMentor, setBookingMentor] = useState<Mentor | null>(null);
-  const [bookingType, setBookingType] = useState(BOOKING_OPTIONS[1]);
-  const [subscribeMentor, setSubscribeMentor] = useState<Mentor | null>(null);
   const [slotsFull, setSlotsFull] = useState(false);
-  const [bookingSent, setBookingSent] = useState(false);
 
   const { hasMentorship, mentorSlots, currentPackageName } = useEnrollment();
   const pairing = useMentorPairing(mentorSlots);
   const { mentors: directory, loading } = useDirectory();
+  const mentorReviews = useMentorReviews();
   const currentPackageIncludesMentorship = Boolean(
     currentPackageName &&
       PACKAGES.some(
         (plan) => plan.name === currentPackageName && plan.mentorshipDays > 0
       )
   );
+  const activeDivision =
+    activeCategory === 'All'
+      ? null
+      : MASTER_GROWTH_DIVISIONS.find((division) => division.id === activeCategory) ?? null;
 
   const focusOptions = useMemo(() => {
     if (activeCategory === 'All') return ['All'];
-    return ['All', ...(MENTORSHIP_CATEGORIES.find((category) => category.id === activeCategory)?.items ?? [])];
+    const division = MASTER_GROWTH_DIVISIONS.find((item) => item.id === activeCategory);
+    if (!division) return ['All'];
+    return ['All', ...division.services.slice(0, 10), ...division.products.slice(0, 4)];
   }, [activeCategory]);
 
   const filteredMentors = directory.filter((mentor) => {
@@ -320,13 +270,20 @@ export const MentorsView: React.FC = () => {
       .toLowerCase();
 
     const matchesQuery = !query || haystack.includes(query.toLowerCase());
-    const categoryItems =
+    const division =
       activeCategory === 'All'
-        ? []
-        : MENTORSHIP_CATEGORIES.find((category) => category.id === activeCategory)?.items ?? [];
+        ? null
+        : MASTER_GROWTH_DIVISIONS.find((category) => category.id === activeCategory);
+    const categoryItems = division
+      ? [division.title, ...division.services, ...division.products]
+      : [];
     const matchesCategory =
-      activeCategory === 'All' || categoryItems.some((item) => focus.includes(item));
-    const matchesFocus = activeFocus === 'All' || focus.includes(activeFocus);
+      activeCategory === 'All' ||
+      categoryItems.some((item) => haystack.includes(item.toLowerCase()) || focus.includes(item));
+    const matchesFocus =
+      activeFocus === 'All' ||
+      haystack.includes(activeFocus.toLowerCase()) ||
+      focus.includes(activeFocus);
     return matchesQuery && matchesCategory && matchesFocus;
   });
 
@@ -336,7 +293,7 @@ export const MentorsView: React.FC = () => {
 
   const chooseMentor = (mentor: Mentor) => {
     if (!hasMentorship) {
-      setSubscribeMentor(mentor);
+      setBookingMentor(mentor);
       return;
     }
     if (!pairing.isPaired(mentor.id) && !pairing.pair(mentor.id)) {
@@ -346,21 +303,72 @@ export const MentorsView: React.FC = () => {
     setBookingMentor(mentor);
   };
 
+  const requestConsultation = (mentor: Mentor) => {
+    setBookingMentor(mentor);
+  };
+
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
       <PageHero
-        eyebrow="Mentorship"
+        eyebrow="Consultation / Mentorship / Transformation"
         icon={<Users className="w-4 h-4" />}
         title={
           <>
-            Find Your{' '}
+            Find the Right{' '}
             <span className="bg-gradient-to-r from-amber-500 via-amber-600 to-amber-700 bg-clip-text text-transparent">
-              Mentor
+              Growth Expert
             </span>
           </>
         }
-        subtitle="Connect with carefully selected professionals, executives, entrepreneurs, business leaders, career specialists and growth experts for personalized digital mentorship."
+        subtitle="Consult, strategize, mentor and transform with carefully selected professionals, consultants, executives, entrepreneurs, business leaders and growth specialists."
       />
+
+      <section className="bg-white border-b border-slate-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            {MENTORSHIP_SERVICE_MODEL.map((stage, index) => (
+              <div key={stage} className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                <p className="text-[10px] font-mono uppercase tracking-wider text-amber-700">
+                  Step {index + 1}
+                </p>
+                <p className="mt-1 text-base sm:text-lg font-serif font-bold text-slate-900">
+                  {stage}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.1fr] gap-6 items-start">
+            <div className="rounded-3xl bg-slate-950 text-white border border-slate-800 p-6 sm:p-8">
+              <p className="text-[11px] font-mono uppercase tracking-wider text-amber-300">
+                Service architecture
+              </p>
+              <h2 className="mt-3 text-2xl sm:text-3xl font-serif font-bold leading-tight">
+                Clients should not struggle to know what to buy.
+              </h2>
+              <p className="mt-3 text-sm text-slate-300 leading-relaxed">
+                Start with clarity, move into strategy, continue through mentorship,
+                and scale into transformation. Prices are guided by expertise,
+                complexity, client type and measurable value.
+              </p>
+              <div className="mt-6 rounded-2xl bg-white/10 border border-white/10 p-4">
+                <p className="text-sm font-bold text-white">Revenue split</p>
+                <p className="mt-1 text-xs text-slate-300 leading-relaxed">
+                  Experts receive {REVENUE_SPLIT.expertPercent}% of every paid
+                  consultation or mentorship engagement. School of Growth Global
+                  retains {REVENUE_SPLIT.companyPercent}% for platform, brand,
+                  operations and client support.
+                </p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <LadderPanel title="Consultation ladder" items={CONSULTATION_LADDER} />
+              <LadderPanel title="Mentorship ladder" items={MENTORSHIP_LADDER} />
+            </div>
+          </div>
+        </div>
+      </section>
 
       <section className="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 xl:grid-cols-[340px_1fr] gap-8 items-start">
@@ -390,10 +398,10 @@ export const MentorsView: React.FC = () => {
                     : 'bg-slate-50 text-slate-700 border-slate-200 hover:border-slate-300'
                 }`}
               >
-                All mentorship categories
+                All growth divisions
               </button>
 
-              {MENTORSHIP_CATEGORIES.map((category) => (
+              {MASTER_GROWTH_DIVISIONS.map((category) => (
                 <button
                   key={category.id}
                   onClick={() => {
@@ -403,15 +411,15 @@ export const MentorsView: React.FC = () => {
                   className={`w-full text-left px-3 py-3 rounded-xl border transition-colors ${
                     activeCategory === category.id
                       ? 'bg-slate-950 text-white border-slate-950'
-                      : 'bg-white text-slate-700 border-slate-200 hover:border-amber-300'
+                    : 'bg-white text-slate-700 border-slate-200 hover:border-amber-300'
                   }`}
                 >
-                  <span className="flex items-center gap-2 text-xs font-black">
-                    <CheckCircle2 className="w-4 h-4 text-amber-500" />
+                  <span className="flex items-center gap-2 text-sm font-black leading-snug">
+                    <CheckCircle2 className="w-4 h-4 text-amber-500 shrink-0" />
                     {category.title}
                   </span>
                   <span className="block mt-1 text-[11px] leading-relaxed opacity-70">
-                    {category.items.join(', ')}
+                    {category.services.slice(0, 5).join(', ')}
                   </span>
                 </button>
               ))}
@@ -442,6 +450,91 @@ export const MentorsView: React.FC = () => {
           </aside>
 
           <main className="space-y-7">
+            <div className="rounded-3xl bg-white border border-slate-200 p-5 sm:p-7 shadow-sm">
+              <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-5">
+                <div className="max-w-2xl">
+                  <p className="text-[11px] font-mono uppercase tracking-wider text-amber-700">
+                    {activeDivision ? 'Selected division' : 'Master growth divisions'}
+                  </p>
+                  <h2 className="mt-2 text-2xl font-serif font-bold text-slate-900">
+                    {activeDivision?.title ?? 'Choose the area where you need growth'}
+                  </h2>
+                  <p className="mt-2 text-sm text-slate-600 leading-relaxed">
+                    {activeDivision
+                      ? activeDivision.whyClientsCome.join(' ')
+                      : 'School of Growth Global connects individuals, professionals, entrepreneurs, leaders and organizations with knowledge, expertise, strategy, mentorship and practical support for measurable results.'}
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const mentor = ordered[0] ?? MENTORS[0];
+                    if (mentor) setBookingMentor(mentor);
+                  }}
+                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-slate-950 px-5 py-3 text-sm font-bold text-white hover:bg-slate-800 active:translate-y-px transition-all"
+                >
+                  Request consultation <ArrowRight className="w-4 h-4" />
+                </button>
+              </div>
+
+              {activeDivision ? (
+                <div className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-5">
+                  <div>
+                    <p className="text-xs font-bold text-slate-900">Services</p>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {activeDivision.services.map((service) => (
+                        <span
+                          key={service}
+                          className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-[11px] text-slate-600"
+                        >
+                          {service}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold text-slate-900">Products</p>
+                    <div className="mt-3 space-y-2">
+                      {activeDivision.products.map((product) => (
+                        <div
+                          key={product}
+                          className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-xs font-semibold text-amber-900"
+                        >
+                          {product}
+                        </div>
+                      ))}
+                    </div>
+                    {activeDivision.note && (
+                      <p className="mt-3 text-[11px] text-slate-500 leading-relaxed">
+                        {activeDivision.note}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              ) : (
+                <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                  {MASTER_GROWTH_DIVISIONS.slice(0, 6).map((division) => (
+                    <button
+                      key={division.id}
+                      type="button"
+                      onClick={() => {
+                        setActiveCategory(division.id);
+                        setActiveFocus('All');
+                      }}
+                      className="text-left rounded-2xl border border-slate-200 bg-slate-50 p-4 hover:border-amber-300 transition-colors"
+                    >
+                      <p className="text-sm font-bold text-slate-900 leading-snug">
+                        {division.title}
+                      </p>
+                      <p className="mt-2 text-[11px] text-slate-500 leading-relaxed">
+                        {division.products.slice(0, 2).join(' / ')}
+                      </p>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
             {hasMentorship ? (
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 p-4 rounded-2xl bg-emerald-50 border border-emerald-200">
                 <p className="flex items-center gap-2 text-xs text-emerald-800">
@@ -488,6 +581,12 @@ export const MentorsView: React.FC = () => {
               {ordered.map((mentor) => {
                 const details = mentorDetails(mentor);
                 const paired = pairing.isPaired(mentor.id);
+                const ratingSummary = summarizeMentorReviews(
+                  mentor.id,
+                  mentor.rating,
+                  mentor.sessions,
+                  mentorReviews
+                );
                 return (
                   <article
                     key={mentor.id}
@@ -525,7 +624,7 @@ export const MentorsView: React.FC = () => {
 
                     <div className="grid grid-cols-2 gap-3 text-xs">
                       <Fact icon={<BriefcaseBusiness className="w-3.5 h-3.5" />} label="Experience" value={`${details.yearsExperience}+ years`} />
-                      <Fact icon={<Star className="w-3.5 h-3.5 fill-amber-400 text-amber-600" />} label="Rating" value={mentor.sessions > 0 ? `${mentor.rating} from ${mentor.sessions} sessions` : 'New profile'} />
+                      <Fact icon={<Star className="w-3.5 h-3.5 fill-amber-400 text-amber-600" />} label="Rating" value={ratingSummary.reviewCount > 0 ? `${ratingSummary.rating} from ${ratingSummary.reviewCount} reviews` : 'New profile'} />
                       <Fact icon={<Users className="w-3.5 h-3.5" />} label="Mentees" value={`${details.menteeCount} mentees`} />
                       <Fact icon={<MapPin className="w-3.5 h-3.5" />} label="Base" value={mentor.location} />
                       <Fact icon={<Languages className="w-3.5 h-3.5" />} label="Languages" value={details.languages.join(', ')} />
@@ -552,6 +651,30 @@ export const MentorsView: React.FC = () => {
                       ))}
                     </div>
 
+                    {ratingSummary.latest.length > 0 && (
+                      <div className="rounded-xl bg-slate-50 border border-slate-200 p-3 space-y-2">
+                        <p className="text-[11px] font-mono uppercase tracking-wider text-slate-500">
+                          Mentee reviews
+                        </p>
+                        {ratingSummary.latest.slice(0, 2).map((review) => (
+                          <div key={`${review.studentEmail}-${review.createdAt}`} className="space-y-1">
+                            <div className="flex items-center justify-between gap-2">
+                              <p className="text-xs font-bold text-slate-800">{review.studentName}</p>
+                              <span className="inline-flex items-center gap-1 text-[11px] font-bold text-amber-700">
+                                <Star className="w-3 h-3 fill-amber-400" />
+                                {review.rating}
+                              </span>
+                            </div>
+                            {review.comment && (
+                              <p className="text-[11px] text-slate-500 leading-relaxed line-clamp-2">
+                                {review.comment}
+                              </p>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
                     <div className="pt-4 border-t border-slate-200 mt-auto space-y-3">
                       <div className="flex items-center justify-between gap-3 text-[11px]">
                         <span className={`px-2.5 py-1 rounded-full border font-mono ${availabilityStyle[mentor.availability]}`}>
@@ -562,12 +685,11 @@ export const MentorsView: React.FC = () => {
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                         <button
                           type="button"
-                          onClick={() => chooseMentor(mentor)}
-                          disabled={hasMentorship && !paired && pairing.slotsLeft === 0}
+                          onClick={() => requestConsultation(mentor)}
                           className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-amber-500 text-slate-950 text-xs font-black hover:bg-amber-400 disabled:bg-slate-100 disabled:text-slate-400 active:translate-y-px transition-all"
                         >
                           <Calendar className="w-4 h-4" />
-                          Book a Session
+                          Request Consultation
                         </button>
                         {paired ? (
                           <Link
@@ -581,10 +703,11 @@ export const MentorsView: React.FC = () => {
                           <button
                             type="button"
                             onClick={() => chooseMentor(mentor)}
+                            disabled={hasMentorship && pairing.slotsLeft === 0}
                             className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-slate-950 text-white text-xs font-bold hover:bg-slate-800 active:translate-y-px transition-all"
                           >
                             <UserCheck className="w-4 h-4" />
-                            Select Mentor
+                            {hasMentorship ? 'Pair Mentor' : 'Request Quote'}
                           </button>
                         )}
                       </div>
@@ -618,122 +741,11 @@ export const MentorsView: React.FC = () => {
       </section>
 
       {bookingMentor && (
-        <div className="fixed inset-0 z-50 bg-slate-950/55 backdrop-blur-md flex items-center justify-center p-4" role="dialog" aria-modal="true">
-          <div className="bg-white border border-slate-200 rounded-2xl max-w-2xl w-full p-6 sm:p-7 shadow-2xl relative">
-            <button
-              type="button"
-              onClick={() => {
-                setBookingMentor(null);
-                setBookingSent(false);
-              }}
-              aria-label="Close booking"
-              className="absolute top-4 right-4 text-slate-400 hover:text-slate-900"
-            >
-              <X className="w-5 h-5" />
-            </button>
-
-            {bookingSent ? (
-              <div className="text-center py-8 space-y-4">
-                <div className="w-14 h-14 rounded-full bg-emerald-50 border border-emerald-200 flex items-center justify-center mx-auto">
-                  <CheckCircle2 className="w-7 h-7 text-emerald-600" />
-                </div>
-                <h3 className="text-xl font-serif font-bold text-slate-900">Session request sent</h3>
-                <p className="text-sm text-slate-500 max-w-md mx-auto">
-                  Your request for {bookingType} with {bookingMentor.name} has been noted. The team will confirm the exact schedule.
-                </p>
-                <Link
-                  to={`/portal?tab=messages&mentor=${bookingMentor.id}`}
-                  className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-amber-500 text-slate-950 text-sm font-black"
-                >
-                  Continue in messages <MessageSquare className="w-4 h-4" />
-                </Link>
-              </div>
-            ) : (
-              <div className="space-y-5">
-                <div className="pr-8">
-                  <p className="text-[11px] font-mono uppercase tracking-wider text-amber-700">Book a Session</p>
-                  <h3 className="text-2xl font-serif font-bold text-slate-900 mt-1">{bookingMentor.name}</h3>
-                  <p className="text-sm text-slate-500 mt-1">{mentorDetails(bookingMentor).specialization}</p>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                  {BOOKING_OPTIONS.map((option) => (
-                    <button
-                      key={option}
-                      type="button"
-                      onClick={() => setBookingType(option)}
-                      className={`text-left p-3 rounded-xl border text-xs font-semibold transition-colors ${
-                        bookingType === option
-                          ? 'bg-amber-50 border-amber-400 text-slate-950'
-                          : 'bg-slate-50 border-slate-200 text-slate-600 hover:border-slate-300'
-                      }`}
-                    >
-                      {option}
-                    </button>
-                  ))}
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => setBookingSent(true)}
-                  className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-slate-950 text-white text-sm font-bold hover:bg-slate-800 active:translate-y-px transition-all"
-                >
-                  Request Booking <ArrowRight className="w-4 h-4" />
-                </button>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-
-      {subscribeMentor && (
-        <div className="fixed inset-0 z-50 bg-slate-950/55 backdrop-blur-md flex items-center justify-center p-4" role="dialog" aria-modal="true">
-          <div className="bg-white border border-slate-200 rounded-2xl max-w-lg w-full p-6 sm:p-7 shadow-2xl relative space-y-5">
-            <button
-              type="button"
-              onClick={() => setSubscribeMentor(null)}
-              aria-label="Close"
-              className="absolute top-4 right-4 text-slate-400 hover:text-slate-900"
-            >
-              <X className="w-5 h-5" />
-            </button>
-
-            <div className="pr-8">
-              <p className="text-[11px] font-mono uppercase tracking-wider text-amber-700">Mentor access required</p>
-              <h3 className="text-xl font-serif font-bold text-slate-900 mt-1">Work with {subscribeMentor.name}</h3>
-              <p className="text-sm text-slate-500 mt-1">Choose a mentorship plan to book sessions and message this mentor.</p>
-            </div>
-
-            <div className="space-y-3">
-              {MENTORSHIP_PLANS.map((plan) => (
-                <Link
-                  key={plan.code}
-                  to={`/checkout/${plan.code}?mentor=${subscribeMentor.id}`}
-                  className={`flex items-center justify-between gap-4 p-4 rounded-2xl border transition-colors ${
-                    plan.highlight
-                      ? 'bg-amber-50 border-amber-400 hover:border-amber-500'
-                      : 'bg-white border-slate-200 hover:border-slate-300'
-                  }`}
-                >
-                  <div>
-                    <p className="text-sm font-bold text-slate-900">{plan.name}</p>
-                    <p className="text-[11px] text-slate-500 mt-0.5">{plan.mentorSlots} mentor slots, {plan.billing}</p>
-                  </div>
-                  <span className="text-lg font-serif font-bold text-amber-700">{formatNaira(plan.amountKobo)}</span>
-                </Link>
-              ))}
-            </div>
-
-            <p className="flex items-start gap-2 text-[11px] text-slate-500 leading-relaxed pt-1 border-t border-slate-100">
-              <Sparkles className="w-3.5 h-3.5 shrink-0 mt-px text-amber-600" />
-              <span>
-                The {PLANS.maxi.name} course package includes a full year of mentor
-                access and {PLANS.maxi.mentorSlots} mentor slots. {PLANS.premium.name}{' '}
-                includes {PLANS.premium.mentorSlots} mentor slots.
-              </span>
-            </p>
-          </div>
-        </div>
+        <ConsultationRequestModal
+          mentor={bookingMentor}
+          selectedDivision={activeDivision}
+          onClose={() => setBookingMentor(null)}
+        />
       )}
 
       {slotsFull && (
@@ -777,3 +789,181 @@ const Fact: React.FC<{ icon: React.ReactNode; label: string; value: string }> = 
     <p className="mt-1 text-xs font-semibold text-slate-800 leading-snug">{value}</p>
   </div>
 );
+
+const LadderPanel: React.FC<{ title: string; items: LadderItem[] }> = ({ title, items }) => (
+  <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5 sm:p-6">
+    <h3 className="text-base font-serif font-bold text-white">{title}</h3>
+    <div className="mt-5 space-y-3">
+      {items.map((item) => (
+        <div key={item.title} className="rounded-xl border border-white/10 bg-white/[0.04] p-4">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="rounded-full bg-amber-400 px-2.5 py-1 text-[10px] font-bold uppercase text-slate-950">
+              {item.level}
+            </span>
+            <span className="text-[11px] font-mono text-slate-300">{item.duration}</span>
+          </div>
+          <h4 className="mt-3 text-sm font-bold text-white">{item.title}</h4>
+          <p className="mt-1 text-xs leading-relaxed text-slate-300">{item.description}</p>
+          <p className="mt-2 text-[11px] leading-relaxed text-amber-100">{item.outcome}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+);
+
+const REQUEST_INPUT_CLASS =
+  'w-full rounded-xl border border-slate-200 bg-white px-3.5 py-3 text-sm text-slate-900 outline-none transition focus:border-amber-400 focus:ring-4 focus:ring-amber-100';
+
+const RequestField: React.FC<{
+  label: string;
+  children: React.ReactNode;
+  wide?: boolean;
+}> = ({ label, children, wide }) => (
+  <label className={`space-y-1.5 ${wide ? 'sm:col-span-2' : ''}`}>
+    <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
+      {label}
+    </span>
+    {children}
+  </label>
+);
+
+const ConsultationRequestModal: React.FC<{
+  mentor: Mentor;
+  selectedDivision?: GrowthDivision;
+  onClose: () => void;
+}> = ({ mentor, selectedDivision, onClose }) => {
+  const { status, error, submit, sending } = useFormSubmit('consultation');
+  const defaultDivision = selectedDivision?.title ?? MASTER_GROWTH_DIVISIONS[0]?.title ?? '';
+  const defaultProduct = REQUEST_PRODUCTS[1]?.value ?? REQUEST_PRODUCTS[0]?.value ?? '';
+
+  return (
+    <div className="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-md flex items-center justify-center p-4">
+      <div className="bg-white border border-slate-200 rounded-2xl max-w-3xl w-full max-h-[92vh] overflow-y-auto shadow-2xl">
+        <div className="sticky top-0 z-10 flex items-center justify-between gap-4 border-b border-slate-200 bg-white px-5 py-4 sm:px-6">
+          <div>
+            <p className="text-[11px] font-bold uppercase tracking-wider text-amber-700">
+              Consultation request
+            </p>
+            <h3 className="text-lg font-serif font-bold text-slate-900">
+              Work with {mentor.name}
+            </h3>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            className="rounded-full border border-slate-200 p-2 text-slate-500 transition hover:bg-slate-50 hover:text-slate-900"
+            aria-label="Close request form"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+
+        <form
+          onSubmit={(event) => submit(event, { mentor: mentor.name })}
+          className="grid grid-cols-1 gap-4 p-5 sm:grid-cols-2 sm:p-6"
+        >
+          <input {...HONEYPOT_PROPS} />
+
+          <RequestField label="Full name">
+            <input name="name" required className={REQUEST_INPUT_CLASS} placeholder="Your name" />
+          </RequestField>
+
+          <RequestField label="Email">
+            <input
+              name="email"
+              type="email"
+              required
+              className={REQUEST_INPUT_CLASS}
+              placeholder="you@example.com"
+            />
+          </RequestField>
+
+          <RequestField label="Phone / WhatsApp">
+            <input name="phone" required className={REQUEST_INPUT_CLASS} placeholder="+234..." />
+          </RequestField>
+
+          <RequestField label="Growth division">
+            <select name="division" required className={REQUEST_INPUT_CLASS} defaultValue={defaultDivision}>
+              {MASTER_GROWTH_DIVISIONS.map((division) => (
+                <option key={division.id} value={division.title}>
+                  {division.title}
+                </option>
+              ))}
+            </select>
+          </RequestField>
+
+          <RequestField label="Product">
+            <select name="product" required className={REQUEST_INPUT_CLASS} defaultValue={defaultProduct}>
+              {REQUEST_PRODUCTS.map((product) => (
+                <option key={`${product.group}-${product.value}`} value={product.value}>
+                  {product.group}: {product.label}
+                </option>
+              ))}
+            </select>
+          </RequestField>
+
+          <RequestField label="Budget / pricing band">
+            <select name="budget" className={REQUEST_INPUT_CLASS} defaultValue="">
+              <option value="">Let the team recommend</option>
+              {BUDGET_OPTIONS.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+          </RequestField>
+
+          <RequestField label="Preferred mentor">
+            <input name="mentor" readOnly className={`${REQUEST_INPUT_CLASS} bg-slate-50`} value={mentor.name} />
+          </RequestField>
+
+          <RequestField label="What do you need help with?" wide>
+            <textarea
+              name="message"
+              required
+              rows={5}
+              className={`${REQUEST_INPUT_CLASS} resize-none`}
+              placeholder="Describe the business, career, leadership, personal or organizational issue you want to solve."
+            />
+          </RequestField>
+
+          <div className="sm:col-span-2 rounded-xl border border-amber-200 bg-amber-50 p-4 text-xs leading-relaxed text-amber-950">
+            Experts receive {REVENUE_SPLIT.expertPercent}% of paid consultation or mentorship
+            revenue. School of Growth Global receives {REVENUE_SPLIT.companyPercent}% for
+            marketplace, support and operations.
+          </div>
+
+          {status === 'sent' && (
+            <div className="sm:col-span-2 rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-xs font-semibold text-emerald-800">
+              Request received. The team will follow up with the right quote and next step.
+            </div>
+          )}
+
+          {error && (
+            <div className="sm:col-span-2 rounded-xl border border-red-200 bg-red-50 p-4 text-xs font-semibold text-red-700">
+              {error}
+            </div>
+          )}
+
+          <div className="sm:col-span-2 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+            <button
+              type="button"
+              onClick={onClose}
+              className="rounded-xl bg-slate-100 px-5 py-3 text-xs font-bold text-slate-700 transition hover:bg-slate-200"
+            >
+              Close
+            </button>
+            <button
+              type="submit"
+              disabled={sending}
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-slate-950 px-5 py-3 text-xs font-bold text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {sending ? 'Sending...' : 'Send Request'}
+              <Mail className="h-4 w-4" />
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};

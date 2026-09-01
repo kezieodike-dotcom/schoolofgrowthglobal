@@ -48,7 +48,7 @@ export function isAllowedImageMime(mimeType: string): boolean {
 }
 
 function isContentKind(value: unknown): value is ContentKind {
-  return value === 'course' || value === 'event' || value === 'team' || value === 'job' || value === 'insight';
+  return value === 'course' || value === 'event' || value === 'team' || value === 'job' || value === 'insight' || value === 'book';
 }
 
 function safeBaseName(fileName: string): string {

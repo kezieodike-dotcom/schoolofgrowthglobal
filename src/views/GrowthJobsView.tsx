@@ -18,6 +18,11 @@ import { PageHero } from '../components/PageHero';
 import { useEnrollment } from '../lib/useEnrollment';
 import { useFormSubmit } from '../lib/useFormSubmit';
 import { useContentCollection } from '../lib/useContent';
+import {
+  CAREER_JOBS_EMAIL,
+  EMPLOYER_JOB_POSTING_MESSAGE,
+  TALENT_POOL_MESSAGE,
+} from '../lib/careerJobsCopy';
 import type { GrowthJob } from '../types';
 
 const WORK_MODES = ['All', 'Remote', 'Hybrid', 'On-site'] as const;
@@ -67,6 +72,54 @@ export const GrowthJobsView: React.FC = () => {
             <p className="mt-2 text-xl font-serif font-bold text-slate-900 leading-snug">
               Where Employers Find Talent. Where Professionals Find Opportunity.
             </p>
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-slate-100 border-b border-slate-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div className="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-sm">
+            <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center mb-4">
+              <BriefcaseBusiness className="w-5 h-5" />
+            </div>
+            <p className="text-[11px] font-mono uppercase tracking-wider text-amber-700">
+              For employers
+            </p>
+            <h2 className="mt-2 text-xl font-serif font-bold text-slate-900">
+              Share a job opportunity
+            </h2>
+            <p className="mt-2 text-sm text-slate-600 leading-relaxed">
+              {EMPLOYER_JOB_POSTING_MESSAGE}
+            </p>
+            <a
+              href={`mailto:${CAREER_JOBS_EMAIL}?subject=Career Jobs Opportunity`}
+              className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-amber-700 hover:text-amber-800"
+            >
+              <Mail className="w-4 h-4" />
+              {CAREER_JOBS_EMAIL}
+            </a>
+          </div>
+
+          <div className="bg-slate-950 text-white border border-slate-800 rounded-2xl p-5 sm:p-6 shadow-sm">
+            <div className="w-10 h-10 rounded-xl bg-amber-500 text-slate-950 flex items-center justify-center mb-4">
+              <FileText className="w-5 h-5" />
+            </div>
+            <p className="text-[11px] font-mono uppercase tracking-wider text-amber-300">
+              Employment Global Talent Pool
+            </p>
+            <h2 className="mt-2 text-xl font-serif font-bold">
+              Let opportunities find you
+            </h2>
+            <p className="mt-2 text-sm text-slate-300 leading-relaxed">
+              {TALENT_POOL_MESSAGE}
+            </p>
+            <a
+              href={`mailto:${CAREER_JOBS_EMAIL}?subject=Employment Global Talent Pool CV`}
+              className="mt-4 inline-flex items-center gap-2 rounded-xl bg-amber-500 px-4 py-2.5 text-sm font-black text-slate-950 hover:bg-amber-400"
+            >
+              <Send className="w-4 h-4" />
+              Send your CV
+            </a>
           </div>
         </div>
       </section>

@@ -40,6 +40,22 @@ export const AboutView: React.FC = () => {
         subtitle="School of Growth Global is a world-class digital institution dedicated to leadership, business transformation, and lifelong growth for individuals, organizations, and governments."
       />
 
+      {/* Promise */}
+      <section className="bg-white border-b border-slate-200 py-10">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="rounded-2xl border border-amber-200 bg-amber-50 p-6 sm:p-8 text-center">
+            <p className="text-xs font-mono uppercase tracking-widest text-amber-700">
+              Our Promise
+            </p>
+            <p className="mt-3 text-lg sm:text-xl font-serif font-semibold leading-relaxed text-slate-900">
+              We help you identify your growth challenge, connect you with the right
+              expertise, develop a practical strategy, and support you toward
+              measurable progress.
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* Impact stats */}
       <section className="border-b border-slate-200 bg-white py-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-2 md:grid-cols-4 gap-6">

@@ -60,6 +60,21 @@ export const FORMS = {
     ],
   },
 
+  consultation: {
+    title: "Consultation and Mentorship Request",
+    replyToField: "email",
+    fields: [
+      { name: "name", label: "Full Name", required: true },
+      { name: "email", label: "Email", type: "email", required: true },
+      { name: "phone", label: "Phone / WhatsApp", type: "tel", required: true },
+      { name: "division", label: "Growth Division", required: true },
+      { name: "product", label: "Requested Product", required: true },
+      { name: "mentor", label: "Preferred Mentor" },
+      { name: "budget", label: "Budget / Pricing Band" },
+      { name: "message", label: "What do you need help with?", type: "textarea", required: true },
+    ],
+  },
+
   application: {
     title: "Cohort Application",
     replyToField: "email",

@@ -59,6 +59,27 @@ export interface GrowthJob {
   featured?: boolean;
 }
 
+export interface BookItem {
+  id: string;
+  title: string;
+  subtitle: string;
+  authorName: string;
+  ownerName: string;
+  ownerId?: string;
+  ownerType: 'Admin' | 'Mentor';
+  ownerEmail: string;
+  category: string;
+  description: string;
+  highlights: string[];
+  coverImage: string;
+  priceKobo: number;
+  format: 'PDF' | 'Ebook' | 'Workbook' | 'Print';
+  pages: number;
+  downloadUrl?: string;
+  sampleUrl?: string;
+  featured?: boolean;
+}
+
 export interface EventItem {
   id: string;
   title: string;
@@ -95,7 +116,7 @@ export interface Course {
   schoolId: string;
   schoolName: string;
   duration: string;
-  level: 'Executive' | 'Emerging Leaders' | 'Senior Directorate' | 'Frontier';
+  level: 'Executive' | 'Emerging Leaders' | 'Senior Directorate' | 'Frontier' | 'Elite';
   format: string;
   instructorName: string;
   instructorRole: string;

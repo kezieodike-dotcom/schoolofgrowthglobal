@@ -14,7 +14,7 @@ export const GrowthAIFloatingWidget: React.FC = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       sender: 'assistant',
-      text: 'Greetings Leader. I am Growth AI, your institutional intelligence advisor. Ask me any strategic, leadership, or expansion question.'
+      text: 'Greetings Leader. I am Growth AI, your institutional intelligence advisor. Describe a business, career, leadership, personal or organizational challenge and I will diagnose the growth area, expert mix and next intervention.'
     }
   ]);
 
@@ -177,6 +177,14 @@ export const GrowthAIFloatingWidget: React.FC = () => {
               className="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-amber-300 whitespace-nowrap"
             >
               Expansion Roadmap
+            </button>
+            <button
+              onClick={() => {
+                setInput("My company has 80 employees, productivity is falling, managers aren't performing and staff turnover is increasing.");
+              }}
+              className="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-amber-300 whitespace-nowrap"
+            >
+              Diagnose Problem
             </button>
             <button 
               onClick={() => { setInput('What are key AI governance metrics for boards?'); }}

@@ -10,7 +10,7 @@ import {
   Note,
 } from './AdminUI';
 import { adminPost, adminUploadImage } from '../../lib/adminApi';
-import { BLOG_POSTS, COURSES, EVENTS, FACULTY_MEMBERS, GROWTH_JOBS } from '../../data/mockData';
+import { BLOG_POSTS, BOOKS, COURSES, EVENTS, FACULTY_MEMBERS, GROWTH_JOBS } from '../../data/mockData';
 import {
   CONTENT_LABEL,
   mergeContent,
@@ -18,8 +18,9 @@ import {
   type ContentKind,
   type ContentRecord,
 } from '../../lib/content';
-import type { BlogPost, Course, EventItem, FacultyMember, GrowthJob } from '../../types';
+import type { BlogPost, BookItem, Course, EventItem, FacultyMember, GrowthJob } from '../../types';
 import {
+  BookMarked,
   BookOpen,
   BriefcaseBusiness,
   Calendar,
@@ -43,7 +44,7 @@ interface AdminContentResponse {
   records: ContentRecord[];
 }
 
-type ManagedItem = Course | EventItem | FacultyMember | GrowthJob | BlogPost;
+type ManagedItem = Course | EventItem | FacultyMember | GrowthJob | BlogPost | BookItem;
 type Draft = Record<string, string | boolean>;
 
 interface Field {
@@ -60,6 +61,7 @@ const TABS: { id: ContentKind; label: string; icon: React.ComponentType<{ classN
   { id: 'team', label: 'Team', icon: Users },
   { id: 'job', label: 'Jobs', icon: BriefcaseBusiness },
   { id: 'insight', label: 'Insights', icon: Newspaper },
+  { id: 'book', label: 'Books', icon: BookMarked },
 ];
 
 const SEED: Record<ContentKind, ManagedItem[]> = {
@@ -68,6 +70,7 @@ const SEED: Record<ContentKind, ManagedItem[]> = {
   team: FACULTY_MEMBERS,
   job: GROWTH_JOBS,
   insight: BLOG_POSTS,
+  book: BOOKS,
 };
 
 const SINGULAR_LABEL: Record<ContentKind, string> = {
@@ -76,6 +79,7 @@ const SINGULAR_LABEL: Record<ContentKind, string> = {
   team: 'Team member',
   job: 'Job',
   insight: 'Insight',
+  book: 'Book',
 };
 
 const FIELDS: Record<ContentKind, Field[]> = {
@@ -87,7 +91,7 @@ const FIELDS: Record<ContentKind, Field[]> = {
       key: 'level',
       label: 'Level',
       type: 'select',
-      options: ['Executive', 'Emerging Leaders', 'Senior Directorate', 'Frontier'],
+      options: ['Executive', 'Emerging Leaders', 'Senior Directorate', 'Frontier', 'Elite'],
     },
     { key: 'duration', label: 'Duration' },
     { key: 'format', label: 'Format' },
@@ -164,6 +168,24 @@ const FIELDS: Record<ContentKind, Field[]> = {
     { key: 'image', label: 'Image', type: 'image', wide: true },
     { key: 'excerpt', label: 'Excerpt', type: 'textarea', wide: true },
     { key: 'featured', label: 'Feature this insight', type: 'checkbox' },
+  ],
+  book: [
+    { key: 'title', label: 'Book title', wide: true },
+    { key: 'subtitle', label: 'Subtitle', wide: true },
+    { key: 'authorName', label: 'Author name' },
+    { key: 'ownerName', label: 'Owner / payout name' },
+    { key: 'ownerType', label: 'Owner type', type: 'select', options: ['Admin', 'Mentor'] },
+    { key: 'ownerEmail', label: 'Owner payout email' },
+    { key: 'category', label: 'Category' },
+    { key: 'format', label: 'Format', type: 'select', options: ['PDF', 'Ebook', 'Workbook', 'Print'] },
+    { key: 'priceKobo', label: 'Price in kobo', type: 'number' },
+    { key: 'pages', label: 'Pages', type: 'number' },
+    { key: 'coverImage', label: 'Cover image', type: 'image', wide: true },
+    { key: 'downloadUrl', label: 'Buyer download link', wide: true },
+    { key: 'sampleUrl', label: 'Sample / preview link', wide: true },
+    { key: 'description', label: 'Description', type: 'textarea', wide: true },
+    { key: 'highlights', label: 'Highlights, one per line', type: 'textarea', wide: true },
+    { key: 'featured', label: 'Feature this book', type: 'checkbox' },
   ],
 };
 
@@ -248,6 +270,28 @@ function defaultsFor(kind: ContentKind): ManagedItem {
     } satisfies BlogPost;
   }
 
+  if (kind === 'book') {
+    return {
+      id: '',
+      title: '',
+      subtitle: '',
+      authorName: '',
+      ownerName: 'School of Growth Global',
+      ownerType: 'Admin',
+      ownerEmail: 'infoschoolofgrowth@gmail.com',
+      category: 'Personal Growth',
+      description: '',
+      highlights: [],
+      coverImage: '/scenes/hero-team.jpg',
+      priceKobo: 1000000,
+      format: 'Ebook',
+      pages: 0,
+      downloadUrl: '',
+      sampleUrl: '',
+      featured: false,
+    } satisfies BookItem;
+  }
+
   return {
     id: '',
     name: '',
@@ -261,7 +305,7 @@ function defaultsFor(kind: ContentKind): ManagedItem {
 
 function itemTitle(kind: ContentKind, item: ManagedItem): string {
   if (kind === 'team') return (item as FacultyMember).name;
-  return (item as Course | EventItem | GrowthJob | BlogPost).title;
+  return (item as Course | EventItem | GrowthJob | BlogPost | BookItem).title;
 }
 
 function itemSubtitle(kind: ContentKind, item: ManagedItem): string {
@@ -280,6 +324,10 @@ function itemSubtitle(kind: ContentKind, item: ManagedItem): string {
   if (kind === 'insight') {
     const post = item as BlogPost;
     return `${post.category} / ${post.author} / ${post.date}`;
+  }
+  if (kind === 'book') {
+    const book = item as BookItem;
+    return `${book.authorName} / ${book.category} / ${book.ownerType}`;
   }
   const member = item as FacultyMember;
   return `${member.role} / ${member.institution}`;
@@ -301,7 +349,7 @@ function fromDraft(kind: ContentKind, draft: Draft, original?: ManagedItem): Man
     const value = draft[field.key];
     if (field.type === 'checkbox') base[field.key] = Boolean(value);
     else if (field.type === 'number') base[field.key] = Number(value || 0);
-    else if (field.type === 'textarea' && ['outcomes', 'credentials', 'requirements', 'tags'].includes(field.key)) {
+    else if (field.type === 'textarea' && ['outcomes', 'credentials', 'requirements', 'tags', 'highlights'].includes(field.key)) {
       base[field.key] = String(value ?? '')
         .split('\n')
         .map((line) => line.trim())
@@ -325,7 +373,14 @@ export const AdminCatalogueView: React.FC = () => {
   );
   const records = data?.records ?? [];
   const recordMap = useMemo(() => new Map(records.map((row) => [row.id, row])), [records]);
-  const items = useMemo(() => mergeContent(SEED[kind], records), [kind, records]);
+  const items = useMemo(() => {
+    const visible = mergeContent(SEED[kind], records) as ManagedItem[];
+    const byId = new Map(visible.map((item) => [item.id, item]));
+    for (const record of records) {
+      if (!byId.has(record.id)) byId.set(record.id, record.payload as ManagedItem);
+    }
+    return Array.from(byId.values());
+  }, [kind, records]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const selected = items.find((item) => item.id === selectedId) ?? items[0] ?? null;
   const selectedRecord = selected ? recordMap.get(selected.id) : undefined;
@@ -338,7 +393,7 @@ export const AdminCatalogueView: React.FC = () => {
     <>
       <PageHeader
         title="Content studio"
-        subtitle="Add, edit, publish and retire public courses, events, team members, jobs and insights from one workspace."
+        subtitle="Add, edit, publish and retire public courses, events, team members, jobs, insights and books from one workspace."
         action={
           <Link
             to="/admin/mentors"
@@ -709,7 +764,9 @@ const ContentForm: React.FC<{
                     ? '/about'
                     : kind === 'job'
                       ? '/jobs'
-                      : `/blog/${(item as BlogPost).slug}`
+                      : kind === 'insight'
+                        ? `/blog/${(item as BlogPost).slug}`
+                        : '/books'
             }
             target="_blank"
             rel="noreferrer"
