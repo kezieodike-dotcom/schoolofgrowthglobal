@@ -369,6 +369,8 @@ export const MentorRegistrationView: React.FC = () => {
                   'Listed on the public directory students choose from',
                   'Vetted, motivated professionals, not cold enquiries',
                   'Sessions, scheduling and payment handled for you',
+                  'Those who desire to learn from you, gain influence through you, or be impacted by you can apply professionally through our global platform',
+                  'You get the opportunity to impact humanity globally, including people who may not be privileged or able to afford direct real-life mentorship or coaching with you',
                 ].map((point) => (
                   <li
                     key={point}
@@ -391,6 +393,7 @@ export const MentorRegistrationView: React.FC = () => {
                   ['Within 1 business day', 'A faculty reviewer reads your application.'],
                   ['Within 3 days', 'A 20-minute call to talk through your practice.'],
                   ['On approval', 'Your profile goes live and mentees can pair with you.'],
+                  ['After approval', 'You receive a brief 1-2 hours organizational internal training.'],
                 ].map(([when, what], i) => (
                   <li key={when} className="flex gap-3">
                     <span className="w-5 h-5 shrink-0 rounded-full bg-slate-100 text-slate-500 text-[10px] font-mono font-bold flex items-center justify-center mt-px">
@@ -924,6 +927,7 @@ const SubmittedPanel: React.FC<{ name: string }> = ({ name }) => {
             ['1 business day', 'We review your background and specialisms.'],
             ['Within 3 days', 'A short call about how you like to mentor.'],
             ['On approval', 'Your profile goes live and students can pair with you.'],
+            ['After approval', 'You receive a brief 1-2 hours organizational internal training.'],
           ].map(([when, what]) => (
             <li key={when} className="space-y-0.5">
               <span className="block text-[10px] font-mono uppercase tracking-wider text-amber-600">

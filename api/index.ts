@@ -1,4 +1,5 @@
 import express from "express";
+import { loadServerEnv } from "../src/server/loadEnv.js";
 import { createAIRouter } from "../src/server/aiRoutes.js";
 import { createPaymentRouter, captureRawBody } from "../src/server/paymentRoutes.js";
 import { createAdminRouter, requireAdmin } from "../src/server/adminRoutes.js";
@@ -8,6 +9,8 @@ import { createMessageRouter } from "../src/server/messageRoutes.js";
 import { createContentRouter } from "../src/server/contentRoutes.js";
 import { createDemoReviewerRouter } from "../src/server/demoReviewerRoutes.js";
 import { createMentorReviewRouter } from "../src/server/mentorReviewRoutes.js";
+
+loadServerEnv();
 
 /**
  * Vercel serverless entry point for every /api/* route.

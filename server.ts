@@ -1,4 +1,4 @@
-import "dotenv/config";
+import { loadServerEnv } from "./src/server/loadEnv.js";
 import express from "express";
 import net from "net";
 import path from "path";
@@ -12,6 +12,8 @@ import { createMessageRouter } from "./src/server/messageRoutes.js";
 import { createContentRouter } from "./src/server/contentRoutes.js";
 import { createDemoReviewerRouter } from "./src/server/demoReviewerRoutes.js";
 import { createMentorReviewRouter } from "./src/server/mentorReviewRoutes.js";
+
+loadServerEnv();
 
 function portInUseMessage(port: number): string {
   const nextPort = port + 1;
