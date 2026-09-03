@@ -12,6 +12,11 @@ import { createMentorReviewRouter } from "../src/server/mentorReviewRoutes.js";
 
 loadServerEnv();
 
+export const config = {
+  runtime: 'nodejs',
+  maxDuration: 60,
+};
+
 /**
  * Vercel serverless entry point for every /api/* route.
  *
