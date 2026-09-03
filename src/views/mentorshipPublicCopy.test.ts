@@ -3,6 +3,22 @@ import path from 'path';
 
 const source = readFileSync(path.join(process.cwd(), 'src', 'views', 'MentorsView.tsx'), 'utf8');
 
+if (!source.includes('Find the Right Guidance &') || !source.includes('Growth Expert You Need')) {
+  throw new Error('Mentorship hero should use the updated guidance and growth expert headline.');
+}
+
+if (!source.includes('Every season of life, career, and business comes with different questions.')) {
+  throw new Error('Mentorship hero should use the updated explanatory subtitle.');
+}
+
+if (!source.includes("Not sure which option is right for you?")) {
+  throw new Error('Mentorship hero should invite visitors to start with a conversation.');
+}
+
+if (source.includes('Find the Right{')) {
+  throw new Error('Remove the old split mentorship hero headline.');
+}
+
 if (!source.includes("Tell Us Where You Are. We'll Help You Discover Where to Go Next.")) {
   throw new Error('Mentorship page should use the updated guidance headline.');
 }

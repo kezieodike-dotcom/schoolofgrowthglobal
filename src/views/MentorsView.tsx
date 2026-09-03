@@ -315,13 +315,13 @@ export const MentorsView: React.FC = () => {
         icon={<Users className="w-4 h-4" />}
         title={
           <>
-            Find the Right{' '}
+            Find the Right Guidance &{' '}
             <span className="bg-gradient-to-r from-amber-500 via-amber-600 to-amber-700 bg-clip-text text-transparent">
-              Growth Expert
+              Growth Expert You Need
             </span>
           </>
         }
-        subtitle="Consult, strategize, mentor and transform with carefully selected professionals, consultants, executives, entrepreneurs, business leaders and growth specialists."
+        subtitle="Every season of life, career, and business comes with different questions. Our consultation and mentorship experiences are designed to meet you where you are and help you move forward with greater clarity, confidence, and strategy. Not sure which option is right for you? Start with a conversation. Tell us what you're facing, what you're trying to achieve, and where you need help. We'll help you identify the right pathway for your growth."
       />
 
       <section className="bg-white border-b border-slate-200">
