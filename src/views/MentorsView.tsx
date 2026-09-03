@@ -36,7 +36,6 @@ import {
   MENTORSHIP_LADDER,
   MENTORSHIP_PRICING_BANDS,
   MENTORSHIP_SERVICE_MODEL,
-  REVENUE_SPLIT,
   formatPriceRange,
   type GrowthDivision,
   type LadderItem,
@@ -343,25 +342,17 @@ export const MentorsView: React.FC = () => {
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.1fr] gap-6 items-start">
             <div className="rounded-3xl bg-slate-950 text-white border border-slate-800 p-6 sm:p-8">
               <p className="text-[11px] font-mono uppercase tracking-wider text-amber-300">
-                Service architecture
+                Growth direction
               </p>
               <h2 className="mt-3 text-2xl sm:text-3xl font-serif font-bold leading-tight">
-                Clients should not struggle to know what to buy.
+                Tell Us Where You Are. We'll Help You Discover Where to Go Next.
               </h2>
               <p className="mt-3 text-sm text-slate-300 leading-relaxed">
-                Start with clarity, move into strategy, continue through mentorship,
-                and scale into transformation. Prices are guided by expertise,
-                complexity, client type and measurable value.
+                Whether you need clarity, direction, strategy, accountability, or someone
+                experienced to walk with you, we're here to help you identify where you
+                are, understand where you want to go, and create a practical path to get
+                there.
               </p>
-              <div className="mt-6 rounded-2xl bg-white/10 border border-white/10 p-4">
-                <p className="text-sm font-bold text-white">Revenue split</p>
-                <p className="mt-1 text-xs text-slate-300 leading-relaxed">
-                  Experts receive {REVENUE_SPLIT.expertPercent}% of every paid
-                  consultation or mentorship engagement. School of Growth Global
-                  retains {REVENUE_SPLIT.companyPercent}% for platform, brand,
-                  operations and client support.
-                </p>
-              </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -935,12 +926,6 @@ const ConsultationRequestModal: React.FC<{
               placeholder="Describe the business, career, leadership, personal or organizational issue you want to solve."
             />
           </RequestField>
-
-          <div className="sm:col-span-2 rounded-xl border border-amber-200 bg-amber-50 p-4 text-xs leading-relaxed text-amber-950">
-            Experts receive {REVENUE_SPLIT.expertPercent}% of paid consultation or mentorship
-            revenue. School of Growth Global receives {REVENUE_SPLIT.companyPercent}% for
-            marketplace, support and operations.
-          </div>
 
           {status === 'sent' && (
             <div className="sm:col-span-2 rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-xs font-semibold text-emerald-800">

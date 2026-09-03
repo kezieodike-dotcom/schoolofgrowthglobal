@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { adminLogin } from '../../lib/adminApi';
-import { Lock, Loader2, AlertCircle, ArrowLeft } from 'lucide-react';
+import { Lock, Loader2, AlertCircle, ArrowLeft, Eye, EyeOff } from 'lucide-react';
 
 /** Password gate. The real check is server-side; this only collects it. */
 export const AdminLoginView: React.FC = () => {
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
@@ -54,16 +55,30 @@ export const AdminLoginView: React.FC = () => {
             >
               Admin password
             </label>
-            <input
-              id="admin-password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              autoFocus
-              autoComplete="current-password"
-              className="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white text-sm focus:outline-none focus:border-amber-500 transition-colors"
-            />
+            <div className="relative">
+              <input
+                id="admin-password"
+                type={showPassword ? 'text' : 'password'}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                autoFocus
+                autoComplete="current-password"
+                className="w-full bg-slate-950 border border-slate-700 rounded-xl py-3 pl-3 pr-11 text-white text-sm focus:outline-none focus:border-amber-500 transition-colors"
+              />
+              <button
+                type="button"
+                aria-label={showPassword ? 'Hide admin password' : 'Show admin password'}
+                onClick={() => setShowPassword((value) => !value)}
+                className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-500/60 transition-colors"
+              >
+                {showPassword ? (
+                  <EyeOff className="w-4 h-4 mx-auto" />
+                ) : (
+                  <Eye className="w-4 h-4 mx-auto" />
+                )}
+              </button>
+            </div>
           </div>
 
           {error && (

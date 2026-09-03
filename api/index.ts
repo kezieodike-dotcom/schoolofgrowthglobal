@@ -1,5 +1,6 @@
 import express from "express";
 import { loadServerEnv } from "../src/server/loadEnv.js";
+import { createAdminRouter, requireAdmin } from "../src/server/adminRoutes.js";
 
 loadServerEnv();
 
@@ -33,6 +34,7 @@ export const config = {
 type RawBodyRequest = express.Request & { rawBody?: Buffer };
 
 const app = express();
+const adminRouter = createAdminRouter();
 
 function captureRawBody(req: RawBodyRequest, _res: express.Response, buf: Buffer) {
   req.rawBody = buf;
@@ -63,7 +65,6 @@ async function loadApiRouter(): Promise<express.Router> {
     apiRouterPromise = Promise.all([
       import("../src/server/aiRoutes.js"),
       import("../src/server/paymentRoutes.js"),
-      import("../src/server/adminRoutes.js"),
       import("../src/server/mentorRoutes.js"),
       import("../src/server/leadRoutes.js"),
       import("../src/server/messageRoutes.js"),
@@ -74,7 +75,6 @@ async function loadApiRouter(): Promise<express.Router> {
       ([
         aiRoutes,
         paymentRoutes,
-        adminRoutes,
         mentorRoutes,
         leadRoutes,
         messageRoutes,
@@ -85,11 +85,10 @@ async function loadApiRouter(): Promise<express.Router> {
         const router = express.Router();
         router.use(aiRoutes.createAIRouter());
         router.use(paymentRoutes.createPaymentRouter());
-        router.use(adminRoutes.createAdminRouter());
-        router.use(mentorRoutes.createMentorRouter(adminRoutes.requireAdmin));
-        router.use(leadRoutes.createLeadRouter(adminRoutes.requireAdmin));
-        router.use(messageRoutes.createMessageRouter(adminRoutes.requireAdmin));
-        router.use(contentRoutes.createContentRouter(adminRoutes.requireAdmin));
+        router.use(mentorRoutes.createMentorRouter(requireAdmin));
+        router.use(leadRoutes.createLeadRouter(requireAdmin));
+        router.use(messageRoutes.createMessageRouter(requireAdmin));
+        router.use(contentRoutes.createContentRouter(requireAdmin));
         router.use(demoReviewerRoutes.createDemoReviewerRouter());
         router.use(mentorReviewRoutes.createMentorReviewRouter());
         return router;
@@ -108,6 +107,8 @@ async function lazyApi(req: express.Request, res: express.Response, next: expres
   }
 }
 
+app.use("/api", adminRouter);
+app.use(adminRouter);
 app.use("/api", lazyApi);
 app.use(lazyApi);
 

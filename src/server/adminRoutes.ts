@@ -54,6 +54,18 @@ const SESSION_HOURS = 8;
 
 const b64url = (buf: Buffer) => buf.toString("base64url");
 
+function normalizePassword(value: string): string {
+  return value.trim();
+}
+
+export function adminPasswordMatches(supplied: string, configured: string): boolean {
+  const normalizedSupplied = normalizePassword(supplied);
+  const normalizedConfigured = normalizePassword(configured);
+  const a = crypto.createHash("sha256").update(normalizedSupplied).digest();
+  const b = crypto.createHash("sha256").update(normalizedConfigured).digest();
+  return crypto.timingSafeEqual(a, b);
+}
+
 function issueToken(): { token: string; expiresAt: string } {
   const expiresAt = new Date(Date.now() + SESSION_HOURS * 3600_000);
   const payload = b64url(
@@ -269,13 +281,8 @@ export function createAdminRouter(): Router {
     }
 
     const supplied = String(req.body?.password ?? "");
-    // Hashed before comparing so both buffers are the same length whatever
-    // was typed - timingSafeEqual throws on a length mismatch, and the
-    // mismatch itself would leak the password's length.
-    const a = crypto.createHash("sha256").update(supplied).digest();
-    const b = crypto.createHash("sha256").update(configured).digest();
 
-    if (!crypto.timingSafeEqual(a, b)) {
+    if (!adminPasswordMatches(supplied, configured)) {
       return res.status(401).json({ error: "That password is not correct." });
     }
 

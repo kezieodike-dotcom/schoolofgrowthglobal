@@ -19,7 +19,6 @@ if (apiIndex.includes("runtime: 'nodejs'") || apiIndex.includes('runtime: "nodej
 for (const moduleName of [
   'aiRoutes',
   'paymentRoutes',
-  'adminRoutes',
   'mentorRoutes',
   'leadRoutes',
   'messageRoutes',
@@ -32,6 +31,14 @@ for (const moduleName of [
     'm'
   );
   if (staticImportPattern.test(apiIndex)) {
-    throw new Error(`api/index.ts should lazy-load ${moduleName} so simple Vercel probes can still answer.`);
+    throw new Error(`api/index.ts should not statically import ${moduleName}; simple Vercel probes must stay isolated.`);
   }
+}
+
+if (!apiIndex.includes('import { createAdminRouter, requireAdmin } from "../src/server/adminRoutes.js";')) {
+  throw new Error('Vercel should statically import only the lightweight admin router so login is bundled.');
+}
+
+if (apiIndex.includes('import("../src/server/adminRoutes.js")')) {
+  throw new Error('The general API router should reuse the static admin middleware, not lazy-load adminRoutes twice.');
 }
