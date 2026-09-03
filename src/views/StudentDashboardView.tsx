@@ -871,7 +871,7 @@ const CoursesTab: React.FC<{
                 <img
                   src={course.heroImage}
                   alt=""
-                  className="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-500"
+                  className="w-full h-full object-cover opacity-80 transition-transform duration-500"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-900/70 to-transparent" />
               </div>
@@ -1125,7 +1125,7 @@ const MessagesTab: React.FC<{
               <button
                 key={mentor.id}
                 onClick={() => setSelectedId(mentor.id)}
-                className={`w-full p-4 text-left flex items-center gap-3 transition-all active:scale-[0.99] ${
+                className={`w-full p-4 text-left flex items-center gap-3 transition-all ${
                   selectedId === mentor.id ? 'bg-amber-50' : 'hover:bg-slate-50'
                 }`}
               >
@@ -1594,7 +1594,7 @@ const AiCoachTab: React.FC<{
                 {[0, 150, 300].map((delay) => (
                   <span
                     key={delay}
-                    className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-bounce"
+                    className="w-1.5 h-1.5 rounded-full bg-amber-500"
                     style={{ animationDelay: `${delay}ms` }}
                   />
                 ))}

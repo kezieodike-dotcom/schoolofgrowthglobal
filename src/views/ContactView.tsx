@@ -126,7 +126,7 @@ export const ContactView: React.FC = () => {
                 className="w-full py-3 bg-amber-500 hover:bg-amber-400 disabled:opacity-60 disabled:cursor-not-allowed text-slate-950 font-bold rounded-xl text-sm flex items-center justify-center gap-2 transition-colors"
               >
                 {sending
-                  ? <><Loader2 className="w-4 h-4 animate-spin" /> Sending...</>
+                  ? <><Loader2 className="w-4 h-4" /> Sending...</>
                   : <><Send className="w-4 h-4" /> Send Message</>}
               </button>
             </form>

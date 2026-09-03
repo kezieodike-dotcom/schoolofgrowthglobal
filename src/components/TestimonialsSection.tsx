@@ -1,5 +1,4 @@
 import React from 'react';
-import { motion } from 'motion/react';
 import { TestimonialsColumn } from '@/components/ui/testimonials-columns-1';
 import { USER_TESTIMONIALS } from '../data/mockData';
 
@@ -11,13 +10,7 @@ export const TestimonialsSection: React.FC = () => {
   return (
     <section className="bg-white py-20 relative border-y border-slate-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-          viewport={{ once: true }}
-          className="flex flex-col items-center justify-center max-w-[540px] mx-auto text-center"
-        >
+        <div className="flex flex-col items-center justify-center max-w-[540px] mx-auto text-center">
           <span className="text-xs font-mono uppercase tracking-widest text-amber-600">
             Proven Global Outcomes
           </span>
@@ -27,7 +20,7 @@ export const TestimonialsSection: React.FC = () => {
           <p className="text-center mt-4 text-sm text-slate-500">
             Hear from Managing Directors, Founders, and C-Suite alumni who scaled global impact with our frameworks.
           </p>
-        </motion.div>
+        </div>
 
         <div className="flex justify-center gap-6 mt-12 [mask-image:linear-gradient(to_bottom,transparent,black_25%,black_75%,transparent)] max-h-[740px] overflow-hidden text-slate-700 text-sm">
           <TestimonialsColumn testimonials={firstColumn} duration={15} />

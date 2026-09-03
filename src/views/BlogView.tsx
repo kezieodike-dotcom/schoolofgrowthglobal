@@ -68,7 +68,7 @@ const Article: React.FC<{ slug: string; posts: BlogPost[] }> = ({ slug, posts })
           </p>
         </div>
 
-        <div className="motion-card mt-10 p-6 rounded-2xl bg-white shadow-sm border border-amber-300 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="mt-10 p-6 rounded-2xl bg-white shadow-sm border border-amber-300 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm text-slate-600">Want the applied version, with tools and mentorship?</p>
           <Link to="/courses" className="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs whitespace-nowrap">
             Explore Programs
@@ -77,10 +77,10 @@ const Article: React.FC<{ slug: string; posts: BlogPost[] }> = ({ slug, posts })
 
         {/* Related */}
         <h3 className="mt-14 mb-6 text-xl font-serif font-bold text-slate-900">Related Insights</h3>
-        <div className="motion-card-grid grid grid-cols-1 sm:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
           {related.map((r) => (
-            <Link key={r.id} to={`/blog/${r.slug}`} className="motion-card group">
-              <img src={r.image} alt={r.title} className="motion-card-image w-full h-28 object-cover rounded-xl border border-slate-200 opacity-80" />
+            <Link key={r.id} to={`/blog/${r.slug}`} className="group">
+              <img src={r.image} alt={r.title} className="w-full h-28 object-cover rounded-xl border border-slate-200 opacity-80" />
               <span className="mt-2 block text-[10px] font-mono text-amber-600">{r.category}</span>
               <h4 className="text-sm font-serif font-bold text-slate-900 group-hover:text-amber-700 transition-colors leading-snug">
                 {r.title}
@@ -117,9 +117,9 @@ export const BlogView: React.FC = () => {
         {/* Featured post */}
         <Link
           to={`/blog/${featured.slug}`}
-          className="motion-card motion-card-orbit group grid grid-cols-1 lg:grid-cols-2 gap-8 items-center mb-14 p-6 rounded-3xl bg-white shadow-sm border border-slate-200 hover:border-amber-400 transition-all"
+          className="group grid grid-cols-1 lg:grid-cols-2 gap-8 items-center mb-14 p-6 rounded-3xl bg-white shadow-sm border border-slate-200 hover:border-amber-400 transition-all"
         >
-          <img src={featured.image} alt={featured.title} className="motion-card-image w-full h-64 object-cover rounded-2xl border border-slate-200 opacity-90" />
+          <img src={featured.image} alt={featured.title} className="w-full h-64 object-cover rounded-2xl border border-slate-200 opacity-90" />
           <div className="space-y-3">
             <span className="text-[10px] font-mono px-2.5 py-1 rounded bg-amber-500 text-slate-950 font-bold">FEATURED</span>
             <h2 className="text-2xl sm:text-3xl font-serif font-bold text-slate-900 group-hover:text-amber-700 transition-colors">
@@ -151,15 +151,15 @@ export const BlogView: React.FC = () => {
           ))}
         </div>
 
-        <div className="motion-card-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="scroll-card-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {posts.map((post) => (
             <Link
               key={post.id}
               to={`/blog/${post.slug}`}
-              className="motion-card group bg-white shadow-sm border border-slate-200 rounded-2xl overflow-hidden flex flex-col hover:border-amber-400 transition-all"
+              className="scroll-card group bg-white shadow-sm border border-slate-200 rounded-2xl overflow-hidden flex flex-col hover:border-amber-400 transition-all"
             >
               <div className="h-40 overflow-hidden">
-                <img src={post.image} alt={post.title} className="motion-card-image w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-500" />
+                <img src={post.image} alt={post.title} className="scroll-card-image w-full h-full object-cover opacity-80 transition-transform duration-500" />
               </div>
               <div className="p-5 flex flex-col flex-1">
                 <span className="text-[10px] font-mono text-amber-600 flex items-center gap-1 mb-2">

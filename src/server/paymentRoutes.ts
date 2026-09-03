@@ -10,6 +10,13 @@ import {
 } from "../lib/pricing.js";
 import { BOOKS } from "../data/mockData.js";
 import { calculateBookRevenueSplit, type BookPurchase } from "../lib/bookRevenue.js";
+import {
+  findDonationFund,
+  isDonationFundId,
+  minimumDonationKobo,
+  parseDonationAmount,
+  type DonationPayment,
+} from "../lib/donations.js";
 import { mergeContent } from "../lib/content.js";
 import { listContent } from "./contentStore.js";
 import type { BookItem } from "../types.js";
@@ -91,7 +98,11 @@ interface PaystackTransaction {
     itemKind?: string;
     bookId?: string;
     bookTitle?: string;
+    donationFund?: string;
+    donationFundName?: string;
+    donorNote?: string;
     name?: string;
+    phone?: string;
     mentorId?: string;
   } | null;
 }
@@ -150,6 +161,21 @@ function purchaseFor(book: BookItem, tx: PaystackTransaction): BookPurchase {
   };
 }
 
+function donationPaymentFor(tx: PaystackTransaction): DonationPayment {
+  const fund = findDonationFund(tx.metadata?.donationFund);
+  return {
+    reference: tx.reference,
+    email: tx.customer?.email ?? "",
+    name: tx.metadata?.name,
+    phone: tx.metadata?.phone,
+    fundId: fund.id,
+    fundName: tx.metadata?.donationFundName ?? fund.name,
+    amountKobo: tx.amount,
+    currency: tx.currency,
+    donorNote: tx.metadata?.donorNote,
+  };
+}
+
 export function createPaymentRouter(): Router {
   const router = Router();
 
@@ -169,10 +195,22 @@ export function createPaymentRouter(): Router {
   /**
    * Starts a payment. Body: { plan, email, name?, phone?, referral?, mentorId? }
    * or { bookId, email, name?, phone?, referral? }
+   * or { donationFund, donationAmount, email, name?, phone?, donorNote? }
    * Returns Paystack's hosted checkout URL for the browser to visit.
    */
   router.post("/payments/initialize", async (req, res) => {
-    const { plan: planCode, bookId, email, name, phone, referral, mentorId } = req.body ?? {};
+    const {
+      plan: planCode,
+      bookId,
+      donationFund,
+      donationAmount,
+      email,
+      name,
+      phone,
+      referral,
+      mentorId,
+      donorNote,
+    } = req.body ?? {};
 
     // Deliberately loose: full RFC-compliant validation belongs to Paystack,
     // which rejects undeliverable addresses. This only catches obvious typos
@@ -189,18 +227,33 @@ export function createPaymentRouter(): Router {
     }
 
     try {
+      const donationAmountKobo =
+        donationFund || donationAmount
+          ? parseDonationAmount(donationAmount)
+          : null;
+      const donation =
+        donationFund || donationAmount
+          ? findDonationFund(isDonationFundId(donationFund) ? donationFund : "where-needed")
+          : null;
+
+      if (donation && !donationAmountKobo) {
+        return res.status(400).json({
+          error: `Donation amount must be at least ${formatNaira(minimumDonationKobo)}.`,
+        });
+      }
+
       const book =
         typeof bookId === "string" && bookId.trim()
           ? await findPublishedBook(bookId.trim())
           : null;
       const plan = isPlanCode(planCode) ? PLANS[planCode] : null;
 
-      if (!plan && !book) {
+      if (!plan && !book && !donation) {
         return res.status(400).json({ error: bookId ? "Unknown book." : "Unknown plan." });
       }
 
-      const amountKobo = book ? book.priceKobo : plan!.amountKobo;
-      const title = book ? book.title : plan!.name;
+      const amountKobo = donation ? donationAmountKobo! : book ? book.priceKobo : plan!.amountKobo;
+      const title = donation ? donation.name : book ? book.title : plan!.name;
 
       const data = await paystack<{ authorization_url: string; reference: string }>(
         "/transaction/initialize",
@@ -214,7 +267,8 @@ export function createPaymentRouter(): Router {
             callback_url: callbackUrl(req),
             metadata: {
               plan: plan?.code,
-              itemKind: book ? "book" : "plan",
+              // itemKind: donation is the discriminator used by verification.
+              itemKind: donation ? "donation" : book ? "book" : "plan",
               bookId: book?.id,
               bookTitle: book?.title,
               bookOwnerName: book?.ownerName,
@@ -222,6 +276,9 @@ export function createPaymentRouter(): Router {
               bookOwnerType: book?.ownerType,
               companyShareKobo: book ? calculateBookRevenueSplit(book.priceKobo).companyShareKobo : undefined,
               ownerShareKobo: book ? calculateBookRevenueSplit(book.priceKobo).ownerShareKobo : undefined,
+              donationFund: donation?.id,
+              donationFundName: donation?.name,
+              donorNote: typeof donorNote === "string" ? donorNote : undefined,
               name: typeof name === "string" ? name : undefined,
               phone: typeof phone === "string" ? phone : undefined,
               referral: typeof referral === "string" ? referral : undefined,
@@ -230,8 +287,8 @@ export function createPaymentRouter(): Router {
               mentorId: plan && typeof mentorId === "string" ? mentorId : undefined,
               custom_fields: [
                 {
-                  display_name: book ? "Book" : "Plan",
-                  variable_name: book ? "book" : "plan",
+                  display_name: donation ? "Donation fund" : book ? "Book" : "Plan",
+                  variable_name: donation ? "donation" : book ? "book" : "plan",
                   value: `${title} - ${formatNaira(amountKobo)}`,
                 },
               ],
@@ -302,6 +359,25 @@ export function createPaymentRouter(): Router {
         }
 
         return res.json({ paid: true, purchase: purchaseFor(book, tx) });
+      }
+
+      if (tx.metadata?.itemKind === "donation") {
+        if (tx.amount < minimumDonationKobo || tx.currency !== CURRENCY) {
+          console.error(
+            `Donation transaction ${reference} paid ${tx.amount} ${tx.currency}, ` +
+              `expected at least ${minimumDonationKobo} ${CURRENCY}.`
+          );
+          return res.status(422).json({
+            error:
+              "Your donation amount could not be matched. Please contact infoschoolofgrowth@gmail.com with your reference.",
+          });
+        }
+
+        return res.json({
+          paid: true,
+          kind: "donation-paid",
+          donation: donationPaymentFor(tx),
+        });
       }
 
       const planCode = tx.metadata?.plan;
@@ -390,7 +466,7 @@ export function createPaymentRouter(): Router {
       console.log(
         `[paystack] charge.success ${tx.reference} - ${tx.customer?.email} ` +
           `paid ${tx.amount} ${tx.currency} for ${tx.metadata?.itemKind ?? "plan"} ` +
-          `"${tx.metadata?.bookId ?? tx.metadata?.plan}".`
+          `"${tx.metadata?.bookId ?? tx.metadata?.donationFund ?? tx.metadata?.plan}".`
       );
     }
 

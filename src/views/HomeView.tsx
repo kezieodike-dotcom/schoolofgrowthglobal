@@ -66,13 +66,13 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
         <div className="absolute inset-0 bg-[linear-gradient(115deg,rgba(15,23,42,0.82)_0%,rgba(15,23,42,0.55)_48%,rgba(15,23,42,0.18)_100%)] lg:hidden"></div>
 
         {/* Subtle background glow */}
-        <div className="motion-orbit-drift absolute top-1/4 left-1/2 hidden h-[400px] w-[800px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-amber-50 blur-[120px] pointer-events-none lg:block"></div>
+        <div className="absolute top-1/4 left-1/2 hidden h-[400px] w-[800px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-amber-50 blur-[120px] pointer-events-none lg:block"></div>
 
         <div className="relative z-10 mx-auto flex min-h-[calc(100dvh-11rem)] max-w-7xl items-end px-4 sm:min-h-[calc(100dvh-12rem)] sm:px-6 lg:block lg:min-h-0 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
 
             {/* Left Copy */}
-            <div className="motion-soft-reveal max-w-[37rem] space-y-5 pb-5 sm:space-y-6 lg:col-span-7 lg:max-w-none lg:pb-0">
+            <div className="max-w-[37rem] space-y-5 pb-5 sm:space-y-6 lg:col-span-7 lg:max-w-none lg:pb-0">
 
               <div className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/12 px-3 py-1.5 text-[11px] font-medium text-amber-100 backdrop-blur-md sm:px-3.5 lg:border-amber-300 lg:bg-white lg:text-xs lg:text-amber-700 lg:font-mono lg:backdrop-blur-none">
                 <Crown className="w-3.5 h-3.5 text-amber-200 lg:text-amber-600" />
@@ -94,7 +94,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
               <div className="flex flex-col gap-3 pt-1 sm:flex-row sm:flex-wrap sm:items-center lg:gap-4 lg:pt-2">
                 <Link
                   to="/courses"
-                  className="motion-accent-sweep flex w-full items-center justify-center gap-2 rounded-xl bg-amber-400 px-5 py-3 text-sm font-semibold text-slate-950 shadow-xl shadow-slate-950/25 transition-all hover:bg-amber-300 active:scale-[0.98] sm:w-auto lg:bg-gradient-to-r lg:from-amber-400 lg:via-amber-500 lg:to-amber-600 lg:shadow-amber-500/20 lg:hover:brightness-110 lg:hover:-translate-y-0.5"
+                  className="flex w-full items-center justify-center gap-2 rounded-xl bg-amber-400 px-5 py-3 text-sm font-semibold text-slate-950 shadow-xl shadow-slate-950/25 transition-all hover:bg-amber-300 sm:w-auto lg:bg-gradient-to-r lg:from-amber-400 lg:via-amber-500 lg:to-amber-600 lg:shadow-amber-500/20 lg:hover:brightness-110"
                 >
                   <span>Explore Programs</span>
                   <ArrowRight className="w-4 h-4" />
@@ -108,7 +108,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
                 */}
                 <Link
                   to="/pricing"
-                  className="flex w-full items-center justify-center gap-2 rounded-xl border border-white/25 bg-white/12 px-5 py-3 text-sm font-medium text-white backdrop-blur-md transition-all hover:bg-white/18 active:scale-[0.98] sm:w-auto lg:border-slate-300 lg:bg-white lg:text-slate-700 lg:backdrop-blur-none lg:hover:bg-slate-100"
+                  className="flex w-full items-center justify-center gap-2 rounded-xl border border-white/25 bg-white/12 px-5 py-3 text-sm font-medium text-white backdrop-blur-md transition-all hover:bg-white/18 sm:w-auto lg:border-slate-300 lg:bg-white lg:text-slate-700 lg:backdrop-blur-none lg:hover:bg-slate-100"
                 >
                   <UserPlus className="w-4 h-4 text-amber-200 lg:text-amber-600" />
                   <span>Enrol Now</span>
@@ -134,23 +134,23 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
             </div>
 
             {/* Right Hero Visual Card */}
-            <div className="motion-soft-reveal motion-soft-reveal-delay-1 hidden lg:col-span-5 lg:block">
-              <div className="motion-card motion-card-orbit relative rounded-2xl overflow-hidden border border-slate-200 shadow-2xl bg-white group">
+            <div className="hidden lg:col-span-5 lg:block">
+              <div className="relative rounded-2xl overflow-hidden border border-slate-200 shadow-2xl bg-white group">
                 <img
                   src="/scenes/hero-team.jpg"
                   alt="A team reviewing growth dashboards together in a modern office"
-                  className="w-full aspect-square sm:aspect-auto sm:h-[460px] object-cover object-center group-hover:scale-105 transition-transform duration-700"
+                  className="w-full aspect-square sm:aspect-auto sm:h-[460px] object-cover object-center transition-transform duration-700"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
 
                 {/* Overlaid Badge Card */}
-                <div className="motion-float-lift absolute bottom-3 left-3 right-3 p-3 space-y-1.5 sm:bottom-6 sm:left-6 sm:right-6 sm:p-5 sm:space-y-3 rounded-xl bg-slate-950/90 backdrop-blur-md border border-slate-800/90">
+                <div className="absolute bottom-3 left-3 right-3 p-3 space-y-1.5 sm:bottom-6 sm:left-6 sm:right-6 sm:p-5 sm:space-y-3 rounded-xl bg-slate-950/90 backdrop-blur-md border border-slate-800/90">
                   <div className="flex items-center justify-between">
                     <span className="text-[9px] sm:text-[10px] font-mono uppercase tracking-widest text-amber-400 font-bold bg-amber-500/10 px-1.5 sm:px-2 py-0.5 rounded border border-amber-500/20">
                       FEATURED COHORT
                     </span>
                     <span className="text-[10px] sm:text-xs font-mono text-emerald-400 flex items-center gap-1">
-                      <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                      <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
                       4 Seats Left
                     </span>
                   </div>
@@ -172,7 +172,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
                       className="text-[10px] sm:text-xs text-amber-400 font-bold hover:text-amber-300 flex items-center gap-1 group/link"
                     >
                       <span>View Curriculum</span>
-                      <ChevronRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 group-hover/link:translate-x-0.5 transition-transform" />
+                      <ChevronRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform" />
                     </button>
                   </div>
                 </div>
@@ -195,7 +195,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
       </section>
 
       {/* Interactive Growth AI Teaser Section */}
-      <section className="motion-soft-reveal motion-soft-reveal-delay-2 py-12 sm:py-16 bg-white border-y border-slate-200">
+      <section className="py-12 sm:py-16 bg-white border-y border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
 
@@ -215,7 +215,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
 
               <button
                 onClick={() => onNavigate('command-center')}
-                className="px-4 py-2.5 sm:px-5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-semibold text-xs flex items-center gap-2 transition-colors active:scale-[0.98]"
+                className="px-4 py-2.5 sm:px-5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-semibold text-xs flex items-center gap-2 transition-colors"
               >
                 <Terminal className="w-4 h-4" />
                 <span>Launch Full Command Center</span>
@@ -247,7 +247,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
                     className="absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-semibold text-xs rounded-lg transition-colors flex items-center gap-1 disabled:opacity-60"
                   >
                     {aiLoading ? (
-                      <Sparkles className="w-3.5 h-3.5 animate-spin" />
+                      <Sparkles className="w-3.5 h-3.5" />
                     ) : (
                       <>
                         <span>Ask</span>
@@ -259,7 +259,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
               </form>
 
               {aiAnswer && (
-                <div className="mt-4 p-4 rounded-xl bg-slate-900/90 border border-slate-800 text-xs text-slate-200 leading-relaxed space-y-2 animate-fadeIn">
+                <div className="mt-4 p-4 rounded-xl bg-slate-900/90 border border-slate-800 text-xs text-slate-200 leading-relaxed space-y-2">
                   <div className="font-mono text-amber-400 font-bold flex items-center gap-2">
                     <Sparkles className="w-3.5 h-3.5" />
                     <span>Growth AI Strategic Brief:</span>
@@ -277,7 +277,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
       <TestimonialsSection />
 
       {/* Meet Our Team */}
-      <section className="motion-soft-reveal motion-soft-reveal-delay-2 py-14 sm:py-18 bg-slate-50 border-t border-slate-200">
+      <section className="py-14 sm:py-18 bg-slate-50 border-t border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between mb-8 sm:mb-10">
             <div className="max-w-2xl space-y-3">
@@ -295,24 +295,24 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
             </div>
             <Link
               to="/about"
-              className="inline-flex w-fit items-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-800 transition-colors hover:border-amber-300 hover:text-amber-700 active:scale-[0.98]"
+              className="inline-flex w-fit items-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-800 transition-colors hover:border-amber-300 hover:text-amber-700"
             >
               <span>View Full Team</span>
               <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
 
-          <div className="motion-card-grid grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {featuredTeam.map((member) => (
               <article
                 key={member.id}
-                className="motion-card group overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm transition-all hover:-translate-y-1 hover:border-amber-300 hover:shadow-xl hover:shadow-slate-900/5"
+                className="group overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm transition-all hover:border-amber-300 hover:shadow-xl hover:shadow-slate-900/5"
               >
                 <div className="aspect-[4/3] overflow-hidden bg-slate-100">
                   <img
                     src={member.avatar}
                     alt={member.name}
-                    className="motion-card-image h-full w-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
+                    className="h-full w-full object-cover object-center transition-transform duration-500"
                   />
                 </div>
                 <div className="p-5 space-y-3">

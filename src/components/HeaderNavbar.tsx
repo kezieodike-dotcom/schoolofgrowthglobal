@@ -17,6 +17,7 @@ const NAV_ITEMS: { to: string; label: string }[] = [
   { to: '/jobs', label: 'Career Jobs' },
   { to: '/events', label: 'Events' },
   { to: '/blog', label: 'Insights' },
+  { to: '/donate', label: 'Donate' },
   { to: '/about', label: 'About' },
 ];
 
@@ -34,7 +35,7 @@ export const HeaderNavbar: React.FC = () => {
     }`;
 
   return (
-    <header className="sticky top-0 z-50 bg-slate-950/90 backdrop-blur-md border-b border-slate-800 text-slate-100">
+    <header className="sticky top-0 z-[80] bg-slate-950/90 backdrop-blur-md border-b border-slate-800 text-slate-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           {/* Logo Brand */}
@@ -42,7 +43,7 @@ export const HeaderNavbar: React.FC = () => {
             <img
               src="/logo.jpg"
               alt="School of Growth Global crest"
-              className="w-11 h-11 rounded-xl object-cover ring-1 ring-amber-500/30 shadow-lg shadow-amber-500/20 group-hover:scale-105 transition-transform duration-200"
+              className="w-11 h-11 rounded-xl object-cover ring-1 ring-amber-500/30 shadow-lg shadow-amber-500/20 transition-transform duration-200"
             />
             <div>
               <div className="flex items-center">
@@ -90,8 +91,11 @@ export const HeaderNavbar: React.FC = () => {
           <div className="flex lg:hidden items-center gap-2">
             <ContentNotificationCenter />
             <button
+              type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="p-2 rounded-lg bg-slate-900 text-slate-300 border border-slate-800"
+              aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
+              aria-expanded={mobileMenuOpen}
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>

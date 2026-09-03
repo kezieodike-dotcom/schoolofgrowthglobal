@@ -62,11 +62,11 @@ export const BooksView: React.FC = () => {
 
       {featured && (
         <section className="bg-white border-b border-slate-200">
-          <div className="motion-card-grid max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 grid grid-cols-1 lg:grid-cols-[260px_1fr_260px] gap-6 items-center">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 grid grid-cols-1 lg:grid-cols-[260px_1fr_260px] gap-6 items-center">
             <img
               src={featured.coverImage || '/scenes/hero-team.jpg'}
               alt={featured.title}
-              className="motion-card motion-card-image h-64 w-full object-cover rounded-lg border border-slate-200"
+              className="h-64 w-full object-cover rounded-lg border border-slate-200"
             />
             <div>
               <p className="text-[11px] font-mono uppercase tracking-wider text-amber-700">
@@ -121,7 +121,7 @@ export const BooksView: React.FC = () => {
           </div>
         </div>
 
-        <div className="motion-card-grid grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
           {books.map((book) => (
             <BookCard key={book.id} book={book} />
           ))}
@@ -140,11 +140,11 @@ export const BooksView: React.FC = () => {
 };
 
 const BookCard: React.FC<{ book: BookItem }> = ({ book }) => (
-  <article className="motion-card group bg-white border border-slate-200 rounded-lg overflow-hidden shadow-sm flex flex-col">
+  <article className="group bg-white border border-slate-200 rounded-lg overflow-hidden shadow-sm flex flex-col">
     <img
       src={book.coverImage || '/scenes/hero-team.jpg'}
       alt={book.title}
-      className="motion-card-image h-56 w-full object-cover"
+      className="h-56 w-full object-cover"
     />
     <div className="p-5 flex-1 flex flex-col">
       <div className="flex items-start justify-between gap-3">
@@ -181,7 +181,7 @@ const BookPurchasePanel: React.FC<{ book: BookItem; compact?: boolean }> = ({ bo
   const split = calculateBookRevenueSplit(book.priceKobo);
 
   return (
-    <div className={compact ? 'motion-card rounded-lg bg-slate-950 text-white p-5' : 'space-y-3'}>
+    <div className={compact ? 'rounded-lg bg-slate-950 text-white p-5' : 'space-y-3'}>
       <div className="flex items-end justify-between gap-3">
         <div>
           <p className={`text-[10px] font-mono uppercase tracking-wider ${compact ? 'text-slate-400' : 'text-slate-500'}`}>

@@ -147,7 +147,7 @@ export const MentorConversation: React.FC<{
       <div className="flex-1 overflow-y-auto p-4 space-y-3">
         {loading && (
           <div className="flex items-center justify-center gap-2 py-10 text-slate-400">
-            <Loader2 className="w-4 h-4 animate-spin" />
+            <Loader2 className="w-4 h-4" />
             <span className="text-xs">Opening conversation...</span>
           </div>
         )}
@@ -239,7 +239,7 @@ export const MentorConversation: React.FC<{
           aria-label="Send message"
         >
           {sending ? (
-            <Loader2 className="w-4 h-4 animate-spin" />
+            <Loader2 className="w-4 h-4" />
           ) : (
             <Send className="w-4 h-4" />
           )}

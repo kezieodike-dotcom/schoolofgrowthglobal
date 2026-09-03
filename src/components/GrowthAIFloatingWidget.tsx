@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { X, Send, Sparkles, Bot, User, ArrowUpRight, AlertTriangle } from 'lucide-react';
+import { X, Send, Sparkles, Bot, User, ArrowUpRight, AlertTriangle, ArrowLeft } from 'lucide-react';
 import { askGrowthAI, describeError, type ChatMessage } from '../lib/growthAI';
 import { useVoiceInput } from '../lib/useVoiceInput';
 import { useChatAutoScroll } from '../lib/useChatAutoScroll';
@@ -21,6 +21,44 @@ export const GrowthAIFloatingWidget: React.FC = () => {
   const voice = useVoiceInput({ value: input, onValueChange: setInput });
 
   const { containerRef, lastMessageRef } = useChatAutoScroll(messages, loading);
+
+  const openGrowthAI = () => {
+    if (!window.history.state?.growthAI) {
+      window.history.pushState({ growthAI: true }, '', window.location.href);
+    }
+    setIsOpen(true);
+  };
+
+  const closeGrowthAI = () => {
+    if (voice.listening) voice.stop();
+
+    if (window.history.state?.growthAI) {
+      window.history.back();
+      return;
+    }
+
+    setIsOpen(false);
+  };
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handlePopState = () => {
+      setIsOpen(false);
+    };
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') closeGrowthAI();
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isOpen, voice.listening]);
 
   const handleSend = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
@@ -57,19 +95,19 @@ export const GrowthAIFloatingWidget: React.FC = () => {
     <div
       className={
         isOpen
-          ? 'fixed inset-0 z-50 font-sans'
+          ? 'fixed inset-0 z-[120] font-sans'
           : 'fixed bottom-3 right-3 sm:bottom-6 sm:right-6 z-50 font-sans'
       }
     >
       {!isOpen ? (
         <button
           aria-label="Open Growth AI strategy advisor"
-          onClick={() => setIsOpen(true)}
-          className="group relative flex h-12 w-12 sm:h-auto sm:w-auto items-center justify-center sm:gap-3 sm:px-5 sm:py-3.5 rounded-full bg-slate-900 hover:bg-slate-800 text-white border border-amber-500/40 shadow-xl sm:shadow-2xl sm:shadow-amber-500/20 transition-all duration-300 hover:scale-105 active:scale-95"
+          onClick={openGrowthAI}
+          className="group relative flex h-12 w-12 sm:h-auto sm:w-auto items-center justify-center sm:gap-3 sm:px-5 sm:py-3.5 rounded-full bg-slate-900 hover:bg-slate-800 text-white border border-amber-500/40 shadow-xl sm:shadow-2xl sm:shadow-amber-500/20 transition-all duration-300"
         >
           <div className="relative">
             <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-tr from-amber-400 to-amber-600 flex items-center justify-center text-slate-950 font-bold">
-              <Sparkles className="w-4 h-4 animate-pulse" />
+              <Sparkles className="w-4 h-4" />
             </div>
             <span className="absolute -top-1 -right-1 w-3 h-3 bg-emerald-500 rounded-full border-2 border-slate-900"></span>
           </div>
@@ -86,7 +124,7 @@ export const GrowthAIFloatingWidget: React.FC = () => {
           
           {/* Header */}
           <div className="bg-slate-900 border-b border-slate-800">
-            <div className="max-w-5xl mx-auto w-full p-4 sm:px-6 flex items-center justify-between">
+            <div className="max-w-5xl mx-auto w-full p-3 sm:p-4 sm:px-6 flex items-center justify-between gap-3">
             <div className="flex items-center gap-3 min-w-0">
               <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-amber-400 to-amber-600 flex items-center justify-center text-slate-950">
                 <Bot className="w-5 h-5" />
@@ -94,14 +132,27 @@ export const GrowthAIFloatingWidget: React.FC = () => {
               <div className="min-w-0">
                 <h4 className="text-sm font-bold text-white flex items-center gap-2">
                   <span className="truncate">Growth AI Assistant</span>
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                  <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
                 </h4>
                 <p className="text-[10px] text-slate-400 font-mono truncate">Executive Intelligence Core v4.2</p>
               </div>
             </div>
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1.5 shrink-0">
+              <button
+                type="button"
+                onClick={closeGrowthAI}
+                className="inline-flex items-center gap-1.5 rounded-full border border-slate-700 bg-slate-950 px-3 py-1.5 text-xs font-bold text-slate-200 hover:border-amber-400 hover:text-amber-300 transition-colors"
+                aria-label="Back to main site"
+              >
+                <ArrowLeft className="w-3.5 h-3.5" />
+                <span>Back to site</span>
+              </button>
               <button
                 onClick={() => {
+                  if (voice.listening) voice.stop();
+                  if (window.history.state?.growthAI) {
+                    window.history.replaceState(null, '', window.location.href);
+                  }
                   setIsOpen(false);
                   navigate('/command-center');
                 }}
@@ -111,7 +162,7 @@ export const GrowthAIFloatingWidget: React.FC = () => {
                 <ArrowUpRight className="w-4 h-4" />
               </button>
               <button
-                onClick={() => setIsOpen(false)}
+                onClick={closeGrowthAI}
                 className="p-1.5 text-slate-400 hover:text-white transition-colors"
                 aria-label="Close Growth AI chat"
               >
@@ -163,7 +214,7 @@ export const GrowthAIFloatingWidget: React.FC = () => {
             ))}
             {loading && (
               <div className="flex items-center gap-2 text-slate-400 text-xs italic">
-                <Sparkles className="w-3.5 h-3.5 text-amber-400 animate-spin" />
+                <Sparkles className="w-3.5 h-3.5 text-amber-400" />
                 <span>Growth AI processing executive response...</span>
               </div>
             )}

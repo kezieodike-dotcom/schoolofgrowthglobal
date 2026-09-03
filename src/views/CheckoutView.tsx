@@ -225,7 +225,7 @@ export const CheckoutView: React.FC = () => {
                   >
                     {submitting ? (
                       <>
-                        <Loader2 className="w-4 h-4 animate-spin" />
+                        <Loader2 className="w-4 h-4" />
                         Opening secure checkout...
                       </>
                     ) : (

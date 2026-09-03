@@ -21,6 +21,7 @@
 @layer base {
   * {
     border-color: var(--color-border);
+    scroll-behavior: auto !important;
   }
 
   html {
@@ -39,84 +40,25 @@
 @keyframes soft-reveal {
   from {
     opacity: 0;
-    transform: translateY(18px);
+    transform: translate3d(0, 18px, 0);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translate3d(0, 0, 0);
   }
 }
 
-@keyframes orbit-drift {
-  0%,
-  100% {
-    opacity: 0.72;
-    filter: blur(110px);
-  }
-  50% {
-    opacity: 0.95;
-    filter: blur(135px);
-  }
-}
-
-@keyframes float-lift {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
-@keyframes accent-sweep {
-  0% {
-    background-position: 0% 50%;
-  }
-  100% {
-    background-position: 200% 50%;
-  }
-}
-
-@keyframes card-rise {
+@keyframes scroll-card-rise {
   from {
     opacity: 0;
-    transform: translateY(42px) scale(0.96) rotateX(7deg);
+    transform: translate3d(0, 44px, 0) scale(0.97);
+  }
+  62% {
+    opacity: 1;
   }
   to {
     opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-@keyframes card-breathe {
-  0%,
-  100% {
-    transform: translate3d(0, 0, 0) rotate(0deg);
-  }
-  50% {
-    transform: translate3d(0, -10px, 0) rotate(0.35deg);
-  }
-}
-
-@keyframes card-spotlight-sweep {
-  0% {
-    transform: translateX(-130%) skewX(-18deg);
-  }
-  100% {
-    transform: translateX(130%) skewX(-18deg);
-  }
-}
-
-@keyframes card-orbit-pulse {
-  0%,
-  100% {
-    transform: translate3d(-8%, 4%, 0) scale(0.92);
-    opacity: 0.28;
-  }
-  50% {
-    transform: translate3d(8%, -6%, 0) scale(1.08);
-    opacity: 0.55;
+    transform: translate3d(0, 0, 0) scale(1);
   }
 }
 
@@ -133,139 +75,76 @@
     animation-delay: 220ms;
   }
 
-  .motion-orbit-drift {
-    animation: orbit-drift 8s cubic-bezier(0.45, 0, 0.55, 1) infinite;
-  }
-
-  .motion-float-lift {
-    animation: float-lift 6s cubic-bezier(0.45, 0, 0.55, 1) infinite;
-  }
-
-  .motion-accent-sweep {
-    background-size: 200% 100%;
-    animation: accent-sweep 7s linear infinite;
-  }
-
-  .motion-card-grid > * {
-    animation: card-rise 680ms cubic-bezier(0.16, 1, 0.3, 1) both;
-    animation-delay: calc(var(--motion-index, 0) * 70ms);
+  .scroll-card-grid > * {
     transform-origin: center top;
   }
 
-  .motion-card-grid > *:nth-child(2) {
-    animation-delay: 90ms;
-  }
-
-  .motion-card-grid > *:nth-child(3) {
-    animation-delay: 180ms;
-  }
-
-  .motion-card-grid > *:nth-child(4) {
-    animation-delay: 270ms;
-  }
-
-  .motion-card-grid > *:nth-child(n + 5) {
-    animation-delay: 360ms;
-  }
-
   @supports (animation-timeline: view()) {
-    .motion-card-grid > * {
-      animation-duration: 1ms;
+    .scroll-card-grid > * {
+      animation: scroll-card-rise linear both;
       animation-timeline: view();
-      animation-range: entry 0% cover 30%;
-      animation-delay: 0s;
+      animation-range: entry 0% cover 32%;
     }
   }
 
-  .motion-card {
-    position: relative;
-    isolation: isolate;
+  @supports not (animation-timeline: view()) {
+    .scroll-card-grid > * {
+      animation: scroll-card-rise 620ms cubic-bezier(0.16, 1, 0.3, 1) both;
+      animation-delay: calc(var(--scroll-index, 0) * 70ms);
+    }
+
+    .scroll-card-grid > *:nth-child(2) {
+      animation-delay: 80ms;
+    }
+
+    .scroll-card-grid > *:nth-child(3) {
+      animation-delay: 160ms;
+    }
+
+    .scroll-card-grid > *:nth-child(4) {
+      animation-delay: 240ms;
+    }
+
+    .scroll-card-grid > *:nth-child(n + 5) {
+      animation-delay: 320ms;
+    }
+  }
+
+  .scroll-card {
     transform: translateZ(0);
-    transform-style: preserve-3d;
-    perspective: 900px;
+    transition:
+      transform 220ms cubic-bezier(0.16, 1, 0.3, 1),
+      box-shadow 220ms cubic-bezier(0.16, 1, 0.3, 1),
+      border-color 220ms cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform;
+  }
+
+  .scroll-card:hover {
+    transform: translate3d(0, -5px, 0);
+    box-shadow: 0 22px 42px -30px rgba(15, 23, 42, 0.45);
+  }
+
+  .scroll-card-image {
+    transform: translateZ(0);
     transition:
       transform 520ms cubic-bezier(0.16, 1, 0.3, 1),
-      box-shadow 520ms cubic-bezier(0.16, 1, 0.3, 1),
-      border-color 520ms cubic-bezier(0.16, 1, 0.3, 1),
-      filter 520ms cubic-bezier(0.16, 1, 0.3, 1);
+      opacity 220ms cubic-bezier(0.16, 1, 0.3, 1),
+      filter 220ms cubic-bezier(0.16, 1, 0.3, 1);
     will-change: transform;
   }
 
-  .motion-card::before {
-    content: "";
-    position: absolute;
-    inset: -35%;
-    z-index: 1;
-    pointer-events: none;
-    background: linear-gradient(
-      105deg,
-      transparent 34%,
-      rgba(245, 158, 11, 0.12) 44%,
-      rgba(255, 255, 255, 0.38) 50%,
-      rgba(245, 158, 11, 0.12) 56%,
-      transparent 66%
-    );
-    opacity: 0;
-    transform: translateX(-130%) skewX(-18deg);
-  }
-
-  .motion-card:hover {
-    transform: perspective(900px) translateY(-12px) rotateX(1.6deg) rotateY(-1.8deg) scale(1.012);
-    box-shadow: 0 26px 70px -34px rgba(15, 23, 42, 0.42);
-    filter: saturate(1.03);
-  }
-
-  .motion-card:hover::before {
-    opacity: 1;
-    animation: card-spotlight-sweep 920ms cubic-bezier(0.16, 1, 0.3, 1) both;
-  }
-
-  .motion-card-subtle {
-    animation: card-breathe 7s cubic-bezier(0.45, 0, 0.55, 1) infinite;
-  }
-
-  .motion-card-orbit::after {
-    content: "";
-    position: absolute;
-    right: -4rem;
-    top: -4rem;
-    width: 11rem;
-    height: 11rem;
-    z-index: 0;
-    pointer-events: none;
-    border-radius: 9999px;
-    border: 1px solid rgba(245, 158, 11, 0.22);
-    background: radial-gradient(circle, rgba(245, 158, 11, 0.18), transparent 62%);
-    animation: card-orbit-pulse 6.8s cubic-bezier(0.45, 0, 0.55, 1) infinite;
-  }
-
-  .motion-card-image {
-    transform: translate3d(0, 0, 0) scale(1.01);
-    transition:
-      transform 900ms cubic-bezier(0.16, 1, 0.3, 1),
-      opacity 520ms cubic-bezier(0.16, 1, 0.3, 1),
-      filter 520ms cubic-bezier(0.16, 1, 0.3, 1);
-    will-change: transform;
-  }
-
-  .group:hover .motion-card-image {
-    transform: translate3d(0, -10px, 32px) scale(1.1);
+  .group:hover .scroll-card-image {
+    transform: scale(1.045);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .motion-soft-reveal,
-  .motion-orbit-drift,
-  .motion-float-lift,
-  .motion-accent-sweep,
-  .motion-card-grid > *,
-  .motion-card,
-  .motion-card-subtle,
-  .motion-card-image,
-  .motion-card::before,
-  .motion-card-orbit::after {
-    animation: none;
-    transition: none;
-    transform: none;
+  .scroll-card-grid > *,
+  .scroll-card,
+  .scroll-card-image {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
   }
 }

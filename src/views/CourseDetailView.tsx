@@ -101,7 +101,7 @@ export const CourseDetailView: React.FC<CourseDetailViewProps> = ({ onNavigate }
             <div className="lg:col-span-8 space-y-6">
 
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-600 text-xs font-mono font-bold">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
                 <span>{course.status}</span>
               </div>
 
@@ -317,11 +317,11 @@ export const CourseDetailView: React.FC<CourseDetailViewProps> = ({ onNavigate }
                   disabled={aiGenerating}
                   className="w-full py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-xl flex items-center justify-center gap-2 transition-colors"
                 >
-                  {aiGenerating ? <Sparkles className="w-4 h-4 animate-spin" /> : <span>Generate AI Study Plan</span>}
+                  {aiGenerating ? <Sparkles className="w-4 h-4" /> : <span>Generate AI Study Plan</span>}
                 </button>
 
                 {aiSyllabusPlan && (
-                  <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-600 whitespace-pre-line leading-relaxed animate-fadeIn">
+                  <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-600 whitespace-pre-line leading-relaxed">
                     {aiSyllabusPlan}
                   </div>
                 )}
@@ -388,7 +388,7 @@ export const CourseDetailView: React.FC<CourseDetailViewProps> = ({ onNavigate }
                   disabled={application.sending}
                   className="w-full py-3 bg-amber-500 hover:bg-amber-400 disabled:opacity-60 disabled:cursor-not-allowed text-slate-950 font-bold rounded-xl text-xs transition-colors flex items-center justify-center gap-2"
                 >
-                  {application.sending && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
+                  {application.sending && <Loader2 className="w-3.5 h-3.5" />}
                   {application.sending ? 'Submitting...' : 'Submit Executive Application'}
                 </button>
               </form>
@@ -455,7 +455,7 @@ export const CourseDetailView: React.FC<CourseDetailViewProps> = ({ onNavigate }
                     disabled={syllabus.sending}
                     className="w-full py-3 bg-amber-500 hover:bg-amber-400 disabled:opacity-60 disabled:cursor-not-allowed text-slate-950 font-bold rounded-xl text-xs transition-colors flex items-center justify-center gap-2"
                   >
-                    {syllabus.sending && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
+                    {syllabus.sending && <Loader2 className="w-3.5 h-3.5" />}
                     {syllabus.sending ? 'Sending...' : 'Send Me the Syllabus'}
                   </button>
                 </form>
@@ -549,13 +549,13 @@ const LockedCourseAccess: React.FC<{ course: Course; unlockedBy: Plan }> = ({
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <Link
                   to={`/checkout/${unlockedBy.code}`}
-                  className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-sm active:translate-y-px transition-all"
+                  className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-sm transition-all"
                 >
                   Unlock Course <ArrowRight className="w-4 h-4" />
                 </Link>
                 <Link
                   to="/pricing"
-                  className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-sm active:translate-y-px transition-all"
+                  className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-sm transition-all"
                 >
                   Compare Plans
                 </Link>

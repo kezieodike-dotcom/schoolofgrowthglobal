@@ -98,7 +98,7 @@ export const AdminLoginView: React.FC = () => {
           >
             {busy ? (
               <>
-                <Loader2 className="w-4 h-4 animate-spin" /> Signing in...
+                <Loader2 className="w-4 h-4" /> Signing in...
               </>
             ) : (
               <>

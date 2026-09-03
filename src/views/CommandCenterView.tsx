@@ -265,7 +265,7 @@ export const CommandCenterView: React.FC<CommandCenterViewProps> = ({ onNavigate
                   ))}
                   {chatLoading && (
                     <div className="flex items-center gap-2 text-amber-400 text-xs italic">
-                      <Sparkles className="w-4 h-4 animate-spin" />
+                      <Sparkles className="w-4 h-4" />
                       <span>Growth AI synthesizing C-Suite response...</span>
                     </div>
                   )}
@@ -351,7 +351,7 @@ export const CommandCenterView: React.FC<CommandCenterViewProps> = ({ onNavigate
                     disabled={scenarioLoading}
                     className="px-6 py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-xl flex items-center gap-2 whitespace-nowrap"
                   >
-                    {scenarioLoading ? <Sparkles className="w-4 h-4 animate-spin" /> : <RefreshCw className="w-4 h-4" />}
+                    {scenarioLoading ? <Sparkles className="w-4 h-4" /> : <RefreshCw className="w-4 h-4" />}
                     <span>Generate Drill</span>
                   </button>
                 </div>
@@ -364,7 +364,7 @@ export const CommandCenterView: React.FC<CommandCenterViewProps> = ({ onNavigate
                 )}
 
                 {scenarioData && (
-                  <div className="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-6 animate-fadeIn">
+                  <div className="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-6">
                     {scenarioSimulated && (
                       <div className="text-[10px] font-mono uppercase tracking-wide text-amber-400/70 border-b border-slate-800 pb-3">
                         Simulated drill · no API key set
@@ -428,7 +428,7 @@ export const CommandCenterView: React.FC<CommandCenterViewProps> = ({ onNavigate
                   disabled={analysisLoading || !strategyText.trim()}
                   className="w-full py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-xl flex items-center justify-center gap-2 transition-colors"
                 >
-                  {analysisLoading ? <Sparkles className="w-4 h-4 animate-spin" /> : <FileText className="w-4 h-4" />}
+                  {analysisLoading ? <Sparkles className="w-4 h-4" /> : <FileText className="w-4 h-4" />}
                   <span>Run C-Suite Strategic Critique</span>
                 </button>
 
@@ -440,7 +440,7 @@ export const CommandCenterView: React.FC<CommandCenterViewProps> = ({ onNavigate
                 )}
 
                 {analysisData && (
-                  <div className="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4 animate-fadeIn text-xs">
+                  <div className="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4 text-xs">
                     {analysisSimulated && (
                       <div className="text-[10px] font-mono uppercase tracking-wide text-amber-400/70 border-b border-slate-800 pb-3">
                         Simulated critique · no API key set
@@ -506,7 +506,7 @@ export const CommandCenterView: React.FC<CommandCenterViewProps> = ({ onNavigate
                 </div>
 
                 {audioPlaying && (
-                  <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/30 text-xs text-amber-300 animate-pulse flex items-center justify-between">
+                  <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/30 text-xs text-amber-300 flex items-center justify-between">
                     <span>Playing Executive Briefing Audio Stream...</span>
                     <button onClick={() => setAudioPlaying(false)} className="text-white font-bold">Stop</button>
                   </div>

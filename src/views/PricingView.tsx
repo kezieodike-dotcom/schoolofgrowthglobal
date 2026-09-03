@@ -104,7 +104,7 @@ const PackageCard: React.FC<{ plan: Plan; owned: boolean }> = ({ plan, owned }) 
 
   return (
     <div
-      className={`motion-card ${featured ? 'motion-card-orbit' : ''} relative flex flex-col rounded-3xl border bg-white transition-all ${
+      className={`${featured ? '' : ''} relative flex flex-col rounded-3xl border bg-white transition-all ${
         featured
           ? 'border-amber-400 shadow-2xl shadow-amber-500/10 ring-1 ring-amber-200 lg:-mt-4 lg:mb-4'
           : 'border-slate-200 shadow-sm hover:border-slate-300'
@@ -189,7 +189,7 @@ const LadderPreview: React.FC<{ item: LadderItem }> = ({ item }) => {
   const plan = PLANS[planCodeForLadder(item.title)];
 
   return (
-  <div className="motion-card rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+  <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
     <div className="flex flex-wrap items-center gap-2">
       <span className="rounded-full bg-slate-100 px-2.5 py-1 text-[10px] font-bold uppercase text-slate-700">
         {item.level}
@@ -211,7 +211,7 @@ const LadderPreview: React.FC<{ item: LadderItem }> = ({ item }) => {
 
 const PricingBandCard: React.FC<{ band: PricingBand; dark?: boolean }> = ({ band, dark }) => (
   <div
-    className={`motion-card rounded-2xl border p-5 ${
+    className={`rounded-2xl border p-5 ${
       dark ? 'border-white/10 bg-white/[0.04]' : 'border-slate-200 bg-white shadow-sm'
     }`}
   >
@@ -266,7 +266,7 @@ export const PricingView: React.FC = () => {
 
       {/* Packages */}
       <section className="pt-12 sm:pt-16 pb-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="motion-card-grid grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 lg:gap-7 items-start">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 lg:gap-7 items-start">
           {PACKAGES.map((plan) => (
             <PackageCard
               key={plan.code}
@@ -277,7 +277,7 @@ export const PricingView: React.FC = () => {
         </div>
 
         {/* Trust strip */}
-        <div className="motion-card-grid mt-10 grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-4">
           {[
             {
               icon: <ShieldCheck className="w-4 h-4" />,
@@ -297,7 +297,7 @@ export const PricingView: React.FC = () => {
           ].map((item) => (
             <div
               key={item.title}
-              className="motion-card p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-2"
+              className="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-2"
             >
               <div className="flex items-center gap-2 text-amber-600">
                 {item.icon}
@@ -414,7 +414,7 @@ export const PricingView: React.FC = () => {
                 <h3 className="text-sm font-serif font-bold text-slate-900">
                   Consultation ladder
                 </h3>
-                <div className="motion-card-grid mt-4 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+                <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
                   {CONSULTATION_LADDER.map((item) => (
                     <LadderPreview key={item.title} item={item} />
                   ))}
@@ -425,7 +425,7 @@ export const PricingView: React.FC = () => {
                 <h3 className="text-sm font-serif font-bold text-slate-900">
                   Mentorship ladder
                 </h3>
-                <div className="motion-card-grid mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                   {MENTORSHIP_LADDER.map((item) => (
                     <LadderPreview key={item.title} item={item} />
                   ))}
@@ -437,7 +437,7 @@ export const PricingView: React.FC = () => {
                   <h3 className="text-sm font-serif font-bold text-slate-900">
                     Individual consultation bands
                   </h3>
-                  <div className="motion-card-grid mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {CONSULTATION_PRICING_BANDS.map((band) => (
                       <PricingBandCard key={band.name} band={band} />
                     ))}
@@ -448,7 +448,7 @@ export const PricingView: React.FC = () => {
                   <h3 className="text-sm font-serif font-bold text-slate-900">
                     Mentorship bands
                   </h3>
-                  <div className="motion-card-grid mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {MENTORSHIP_PRICING_BANDS.map((band) => (
                       <PricingBandCard key={band.name} band={band} />
                     ))}
@@ -473,7 +473,7 @@ export const PricingView: React.FC = () => {
                     Request corporate quote <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
-                <div className="motion-card-grid mt-5 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+                <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
                   {CORPORATE_PRICING_BANDS.map((band) => (
                     <PricingBandCard key={band.name} band={band} dark />
                   ))}
@@ -490,7 +490,7 @@ export const PricingView: React.FC = () => {
           Before you pay
         </h2>
 
-        <div className="motion-card-grid grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {[
             {
               q: 'What happens right after I pay?',
@@ -519,7 +519,7 @@ export const PricingView: React.FC = () => {
           ].map((item) => (
             <div
               key={item.q}
-              className="motion-card p-6 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-2"
+              className="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-2"
             >
               <h4 className="text-sm font-bold text-slate-900 font-serif">{item.q}</h4>
               <p className="text-xs text-slate-500 leading-relaxed">{item.a}</p>

@@ -34,7 +34,7 @@ export const VoiceInputButton: React.FC<{
     >
       {listening ? <Square className="w-4 h-4 fill-current" /> : <Mic className="w-4 h-4" />}
       {listening && (
-        <span className="absolute inset-0 rounded-lg animate-ping bg-red-500/40 pointer-events-none" />
+        <span className="absolute inset-0 rounded-lg bg-red-500/40 pointer-events-none" />
       )}
     </button>
   );

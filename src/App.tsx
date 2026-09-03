@@ -17,6 +17,7 @@ import { BooksView } from './views/BooksView';
 import { GrowthJobsView } from './views/GrowthJobsView';
 import { EventsView } from './views/EventsView';
 import { BlogView } from './views/BlogView';
+import { DonationsView } from './views/DonationsView';
 import { ContactView } from './views/ContactView';
 import { RegisterView } from './views/RegisterView';
 import { MentorRegistrationView } from './views/MentorRegistrationView';
@@ -83,6 +84,7 @@ export default function App() {
           <Route path="events" element={<EventsView />} />
           <Route path="blog" element={<BlogView />} />
           <Route path="blog/:slug" element={<BlogView />} />
+          <Route path="donate" element={<DonationsView />} />
           <Route path="contact" element={<ContactView />} />
           <Route path="demo-reviewer" element={<DemoReviewerAccessView />} />
 

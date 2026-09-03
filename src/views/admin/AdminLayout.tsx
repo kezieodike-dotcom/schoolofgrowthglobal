@@ -64,7 +64,7 @@ export const AdminLayout: React.FC = () => {
   if (status === null) {
     return (
       <div className="min-h-screen bg-slate-950 flex items-center justify-center">
-        <Loader2 className="w-6 h-6 text-amber-500 animate-spin" />
+        <Loader2 className="w-6 h-6 text-amber-500" />
       </div>
     );
   }
@@ -76,7 +76,7 @@ export const AdminLayout: React.FC = () => {
     <div className="min-h-screen bg-slate-100 text-slate-900 flex">
       {/* ── Sidebar ──────────────────────────────────────────────────── */}
       <aside
-        className={`fixed lg:static inset-y-0 left-0 z-40 w-64 bg-slate-950 text-slate-300 flex flex-col transition-transform lg:translate-x-0 ${
+        className={`fixed lg:static inset-y-0 left-0 z-[60] w-64 bg-slate-950 text-slate-300 flex flex-col transition-transform lg:translate-x-0 ${
           menuOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
@@ -134,14 +134,15 @@ export const AdminLayout: React.FC = () => {
       {menuOpen && (
         <div
           onClick={() => setMenuOpen(false)}
-          className="fixed inset-0 z-30 bg-slate-950/50 lg:hidden"
+          className="fixed inset-0 z-40 bg-slate-950/50 lg:hidden"
         />
       )}
 
       {/* ── Workspace ────────────────────────────────────────────────── */}
       <div className="flex-1 min-w-0 flex flex-col">
-        <header className="lg:hidden h-16 bg-white border-b border-slate-200 flex items-center gap-3 px-4 sticky top-0 z-20">
+        <header className="lg:hidden h-16 bg-white border-b border-slate-200 flex items-center gap-3 px-4 sticky top-0 z-50">
           <button
+            type="button"
             onClick={() => setMenuOpen(true)}
             aria-label="Open menu"
             className="p-2 rounded-lg bg-slate-100 text-slate-700"

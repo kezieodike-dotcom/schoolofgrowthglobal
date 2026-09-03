@@ -150,7 +150,7 @@ export const DemoReviewerAccessView: React.FC = () => {
                   disabled={busy || enabled === false}
                   className="flex w-full items-center justify-center gap-2 rounded-xl bg-amber-500 px-5 py-3 text-xs font-black text-slate-950 transition-colors hover:bg-amber-400 disabled:cursor-not-allowed disabled:opacity-50"
                 >
-                  {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <LockKeyhole className="h-4 w-4" />}
+                  {busy ? <Loader2 className="h-4 w-4" /> : <LockKeyhole className="h-4 w-4" />}
                   Open preview access
                 </button>
               </>

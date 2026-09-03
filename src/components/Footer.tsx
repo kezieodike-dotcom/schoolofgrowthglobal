@@ -62,6 +62,7 @@ export const Footer: React.FC = () => {
               <li><Link to="/pricing" className="hover:text-amber-700 transition-colors">Tuition &amp; Packages</Link></li>
               <li><Link to="/events" className="hover:text-amber-700 transition-colors">Events &amp; Summits</Link></li>
               <li><Link to="/blog" className="hover:text-amber-700 transition-colors">Knowledge Centre</Link></li>
+              <li><Link to="/donate" className="hover:text-amber-700 transition-colors">Donations</Link></li>
             </ul>
           </div>
 
@@ -112,7 +113,7 @@ export const Footer: React.FC = () => {
                   className="w-full bg-amber-500 hover:bg-amber-400 disabled:opacity-60 disabled:cursor-not-allowed text-slate-950 font-bold py-2 px-3 rounded-lg text-xs flex items-center justify-center gap-2 transition-colors"
                 >
                   {newsletter.sending ? (
-                    <><Loader2 className="w-3.5 h-3.5 animate-spin" /><span>Subscribing...</span></>
+                    <><Loader2 className="w-3.5 h-3.5" /><span>Subscribing...</span></>
                   ) : (
                     <><span>Subscribe Briefings</span><ArrowRight className="w-3.5 h-3.5" /></>
                   )}

@@ -292,7 +292,7 @@ const ThreadPanel: React.FC<{
             className="px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 disabled:opacity-40 disabled:cursor-not-allowed text-slate-950 text-[11px] font-bold flex items-center gap-1.5 transition-colors"
           >
             {sending ? (
-              <Loader2 className="w-3.5 h-3.5 animate-spin" />
+              <Loader2 className="w-3.5 h-3.5" />
             ) : (
               <Send className="w-3.5 h-3.5" />
             )}

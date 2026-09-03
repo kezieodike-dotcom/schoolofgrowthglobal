@@ -39,7 +39,7 @@ export const AdminOverviewView: React.FC = () => {
             onClick={reload}
             className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-white border border-slate-200 hover:border-slate-300 text-slate-600 text-xs font-semibold transition-colors"
           >
-            <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`w-3.5 h-3.5 ${loading ? '' : ''}`} />
             Refresh
           </button>
         }

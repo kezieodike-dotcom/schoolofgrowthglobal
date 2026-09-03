@@ -1,7 +1,7 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
-import { useMotionValue, animate, motion } from 'framer-motion';
+import { animate, motion, useMotionValue } from 'framer-motion';
 import useMeasure from 'react-use-measure';
 
 type InfiniteSliderProps = {
@@ -30,36 +30,34 @@ export function InfiniteSlider({
   const [key, setKey] = useState(0);
 
   useEffect(() => {
-    let controls;
     const size = direction === 'horizontal' ? width : height;
     const contentSize = size + gap;
     const from = reverse ? -contentSize / 2 : 0;
     const to = reverse ? 0 : -contentSize / 2;
 
-    if (isTransitioning) {
-      controls = animate(translation, [translation.get(), to], {
-        ease: 'linear',
-        duration:
-          currentDuration * Math.abs((translation.get() - to) / contentSize),
-        onComplete: () => {
-          setIsTransitioning(false);
-          setKey((prevKey) => prevKey + 1);
-        },
-      });
-    } else {
-      controls = animate(translation, [from, to], {
-        ease: 'linear',
-        duration: currentDuration,
-        repeat: Infinity,
-        repeatType: 'loop',
-        repeatDelay: 0,
-        onRepeat: () => {
-          translation.set(from);
-        },
-      });
-    }
+    if (!contentSize) return;
 
-    return controls?.stop;
+    const controls = isTransitioning
+      ? animate(translation, [translation.get(), to], {
+          ease: 'linear',
+          duration: currentDuration * Math.abs((translation.get() - to) / contentSize),
+          onComplete: () => {
+            setIsTransitioning(false);
+            setKey((prevKey) => prevKey + 1);
+          },
+        })
+      : animate(translation, [from, to], {
+          ease: 'linear',
+          duration: currentDuration,
+          repeat: Infinity,
+          repeatType: 'loop',
+          repeatDelay: 0,
+          onRepeat: () => {
+            translation.set(from);
+          },
+        });
+
+    return controls.stop;
   }, [
     key,
     translation,
@@ -88,7 +86,7 @@ export function InfiniteSlider({
   return (
     <div className={cn('overflow-hidden', className)}>
       <motion.div
-        className='flex w-max'
+        className="flex w-max"
         style={{
           ...(direction === 'horizontal'
             ? { x: translation }

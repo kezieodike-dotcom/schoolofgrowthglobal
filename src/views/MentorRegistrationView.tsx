@@ -414,7 +414,7 @@ export const MentorRegistrationView: React.FC = () => {
                       >
                         {sending ? (
                           <>
-                            <Loader2 className="w-4 h-4 animate-spin" /> Submitting...
+                            <Loader2 className="w-4 h-4" /> Submitting...
                           </>
                         ) : (
                           <>

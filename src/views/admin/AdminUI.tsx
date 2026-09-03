@@ -135,7 +135,7 @@ export const StatTile: React.FC<{
 
 export const LoadingState: React.FC<{ label?: string }> = ({ label = 'Loading' }) => (
   <div className="flex items-center justify-center gap-2.5 py-16 text-slate-400">
-    <Loader2 className="w-4 h-4 animate-spin" />
+    <Loader2 className="w-4 h-4" />
     <span className="text-xs">{label}...</span>
   </div>
 );

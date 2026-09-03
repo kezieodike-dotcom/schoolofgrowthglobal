@@ -669,7 +669,7 @@ const ContentForm: React.FC<{
                           }`}
                         >
                           {uploadingField === field.key ? (
-                            <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                            <Loader2 className="h-3.5 w-3.5" />
                           ) : (
                             <ImagePlus className="h-3.5 w-3.5" />
                           )}
@@ -780,7 +780,7 @@ const ContentForm: React.FC<{
             disabled={!writable || saving}
             className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg bg-amber-500 hover:bg-amber-400 disabled:opacity-40 disabled:cursor-not-allowed text-slate-950 text-xs font-black transition-colors"
           >
-            {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+            {saving ? <Loader2 className="w-4 h-4" /> : <Save className="w-4 h-4" />}
             Save changes
           </button>
         </div>

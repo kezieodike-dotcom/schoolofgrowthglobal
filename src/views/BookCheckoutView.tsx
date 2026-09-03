@@ -54,7 +54,7 @@ export const BookCheckoutView: React.FC = () => {
   if (!book) {
     return (
       <div className="min-h-screen bg-slate-50 flex items-center justify-center">
-        <Loader2 className="w-6 h-6 animate-spin text-amber-500" />
+        <Loader2 className="w-6 h-6 text-amber-500" />
       </div>
     );
   }
@@ -169,7 +169,7 @@ export const BookCheckoutView: React.FC = () => {
                   >
                     {submitting ? (
                       <>
-                        <Loader2 className="w-4 h-4 animate-spin" />
+                        <Loader2 className="w-4 h-4" />
                         Opening secure checkout...
                       </>
                     ) : (

@@ -3,6 +3,7 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { grantEntitlement } from '../lib/useEnrollment';
 import { PLANS, formatNaira, type Entitlement } from '../lib/pricing';
 import type { BookPurchase } from '../lib/bookRevenue';
+import type { DonationPayment } from '../lib/donations';
 import {
   CheckCircle2,
   Loader2,
@@ -12,6 +13,7 @@ import {
   Receipt,
   Users,
   BookOpen,
+  HeartHandshake,
 } from 'lucide-react';
 
 /**
@@ -26,6 +28,7 @@ type State =
   | { phase: 'verifying' }
   | { phase: 'paid'; entitlement: Entitlement }
   | { phase: 'book-paid'; purchase: BookPurchase }
+  | { phase: 'donation-paid'; donation: DonationPayment }
   | { phase: 'unpaid'; status: string }
   | { phase: 'error'; message: string };
 
@@ -85,6 +88,11 @@ export const PaymentCallbackView: React.FC = () => {
           return;
         }
 
+        if (body.donation) {
+          setState({ phase: 'donation-paid', donation: body.donation });
+          return;
+        }
+
         // The single point where course and mentorship access is granted anywhere in the app.
         grantEntitlement(body.entitlement);
         setState({ phase: 'paid', entitlement: body.entitlement });
@@ -103,7 +111,7 @@ export const PaymentCallbackView: React.FC = () => {
       <div className="w-full max-w-lg">
         {state.phase === 'verifying' && (
           <div className="p-10 rounded-3xl bg-white border border-slate-200 shadow-sm text-center space-y-4">
-            <Loader2 className="w-10 h-10 text-amber-500 animate-spin mx-auto" />
+            <Loader2 className="w-10 h-10 text-amber-500 mx-auto" />
             <h1 className="text-lg font-serif font-bold text-slate-900">
               Confirming your payment
             </h1>
@@ -117,6 +125,10 @@ export const PaymentCallbackView: React.FC = () => {
         {state.phase === 'paid' && <PaidPanel entitlement={state.entitlement} />}
 
         {state.phase === 'book-paid' && <BookPaidPanel purchase={state.purchase} />}
+
+        {state.phase === 'donation-paid' && (
+          <DonationPaidPanel donation={state.donation} />
+        )}
 
         {state.phase === 'unpaid' && (
           <div className="p-10 rounded-3xl bg-white border border-amber-300 shadow-sm text-center space-y-4">
@@ -331,6 +343,65 @@ const BookPaidPanel: React.FC<{ purchase: BookPurchase }> = ({ purchase }) => (
     <p className="text-[11px] text-slate-400 text-center leading-relaxed">
       A receipt is on its way to {purchase.email || 'your email address'}. The admin
       ledger tracks the 20/80 split for payout to {purchase.ownerName}.
+    </p>
+  </div>
+);
+
+const DonationPaidPanel: React.FC<{ donation: DonationPayment }> = ({ donation }) => (
+  <div className="p-8 sm:p-10 rounded-3xl bg-white border border-emerald-200 shadow-lg space-y-6">
+    <div className="text-center space-y-4">
+      <div className="w-16 h-16 rounded-full bg-emerald-50 border border-emerald-200 flex items-center justify-center mx-auto">
+        <CheckCircle2 className="w-8 h-8 text-emerald-600" />
+      </div>
+      <div className="space-y-1.5">
+        <h1 className="text-2xl font-serif font-bold text-slate-900">
+          Donation received.
+        </h1>
+        <p className="text-sm text-slate-500 leading-relaxed">
+          Thank you for supporting{' '}
+          <strong className="text-slate-900">{donation.fundName}</strong>.
+        </p>
+      </div>
+    </div>
+
+    <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2 text-[11px] font-mono">
+      <div className="flex justify-between gap-4">
+        <span className="text-slate-500">Amount donated</span>
+        <span className="text-slate-900 font-bold">
+          {formatNaira(donation.amountKobo)}
+        </span>
+      </div>
+      <div className="flex justify-between gap-4">
+        <span className="text-slate-500">Fund</span>
+        <span className="text-slate-700 text-right">{donation.fundName}</span>
+      </div>
+      <div className="flex justify-between gap-4">
+        <span className="text-slate-500">Reference</span>
+        <span className="text-slate-700 break-all text-right">
+          {donation.reference}
+        </span>
+      </div>
+    </div>
+
+    <div className="flex flex-col sm:flex-row gap-3">
+      <Link
+        to="/donate"
+        className="flex-1 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs flex items-center justify-center gap-2 transition-colors"
+      >
+        <HeartHandshake className="w-4 h-4" />
+        Give again
+      </Link>
+      <Link
+        to="/"
+        className="flex-1 py-3.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs flex items-center justify-center gap-2 transition-colors"
+      >
+        Back to home
+      </Link>
+    </div>
+
+    <p className="text-[11px] text-slate-400 text-center leading-relaxed">
+      A receipt is on its way to {donation.email || 'your email address'}. Keep
+      your reference if you need to contact the team about this donation.
     </p>
   </div>
 );
