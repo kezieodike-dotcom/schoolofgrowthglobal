@@ -13,7 +13,6 @@ import { createMentorReviewRouter } from "../src/server/mentorReviewRoutes.js";
 loadServerEnv();
 
 export const config = {
-  runtime: 'nodejs',
   maxDuration: 60,
 };
 

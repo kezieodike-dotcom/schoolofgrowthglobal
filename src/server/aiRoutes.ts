@@ -1,5 +1,4 @@
 import express, { Router } from "express";
-import { GoogleGenAI } from "@google/genai";
 import {
   diagnoseGrowthChallenge,
   formatGrowthDiagnosis,
@@ -79,12 +78,14 @@ function isQuotaError(error: unknown): boolean {
   return message.includes('"code":429') || message.includes("RESOURCE_EXHAUSTED");
 }
 
-// Initialize Gemini API client lazily or safely
-const getAI = () => {
+// Load Gemini only when a live AI request needs it. This keeps health/admin
+// routes independent from the external SDK during Vercel cold starts.
+const getAI = async () => {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
     console.warn("GEMINI_API_KEY is not set. API calls will return fallback messages.");
   }
+  const { GoogleGenAI } = await import("@google/genai");
   return new GoogleGenAI({
     apiKey: apiKey || "placeholder",
     httpOptions: {
@@ -125,7 +126,7 @@ export function createAIRouter(): Router {
       });
     }
     try {
-      const ai = getAI();
+      const ai = await getAI();
       const names: string[] = [];
       const pager = await ai.models.list();
       for await (const m of pager) {
@@ -161,7 +162,7 @@ export function createAIRouter(): Router {
       }
 
       const suggestedDiagnosis = formatGrowthDiagnosis(diagnoseGrowthChallenge(message));
-      const ai = getAI();
+      const ai = await getAI();
       const systemInstruction = `You are "Growth AI", the institutional intelligence coach for "School of Growth Global".
 You serve executive leaders, high-potential managers, C-suite executives, and entrepreneurs.
 Your tone is authoritative yet empowering, highly strategic, precise, and structured (using bullet points, bold key terms, and actionable executive insights).
@@ -239,7 +240,7 @@ ${context ? `Current Context: ${context}` : ''}`;
         });
       }
 
-      const ai = getAI();
+      const ai = await getAI();
       const prompt = `Generate a realistic executive strategic decision drill scenario for the topic: "${theme}". Level: "${difficulty || 'Executive Tier'}".
 Return a JSON object with:
 - title (string): Snappy title of the scenario
@@ -291,7 +292,7 @@ Return a JSON object with:
         });
       }
 
-      const ai = getAI();
+      const ai = await getAI();
       const prompt = `Perform a C-suite Executive Critique on the following strategy snippet:\n"${strategyText}"\n
 Provide a JSON response with:
 - strengths (array of strings): 2-3 key strategic strengths
