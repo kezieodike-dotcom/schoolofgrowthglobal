@@ -15,3 +15,23 @@ if (!aiRoutes.includes('await import("@google/genai")')) {
 if (apiIndex.includes("runtime: 'nodejs'") || apiIndex.includes('runtime: "nodejs"')) {
   throw new Error('Vercel Node functions are Node by default; avoid route-config runtime overrides here.');
 }
+
+for (const moduleName of [
+  'aiRoutes',
+  'paymentRoutes',
+  'adminRoutes',
+  'mentorRoutes',
+  'leadRoutes',
+  'messageRoutes',
+  'contentRoutes',
+  'demoReviewerRoutes',
+  'mentorReviewRoutes',
+]) {
+  const staticImportPattern = new RegExp(
+    `^import\\s+.*\\.\\./src/server/${moduleName}\\.js`,
+    'm'
+  );
+  if (staticImportPattern.test(apiIndex)) {
+    throw new Error(`api/index.ts should lazy-load ${moduleName} so simple Vercel probes can still answer.`);
+  }
+}

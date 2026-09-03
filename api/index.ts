@@ -1,14 +1,5 @@
 import express from "express";
 import { loadServerEnv } from "../src/server/loadEnv.js";
-import { createAIRouter } from "../src/server/aiRoutes.js";
-import { createPaymentRouter, captureRawBody } from "../src/server/paymentRoutes.js";
-import { createAdminRouter, requireAdmin } from "../src/server/adminRoutes.js";
-import { createMentorRouter } from "../src/server/mentorRoutes.js";
-import { createLeadRouter } from "../src/server/leadRoutes.js";
-import { createMessageRouter } from "../src/server/messageRoutes.js";
-import { createContentRouter } from "../src/server/contentRoutes.js";
-import { createDemoReviewerRouter } from "../src/server/demoReviewerRoutes.js";
-import { createMentorReviewRouter } from "../src/server/mentorReviewRoutes.js";
 
 loadServerEnv();
 
@@ -39,27 +30,85 @@ export const config = {
  * works locally is absent here until it is configured in the dashboard.
  */
 
+type RawBodyRequest = express.Request & { rawBody?: Buffer };
+
 const app = express();
-// captureRawBody keeps the original bytes on the request so the Paystack
-// webhook can verify its signature; parsing alone would discard them.
+
+function captureRawBody(req: RawBodyRequest, _res: express.Response, buf: Buffer) {
+  req.rawBody = buf;
+}
+
 app.use(express.json({ limit: '8mb', verify: captureRawBody }));
-app.use("/api", createAIRouter());
-app.use("/api", createPaymentRouter());
-app.use("/api", createAdminRouter());
-app.use("/api", createMentorRouter(requireAdmin));
-app.use("/api", createLeadRouter(requireAdmin));
-app.use("/api", createMessageRouter(requireAdmin));
-app.use("/api", createContentRouter(requireAdmin));
-app.use("/api", createDemoReviewerRouter());
-app.use("/api", createMentorReviewRouter());
-app.use(createAIRouter());
-app.use(createPaymentRouter());
-app.use(createAdminRouter());
-app.use(createMentorRouter(requireAdmin));
-app.use(createLeadRouter(requireAdmin));
-app.use(createMessageRouter(requireAdmin));
-app.use(createContentRouter(requireAdmin));
-app.use(createDemoReviewerRouter());
-app.use(createMentorReviewRouter());
+
+app.get(["/api/health", "/health"], (_req, res) => {
+  res.json({
+    status: "ok",
+    app: "School of Growth Global",
+    model: process.env.GEMINI_MODEL || "gemini-3.1-flash-lite",
+    aiMode: process.env.GEMINI_API_KEY ? "live" : "simulation",
+  });
+});
+
+app.get(["/api/admin/status", "/admin/status"], (_req, res) => {
+  res.json({
+    enabled: Boolean(process.env.ADMIN_PASSWORD),
+    paystackConnected: Boolean(process.env.PAYSTACK_SECRET_KEY),
+  });
+});
+
+let apiRouterPromise: Promise<express.Router> | null = null;
+
+async function loadApiRouter(): Promise<express.Router> {
+  if (!apiRouterPromise) {
+    apiRouterPromise = Promise.all([
+      import("../src/server/aiRoutes.js"),
+      import("../src/server/paymentRoutes.js"),
+      import("../src/server/adminRoutes.js"),
+      import("../src/server/mentorRoutes.js"),
+      import("../src/server/leadRoutes.js"),
+      import("../src/server/messageRoutes.js"),
+      import("../src/server/contentRoutes.js"),
+      import("../src/server/demoReviewerRoutes.js"),
+      import("../src/server/mentorReviewRoutes.js"),
+    ]).then(
+      ([
+        aiRoutes,
+        paymentRoutes,
+        adminRoutes,
+        mentorRoutes,
+        leadRoutes,
+        messageRoutes,
+        contentRoutes,
+        demoReviewerRoutes,
+        mentorReviewRoutes,
+      ]) => {
+        const router = express.Router();
+        router.use(aiRoutes.createAIRouter());
+        router.use(paymentRoutes.createPaymentRouter());
+        router.use(adminRoutes.createAdminRouter());
+        router.use(mentorRoutes.createMentorRouter(adminRoutes.requireAdmin));
+        router.use(leadRoutes.createLeadRouter(adminRoutes.requireAdmin));
+        router.use(messageRoutes.createMessageRouter(adminRoutes.requireAdmin));
+        router.use(contentRoutes.createContentRouter(adminRoutes.requireAdmin));
+        router.use(demoReviewerRoutes.createDemoReviewerRouter());
+        router.use(mentorReviewRoutes.createMentorReviewRouter());
+        return router;
+      }
+    );
+  }
+  return apiRouterPromise;
+}
+
+async function lazyApi(req: express.Request, res: express.Response, next: express.NextFunction) {
+  try {
+    const router = await loadApiRouter();
+    router(req, res, next);
+  } catch (error) {
+    next(error);
+  }
+}
+
+app.use("/api", lazyApi);
+app.use(lazyApi);
 
 export default app;
