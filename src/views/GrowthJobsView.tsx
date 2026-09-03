@@ -78,8 +78,8 @@ export const GrowthJobsView: React.FC = () => {
       </section>
 
       <section className="bg-slate-100 border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 grid grid-cols-1 lg:grid-cols-2 gap-4">
-          <div className="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-sm">
+        <div className="motion-card-grid max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div className="motion-card bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-sm">
             <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center mb-4">
               <BriefcaseBusiness className="w-5 h-5" />
             </div>
@@ -101,7 +101,7 @@ export const GrowthJobsView: React.FC = () => {
             </a>
           </div>
 
-          <div className="bg-slate-950 text-white border border-slate-800 rounded-2xl p-5 sm:p-6 shadow-sm">
+          <div className="motion-card bg-slate-950 text-white border border-slate-800 rounded-2xl p-5 sm:p-6 shadow-sm">
             <div className="w-10 h-10 rounded-xl bg-amber-500 text-slate-950 flex items-center justify-center mb-4">
               <FileText className="w-5 h-5" />
             </div>
@@ -152,16 +152,16 @@ export const GrowthJobsView: React.FC = () => {
               </div>
             </div>
 
-            <div className="space-y-4">
+            <div className="motion-card-grid space-y-4">
               {jobs.map((job) => (
                 <article
                   key={job.id}
-                  className="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-sm"
+                  className="motion-card group bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-sm"
                 >
                   <img
                     src={job.image || '/scenes/bootcamp-team.jpg'}
                     alt={job.title}
-                    className="w-full h-40 object-cover rounded-xl border border-slate-200 mb-5"
+                    className="motion-card-image w-full h-40 object-cover rounded-xl border border-slate-200 mb-5"
                   />
                   <div className="flex flex-col xl:flex-row xl:items-start justify-between gap-5">
                     <div className="space-y-4 min-w-0">
@@ -219,7 +219,7 @@ export const GrowthJobsView: React.FC = () => {
           </main>
 
           <aside className="lg:sticky lg:top-24 space-y-4">
-            <div className="bg-slate-950 text-white border border-slate-800 rounded-2xl p-5 shadow-sm">
+            <div className="motion-card bg-slate-950 text-white border border-slate-800 rounded-2xl p-5 shadow-sm">
               <div className="w-10 h-10 rounded-xl bg-amber-500 text-slate-950 flex items-center justify-center mb-4">
                 {canApply ? <CheckCircle2 className="w-5 h-5" /> : <Lock className="w-5 h-5" />}
               </div>
@@ -243,7 +243,7 @@ export const GrowthJobsView: React.FC = () => {
               )}
             </div>
 
-            <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
+            <div className="motion-card bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
               <p className="text-xs font-mono uppercase tracking-wider text-slate-500">Before you apply</p>
               <ul className="mt-3 space-y-2 text-sm text-slate-600">
                 <li className="flex gap-2"><CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" /> Keep your CV to PDF, DOC or DOCX.</li>

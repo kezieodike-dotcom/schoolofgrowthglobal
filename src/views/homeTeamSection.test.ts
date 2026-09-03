@@ -20,3 +20,13 @@ if (teamIndex < testimonialsIndex) {
 if (!source.includes('FACULTY_MEMBERS')) {
   throw new Error('Meet Our Team should be driven by the existing faculty data.');
 }
+
+const css = readFileSync(new URL('../index.css', import.meta.url), 'utf8');
+
+if (!source.includes('motion-orbit-drift') || !source.includes('motion-soft-reveal')) {
+  throw new Error('Home page should use Spaceship-inspired motion hooks without changing the core UI.');
+}
+
+if (!css.includes('@keyframes orbit-drift') || !css.includes('@keyframes soft-reveal')) {
+  throw new Error('Global CSS should define the homepage motion keyframes.');
+}

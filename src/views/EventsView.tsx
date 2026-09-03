@@ -27,8 +27,8 @@ export const EventsView: React.FC = () => {
 
       {/* Featured event banner */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12">
-        <div className="relative rounded-3xl overflow-hidden border border-amber-300 shadow-2xl">
-          <img src={featured.image} alt={featured.title} className="w-full h-72 object-cover opacity-60" />
+        <div className="motion-card motion-card-orbit group relative rounded-3xl overflow-hidden border border-amber-300 shadow-2xl">
+          <img src={featured.image} alt={featured.title} className="motion-card-image w-full h-72 object-cover opacity-60" />
           <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/80 to-transparent" />
           <div className="absolute inset-0 flex flex-col justify-center p-8 sm:p-12 max-w-2xl space-y-4">
             <span className="text-[10px] font-mono px-2.5 py-1 rounded bg-amber-500 text-slate-950 font-bold w-fit">
@@ -77,11 +77,11 @@ export const EventsView: React.FC = () => {
           ))}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="motion-card-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {events.map((event) => (
-            <div key={event.id} className="bg-white shadow-sm border border-slate-200 rounded-2xl overflow-hidden flex flex-col hover:border-slate-300 transition-all">
+            <div key={event.id} className="motion-card group bg-white shadow-sm border border-slate-200 rounded-2xl overflow-hidden flex flex-col hover:border-slate-300 transition-all">
               <div className="relative h-36 overflow-hidden">
-                <img src={event.image} alt={event.title} className="w-full h-full object-cover opacity-80" />
+                <img src={event.image} alt={event.title} className="motion-card-image w-full h-full object-cover opacity-80" />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent" />
                 <span className="absolute top-3 left-3 text-[10px] font-mono px-2 py-0.5 rounded bg-slate-950/80 text-amber-400 border border-amber-500/30">
                   {event.type}

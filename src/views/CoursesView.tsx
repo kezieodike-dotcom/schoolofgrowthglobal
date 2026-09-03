@@ -133,7 +133,7 @@ export const CoursesView: React.FC = () => {
         </div>
 
         {/* Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="motion-card-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {courses.map((course) => {
             const unlocked = canAccessLevel(course.level as CourseLevel);
             // Names the specific package that opens this course, so a locked
@@ -144,7 +144,7 @@ export const CoursesView: React.FC = () => {
               <Link
                 key={course.id}
                 to={`/courses/${course.id}`}
-                className={`group bg-white border shadow-sm rounded-2xl overflow-hidden flex flex-col transition-all ${
+                className={`motion-card group bg-white border shadow-sm rounded-2xl overflow-hidden flex flex-col transition-all ${
                   unlocked
                     ? 'border-emerald-200 hover:border-emerald-300'
                     : 'border-slate-200 hover:border-amber-300'
@@ -154,7 +154,7 @@ export const CoursesView: React.FC = () => {
                   <img
                     src={course.heroImage}
                     alt={course.title}
-                    className={`w-full h-full object-cover transition-all duration-500 group-hover:scale-105 ${
+                    className={`motion-card-image w-full h-full object-cover transition-all duration-500 group-hover:scale-105 ${
                       unlocked ? 'opacity-80' : 'opacity-50 grayscale'
                     }`}
                   />

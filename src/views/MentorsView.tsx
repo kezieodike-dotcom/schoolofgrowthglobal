@@ -326,9 +326,9 @@ export const MentorsView: React.FC = () => {
 
       <section className="bg-white border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <div className="motion-card-grid grid grid-cols-2 md:grid-cols-4 gap-3">
             {MENTORSHIP_SERVICE_MODEL.map((stage, index) => (
-              <div key={stage} className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+              <div key={stage} className="motion-card rounded-2xl border border-slate-200 bg-slate-50 p-4">
                 <p className="text-[10px] font-mono uppercase tracking-wider text-amber-700">
                   Step {index + 1}
                 </p>
@@ -340,7 +340,7 @@ export const MentorsView: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.1fr] gap-6 items-start">
-            <div className="rounded-3xl bg-slate-950 text-white border border-slate-800 p-6 sm:p-8">
+            <div className="motion-card motion-card-orbit rounded-3xl bg-slate-950 text-white border border-slate-800 p-6 sm:p-8">
               <p className="text-[11px] font-mono uppercase tracking-wider text-amber-300">
                 Growth direction
               </p>
@@ -355,7 +355,7 @@ export const MentorsView: React.FC = () => {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="motion-card-grid grid grid-cols-1 sm:grid-cols-2 gap-4">
               <LadderPanel title="Consultation ladder" items={CONSULTATION_LADDER} />
               <LadderPanel title="Mentorship ladder" items={MENTORSHIP_LADDER} />
             </div>
@@ -366,7 +366,7 @@ export const MentorsView: React.FC = () => {
       <section className="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 xl:grid-cols-[340px_1fr] gap-8 items-start">
           <aside className="space-y-5 xl:sticky xl:top-24">
-            <div className="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm">
+            <div className="motion-card bg-white border border-slate-200 rounded-2xl p-4 shadow-sm">
               <div className="relative">
                 <Search className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
                 <input
@@ -379,7 +379,7 @@ export const MentorsView: React.FC = () => {
               </div>
             </div>
 
-            <div className="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm space-y-3">
+            <div className="motion-card bg-white border border-slate-200 rounded-2xl p-4 shadow-sm space-y-3">
               <button
                 onClick={() => {
                   setActiveCategory('All');
@@ -419,7 +419,7 @@ export const MentorsView: React.FC = () => {
             </div>
 
             {focusOptions.length > 1 && (
-              <div className="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm">
+              <div className="motion-card bg-white border border-slate-200 rounded-2xl p-4 shadow-sm">
                 <p className="text-[11px] font-mono font-bold uppercase tracking-wider text-slate-500 mb-3">
                   Narrow focus
                 </p>
@@ -443,7 +443,7 @@ export const MentorsView: React.FC = () => {
           </aside>
 
           <main className="space-y-7">
-            <div className="rounded-3xl bg-white border border-slate-200 p-5 sm:p-7 shadow-sm">
+            <div className="motion-card rounded-3xl bg-white border border-slate-200 p-5 sm:p-7 shadow-sm">
               <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-5">
                 <div className="max-w-2xl">
                   <p className="text-[11px] font-mono uppercase tracking-wider text-amber-700">
@@ -505,7 +505,7 @@ export const MentorsView: React.FC = () => {
                   </div>
                 </div>
               ) : (
-                <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                <div className="motion-card-grid mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                   {MASTER_GROWTH_DIVISIONS.slice(0, 6).map((division) => (
                     <button
                       key={division.id}
@@ -514,7 +514,7 @@ export const MentorsView: React.FC = () => {
                         setActiveCategory(division.id);
                         setActiveFocus('All');
                       }}
-                      className="text-left rounded-2xl border border-slate-200 bg-slate-50 p-4 hover:border-amber-300 transition-colors"
+                      className="motion-card text-left rounded-2xl border border-slate-200 bg-slate-50 p-4 hover:border-amber-300 transition-colors"
                     >
                       <p className="text-sm font-bold text-slate-900 leading-snug">
                         {division.title}
@@ -529,7 +529,7 @@ export const MentorsView: React.FC = () => {
             </div>
 
             {hasMentorship ? (
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 p-4 rounded-2xl bg-emerald-50 border border-emerald-200">
+              <div className="motion-card flex flex-col md:flex-row md:items-center justify-between gap-3 p-4 rounded-2xl bg-emerald-50 border border-emerald-200">
                 <p className="flex items-center gap-2 text-xs text-emerald-800">
                   <UserCheck className="w-4 h-4 shrink-0" />
                   <span>
@@ -548,7 +548,7 @@ export const MentorsView: React.FC = () => {
                 </Link>
               </div>
             ) : (
-              <div className="rounded-2xl bg-slate-950 text-white border border-slate-800 p-5 sm:p-6 shadow-sm">
+              <div className="motion-card motion-card-orbit rounded-2xl bg-slate-950 text-white border border-slate-800 p-5 sm:p-6 shadow-sm">
                 <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
                   <div className="space-y-2">
                     <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 text-[10px] font-mono font-bold uppercase tracking-wider">
@@ -570,7 +570,7 @@ export const MentorsView: React.FC = () => {
               </div>
             )}
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+            <div className="motion-card-grid grid grid-cols-1 lg:grid-cols-2 gap-5">
               {ordered.map((mentor) => {
                 const details = mentorDetails(mentor);
                 const paired = pairing.isPaired(mentor.id);
@@ -583,7 +583,7 @@ export const MentorsView: React.FC = () => {
                 return (
                   <article
                     key={mentor.id}
-                    className={`bg-white border rounded-2xl p-5 shadow-sm flex flex-col gap-5 ${
+                    className={`motion-card bg-white border rounded-2xl p-5 shadow-sm flex flex-col gap-5 ${
                       paired ? 'border-emerald-300 ring-1 ring-emerald-100' : 'border-slate-200'
                     }`}
                   >
@@ -592,7 +592,7 @@ export const MentorsView: React.FC = () => {
                         <img
                           src={mentor.avatar}
                           alt={mentor.name}
-                          className="w-16 h-16 rounded-2xl object-cover border-2 border-amber-300"
+                          className="motion-card-image w-16 h-16 rounded-2xl object-cover border-2 border-amber-300"
                         />
                       ) : (
                         <span className="w-16 h-16 shrink-0 rounded-2xl border-2 border-amber-300 bg-amber-50 text-amber-700 flex items-center justify-center font-serif font-bold text-lg">
@@ -717,7 +717,7 @@ export const MentorsView: React.FC = () => {
               </div>
             )}
 
-            <div className="rounded-2xl bg-white border border-amber-300 p-6 sm:p-8 flex flex-col md:flex-row md:items-center justify-between gap-5">
+            <div className="motion-card rounded-2xl bg-white border border-amber-300 p-6 sm:p-8 flex flex-col md:flex-row md:items-center justify-between gap-5">
               <div>
                 <h3 className="text-xl font-serif font-bold text-slate-900">Are you an experienced professional?</h3>
                 <p className="text-sm text-slate-500 mt-1">Apply to become a mentor and serve vetted students and subscribed mentees.</p>
@@ -784,7 +784,7 @@ const Fact: React.FC<{ icon: React.ReactNode; label: string; value: string }> = 
 );
 
 const LadderPanel: React.FC<{ title: string; items: LadderItem[] }> = ({ title, items }) => (
-  <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5 sm:p-6">
+  <div className="motion-card rounded-2xl border border-slate-800 bg-slate-900 p-5 sm:p-6">
     <h3 className="text-base font-serif font-bold text-white">{title}</h3>
     <div className="mt-5 space-y-3">
       {items.map((item) => (

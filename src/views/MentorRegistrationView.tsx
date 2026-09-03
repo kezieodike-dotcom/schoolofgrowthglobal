@@ -28,6 +28,7 @@ import {
   ShieldCheck,
   Clock,
   Trash2,
+  Banknote,
 } from 'lucide-react';
 
 /**
@@ -246,10 +247,84 @@ export const MentorRegistrationView: React.FC = () => {
         subtitle="Join the directory students choose from. Tell us what you have built, how you work, and who you are best placed to help."
       />
 
+      <section className="bg-white border-b border-slate-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
+          <div className="grid grid-cols-1 lg:grid-cols-[1.05fr_0.95fr] gap-5 lg:gap-8 items-stretch">
+            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5 sm:p-7">
+              <p className="text-[11px] font-mono uppercase tracking-wider text-amber-700">
+                Mentor / Consultant onboarding
+              </p>
+              <h2 className="mt-3 text-2xl sm:text-3xl font-serif font-bold leading-tight text-slate-950">
+                Become a Mentor. Create Impact. Earn From Your Expertise.
+              </h2>
+              <p className="mt-3 text-sm sm:text-base text-slate-600 leading-relaxed">
+                Your knowledge, experience, and ability to guide others have value.
+                Join a growing community of mentors and consultants helping people
+                make better decisions, overcome challenges, build careers, grow
+                businesses, and transform their lives.
+              </p>
+              <p className="mt-3 text-sm text-slate-600 leading-relaxed">
+                You focus on delivering exceptional value. We provide the platform,
+                client access, systems, and growth infrastructure.
+              </p>
+              <a
+                href="#mentor-application"
+                className="mt-5 inline-flex items-center justify-center gap-2 rounded-xl bg-amber-500 px-5 py-3 text-xs font-bold text-slate-950 shadow-lg shadow-amber-500/20 transition hover:bg-amber-400"
+              >
+                Apply as a Mentor/Consultant
+                <ChevronRight className="w-4 h-4" />
+              </a>
+            </div>
+
+            <div className="rounded-2xl border border-slate-200 bg-white p-5 sm:p-7 shadow-sm">
+              <div className="flex items-center gap-3">
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-amber-50 text-amber-700">
+                  <Banknote className="w-5 h-5" />
+                </span>
+                <div>
+                  <p className="text-[11px] font-mono uppercase tracking-wider text-amber-700">
+                    Transparency
+                  </p>
+                  <h3 className="text-lg font-serif font-bold text-slate-950">
+                    How You Earn
+                  </h3>
+                </div>
+              </div>
+              <p className="mt-4 text-sm text-slate-600 leading-relaxed">
+                School of Growth Global operates a performance-based revenue-sharing
+                model. Mentors and Consultants receive 80% of the consultation or
+                mentorship fees generated through their individual sessions, while
+                they receive 20% of the consultation or mentorship fees generated
+                through their corporate organization sessions, subject to the terms
+                of their engagement with School of Growth Global.
+              </p>
+              <p className="mt-3 text-sm text-slate-600 leading-relaxed">
+                Applicable taxes and statutory deductions are removed before the 80%
+                individual-session share is calculated and paid to the mentor or
+                consultant.
+              </p>
+              <p className="mt-4 rounded-xl border border-amber-200 bg-amber-50 p-4 text-xs text-amber-950 leading-relaxed">
+                Please note: as part of our mission to give the child of a common
+                person the chance and privilege to be mentored, taught, or guided by
+                great, experienced and intelligent minds like you, you may be given
+                the honor to lecture or mentor School of Growth Global students
+                without a fee. This is different from subscribed mentees you earn
+                80% from.
+              </p>
+              <p className="mt-4 text-sm text-slate-600 leading-relaxed">
+                Your earnings increase as you provide valuable experiences, maintain
+                strong client satisfaction, and build your professional profile on
+                the platform.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section className="py-10 sm:py-14 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* ── Form column ────────────────────────────────────────── */}
-          <div className="lg:col-span-8 space-y-5" ref={formTopRef}>
+          <div id="mentor-application" className="lg:col-span-8 space-y-5 scroll-mt-28" ref={formTopRef}>
             {draftRestored && step < REVIEW_STEP && (
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-2xl bg-amber-50 border border-amber-200">
                 <p className="text-xs text-amber-900 flex items-center gap-2">
