@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, Navigate, useParams, useSearchParams } from 'react-router-dom';
 import { MENTORS } from '../data/mockData';
+import { CountryPhoneField } from '../components/CountryPhoneField';
 import { PLANS, isPlanCode, formatNaira } from '../lib/pricing';
 import {
   Lock,
@@ -38,6 +39,7 @@ export const CheckoutView: React.FC = () => {
   const [config, setConfig] = useState<PaymentConfig | null>(null);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
@@ -64,6 +66,7 @@ export const CheckoutView: React.FC = () => {
   // Carried from the mentor directory when checkout was started by picking a
   // specific mentor, so the summary confirms who the subscription is for.
   const mentorId = searchParams.get('mentor');
+  const referral = searchParams.get('ref') ?? '';
   const mentor = mentorId ? MENTORS.find((m) => m.id === mentorId) : undefined;
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -79,6 +82,8 @@ export const CheckoutView: React.FC = () => {
           plan: plan.code,
           email: email.trim(),
           name: name.trim(),
+          phone: phone.trim(),
+          referral,
           mentorId: mentor?.id,
         }),
       });
@@ -187,6 +192,23 @@ export const CheckoutView: React.FC = () => {
                     <p className="text-[11px] text-slate-400 mt-1.5">
                       Your receipt and access confirmation go here.
                     </p>
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="checkout-phone"
+                      className="block text-slate-500 text-xs mb-1.5"
+                    >
+                      Phone / WhatsApp
+                    </label>
+                    <CountryPhoneField
+                      id="checkout-phone"
+                      name="phone"
+                      value={phone}
+                      required
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-slate-900 text-sm focus:outline-none focus:border-amber-500 transition-colors"
+                      onChange={setPhone}
+                    />
                   </div>
 
                   {error && (

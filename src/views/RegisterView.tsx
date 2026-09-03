@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { PageHero } from '../components/PageHero';
+import { CountryPhoneField } from '../components/CountryPhoneField';
 import { FORMS, type FormField } from '../lib/formDefs';
 import { useFormSubmit, HONEYPOT_PROPS } from '../lib/useFormSubmit';
 import { PACKAGES, formatNaira } from '../lib/pricing';
@@ -65,6 +66,14 @@ const Field: React.FC<{ field: FormField }> = ({ field }) => {
         <select id={field.name} name={field.name} required={field.required} className={base}>
           {field.options?.map((o) => <option key={o}>{o}</option>)}
         </select>
+      ) : field.type === 'tel' ? (
+        <CountryPhoneField
+          id={field.name}
+          name={field.name}
+          required={field.required}
+          className={base}
+          placeholder={field.placeholder}
+        />
       ) : (
         <input
           id={field.name}

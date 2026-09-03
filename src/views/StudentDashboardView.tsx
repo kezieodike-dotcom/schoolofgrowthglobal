@@ -6,6 +6,7 @@ import { askGrowthAI, describeError, type ChatMessage } from '../lib/growthAI';
 import { useVoiceInput } from '../lib/useVoiceInput';
 import { useChatAutoScroll } from '../lib/useChatAutoScroll';
 import { VoiceInputButton } from '../components/VoiceInputButton';
+import { ReferralShareCard } from '../components/ReferralShareCard';
 import { useEnrollment } from '../lib/useEnrollment';
 import { useMentorPairing } from '../lib/useMentorPairing';
 import { deriveExperience, aiQuota, type StudentFeature } from '../lib/studentExperience';
@@ -645,6 +646,13 @@ const OverviewTab: React.FC<{
           })}
         </div>
       </section>
+
+      <ReferralShareCard
+        audience="student"
+        name={STUDENT_DATA.name}
+        title="Invite a student"
+        body="Share your link with someone who should register for School of Growth Global."
+      />
 
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
         <div className="xl:col-span-2 space-y-4">

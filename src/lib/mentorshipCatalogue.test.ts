@@ -43,6 +43,13 @@ for (const duration of ['30 Days', '90 Days', '6 Months', '12 Months']) {
   }
 }
 
+const relationshipDivision = MASTER_GROWTH_DIVISIONS.find(
+  (division) => division.id === 'relationships'
+);
+if (!relationshipDivision?.services.includes('Wedding Planning')) {
+  throw new Error('Relationship services should include Wedding Planning.');
+}
+
 if (!CORPORATE_PRICING_BANDS.some((band) => band.name === 'Annual Consulting Retainer')) {
   throw new Error('Corporate pricing should include annual consulting retainers.');
 }

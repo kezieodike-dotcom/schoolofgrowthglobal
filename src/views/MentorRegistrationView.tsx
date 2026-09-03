@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { PageHero } from '../components/PageHero';
+import { CountryPhoneField } from '../components/CountryPhoneField';
 import { useFormSubmit, HONEYPOT_PROPS } from '../lib/useFormSubmit';
 import {
   MENTOR_STEPS,
@@ -636,6 +637,19 @@ const Field: React.FC<{
           selected={text}
           describedBy={describedBy || undefined}
           onSelect={onChange}
+        />
+      ) : field.type === 'tel' ? (
+        <CountryPhoneField
+          id={id}
+          name={field.name}
+          value={text}
+          required={field.required}
+          className={base}
+          invalid={Boolean(error)}
+          describedBy={describedBy || undefined}
+          autoComplete={field.autoComplete}
+          placeholder={field.placeholder}
+          onChange={(next) => onChange(next)}
         />
       ) : (
         <input

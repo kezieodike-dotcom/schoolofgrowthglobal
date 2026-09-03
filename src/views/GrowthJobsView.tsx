@@ -15,6 +15,7 @@ import {
 import { Link } from 'react-router-dom';
 import { GROWTH_JOBS } from '../data/mockData';
 import { PageHero } from '../components/PageHero';
+import { CountryPhoneField } from '../components/CountryPhoneField';
 import { useEnrollment } from '../lib/useEnrollment';
 import { useFormSubmit } from '../lib/useFormSubmit';
 import { useContentCollection } from '../lib/useContent';
@@ -385,7 +386,7 @@ const JobApplicationModal: React.FC<{
                 <input required name="email" type="email" className={INPUT_CLASS} />
               </Field>
               <Field label="Phone / WhatsApp">
-                <input required name="phone" type="tel" className={INPUT_CLASS} />
+                <CountryPhoneField required name="phone" className={INPUT_CLASS} />
               </Field>
               <Field label="Student / Mentee Status">
                 <select required name="studentStatus" className={INPUT_CLASS}>

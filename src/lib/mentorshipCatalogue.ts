@@ -220,6 +220,7 @@ export const MASTER_GROWTH_DIVISIONS: GrowthDivision[] = [
       'Dating Strategy',
       'Communication',
       'Conflict Resolution',
+      'Wedding Planning',
       'Marriage Preparation',
       'Premarital Mentorship',
       'Couples Growth',

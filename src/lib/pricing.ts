@@ -24,12 +24,23 @@ export type MentorshipPlanId =
   | "mentor-5-hours"
   | "mentor-1-week"
   | "mentor-1-month"
-  | "mentor-1-year";
+  | "mentor-1-year"
+  | "mentor-30-day"
+  | "mentor-90-day"
+  | "mentor-6-month"
+  | "mentor-12-month";
+
+export type ConsultationPlanId =
+  | "consult-quick-clarity"
+  | "consult-strategic-consultation"
+  | "consult-growth-strategy-session"
+  | "consult-growth-audit"
+  | "consult-blueprint";
 
 /** Anything a student or mentee can pay for. This is what /api/payments accepts. */
-export type PlanCode = PackageId | MentorshipPlanId;
+export type PlanCode = PackageId | MentorshipPlanId | ConsultationPlanId;
 
-export type PlanKind = "package" | "mentorship";
+export type PlanKind = "package" | "mentorship" | "consultation";
 
 export type CourseLevel =
   | "Emerging Leaders"
@@ -330,6 +341,181 @@ export const PLANS: Record<PlanCode, Plan> = {
     ],
     highlight: "Deepest support",
   },
+
+  "consult-quick-clarity": {
+    code: "consult-quick-clarity",
+    kind: "consultation",
+    name: "Quick Clarity",
+    tagline: "A focused 30-minute consultation for one problem that needs immediate direction.",
+    amountKobo: naira(10_000),
+    durationDays: 7,
+    billing: "30-minute consultation",
+    includedLevels: [],
+    mentorshipDays: 0,
+    mentorSlots: 0,
+    features: [
+      "30-minute focused diagnosis",
+      "One clear growth challenge defined",
+      "Immediate recommendations and next steps",
+      "Best for quick career, business, leadership or personal decisions",
+    ],
+  },
+
+  "consult-strategic-consultation": {
+    code: "consult-strategic-consultation",
+    kind: "consultation",
+    name: "Strategic Consultation",
+    tagline: "A 60-minute session for a significant problem requiring analysis and recommendations.",
+    amountKobo: naira(25_000),
+    durationDays: 14,
+    billing: "60-minute consultation",
+    includedLevels: [],
+    mentorshipDays: 0,
+    mentorSlots: 0,
+    features: [
+      "60-minute consultation",
+      "Problem analysis and expert recommendations",
+      "Decision guidance for a significant growth issue",
+      "Recommended for specialist career, business or leadership questions",
+    ],
+  },
+
+  "consult-growth-strategy-session": {
+    code: "consult-growth-strategy-session",
+    kind: "consultation",
+    name: "Growth Strategy Session",
+    tagline: "A 90-120 minute deep assessment with strategy and action planning.",
+    amountKobo: naira(75_000),
+    durationDays: 21,
+    billing: "90-120 minute strategy session",
+    includedLevels: [],
+    mentorshipDays: 0,
+    mentorSlots: 0,
+    features: [
+      "Deep assessment of your situation",
+      "Strategy and action planning",
+      "Practical roadmap for business, career, leadership or life growth",
+      "Best for complex individual or business decisions",
+    ],
+    highlight: "Strategy",
+  },
+
+  "consult-growth-audit": {
+    code: "consult-growth-audit",
+    kind: "consultation",
+    name: "Growth Audit",
+    tagline: "A structured review of your business, career, leadership path or organization.",
+    amountKobo: naira(200_000),
+    durationDays: 30,
+    billing: "comprehensive growth audit starting price",
+    includedLevels: [],
+    mentorshipDays: 0,
+    mentorSlots: 0,
+    features: [
+      "Comprehensive growth review",
+      "Gaps, risks and constraints identified",
+      "Improvement opportunities prioritized",
+      "Best for business, career, leadership or organizational diagnosis",
+    ],
+  },
+
+  "consult-blueprint": {
+    code: "consult-blueprint",
+    kind: "consultation",
+    name: "Blueprint",
+    tagline: "A documented personalized strategy based on your exact growth situation.",
+    amountKobo: naira(250_000),
+    durationDays: 45,
+    billing: "documented strategy starting price",
+    includedLevels: [],
+    mentorshipDays: 0,
+    mentorSlots: 0,
+    features: [
+      "Documented personalized growth strategy",
+      "Priorities, roadmap and implementation focus",
+      "Designed around your business, career, leadership or personal challenge",
+      "Best for clients who need a written strategic plan",
+    ],
+    highlight: "Documented plan",
+  },
+
+  "mentor-30-day": {
+    code: "mentor-30-day",
+    kind: "mentorship",
+    name: "30-Day Mentorship",
+    tagline: "Start: immediate direction and accountability for one growth area.",
+    amountKobo: naira(30_000),
+    durationDays: 30,
+    billing: "30-day mentorship starting price",
+    includedLevels: [],
+    mentorshipDays: 30,
+    mentorSlots: 1,
+    features: [
+      "30 days of mentor access",
+      "Immediate direction and accountability",
+      "Direct mentee-to-mentor messaging during access",
+      "Good for quick momentum and early execution",
+    ],
+  },
+
+  "mentor-90-day": {
+    code: "mentor-90-day",
+    kind: "mentorship",
+    name: "90-Day Mentorship",
+    tagline: "Build: the flagship mentorship duration for meaningful growth and execution.",
+    amountKobo: naira(75_000),
+    durationDays: 90,
+    billing: "90-day mentorship starting price",
+    includedLevels: [],
+    mentorshipDays: 90,
+    mentorSlots: 1,
+    features: [
+      "90 days of structured mentorship",
+      "Build habits, systems and portfolio evidence",
+      "Direct mentee-to-mentor messaging during access",
+      "Recommended flagship mentorship duration",
+    ],
+    highlight: "Flagship",
+  },
+
+  "mentor-6-month": {
+    code: "mentor-6-month",
+    kind: "mentorship",
+    name: "6-Month Mentorship",
+    tagline: "Scale: serious transformation across business, career, leadership or personal growth.",
+    amountKobo: naira(200_000),
+    durationDays: 180,
+    billing: "6-month mentorship starting price",
+    includedLevels: [],
+    mentorshipDays: 180,
+    mentorSlots: 2,
+    features: [
+      "6 months of deeper mentorship",
+      "Sustain change and improve capability",
+      "Direct messaging throughout access",
+      "Best for serious transformation and execution support",
+    ],
+  },
+
+  "mentor-12-month": {
+    code: "mentor-12-month",
+    kind: "mentorship",
+    name: "12-Month Mentorship",
+    tagline: "Master: long-term development, strategic support and high-level accountability.",
+    amountKobo: naira(500_000),
+    durationDays: 365,
+    billing: "12-month mentorship starting price",
+    includedLevels: [],
+    mentorshipDays: 365,
+    mentorSlots: 3,
+    features: [
+      "12 months of long-term mentor access",
+      "Strategic development and accountability",
+      "Direct messaging throughout access",
+      "Best for leadership maturity and high-level growth",
+    ],
+    highlight: "Long-term",
+  },
 };
 
 export const PACKAGES: Plan[] = [PLANS.mini, PLANS.medium, PLANS.maxi, PLANS.premium];
@@ -343,6 +529,18 @@ export const MENTORSHIP_PLANS: Plan[] = [
   PLANS["mentor-1-week"],
   PLANS["mentor-1-month"],
   PLANS["mentor-1-year"],
+  PLANS["mentor-30-day"],
+  PLANS["mentor-90-day"],
+  PLANS["mentor-6-month"],
+  PLANS["mentor-12-month"],
+];
+
+export const CONSULTATION_PLANS: Plan[] = [
+  PLANS["consult-quick-clarity"],
+  PLANS["consult-strategic-consultation"],
+  PLANS["consult-growth-strategy-session"],
+  PLANS["consult-growth-audit"],
+  PLANS["consult-blueprint"],
 ];
 
 export function isPlanCode(value: unknown): value is PlanCode {

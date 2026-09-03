@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { MENTORS } from '../data/mockData';
 import type { BookItem, Mentor } from '../types';
+import { ReferralShareCard } from '../components/ReferralShareCard';
 import type { ContentRecord } from '../lib/content';
 import { formatNaira } from '../lib/pricing';
 import {
@@ -564,6 +565,14 @@ const MentorRail: React.FC<{
           </span>
         ))}
       </div>
+
+      <ReferralShareCard
+        audience="mentor"
+        name={mentor.name}
+        title="Invite a mentor"
+        body="Share your mentor referral link with a trusted expert who should apply through the global platform."
+        dark
+      />
     </div>
 
     <div className="border-t border-slate-800 p-3">

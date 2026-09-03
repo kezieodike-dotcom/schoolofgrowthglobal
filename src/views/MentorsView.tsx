@@ -20,9 +20,11 @@ import {
 } from 'lucide-react';
 import { MENTORS } from '../data/mockData';
 import { PageHero } from '../components/PageHero';
+import { CountryPhoneField } from '../components/CountryPhoneField';
 import { useEnrollment } from '../lib/useEnrollment';
 import { useMentorPairing } from '../lib/useMentorPairing';
-import { PACKAGES, PLANS } from '../lib/pricing';
+import { PACKAGES, PLANS, formatNaira } from '../lib/pricing';
+import { paymentLinkForLadder, planCodeForLadder } from '../lib/ladderPayments';
 import { summarizeMentorReviews } from '../lib/mentorReviews';
 import { useMentorReviews } from '../lib/useMentorReviews';
 import { HONEYPOT_PROPS, useFormSubmit } from '../lib/useFormSubmit';
@@ -805,6 +807,13 @@ const LadderPanel: React.FC<{ title: string; items: LadderItem[] }> = ({ title, 
           <h4 className="mt-3 text-sm font-bold text-white">{item.title}</h4>
           <p className="mt-1 text-xs leading-relaxed text-slate-300">{item.description}</p>
           <p className="mt-2 text-[11px] leading-relaxed text-amber-100">{item.outcome}</p>
+          <Link
+            to={paymentLinkForLadder(item.title)}
+            className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-amber-500 px-3 py-2.5 text-[11px] font-black text-slate-950 transition hover:bg-amber-400"
+          >
+            Pay from {formatNaira(PLANS[planCodeForLadder(item.title)].amountKobo)}
+            <ArrowRight className="h-3.5 w-3.5" />
+          </Link>
         </div>
       ))}
     </div>
@@ -879,7 +888,7 @@ const ConsultationRequestModal: React.FC<{
           </RequestField>
 
           <RequestField label="Phone / WhatsApp">
-            <input name="phone" required className={REQUEST_INPUT_CLASS} placeholder="+234..." />
+            <CountryPhoneField name="phone" required className={REQUEST_INPUT_CLASS} />
           </RequestField>
 
           <RequestField label="Growth division">

@@ -167,11 +167,12 @@ export function createPaymentRouter(): Router {
   });
 
   /**
-   * Starts a payment. Body: { plan, email, name?, mentorId? } or { bookId, email, name? }
+   * Starts a payment. Body: { plan, email, name?, phone?, referral?, mentorId? }
+   * or { bookId, email, name?, phone?, referral? }
    * Returns Paystack's hosted checkout URL for the browser to visit.
    */
   router.post("/payments/initialize", async (req, res) => {
-    const { plan: planCode, bookId, email, name, mentorId } = req.body ?? {};
+    const { plan: planCode, bookId, email, name, phone, referral, mentorId } = req.body ?? {};
 
     // Deliberately loose: full RFC-compliant validation belongs to Paystack,
     // which rejects undeliverable addresses. This only catches obvious typos
@@ -222,6 +223,8 @@ export function createPaymentRouter(): Router {
               companyShareKobo: book ? calculateBookRevenueSplit(book.priceKobo).companyShareKobo : undefined,
               ownerShareKobo: book ? calculateBookRevenueSplit(book.priceKobo).ownerShareKobo : undefined,
               name: typeof name === "string" ? name : undefined,
+              phone: typeof phone === "string" ? phone : undefined,
+              referral: typeof referral === "string" ? referral : undefined,
               // Carried through so the confirmation email and the student's
               // first session can name the mentor they chose at checkout.
               mentorId: plan && typeof mentorId === "string" ? mentorId : undefined,
