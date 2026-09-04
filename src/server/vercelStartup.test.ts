@@ -42,3 +42,13 @@ if (!apiIndex.includes('import { createAdminRouter, requireAdmin } from "../src/
 if (apiIndex.includes('import("../src/server/adminRoutes.js")')) {
   throw new Error('The general API router should reuse the static admin middleware, not lazy-load adminRoutes twice.');
 }
+
+if (!apiIndex.includes('app.get(["/api/payments/config", "/payments/config"]')) {
+  throw new Error('Vercel should answer the payment config probe before loading the heavy API router.');
+}
+
+const paymentConfigIndex = apiIndex.indexOf('app.get(["/api/payments/config", "/payments/config"]');
+const lazyApiIndex = apiIndex.indexOf('app.use("/api", lazyApi)');
+if (paymentConfigIndex === -1 || lazyApiIndex === -1 || paymentConfigIndex > lazyApiIndex) {
+  throw new Error('The payment config probe must be mounted before the lazy API router.');
+}

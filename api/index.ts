@@ -58,6 +58,14 @@ app.get(["/api/admin/status", "/admin/status"], (_req, res) => {
   });
 });
 
+app.get(["/api/payments/config", "/payments/config"], (_req, res) => {
+  res.json({
+    configured: Boolean(process.env.PAYSTACK_SECRET_KEY),
+    publicKey: process.env.PAYSTACK_PUBLIC_KEY ?? null,
+    currency: "NGN",
+  });
+});
+
 let apiRouterPromise: Promise<express.Router> | null = null;
 
 async function loadApiRouter(): Promise<express.Router> {

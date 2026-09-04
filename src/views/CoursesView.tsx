@@ -18,6 +18,56 @@ import {
 
 const LEVELS = ['All', 'Emerging Leaders', 'Executive', 'Frontier', 'Senior Directorate', 'Elite'] as const;
 
+const COHORT_COURSE_IDS = [
+  'growth-foundation-cohort',
+  'growth-accelerator',
+  'executive-circle',
+  'elite-council',
+] as const;
+
+const isCohortCourse = (course: { id: string }) =>
+  COHORT_COURSE_IDS.includes(course.id as (typeof COHORT_COURSE_IDS)[number]);
+
+const COHORT_CARD_STYLES: Record<
+  (typeof COHORT_COURSE_IDS)[number],
+  {
+    card: string;
+    label: string;
+    labelClass: string;
+    levelClass: string;
+    lockClass: string;
+  }
+> = {
+  'growth-foundation-cohort': {
+    card: 'border-amber-300 bg-amber-50/70 hover:border-amber-400 shadow-amber-100/70',
+    label: 'Foundation pathway',
+    labelClass: 'bg-amber-500 text-slate-950',
+    levelClass: 'bg-white text-amber-800 border-amber-200',
+    lockClass: 'bg-amber-500 text-slate-950 border-amber-300',
+  },
+  'growth-accelerator': {
+    card: 'border-emerald-300 bg-emerald-50/70 hover:border-emerald-400 shadow-emerald-100/70',
+    label: 'Implementation pathway',
+    labelClass: 'bg-emerald-600 text-white',
+    levelClass: 'bg-white text-emerald-800 border-emerald-200',
+    lockClass: 'bg-emerald-600 text-white border-emerald-300',
+  },
+  'executive-circle': {
+    card: 'border-slate-400 bg-slate-100 hover:border-slate-500 shadow-slate-200/80',
+    label: 'Executive pathway',
+    labelClass: 'bg-slate-950 text-amber-300',
+    levelClass: 'bg-white text-slate-800 border-slate-300',
+    lockClass: 'bg-slate-950 text-amber-300 border-slate-700',
+  },
+  'elite-council': {
+    card: 'border-amber-500 bg-slate-950 hover:border-amber-400 shadow-slate-300/80',
+    label: 'Elite pathway',
+    labelClass: 'bg-amber-400 text-slate-950',
+    levelClass: 'bg-slate-900 text-amber-300 border-amber-500/40',
+    lockClass: 'bg-amber-400 text-slate-950 border-amber-300',
+  },
+};
+
 export const CoursesView: React.FC = () => {
   const [level, setLevel] = useState<(typeof LEVELS)[number]>('All');
   const [school, setSchool] = useState('All');
@@ -33,6 +83,146 @@ export const CoursesView: React.FC = () => {
       c.description.toLowerCase().includes(query.toLowerCase());
     return matchLevel && matchSchool && matchQuery;
   });
+
+  const cohortCourses = courses.filter(isCohortCourse);
+  const specializedCourses = courses.filter((course) => !isCohortCourse(course));
+
+  const renderCourseCard = (course: (typeof courses)[number]) => {
+    const unlocked = canAccessLevel(course.level as CourseLevel);
+    // Names the specific package that opens this course, so a locked
+    // card is an answer ("Growth Accelerator unlocks this") rather than a wall.
+    const unlockedBy = cheapestPackageFor(course.level as CourseLevel);
+    const cohortStyle = isCohortCourse(course)
+      ? COHORT_CARD_STYLES[course.id as (typeof COHORT_COURSE_IDS)[number]]
+      : null;
+    const isEliteCohort = course.id === 'elite-council';
+
+    return (
+      <Link
+        key={course.id}
+        to={`/courses/${course.id}`}
+        className={`scroll-card group border shadow-sm rounded-2xl overflow-hidden flex flex-col transition-all ${
+          cohortStyle
+            ? cohortStyle.card
+            : unlocked
+              ? 'bg-white border-emerald-200 hover:border-emerald-300'
+              : 'bg-white border-slate-200 hover:border-amber-300'
+        }`}
+      >
+        <div className="relative h-40 overflow-hidden">
+          <img
+            src={course.heroImage}
+            alt={course.title}
+            className={`scroll-card-image w-full h-full object-cover transition-all duration-500 ${
+              unlocked ? 'opacity-80' : 'opacity-50 grayscale'
+            }`}
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent" />
+          <span className="absolute top-3 left-3 text-[10px] font-mono px-2 py-0.5 rounded bg-slate-950/80 text-amber-400 border border-amber-500/30">
+            {course.schoolName}
+          </span>
+
+          {unlocked ? (
+            <span className="absolute top-3 right-3 flex items-center gap-1 text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500 text-slate-950 font-bold">
+              <LockOpen className="w-3 h-3" /> UNLOCKED
+            </span>
+          ) : (
+            <span
+              className={`absolute top-3 right-3 flex items-center justify-center w-7 h-7 rounded-full ${
+                cohortStyle?.lockClass ?? 'bg-slate-950/80 border border-amber-500/40'
+              }`}
+            >
+              <Lock className={`w-3.5 h-3.5 ${cohortStyle ? '' : 'text-amber-400'}`} />
+            </span>
+          )}
+
+          {course.featured && (
+            <span className="absolute bottom-3 left-3 text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500 text-slate-950 font-bold">
+              FLAGSHIP
+            </span>
+          )}
+        </div>
+
+        <div className="p-5 flex flex-col flex-1">
+          {cohortStyle && (
+            <div className="mb-3 flex items-center justify-between gap-3">
+              <span className={`rounded-full px-2.5 py-1 text-[10px] font-mono font-bold uppercase tracking-wider ${cohortStyle.labelClass}`}>
+                {cohortStyle.label}
+              </span>
+              <span className={`text-[10px] font-mono px-2 py-0.5 rounded border ${cohortStyle.levelClass}`}>
+                Cohort
+              </span>
+            </div>
+          )}
+          <div className="flex items-center justify-between mb-2 text-xs">
+            <span
+              className={`font-mono px-2 py-0.5 rounded border ${
+                cohortStyle?.levelClass ?? 'bg-slate-100 text-slate-600 border-slate-300'
+              }`}
+            >
+              {course.level}
+            </span>
+            <span className={`flex items-center gap-1 font-mono ${isEliteCohort ? 'text-amber-300' : 'text-amber-600'}`}>
+              <Star className="w-3.5 h-3.5 fill-amber-400" /> {course.rating}
+            </span>
+          </div>
+          <h4 className={`text-lg font-serif font-bold transition-colors mb-2 ${
+            isEliteCohort ? 'text-white group-hover:text-amber-300' : 'text-slate-900 group-hover:text-amber-700'
+          }`}>
+            {course.title}
+          </h4>
+          <p className={`text-xs line-clamp-2 mb-4 flex-1 ${isEliteCohort ? 'text-slate-300' : 'text-slate-500'}`}>
+            {course.description}
+          </p>
+          {course.modules.length > 0 && (
+            <div className={`mb-4 rounded-xl border p-3 space-y-2 ${
+              isEliteCohort ? 'bg-slate-900 border-slate-800' : 'bg-white/80 border-slate-200'
+            }`}>
+              <div className="flex items-center justify-between gap-2">
+                <span className={`text-[10px] font-mono uppercase tracking-wider ${isEliteCohort ? 'text-slate-400' : 'text-slate-500'}`}>
+                  Course preview
+                </span>
+                <span className="text-[10px] font-mono text-amber-700">
+                  {course.modules.length} modules
+                </span>
+              </div>
+              <div className="flex flex-wrap gap-1.5">
+                {course.modules.slice(0, 4).map((module) => (
+                  <span
+                    key={module.title}
+                    className={`rounded-full border px-2 py-1 text-[10px] ${
+                      isEliteCohort
+                        ? 'bg-slate-950 border-slate-700 text-slate-300'
+                        : 'bg-white border-slate-200 text-slate-600'
+                    }`}
+                  >
+                    {module.title}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+          <div className={`pt-4 border-t flex items-center justify-between text-xs ${
+            isEliteCohort ? 'border-slate-800' : 'border-slate-200'
+          }`}>
+            <span className={`flex items-center gap-1.5 font-mono ${isEliteCohort ? 'text-slate-400' : 'text-slate-500'}`}>
+              <Clock className="w-3.5 h-3.5" /> {course.duration}
+            </span>
+            {unlocked ? (
+              <span className="text-emerald-600 font-bold flex items-center gap-1">
+                Start <ChevronRight className="w-3.5 h-3.5" />
+              </span>
+            ) : (
+              <span className={`font-mono flex items-center gap-1 ${isEliteCohort ? 'text-amber-300' : 'text-slate-500'}`}>
+                <Lock className="w-3 h-3" />
+                {unlockedBy.name} unlocks this
+              </span>
+            )}
+          </div>
+        </div>
+      </Link>
+    );
+  };
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
@@ -132,109 +322,47 @@ export const CoursesView: React.FC = () => {
           </div>
         </div>
 
-        {/* Grid */}
-        <div className="scroll-card-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {courses.map((course) => {
-            const unlocked = canAccessLevel(course.level as CourseLevel);
-            // Names the specific package that opens this course, so a locked
-            // card is an answer ("Growth Accelerator unlocks this") rather than a wall.
-            const unlockedBy = cheapestPackageFor(course.level as CourseLevel);
+        {cohortCourses.length > 0 && (
+          <section className="mb-12">
+            <div className="mb-5 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2">
+              <div>
+                <p className="text-[11px] font-mono font-bold uppercase tracking-widest text-amber-700">
+                  Main packages
+                </p>
+                <h2 className="mt-1 text-2xl sm:text-3xl font-serif font-bold text-slate-950">
+                  Cohort Programs
+                </h2>
+              </div>
+              <p className="max-w-xl text-sm leading-relaxed text-slate-500">
+                These four programs are the main paid pathways, from entry-level growth to elite strategic transformation.
+              </p>
+            </div>
+            <div className="scroll-card-grid grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+              {cohortCourses.map(renderCourseCard)}
+            </div>
+          </section>
+        )}
 
-            return (
-              <Link
-                key={course.id}
-                to={`/courses/${course.id}`}
-                className={`scroll-card group bg-white border shadow-sm rounded-2xl overflow-hidden flex flex-col transition-all ${
-                  unlocked
-                    ? 'border-emerald-200 hover:border-emerald-300'
-                    : 'border-slate-200 hover:border-amber-300'
-                }`}
-              >
-                <div className="relative h-40 overflow-hidden">
-                  <img
-                    src={course.heroImage}
-                    alt={course.title}
-                    className={`scroll-card-image w-full h-full object-cover transition-all duration-500 ${
-                      unlocked ? 'opacity-80' : 'opacity-50 grayscale'
-                    }`}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent" />
-                  <span className="absolute top-3 left-3 text-[10px] font-mono px-2 py-0.5 rounded bg-slate-950/80 text-amber-400 border border-amber-500/30">
-                    {course.schoolName}
-                  </span>
-
-                  {unlocked ? (
-                    <span className="absolute top-3 right-3 flex items-center gap-1 text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500 text-slate-950 font-bold">
-                      <LockOpen className="w-3 h-3" /> UNLOCKED
-                    </span>
-                  ) : (
-                    <span className="absolute top-3 right-3 flex items-center justify-center w-7 h-7 rounded-full bg-slate-950/80 border border-amber-500/40">
-                      <Lock className="w-3.5 h-3.5 text-amber-400" />
-                    </span>
-                  )}
-
-                  {course.featured && (
-                    <span className="absolute bottom-3 left-3 text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500 text-slate-950 font-bold">
-                      FLAGSHIP
-                    </span>
-                  )}
-                </div>
-
-                <div className="p-5 flex flex-col flex-1">
-                  <div className="flex items-center justify-between mb-2 text-xs">
-                    <span className="font-mono px-2 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-300">
-                      {course.level}
-                    </span>
-                    <span className="flex items-center gap-1 text-amber-600 font-mono">
-                      <Star className="w-3.5 h-3.5 fill-amber-400" /> {course.rating}
-                    </span>
-                  </div>
-                  <h4 className="text-lg font-serif font-bold text-slate-900 group-hover:text-amber-700 transition-colors mb-2">
-                    {course.title}
-                  </h4>
-                  <p className="text-xs text-slate-500 line-clamp-2 mb-4 flex-1">{course.description}</p>
-                  {course.modules.length > 0 && (
-                    <div className="mb-4 rounded-xl bg-slate-50 border border-slate-200 p-3 space-y-2">
-                      <div className="flex items-center justify-between gap-2">
-                        <span className="text-[10px] font-mono uppercase tracking-wider text-slate-500">
-                          Course preview
-                        </span>
-                        <span className="text-[10px] font-mono text-amber-700">
-                          {course.modules.length} modules
-                        </span>
-                      </div>
-                      <div className="flex flex-wrap gap-1.5">
-                        {course.modules.slice(0, 4).map((module) => (
-                          <span
-                            key={module.title}
-                            className="rounded-full bg-white border border-slate-200 px-2 py-1 text-[10px] text-slate-600"
-                          >
-                            {module.title}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                  <div className="pt-4 border-t border-slate-200 flex items-center justify-between text-xs">
-                    <span className="flex items-center gap-1.5 text-slate-500 font-mono">
-                      <Clock className="w-3.5 h-3.5" /> {course.duration}
-                    </span>
-                    {unlocked ? (
-                      <span className="text-emerald-600 font-bold flex items-center gap-1">
-                        Start <ChevronRight className="w-3.5 h-3.5" />
-                      </span>
-                    ) : (
-                      <span className="text-slate-500 font-mono flex items-center gap-1">
-                        <Lock className="w-3 h-3" />
-                        {unlockedBy.name} unlocks this
-                      </span>
-                    )}
-                  </div>
-                </div>
-              </Link>
-            );
-          })}
-        </div>
+        {specializedCourses.length > 0 && (
+          <section>
+            <div className="mb-5 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2">
+              <div>
+                <p className="text-[11px] font-mono font-bold uppercase tracking-widest text-slate-500">
+                  Additional learning tracks
+                </p>
+                <h2 className="mt-1 text-2xl sm:text-3xl font-serif font-bold text-slate-950">
+                  Specialized Growth Courses
+                </h2>
+              </div>
+              <p className="max-w-xl text-sm leading-relaxed text-slate-500">
+                Focused courses that deepen skills across leadership, finance, AI, career growth and business execution.
+              </p>
+            </div>
+            <div className="scroll-card-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {specializedCourses.map(renderCourseCard)}
+            </div>
+          </section>
+        )}
 
         {courses.length === 0 && (
           <div className="text-center py-16 text-slate-500 text-sm">
@@ -250,7 +378,7 @@ export const CoursesView: React.FC = () => {
                 Ready to start?
               </h3>
               <p className="text-sm text-slate-500">
-                Three packages, published prices, no application queue. Pay once and
+                Four packages, published prices, no application queue. Pay once and
                 your courses open immediately.
               </p>
             </div>
