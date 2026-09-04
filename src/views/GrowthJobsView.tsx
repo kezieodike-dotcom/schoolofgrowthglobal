@@ -56,6 +56,7 @@ export const GrowthJobsView: React.FC = () => {
           </>
         }
         subtitle="See new jobs posted through the School of Growth network. Applications are reserved for enrolled students and subscribed mentees of the community."
+        imageSrc="/scenes/finance-documents.jpg"
       />
 
       <section className="bg-white border-b border-slate-200">
@@ -78,8 +79,8 @@ export const GrowthJobsView: React.FC = () => {
       </section>
 
       <section className="bg-slate-100 border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 grid grid-cols-1 lg:grid-cols-2 gap-4">
-          <div className="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-sm">
+        <div className="scroll-card-grid max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div className="scroll-card bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-sm">
             <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center mb-4">
               <BriefcaseBusiness className="w-5 h-5" />
             </div>
@@ -101,7 +102,7 @@ export const GrowthJobsView: React.FC = () => {
             </a>
           </div>
 
-          <div className="bg-slate-950 text-white border border-slate-800 rounded-2xl p-5 sm:p-6 shadow-sm">
+          <div className="scroll-card bg-slate-950 text-white border border-slate-800 rounded-2xl p-5 sm:p-6 shadow-sm">
             <div className="w-10 h-10 rounded-xl bg-amber-500 text-slate-950 flex items-center justify-center mb-4">
               <FileText className="w-5 h-5" />
             </div>
@@ -116,7 +117,7 @@ export const GrowthJobsView: React.FC = () => {
             </p>
             <a
               href={`mailto:${CAREER_JOBS_EMAIL}?subject=Employment Global Talent Pool CV`}
-              className="mt-4 inline-flex items-center gap-2 rounded-xl bg-amber-500 px-4 py-2.5 text-sm font-black text-slate-950 hover:bg-amber-400"
+              className="motion-pressable mt-4 inline-flex items-center gap-2 rounded-xl bg-amber-500 px-4 py-2.5 text-sm font-black text-slate-950 hover:bg-amber-400"
             >
               <Send className="w-4 h-4" />
               Send your CV
@@ -140,7 +141,7 @@ export const GrowthJobsView: React.FC = () => {
                   <button
                     key={item}
                     onClick={() => setMode(item)}
-                    className={`px-3.5 py-2 rounded-full border text-xs font-bold transition-colors ${
+                    className={`motion-pressable px-3.5 py-2 rounded-full border text-xs font-bold transition-colors ${
                       mode === item
                         ? 'bg-amber-500 text-slate-950 border-amber-500'
                         : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300'
@@ -202,7 +203,7 @@ export const GrowthJobsView: React.FC = () => {
                       <button
                         type="button"
                         onClick={() => setActiveJob(job)}
-                        className={`w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-black transition-all ${
+                        className={`motion-pressable w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-black transition-all ${
                           canApply
                             ? 'bg-amber-500 text-slate-950 hover:bg-amber-400'
                             : 'bg-slate-950 text-white hover:bg-slate-800'
@@ -233,10 +234,10 @@ export const GrowthJobsView: React.FC = () => {
               </p>
               {!canApply && (
                 <div className="grid grid-cols-1 gap-2 mt-5">
-                  <Link to="/pricing" className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-amber-500 text-slate-950 text-xs font-black hover:bg-amber-400">
+                  <Link to="/pricing" className="motion-pressable inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-amber-500 text-slate-950 text-xs font-black hover:bg-amber-400">
                     Become eligible <ArrowRight className="w-4 h-4" />
                   </Link>
-                  <Link to="/register" className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white/10 text-white text-xs font-bold hover:bg-white/15">
+                  <Link to="/register" className="motion-pressable inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white/10 text-white text-xs font-bold hover:bg-white/15">
                     Register as student
                   </Link>
                 </div>
@@ -339,10 +340,10 @@ const JobApplicationModal: React.FC<{
               Enroll as a student or subscribe as a mentee to apply for Career Jobs.
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-5">
-              <Link to="/pricing" className="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-amber-500 text-slate-950 text-xs font-black">
+              <Link to="/pricing" className="motion-pressable inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-amber-500 text-slate-950 text-xs font-black">
                 View plans <ArrowRight className="w-4 h-4" />
               </Link>
-              <Link to="/register" className="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-white/10 text-white text-xs font-bold">
+              <Link to="/register" className="motion-pressable inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-white/10 text-white text-xs font-bold">
                 Register
               </Link>
             </div>
@@ -359,7 +360,7 @@ const JobApplicationModal: React.FC<{
             <button
               type="button"
               onClick={onClose}
-              className="inline-flex items-center justify-center px-5 py-3 rounded-xl bg-amber-500 text-slate-950 text-sm font-black"
+              className="motion-pressable inline-flex items-center justify-center px-5 py-3 rounded-xl bg-amber-500 text-slate-950 text-sm font-black"
             >
               Done
             </button>
@@ -434,7 +435,7 @@ const JobApplicationModal: React.FC<{
             <button
               type="submit"
               disabled={form.sending || !cvFileName}
-              className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-slate-950 text-white text-sm font-bold hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+              className="motion-pressable w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-slate-950 text-white text-sm font-bold hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
             >
               {form.sending ? <FileText className="w-4 h-4" /> : <Send className="w-4 h-4" />}
               {form.sending ? 'Sending Application' : 'Submit Application'}

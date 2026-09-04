@@ -27,7 +27,7 @@ const Article: React.FC<{ slug: string; posts: BlogPost[] }> = ({ slug, posts })
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
-        <Link to="/blog" className="inline-flex items-center gap-1.5 text-xs font-mono text-slate-500 hover:text-amber-600 mb-6">
+        <Link to="/blog" className="motion-pressable inline-flex items-center gap-1.5 text-xs font-mono text-slate-500 hover:text-amber-600 mb-6">
           <ArrowLeft className="w-3.5 h-3.5" /> Knowledge Centre
         </Link>
 
@@ -68,19 +68,19 @@ const Article: React.FC<{ slug: string; posts: BlogPost[] }> = ({ slug, posts })
           </p>
         </div>
 
-        <div className="mt-10 p-6 rounded-2xl bg-white shadow-sm border border-amber-300 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="scroll-card mt-10 p-6 rounded-2xl bg-white shadow-sm border border-amber-300 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm text-slate-600">Want the applied version, with tools and mentorship?</p>
-          <Link to="/courses" className="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs whitespace-nowrap">
+          <Link to="/courses" className="motion-pressable px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs whitespace-nowrap">
             Explore Programs
           </Link>
         </div>
 
         {/* Related */}
         <h3 className="mt-14 mb-6 text-xl font-serif font-bold text-slate-900">Related Insights</h3>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+        <div className="scroll-card-grid grid grid-cols-1 sm:grid-cols-3 gap-5">
           {related.map((r) => (
-            <Link key={r.id} to={`/blog/${r.slug}`} className="group">
-              <img src={r.image} alt={r.title} className="w-full h-28 object-cover rounded-xl border border-slate-200 opacity-80" />
+            <Link key={r.id} to={`/blog/${r.slug}`} className="scroll-card motion-pressable group">
+              <img src={r.image} alt={r.title} className="scroll-card-image w-full h-28 object-cover rounded-xl border border-slate-200 opacity-80" />
               <span className="mt-2 block text-[10px] font-mono text-amber-600">{r.category}</span>
               <h4 className="text-sm font-serif font-bold text-slate-900 group-hover:text-amber-700 transition-colors leading-snug">
                 {r.title}
@@ -111,15 +111,16 @@ export const BlogView: React.FC = () => {
         icon={<Newspaper className="w-4 h-4" />}
         title={<>Insights on Leadership, Growth & Strategy</>}
         subtitle="Practical briefings and frameworks from our global faculty across leadership, business, finance, technology, and personal growth."
+        imageSrc="/scenes/leadership-meeting.jpg"
       />
 
       <section className="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Featured post */}
         <Link
           to={`/blog/${featured.slug}`}
-          className="group grid grid-cols-1 lg:grid-cols-2 gap-8 items-center mb-14 p-6 rounded-3xl bg-white shadow-sm border border-slate-200 hover:border-amber-400 transition-all"
+          className="scroll-card motion-pressable group grid grid-cols-1 lg:grid-cols-2 gap-8 items-center mb-14 p-6 rounded-3xl bg-white shadow-sm border border-slate-200 hover:border-amber-400 transition-all"
         >
-          <img src={featured.image} alt={featured.title} className="w-full h-64 object-cover rounded-2xl border border-slate-200 opacity-90" />
+          <img src={featured.image} alt={featured.title} className="scroll-card-image w-full h-64 object-cover rounded-2xl border border-slate-200 opacity-90" />
           <div className="space-y-3">
             <span className="text-[10px] font-mono px-2.5 py-1 rounded bg-amber-500 text-slate-950 font-bold">FEATURED</span>
             <h2 className="text-2xl sm:text-3xl font-serif font-bold text-slate-900 group-hover:text-amber-700 transition-colors">
@@ -140,7 +141,7 @@ export const BlogView: React.FC = () => {
             <button
               key={c}
               onClick={() => setCategory(c)}
-              className={`px-3.5 py-1.5 rounded-full text-xs font-medium border transition-all ${
+              className={`motion-pressable px-3.5 py-1.5 rounded-full text-xs font-medium border transition-all ${
                 category === c
                   ? 'bg-amber-500 text-slate-950 border-amber-500 font-bold'
                   : 'text-slate-500 border-slate-200 hover:text-slate-900 hover:border-slate-300'
@@ -156,7 +157,7 @@ export const BlogView: React.FC = () => {
             <Link
               key={post.id}
               to={`/blog/${post.slug}`}
-              className="scroll-card group bg-white shadow-sm border border-slate-200 rounded-2xl overflow-hidden flex flex-col hover:border-amber-400 transition-all"
+              className="scroll-card motion-pressable group bg-white shadow-sm border border-slate-200 rounded-2xl overflow-hidden flex flex-col hover:border-amber-400 transition-all"
             >
               <div className="h-40 overflow-hidden">
                 <img src={post.image} alt={post.title} className="scroll-card-image w-full h-full object-cover opacity-80 transition-transform duration-500" />

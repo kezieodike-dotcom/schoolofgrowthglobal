@@ -74,12 +74,17 @@ export function deriveExperience(entitlements: Entitlement[]): StudentExperience
 
   // The richest package held wins. Someone who upgrades mid-term should get
   // the better dashboard immediately rather than the one they bought first.
+  const hasCompleteLadder = live.some((e) => e.plan === "complete-ladder");
   const packages = live
     .map((e) => e.plan)
     .filter((code): code is PackageId => PLANS[code]?.kind === "package")
     .sort((a, b) => PLANS[a].amountKobo - PLANS[b].amountKobo);
 
-  const packageId = packages.length ? packages[packages.length - 1] : null;
+  const packageId = hasCompleteLadder
+    ? "premium"
+    : packages.length
+      ? packages[packages.length - 1]
+      : null;
 
   const mentorshipLive = entitlements.some(
     (e) => new Date(e.mentorshipExpiresAt).getTime() > now
@@ -110,6 +115,7 @@ export function deriveExperience(entitlements: Entitlement[]): StudentExperience
   }
 
   const plan = PLANS[packageId];
+  const packageName = hasCompleteLadder ? PLANS["complete-ladder"].name : plan.name;
   const isFoundation = packageId === "mini";
   const isPremium = packageId === "premium";
   const isTopTier = packageId === "maxi" || packageId === "premium";
@@ -117,6 +123,9 @@ export function deriveExperience(entitlements: Entitlement[]): StudentExperience
   // The next package up by price, so the upgrade card never points sideways
   // or at something the student already holds.
   const upgradeTo =
+    hasCompleteLadder
+      ? null
+      :
     PACKAGES.filter((p) => p.amountKobo > plan.amountKobo).sort(
       (a, b) => a.amountKobo - b.amountKobo
     )[0]?.code ?? null;
@@ -124,7 +133,7 @@ export function deriveExperience(entitlements: Entitlement[]): StudentExperience
   return {
     enrolled: true,
     packageId,
-    packageName: plan.name,
+    packageName,
     levels: plan.includedLevels,
     daysRemaining,
     expiringSoon: daysRemaining !== null && daysRemaining <= 30,

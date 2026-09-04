@@ -23,9 +23,9 @@ export const TestimonialsSection: React.FC = () => {
         </div>
 
         <div className="flex justify-center gap-6 mt-12 [mask-image:linear-gradient(to_bottom,transparent,black_25%,black_75%,transparent)] max-h-[740px] overflow-hidden text-slate-700 text-sm">
-          <TestimonialsColumn testimonials={firstColumn} duration={15} />
-          <TestimonialsColumn testimonials={secondColumn} className="hidden md:block" duration={19} />
-          <TestimonialsColumn testimonials={thirdColumn} className="hidden lg:block" duration={17} />
+          <TestimonialsColumn testimonials={firstColumn} duration={18} />
+          <TestimonialsColumn testimonials={secondColumn} className="hidden md:block" duration={20} />
+          <TestimonialsColumn testimonials={thirdColumn} className="hidden lg:block" duration={22} />
         </div>
       </div>
     </section>

@@ -16,6 +16,14 @@ export function formatNaira(kobo: number): string {
 /** Course packages. Codes stay stable so existing checkout links do not break. */
 export type PackageId = "mini" | "medium" | "maxi" | "premium";
 
+export type CourseFastTrackPlanId =
+  | "foundation-intensive"
+  | "accelerator-intensive"
+  | "executive-intensive"
+  | "elite-intensive";
+
+export type CourseBundlePlanId = "complete-ladder";
+
 export type MentorshipPlanId =
   | "mentor-1-hour"
   | "mentor-2-hours"
@@ -38,9 +46,19 @@ export type ConsultationPlanId =
   | "consult-blueprint";
 
 /** Anything a student or mentee can pay for. This is what /api/payments accepts. */
-export type PlanCode = PackageId | MentorshipPlanId | ConsultationPlanId;
+export type PlanCode =
+  | PackageId
+  | CourseFastTrackPlanId
+  | CourseBundlePlanId
+  | MentorshipPlanId
+  | ConsultationPlanId;
 
-export type PlanKind = "package" | "mentorship" | "consultation";
+export type PlanKind =
+  | "package"
+  | "course-intensive"
+  | "course-bundle"
+  | "mentorship"
+  | "consultation";
 
 export type CourseLevel =
   | "Emerging Leaders"
@@ -184,6 +202,116 @@ export const PLANS: Record<PlanCode, Plan> = {
       "12 months of access",
     ],
     highlight: "Highest level",
+  },
+
+  "foundation-intensive": {
+    code: "foundation-intensive",
+    kind: "course-intensive",
+    name: "Growth Foundation Intensive",
+    tagline: "A two-week focused introduction to practical personal and professional growth.",
+    position: "Two-Week Fast-Track",
+    amountKobo: naira(5_000),
+    durationDays: 14,
+    billing: "50% fast-track intensive / 2 weeks access",
+    includedLevels: ["Emerging Leaders"],
+    mentorshipDays: 0,
+    mentorSlots: 0,
+    features: [
+      "Selected high-impact Growth Foundation modules",
+      "Two-week practical learning sprint",
+      "Capability-focused assignments",
+      "Intensive completion certificate",
+      "No previous certificate required",
+    ],
+  },
+
+  "accelerator-intensive": {
+    code: "accelerator-intensive",
+    kind: "course-intensive",
+    name: "Growth Accelerator Intensive",
+    tagline: "A two-week implementation sprint for learners who need selected Accelerator modules.",
+    position: "Two-Week Fast-Track",
+    amountKobo: naira(25_000),
+    durationDays: 14,
+    billing: "50% fast-track intensive / 2 weeks access",
+    includedLevels: ["Executive", "Frontier"],
+    mentorshipDays: 0,
+    mentorSlots: 0,
+    features: [
+      "Selected high-impact Growth Accelerator modules",
+      "Implementation assignments and templates",
+      "Two-week practical learning sprint",
+      "Intensive completion certificate",
+      "No previous certificate required",
+    ],
+  },
+
+  "executive-intensive": {
+    code: "executive-intensive",
+    kind: "course-intensive",
+    name: "Executive Circle Intensive",
+    tagline: "A two-week executive sprint covering selected leadership and strategy modules.",
+    position: "Two-Week Fast-Track",
+    amountKobo: naira(100_000),
+    durationDays: 14,
+    billing: "50% fast-track intensive / 2 weeks access",
+    includedLevels: ["Senior Directorate"],
+    mentorshipDays: 0,
+    mentorSlots: 0,
+    features: [
+      "Selected high-impact Executive Circle modules",
+      "Strategic career or business assignments",
+      "Two-week practical learning sprint",
+      "Intensive completion certificate",
+      "No previous certificate required",
+    ],
+  },
+
+  "elite-intensive": {
+    code: "elite-intensive",
+    kind: "course-intensive",
+    name: "Elite Council Intensive",
+    tagline: "A two-week elite advisory sprint for high-level transformation priorities.",
+    position: "Two-Week Fast-Track",
+    amountKobo: naira(500_000),
+    durationDays: 14,
+    billing: "50% fast-track intensive / 2 weeks access",
+    includedLevels: ["Elite"],
+    mentorshipDays: 0,
+    mentorSlots: 0,
+    features: [
+      "Selected high-impact Elite Council modules",
+      "Private strategic assignments",
+      "Two-week practical learning sprint",
+      "Intensive completion certificate",
+      "No previous certificate required",
+    ],
+    highlight: "Fastest route",
+  },
+
+  "complete-ladder": {
+    code: "complete-ladder",
+    kind: "course-bundle",
+    name: "Complete Growth Ladder",
+    tagline: "Pay once for Growth Foundation, Growth Accelerator, Executive Circle and Elite Council.",
+    position: "All Four Cohorts",
+    amountKobo: naira(1_210_000),
+    durationDays: 365,
+    billing: "All four full course ladders / ₦50,000 bundle discount",
+    includedLevels: ALL_LEVELS,
+    mentorshipDays: 365,
+    mentorSlots: 5,
+    features: [
+      "Growth Foundation full cohort",
+      "Growth Accelerator full cohort",
+      "Executive Circle full cohort",
+      "Elite Council full cohort",
+      "All course levels unlocked through one payment",
+      "₦50,000 discount from the combined ₦1,260,000 value",
+      "One year of mentorship access",
+      "Complete ladder certificate pathway",
+    ],
+    highlight: "Best complete path",
   },
 
   "mentor-1-hour": {
@@ -519,6 +647,13 @@ export const PLANS: Record<PlanCode, Plan> = {
 };
 
 export const PACKAGES: Plan[] = [PLANS.mini, PLANS.medium, PLANS.maxi, PLANS.premium];
+
+export const COURSE_INTENSIVES: Plan[] = [
+  PLANS["foundation-intensive"],
+  PLANS["accelerator-intensive"],
+  PLANS["executive-intensive"],
+  PLANS["elite-intensive"],
+];
 
 export const MENTORSHIP_PLANS: Plan[] = [
   PLANS["mentor-1-hour"],

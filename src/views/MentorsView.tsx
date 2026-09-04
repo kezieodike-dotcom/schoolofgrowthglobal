@@ -322,6 +322,7 @@ export const MentorsView: React.FC = () => {
           </>
         }
         subtitle="Every season of life, career, and business comes with different questions. Our consultation and mentorship experiences are designed to meet you where you are and help you move forward with greater clarity, confidence, and strategy. Not sure which option is right for you? Start with a conversation. Tell us what you're facing, what you're trying to achieve, and where you need help. We'll help you identify the right pathway for your growth."
+        imageSrc="/scenes/coaching-collab.jpg"
       />
 
       <section className="bg-white border-b border-slate-200">

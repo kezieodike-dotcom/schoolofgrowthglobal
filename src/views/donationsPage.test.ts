@@ -29,6 +29,8 @@ for (const phrase of [
   'CHOOSE YOUR IMPACT',
   'Donate to a Specific Fund',
   'Let School of Growth Global Allocate My Donation Where It Is Most Needed',
+  'What this fund supports',
+  'Choose your impact first, then complete your donation here.',
 ]) {
   if (!page.includes(phrase)) {
     throw new Error(`Donations page should include "${phrase}".`);
@@ -49,5 +51,16 @@ for (const phrase of [
 ]) {
   if (!page.includes(phrase)) {
     throw new Error(`Donation form should require donor terms consent: ${phrase}.`);
+  }
+}
+
+for (const phrase of [
+  'donationDetailRef',
+  'handleFundSelection',
+  'scrollIntoView',
+  'id="donation-detail-panel"',
+]) {
+  if (!page.includes(phrase)) {
+    throw new Error(`Donation choices should jump donors to the detail/payment panel: ${phrase}.`);
   }
 }

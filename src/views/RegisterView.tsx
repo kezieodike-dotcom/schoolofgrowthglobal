@@ -99,6 +99,7 @@ export const RegisterView: React.FC = () => {
         icon={<UserPlus className="w-4 h-4" />}
         title={<>Join School of Growth</>}
         subtitle="Register as a student to begin a programme, or apply to mentor the next generation of leaders."
+        imageSrc="/scenes/hero-team.jpg"
       />
 
       <section className="py-12 sm:py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

@@ -23,12 +23,13 @@ export const EventsView: React.FC = () => {
         icon={<CalendarDays className="w-4 h-4" />}
         title={<>Conferences, Summits & Live Learning</>}
         subtitle="Register for global conferences, webinars, and bootcamps. Every event includes a QR ticket, livestream access, and downloadable resources."
+        imageSrc="/scenes/summit-audience.jpg"
       />
 
       {/* Featured event banner */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12">
-        <div className="group relative rounded-3xl overflow-hidden border border-amber-300 shadow-2xl">
-          <img src={featured.image} alt={featured.title} className="w-full h-72 object-cover opacity-60" />
+        <div className="scroll-card group relative rounded-3xl overflow-hidden border border-amber-300 shadow-2xl">
+          <img src={featured.image} alt={featured.title} className="scroll-card-image w-full h-72 object-cover opacity-60" />
           <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/80 to-transparent" />
           <div className="absolute inset-0 flex flex-col justify-center p-8 sm:p-12 max-w-2xl space-y-4">
             <span className="text-[10px] font-mono px-2.5 py-1 rounded bg-amber-500 text-slate-950 font-bold w-fit">
@@ -45,14 +46,14 @@ export const EventsView: React.FC = () => {
                 href={featured.liveClassUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="px-6 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-sm w-fit flex items-center gap-2"
+                className="motion-pressable px-6 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-sm w-fit flex items-center gap-2"
               >
                 <ExternalLink className="w-4 h-4" /> Join Live Class
               </a>
             ) : (
               <button
                 onClick={() => setRegistered(featured.id)}
-                className="px-6 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-sm w-fit flex items-center gap-2"
+                className="motion-pressable px-6 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-sm w-fit flex items-center gap-2"
               >
                 <Ticket className="w-4 h-4" /> Register Now
               </button>
@@ -68,7 +69,7 @@ export const EventsView: React.FC = () => {
             <button
               key={t}
               onClick={() => setFilter(t)}
-              className={`px-3.5 py-2 rounded-lg transition-all ${
+              className={`motion-pressable px-3.5 py-2 rounded-lg transition-all ${
                 filter === t ? 'bg-amber-500 text-slate-950 font-bold shadow' : 'text-slate-500 hover:text-slate-900'
               }`}
             >
@@ -77,11 +78,11 @@ export const EventsView: React.FC = () => {
           ))}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="scroll-card-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {events.map((event) => (
-            <div key={event.id} className="group bg-white shadow-sm border border-slate-200 rounded-2xl overflow-hidden flex flex-col hover:border-slate-300 transition-all">
+            <div key={event.id} className="scroll-card group bg-white shadow-sm border border-slate-200 rounded-2xl overflow-hidden flex flex-col hover:border-slate-300 transition-all">
               <div className="relative h-36 overflow-hidden">
-                <img src={event.image} alt={event.title} className="w-full h-full object-cover opacity-80" />
+                <img src={event.image} alt={event.title} className="scroll-card-image w-full h-full object-cover opacity-80" />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent" />
                 <span className="absolute top-3 left-3 text-[10px] font-mono px-2 py-0.5 rounded bg-slate-950/80 text-amber-400 border border-amber-500/30">
                   {event.type}
@@ -111,14 +112,14 @@ export const EventsView: React.FC = () => {
                       href={event.liveClassUrl}
                       target="_blank"
                       rel="noreferrer"
-                      className="px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs flex items-center gap-1.5 transition-colors"
+                      className="motion-pressable px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs flex items-center gap-1.5 transition-colors"
                     >
                       <ExternalLink className="w-3.5 h-3.5" /> Join Live
                     </a>
                   ) : (
                     <button
                       onClick={() => setRegistered(event.id)}
-                      className="px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs flex items-center gap-1.5 transition-colors"
+                      className="motion-pressable px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs flex items-center gap-1.5 transition-colors"
                     >
                       <Ticket className="w-3.5 h-3.5" /> Register
                     </button>
@@ -145,7 +146,7 @@ export const EventsView: React.FC = () => {
             </p>
             <button
               onClick={() => setRegistered(null)}
-              className="w-full py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-xl text-sm transition-colors"
+              className="motion-pressable w-full py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-xl text-sm transition-colors"
             >
               Done
             </button>

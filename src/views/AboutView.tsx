@@ -38,6 +38,7 @@ export const AboutView: React.FC = () => {
         icon={<Building2 className="w-4 h-4" />}
         title={<>Raising Transformational Leaders <span className="bg-gradient-to-r from-amber-500 via-amber-600 to-amber-700 bg-clip-text text-transparent">for a Changing World.</span></>}
         subtitle="School of Growth Global is a world-class digital institution dedicated to leadership, business transformation, and lifelong growth for individuals, organizations, and governments."
+        imageSrc="/scenes/leadership-meeting.jpg"
       />
 
       {/* Promise */}

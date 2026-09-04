@@ -61,6 +61,8 @@ export const EXPERTISE_AREAS = [
   "Technology & Innovation",
   "Finance & Wealth",
   "Career & Personal Development",
+  "Beauty & Fitness",
+  "Health, Diet & Well-Being",
 ];
 
 export const SPECIALISMS = [
@@ -84,6 +86,8 @@ export const SPECIALISMS = [
   "Public Policy",
   "Energy & Infrastructure",
   "Healthcare",
+  "Beauty & Fitness",
+  "Health, Diet & Well-Being",
   "Supply Chain",
   "Legal & Compliance",
 ];
@@ -94,6 +98,8 @@ export const INDUSTRIES = [
   "Telecommunications",
   "Oil, Gas & Energy",
   "Healthcare & Pharma",
+  "Beauty & Fitness",
+  "Health, Diet & Well-Being",
   "Manufacturing",
   "Retail & FMCG",
   "Agriculture & Agribusiness",
@@ -220,6 +226,8 @@ export const MENTOR_STEPS: MentorStep[] = [
           "Technology & Innovation": "Engineering, product, AI, digital transformation",
           "Finance & Wealth": "Corporate finance, investment, valuation, capital",
           "Career & Personal Development": "Progression, presence, transitions, coaching",
+          "Beauty & Fitness": "Fitness, beauty business, wellness presentation",
+          "Health, Diet & Well-Being": "Health habits, diet education, sustainable well-being",
         },
       },
       {

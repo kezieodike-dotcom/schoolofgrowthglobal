@@ -86,6 +86,20 @@ export const FORMS = {
     ],
   },
 
+  certificateVerification: {
+    title: "Course Certificate Verification",
+    replyToField: "email",
+    fields: [
+      { name: "name", label: "Full Name", required: true },
+      { name: "email", label: "Email", type: "email", required: true },
+      { name: "phone", label: "Phone / WhatsApp", type: "tel", required: true },
+      { name: "requestedCohort", label: "Requested Full Cohort", required: true },
+      { name: "requiredCertificates", label: "Required Certificates", required: true },
+      { name: "uploadedCertificate", label: "Uploaded Certificate File", required: true },
+      { name: "note", label: "Student Note", type: "textarea" },
+    ],
+  },
+
   jobApplication: {
     title: "Growth Career Job Application",
     replyToField: "email",
@@ -188,6 +202,8 @@ export const FORMS = {
           "Technology & Innovation",
           "Finance & Wealth",
           "Career & Personal Development",
+          "Beauty & Fitness",
+          "Health, Diet & Well-Being",
         ],
       },
       {

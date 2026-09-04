@@ -11,6 +11,12 @@ import { useEnrollment } from '../lib/useEnrollment';
 import { useMentorPairing } from '../lib/useMentorPairing';
 import { deriveExperience, aiQuota, type StudentFeature } from '../lib/studentExperience';
 import { PACKAGES, PLANS, cheapestPackageFor, formatNaira, type CourseLevel, type Entitlement } from '../lib/pricing';
+import {
+  COURSE_LADDER_STEPS,
+  completedPackageCodes,
+  describePrerequisiteFor,
+  fastTrackPlanFor,
+} from '../lib/courseLadder';
 import { saveMentorReview, summarizeMentorReviews, type MentorReview } from '../lib/mentorReviews';
 import { useMentorReviews } from '../lib/useMentorReviews';
 import { MentorConversation } from '../components/MentorConversation';
@@ -474,7 +480,7 @@ export const StudentDashboardView: React.FC<StudentDashboardViewProps> = ({
         )}
 
         {activeTab === 'courses' && (
-          <CoursesTab canAccess={enrollment.canAccessLevel} />
+          <CoursesTab canAccess={enrollment.canAccessLevel} packages={enrollment.packages} />
         )}
 
         {activeTab === 'schedule' &&
@@ -783,13 +789,97 @@ const OverviewTab: React.FC<{
 
 const CoursesTab: React.FC<{
   canAccess: (level: CourseLevel) => boolean;
-}> = ({ canAccess }) => {
+  packages: Entitlement['plan'][];
+}> = ({ canAccess, packages }) => {
   const open = COURSES.filter((c) => canAccess(c.level as CourseLevel));
   const locked = COURSES.filter((c) => !canAccess(c.level as CourseLevel));
   const foundation = open.find((course) => course.id === 'growth-foundation-cohort');
+  const completed = completedPackageCodes(packages);
 
   return (
     <div className="space-y-8">
+      <section className="bg-white border border-slate-200 rounded-lg p-5 sm:p-6 shadow-sm space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+          <div>
+            <span className="text-[10px] font-mono uppercase tracking-widest text-amber-600 font-bold">
+              Growth Ladder Progress
+            </span>
+            <h3 className="mt-1 text-lg sm:text-xl font-bold text-slate-900">
+              Full cohorts move one certificate at a time
+            </h3>
+            <p className="mt-1 max-w-2xl text-sm text-slate-500 leading-relaxed">
+              Higher full cohorts require proof of the previous School of Growth
+              certificate. If you need selected modules without the complete ladder, use
+              the two-week intensive option.
+            </p>
+          </div>
+          <Link
+            to="/pricing"
+            className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-700 hover:text-amber-800"
+          >
+            See ladder <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3">
+          {COURSE_LADDER_STEPS.map((step) => {
+            const plan = PLANS[step.packageCode];
+            const fastTrack = fastTrackPlanFor(step.packageCode);
+            const done = completed.includes(step.packageCode);
+            const nextRequirement = describePrerequisiteFor(step.packageCode);
+
+            return (
+              <div
+                key={step.packageCode}
+                className={`rounded-xl border p-4 ${
+                  done
+                    ? 'border-emerald-200 bg-emerald-50'
+                    : 'border-slate-200 bg-slate-50'
+                }`}
+              >
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-amber-700">
+                    Level {step.level}
+                  </span>
+                  {done ? (
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                  ) : (
+                    <Lock className="w-4 h-4 text-slate-300" />
+                  )}
+                </div>
+                <h4 className="mt-2 text-sm font-bold text-slate-900 leading-snug">
+                  {plan.name}
+                </h4>
+                <p className="mt-1 text-[11px] text-slate-500 leading-relaxed">
+                  {done ? `${step.certificateName} earned.` : nextRequirement}
+                </p>
+                {!done && step.prerequisiteCertificateNames.length > 0 && (
+                  <Link
+                    to={`/checkout/${step.packageCode}`}
+                    className="mt-3 inline-flex items-center gap-1 text-[11px] font-bold text-amber-700 hover:text-amber-800"
+                  >
+                    Submit certificate for verification
+                    <ArrowRight className="w-3 h-3" />
+                  </Link>
+                )}
+                {!done && step.prerequisiteCertificateNames.length === 0 && (
+                  <Link
+                    to={`/checkout/${step.packageCode}`}
+                    className="mt-3 inline-flex items-center gap-1 text-[11px] font-bold text-amber-700 hover:text-amber-800"
+                  >
+                    Start full cohort
+                    <ArrowRight className="w-3 h-3" />
+                  </Link>
+                )}
+                <p className="mt-3 text-[10px] text-slate-400 leading-relaxed">
+                  Fast-track: {formatNaira(fastTrack.amountKobo)} for selected modules.
+                </p>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
       {foundation && foundation.modules.length > 0 && (
         <section className="space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2">

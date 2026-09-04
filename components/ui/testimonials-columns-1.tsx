@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import { motion, useReducedMotion } from 'motion/react';
 
 export interface TestimonialItem {
   text: string;
@@ -13,11 +14,33 @@ export const TestimonialsColumn = (props: {
   testimonials: TestimonialItem[];
   duration?: number;
 }) => {
+  const reduceMotion = useReducedMotion();
+  const loopedTestimonials = [...props.testimonials, ...props.testimonials];
+
   return (
-    <div className={props.className}>
-      <div className="flex flex-col gap-6 pb-6 bg-background">
-        {props.testimonials.map(({ text, image, name, role }, i) => (
-          <div className="p-10 rounded-3xl border bg-white shadow-lg shadow-primary/10 max-w-xs w-full" key={i}>
+    <motion.div className={props.className}>
+      <motion.div
+        className="flex flex-col gap-6 pb-6 bg-background"
+        animate={reduceMotion ? undefined : { translateY: "-50%" }}
+        transition={
+          reduceMotion
+            ? undefined
+            : {
+                duration: props.duration ?? 20,
+                repeat: Infinity,
+                ease: 'linear',
+              }
+        }
+      >
+        {loopedTestimonials.map(({ text, image, name, role }, i) => (
+          <motion.article
+            className="p-10 rounded-3xl border bg-white shadow-lg shadow-primary/10 max-w-xs w-full outline-none"
+            key={`${name}-${i}`}
+            tabIndex={0}
+            whileHover={reduceMotion ? undefined : { y: -8, scale: 1.025 }}
+            whileFocus={reduceMotion ? undefined : { y: -8, scale: 1.025 }}
+            transition={{ type: 'spring', stiffness: 360, damping: 22 }}
+          >
             <div>{text}</div>
             <div className="flex items-center gap-2 mt-5">
               <img
@@ -32,9 +55,9 @@ export const TestimonialsColumn = (props: {
                 <div className="leading-5 opacity-60 tracking-tight">{role}</div>
               </div>
             </div>
-          </div>
+          </motion.article>
         ))}
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 };

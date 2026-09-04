@@ -1,6 +1,6 @@
 import { useSyncExternalStore } from "react";
 import type { ContentKind } from "./content";
-import type { PlanCode } from "./pricing";
+import type { PlanCode, PlanKind } from "./pricing";
 
 /**
  * Client half of the admin panel: session storage and typed API calls.
@@ -162,7 +162,7 @@ export interface Enrolment {
   name: string;
   plan: PlanCode | null;
   planName: string;
-  kind: "package" | "mentorship" | "book" | null;
+  kind: PlanKind | "book" | null;
   amountKobo: number;
   currency: string;
   status: string;
@@ -180,7 +180,7 @@ export interface Enrolment {
 export interface PlanBreakdown {
   code: PlanCode;
   name: string;
-  kind: "package" | "mentorship";
+  kind: PlanKind;
   priceKobo: number;
   count: number;
   revenueKobo: number;

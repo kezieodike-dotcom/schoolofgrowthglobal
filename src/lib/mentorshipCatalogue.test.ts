@@ -8,8 +8,8 @@ import {
   formatPriceRange,
 } from './mentorshipCatalogue.js';
 
-if (MASTER_GROWTH_DIVISIONS.length !== 12) {
-  throw new Error(`Expected 12 master growth divisions, found ${MASTER_GROWTH_DIVISIONS.length}.`);
+if (MASTER_GROWTH_DIVISIONS.length !== 14) {
+  throw new Error(`Expected 14 master growth divisions, found ${MASTER_GROWTH_DIVISIONS.length}.`);
 }
 
 for (const title of [
@@ -17,6 +17,8 @@ for (const title of [
   'Career, Jobs & Professional Growth',
   'Organizational & Corporate Growth',
   'Specialized Industry Consulting',
+  'Beauty & Fitness',
+  'Health, Diet & Well-Being',
 ]) {
   if (!MASTER_GROWTH_DIVISIONS.some((division) => division.title === title)) {
     throw new Error(`Missing growth division: ${title}.`);

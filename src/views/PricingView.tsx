@@ -6,8 +6,19 @@ import {
   PLANS,
   PACKAGES,
   formatNaira,
+  type PackageId,
   type Plan,
 } from '../lib/pricing';
+import {
+  COMPLETE_LADDER_DISCOUNT_KOBO,
+  COMPLETE_LADDER_ORIGINAL_KOBO,
+  COMPLETE_LADDER_SUMMARY,
+  COURSE_LADDER_STEPS,
+  COURSE_LADDER_SUMMARY,
+  FAST_TRACK_SUMMARY,
+  describePrerequisiteFor,
+  fastTrackPlanFor,
+} from '../lib/courseLadder';
 import { paymentLinkForLadder, planCodeForLadder } from '../lib/ladderPayments';
 import {
   CONSULTATION_LADDER,
@@ -101,6 +112,9 @@ const Cell: React.FC<{ value: boolean | string }> = ({ value }) => {
 
 const PackageCard: React.FC<{ plan: Plan; owned: boolean }> = ({ plan, owned }) => {
   const featured = Boolean(plan.highlight);
+  const requirements = describePrerequisiteFor(plan.code);
+  const fastTrackPlan = fastTrackPlanFor(plan.code as PackageId);
+  const needsCertificate = requirements.startsWith('Requires');
 
   return (
     <div
@@ -145,6 +159,31 @@ const PackageCard: React.FC<{ plan: Plan; owned: boolean }> = ({ plan, owned }) 
               Payment option: {option}
             </p>
           ))}
+        </div>
+
+        <div
+          className={`rounded-2xl border p-3 ${
+            needsCertificate
+              ? 'border-amber-200 bg-amber-50'
+              : 'border-emerald-200 bg-emerald-50'
+          }`}
+        >
+          <p className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-700">
+            {needsCertificate ? 'Requires previous certificate verification' : 'Ladder entry'}
+          </p>
+          <p className="mt-1 text-[11px] leading-relaxed text-slate-600">
+            {requirements}
+          </p>
+          <p className="mt-2 text-[11px] leading-relaxed text-slate-500">
+            Short on time? Choose the{' '}
+            <Link
+              to={`/checkout/${fastTrackPlan.code}`}
+              className="font-bold text-amber-700 hover:underline"
+            >
+              {fastTrackPlan.name}
+            </Link>{' '}
+            at {formatNaira(fastTrackPlan.amountKobo)}.
+          </p>
         </div>
 
         {owned ? (
@@ -227,6 +266,128 @@ const PricingBandCard: React.FC<{ band: PricingBand; dark?: boolean }> = ({ band
   </div>
 );
 
+const CourseLadderSection: React.FC = () => (
+  <section className="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+      <div className="lg:col-span-5 rounded-3xl bg-slate-950 text-white p-6 sm:p-8 space-y-4">
+        <p className="text-[11px] font-mono font-bold uppercase tracking-widest text-amber-300">
+          Full Growth Ladder
+        </p>
+        <h2 className="text-2xl sm:text-3xl font-serif font-bold leading-tight">
+          Move from foundation to elite with certificate proof at every stage.
+        </h2>
+        <p className="text-sm leading-relaxed text-slate-300">
+          {COURSE_LADDER_SUMMARY}
+        </p>
+        <div className="rounded-2xl border border-white/10 bg-white/[0.05] p-4">
+          <p className="text-[11px] font-bold uppercase tracking-wider text-amber-200">
+            Two-Week Fast-Track Intensives
+          </p>
+          <p className="mt-2 text-xs leading-relaxed text-slate-300">
+            {FAST_TRACK_SUMMARY} Fast-track students receive an Intensive Completion Certificate,
+            not the full cohort certificate.
+          </p>
+        </div>
+      </div>
+
+      <div className="lg:col-span-7 space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {COURSE_LADDER_STEPS.map((step) => {
+            const fullPlan = PLANS[step.packageCode];
+            const intensivePlan = PLANS[step.fastTrackCode];
+            const requires = step.prerequisiteCertificateNames.length > 0;
+
+            return (
+              <div
+                key={step.packageCode}
+                className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm"
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <p className="text-[10px] font-mono font-bold uppercase tracking-wider text-amber-700">
+                      Level {step.level}
+                    </p>
+                    <h3 className="mt-1 text-lg font-serif font-bold text-slate-900">
+                      {fullPlan.name}
+                    </h3>
+                  </div>
+                  <span className="rounded-full bg-slate-100 px-2.5 py-1 text-[10px] font-bold text-slate-600">
+                    {formatNaira(fullPlan.amountKobo)}
+                  </span>
+                </div>
+
+                <p className="mt-3 text-xs leading-relaxed text-slate-500">
+                  {requires
+                    ? `Submit ${step.prerequisiteCertificateNames.join(', ')} before the full cohort is approved.`
+                    : 'This is the starting point for the complete School of Growth course ladder.'}
+                </p>
+
+                <div className="mt-4 grid grid-cols-1 gap-2">
+                  <Link
+                    to={`/checkout/${fullPlan.code}`}
+                    className="motion-pressable inline-flex items-center justify-center gap-2 rounded-xl bg-slate-950 px-3 py-2.5 text-[11px] font-bold text-white transition hover:bg-slate-800"
+                  >
+                    Full cohort
+                    <ArrowRight className="h-3.5 w-3.5" />
+                  </Link>
+                  <Link
+                    to={`/checkout/${intensivePlan.code}`}
+                    className="motion-pressable inline-flex items-center justify-center gap-2 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2.5 text-[11px] font-bold text-amber-800 transition hover:border-amber-300"
+                  >
+                    Two-week fast-track: {formatNaira(intensivePlan.amountKobo)}
+                    <ArrowRight className="h-3.5 w-3.5" />
+                  </Link>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        <Link
+          to="/checkout/complete-ladder"
+          className="motion-pressable group block rounded-3xl border border-amber-300 bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 p-5 sm:p-6 text-white shadow-xl shadow-amber-500/10 transition-all hover:-translate-y-1 hover:border-amber-400"
+        >
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
+            <div className="space-y-2">
+              <p className="text-[11px] font-mono font-bold uppercase tracking-widest text-amber-300">
+                Pay for all four ladders
+              </p>
+              <h3 className="text-xl sm:text-2xl font-serif font-bold">
+                Complete Growth Ladder
+              </h3>
+              <p className="max-w-2xl text-xs sm:text-sm leading-relaxed text-slate-300">
+                {COMPLETE_LADDER_SUMMARY} International dollar invoices can receive
+                a $50 discount through admissions.
+              </p>
+            </div>
+            <div className="rounded-2xl bg-white p-4 text-slate-950 shadow-lg min-w-[220px]">
+              <p className="text-[10px] font-mono uppercase tracking-wider text-slate-500">
+                All four combined
+              </p>
+              <p className="mt-1 text-sm text-slate-500 line-through">
+                {formatNaira(COMPLETE_LADDER_ORIGINAL_KOBO)}
+              </p>
+              <p className="text-3xl font-serif font-bold text-slate-950">
+                {formatNaira(PLANS["complete-ladder"].amountKobo)}
+              </p>
+              <p
+                className="mt-1 text-[11px] font-bold text-emerald-700"
+                aria-label="Save ₦50,000"
+              >
+                Save {formatNaira(COMPLETE_LADDER_DISCOUNT_KOBO)}
+              </p>
+              <span className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-amber-500 px-3 py-2.5 text-[11px] font-bold text-slate-950 transition group-hover:bg-amber-400">
+                Pay once
+                <ArrowRight className="h-3.5 w-3.5" />
+              </span>
+            </div>
+          </div>
+        </Link>
+      </div>
+    </div>
+  </section>
+);
+
 export const PricingView: React.FC = () => {
   const { packages, currentPackageName } = useEnrollment();
 
@@ -243,7 +404,8 @@ export const PricingView: React.FC = () => {
             </span>
           </>
         }
-        subtitle="Choose the package that matches your ambition. Every course in your tier unlocks the moment your payment clears - no application queue, no waiting list."
+        subtitle="Choose your starting point. Full cohorts now follow a certificate-based ladder, while two-week fast-track intensives let busy learners study selected high-impact modules."
+        imageSrc="/scenes/wealth-planning.jpg"
       />
 
       {currentPackageName && (
@@ -271,7 +433,7 @@ export const PricingView: React.FC = () => {
             <PackageCard
               key={plan.code}
               plan={plan}
-              owned={packages.includes(plan.code)}
+              owned={packages.includes(plan.code) || packages.includes('complete-ladder')}
             />
           ))}
         </div>
@@ -484,6 +646,8 @@ export const PricingView: React.FC = () => {
         </div>
       </section>
 
+      <CourseLadderSection />
+
       {/* Questions */}
       <section className="py-14 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="text-2xl font-serif font-bold text-slate-900 mb-6">
@@ -494,11 +658,11 @@ export const PricingView: React.FC = () => {
           {[
             {
               q: 'What happens right after I pay?',
-              a: 'Your courses unlock immediately. Paystack confirms the payment to us, we verify it, and the catalogue opens on the same screen - no email wait, no approval step.',
+              a: 'Growth Foundation and all fast-track intensives open after payment confirmation. Higher full cohorts first require certificate verification from the previous level.',
             },
             {
               q: 'Can I upgrade later?',
-              a: 'Yes. Buy any higher package at any time and the additional courses unlock alongside what you already hold. Your existing access window is untouched.',
+              a: 'Yes. Submit the certificate from your completed level, then admissions can approve your next full cohort payment. If you only need selected modules quickly, choose the two-week intensive.',
             },
             {
               q: 'Do I need a package to get a mentor?',

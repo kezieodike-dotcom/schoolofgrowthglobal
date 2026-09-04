@@ -4,7 +4,13 @@ import { COURSES, SCHOOLS } from '../data/mockData';
 import { PageHero } from '../components/PageHero';
 import { useEnrollment } from '../lib/useEnrollment';
 import { useContentCollection } from '../lib/useContent';
-import { cheapestPackageFor, formatNaira, type CourseLevel } from '../lib/pricing';
+import { cheapestPackageFor, formatNaira, type CourseLevel, type PackageId } from '../lib/pricing';
+import {
+  COURSE_LADDER_STEPS,
+  COURSE_LADDER_SUMMARY,
+  describePrerequisiteFor,
+  fastTrackPlanFor,
+} from '../lib/courseLadder';
 import {
   BookOpen,
   ChevronRight,
@@ -27,6 +33,13 @@ const COHORT_COURSE_IDS = [
 
 const isCohortCourse = (course: { id: string }) =>
   COHORT_COURSE_IDS.includes(course.id as (typeof COHORT_COURSE_IDS)[number]);
+
+const COHORT_PACKAGE_BY_COURSE_ID: Record<(typeof COHORT_COURSE_IDS)[number], PackageId> = {
+  'growth-foundation-cohort': 'mini',
+  'growth-accelerator': 'medium',
+  'executive-circle': 'maxi',
+  'elite-council': 'premium',
+};
 
 const COHORT_CARD_STYLES: Record<
   (typeof COHORT_COURSE_IDS)[number],
@@ -95,13 +108,17 @@ export const CoursesView: React.FC = () => {
     const cohortStyle = isCohortCourse(course)
       ? COHORT_CARD_STYLES[course.id as (typeof COHORT_COURSE_IDS)[number]]
       : null;
+    const cohortPackageCode = isCohortCourse(course)
+      ? COHORT_PACKAGE_BY_COURSE_ID[course.id as (typeof COHORT_COURSE_IDS)[number]]
+      : null;
+    const fastTrack = cohortPackageCode ? fastTrackPlanFor(cohortPackageCode) : null;
     const isEliteCohort = course.id === 'elite-council';
 
     return (
       <Link
         key={course.id}
         to={`/courses/${course.id}`}
-        className={`scroll-card group border shadow-sm rounded-2xl overflow-hidden flex flex-col transition-all ${
+        className={`scroll-card motion-pressable group border shadow-sm rounded-2xl overflow-hidden flex flex-col transition-all ${
           cohortStyle
             ? cohortStyle.card
             : unlocked
@@ -202,6 +219,22 @@ export const CoursesView: React.FC = () => {
               </div>
             </div>
           )}
+          {cohortPackageCode && fastTrack && (
+            <div className={`mb-4 rounded-xl border p-3 ${
+              isEliteCohort ? 'bg-slate-900 border-slate-800 text-slate-300' : 'bg-amber-50 border-amber-200 text-amber-950'
+            }`}>
+              <p className="text-[10px] font-mono font-bold uppercase tracking-wider">
+                Full Growth Ladder
+              </p>
+              <p className="mt-1 text-[11px] leading-relaxed">
+                {describePrerequisiteFor(cohortPackageCode)}
+              </p>
+              <p className="mt-2 text-[11px] leading-relaxed">
+                Two-week fast-track intensive: {formatNaira(fastTrack.amountKobo)} for
+                selected modules.
+              </p>
+            </div>
+          )}
           <div className={`pt-4 border-t flex items-center justify-between text-xs ${
             isEliteCohort ? 'border-slate-800' : 'border-slate-200'
           }`}>
@@ -231,6 +264,7 @@ export const CoursesView: React.FC = () => {
         icon={<BookOpen className="w-4 h-4" />}
         title={<>Executive Programs & Courses</>}
         subtitle="Accredited, practitioner-led programs across all 14 schools - from live executive cohorts to self-paced mastery tracks."
+        imageSrc="/scenes/bootcamp-team.jpg"
       />
 
       <section className="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -256,7 +290,7 @@ export const CoursesView: React.FC = () => {
             </p>
             <Link
               to="/pricing"
-              className="text-xs font-bold text-emerald-800 hover:underline flex items-center gap-1 whitespace-nowrap"
+              className="motion-pressable text-xs font-bold text-emerald-800 hover:underline flex items-center gap-1 whitespace-nowrap"
             >
               Upgrade for more <ArrowRight className="w-3.5 h-3.5" />
             </Link>
@@ -278,7 +312,7 @@ export const CoursesView: React.FC = () => {
             </div>
             <Link
               to="/pricing"
-              className="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs flex items-center justify-center gap-2 whitespace-nowrap transition-colors"
+              className="motion-pressable px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs flex items-center justify-center gap-2 whitespace-nowrap transition-colors"
             >
               See packages <ArrowRight className="w-4 h-4" />
             </Link>
@@ -288,14 +322,14 @@ export const CoursesView: React.FC = () => {
         {/* Filters */}
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-10">
           <div className="flex flex-wrap items-center gap-2 bg-white p-1.5 rounded-xl border border-slate-200 text-xs font-medium">
-            {LEVELS.map((l) => (
-              <button
-                key={l}
-                onClick={() => setLevel(l)}
-                className={`px-3.5 py-2 rounded-lg transition-all ${
-                  level === l ? 'bg-amber-500 text-slate-950 font-bold shadow' : 'text-slate-500 hover:text-slate-900'
-                }`}
-              >
+              {LEVELS.map((l) => (
+                <button
+                  key={l}
+                  onClick={() => setLevel(l)}
+                  className={`motion-pressable px-3.5 py-2 rounded-lg transition-all ${
+                    level === l ? 'bg-amber-500 text-slate-950 font-bold shadow' : 'text-slate-500 hover:text-slate-900'
+                  }`}
+                >
                 {l}
               </button>
             ))}
@@ -317,7 +351,7 @@ export const CoursesView: React.FC = () => {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search programs..."
-              className="bg-white border border-slate-200 rounded-lg px-3 py-2.5 text-xs text-slate-900 placeholder:text-slate-500 focus:outline-none focus:border-amber-500 w-44"
+              className="motion-search bg-white border border-slate-200 rounded-lg px-3 py-2.5 text-xs text-slate-900 placeholder:text-slate-500 focus:outline-none focus:border-amber-500 w-44"
             />
           </div>
         </div>
@@ -334,8 +368,36 @@ export const CoursesView: React.FC = () => {
                 </h2>
               </div>
               <p className="max-w-xl text-sm leading-relaxed text-slate-500">
-                These four programs are the main paid pathways, from entry-level growth to elite strategic transformation.
+                {COURSE_LADDER_SUMMARY} Two-week fast-track intensive options are available for selected modules.
               </p>
+            </div>
+            <div className="mb-5 grid grid-cols-1 md:grid-cols-4 gap-3">
+              {COURSE_LADDER_STEPS.map((step) => (
+                <div
+                  key={step.packageCode}
+                  className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"
+                >
+                  <p className="text-[10px] font-mono font-bold uppercase tracking-widest text-amber-700">
+                    Level {step.level}
+                  </p>
+                  <p className="mt-1 text-sm font-bold text-slate-900">
+                    {cheapestPackageFor(
+                      step.packageCode === 'mini'
+                        ? 'Emerging Leaders'
+                        : step.packageCode === 'medium'
+                          ? 'Executive'
+                          : step.packageCode === 'maxi'
+                            ? 'Senior Directorate'
+                            : 'Elite'
+                    ).name}
+                  </p>
+                  <p className="mt-1 text-[11px] leading-relaxed text-slate-500">
+                    {step.prerequisiteCertificateNames.length
+                      ? `Requires verification of ${step.prerequisiteCertificateNames.join(', ')}.`
+                      : 'No previous certificate required.'}
+                  </p>
+                </div>
+              ))}
             </div>
             <div className="scroll-card-grid grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
               {cohortCourses.map(renderCourseCard)}
@@ -378,8 +440,8 @@ export const CoursesView: React.FC = () => {
                 Ready to start?
               </h3>
               <p className="text-sm text-slate-500">
-                Four packages, published prices, no application queue. Pay once and
-                your courses open immediately.
+                Four packages, published prices, and a clear certificate ladder. Start
+                from Growth Foundation or choose a two-week intensive for selected modules.
               </p>
             </div>
             <Link

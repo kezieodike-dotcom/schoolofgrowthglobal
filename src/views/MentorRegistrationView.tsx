@@ -245,6 +245,7 @@ export const MentorRegistrationView: React.FC = () => {
         icon={<Users className="w-4 h-4" />}
         title={<>Register as a Mentor</>}
         subtitle="Join the directory students choose from. Tell us what you have built, how you work, and who you are best placed to help."
+        imageSrc="/scenes/leadership-meeting.jpg"
       />
 
       <section className="bg-white border-b border-slate-200">

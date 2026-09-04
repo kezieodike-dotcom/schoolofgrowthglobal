@@ -16,6 +16,7 @@ import {
   RefreshCw,
   PlugZap,
   UserCheck,
+  FileCheck2,
 } from 'lucide-react';
 
 /**
@@ -51,6 +52,7 @@ export const AdminOverviewView: React.FC = () => {
       {data && !data.connected && <NotConnected message={data.message} />}
 
       <ContentOperations />
+      <CertificateVerificationQueue />
 
       {data?.connected && data.totals && (
         <div className="space-y-6">
@@ -101,6 +103,39 @@ export const AdminOverviewView: React.FC = () => {
     </>
   );
 };
+
+const CertificateVerificationQueue: React.FC = () => (
+  <div className="mb-6">
+    <Panel title="Certificate Verification Queue" hint="Higher full cohorts require previous cohort certificates">
+      <div className="grid grid-cols-1 lg:grid-cols-[0.7fr_1.3fr] gap-0 lg:divide-x divide-slate-100">
+        <div className="p-5 flex items-start gap-3">
+          <span className="w-10 h-10 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-700 flex items-center justify-center">
+            <FileCheck2 className="w-4 h-4" />
+          </span>
+          <div>
+            <p className="text-sm font-bold text-slate-900">Admissions checkpoint</p>
+            <p className="mt-1 text-[11px] text-slate-500 leading-relaxed">
+              Certificate submissions arrive through the website form and are captured as
+              leads before students are invited to pay for the next full cohort.
+            </p>
+          </div>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-slate-100">
+          {[
+            ['Growth Accelerator', 'Verify Growth Foundation Certificate'],
+            ['Executive Circle', 'Verify Foundation + Accelerator certificates'],
+            ['Elite Council', 'Verify Foundation + Accelerator + Executive certificates'],
+          ].map(([title, body]) => (
+            <div key={title} className="p-5">
+              <p className="text-xs font-bold text-slate-900">{title}</p>
+              <p className="mt-1 text-[11px] text-slate-500 leading-relaxed">{body}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </Panel>
+  </div>
+);
 
 interface ContentSummary {
   writable: boolean;
@@ -343,7 +378,11 @@ const PlanTable: React.FC<{ plans: PlanBreakdown[] }> = ({ plans }) => {
                 </p>
                 <p className="text-[10px] font-mono text-slate-400">
                   {money(plan.priceKobo)} ·{' '}
-                  {plan.kind === 'package' ? 'course package' : 'mentorship'}
+                  {plan.kind === 'package'
+                    ? 'course package'
+                    : plan.kind === 'course-intensive'
+                      ? 'course intensive'
+                      : plan.kind}
                 </p>
               </div>
               <div className="text-right shrink-0">

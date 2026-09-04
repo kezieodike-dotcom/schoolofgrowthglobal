@@ -4,6 +4,16 @@ import { MENTORS } from '../data/mockData';
 import { CountryPhoneField } from '../components/CountryPhoneField';
 import { PLANS, isPlanCode, formatNaira } from '../lib/pricing';
 import {
+  FAST_TRACK_SUMMARY,
+  certificateRequirementsFor,
+  fastTrackPlanFor,
+  getCourseLadderStep,
+  getFastTrackStep,
+  isFastTrackPlan,
+  requiresCertificateReview,
+} from '../lib/courseLadder';
+import { useFormSubmit } from '../lib/useFormSubmit';
+import {
   Lock,
   ShieldCheck,
   ArrowRight,
@@ -13,6 +23,7 @@ import {
   Check,
   CreditCard,
   Info,
+  Upload,
 } from 'lucide-react';
 
 /**
@@ -40,8 +51,11 @@ export const CheckoutView: React.FC = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
+  const [certificateFile, setCertificateFile] = useState<File | null>(null);
+  const [certificateNote, setCertificateNote] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const verification = useFormSubmit('certificateVerification');
 
   // Whether payments are live decides what this page may promise, so it is
   // asked once on mount rather than discovered when the button fails.
@@ -68,6 +82,40 @@ export const CheckoutView: React.FC = () => {
   const mentorId = searchParams.get('mentor');
   const referral = searchParams.get('ref') ?? '';
   const mentor = mentorId ? MENTORS.find((m) => m.id === mentorId) : undefined;
+  const certificateRequirements = certificateRequirementsFor(plan.code);
+  const needsCertificateReview = requiresCertificateReview(plan.code);
+  const ladderStep = getCourseLadderStep(plan.code);
+  const fastTrackStep = getFastTrackStep(plan.code);
+  const fastTrackPlan = ladderStep ? fastTrackPlanFor(ladderStep.packageCode) : null;
+
+  const handleVerificationSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setError(null);
+
+    if (!certificateFile) {
+      setError('Upload previous certificate before submitting for verification.');
+      return;
+    }
+
+    const sent = await verification.submitValuesWithAttachment(
+      [
+        ['Full Name', name],
+        ['Email', email],
+        ['Phone / WhatsApp', phone],
+        ['Requested Full Cohort', plan.name],
+        ['Required Certificates', certificateRequirements.join(', ')],
+        ['Uploaded Certificate File', certificateFile.name],
+        ['Student Note', certificateNote],
+      ],
+      certificateFile,
+      { replyTo: email }
+    );
+
+    if (sent) {
+      setCertificateFile(null);
+      setCertificateNote('');
+    }
+  };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -134,7 +182,158 @@ export const CheckoutView: React.FC = () => {
                 </p>
               </div>
 
-              {unavailable ? (
+              {needsCertificateReview ? (
+                <form onSubmit={handleVerificationSubmit} className="space-y-4">
+                  <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4">
+                    <p className="text-[11px] font-mono font-bold uppercase tracking-wider text-amber-800">
+                      Certificate verification required
+                    </p>
+                    <p className="mt-2 text-xs leading-relaxed text-amber-950">
+                      To join {plan.name} as a full cohort student, admissions must first
+                      verify your previous certificate{certificateRequirements.length > 1 ? 's' : ''}:{' '}
+                      <strong>{certificateRequirements.join(', ')}</strong>.
+                    </p>
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="checkout-name"
+                      className="block text-slate-500 text-xs mb-1.5"
+                    >
+                      Full name
+                    </label>
+                    <input
+                      id="checkout-name"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      required
+                      autoComplete="name"
+                      placeholder="Chidi Okeke"
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-slate-900 text-sm focus:outline-none focus:border-amber-500 transition-colors"
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="checkout-email"
+                      className="block text-slate-500 text-xs mb-1.5"
+                    >
+                      Email address
+                    </label>
+                    <input
+                      id="checkout-email"
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                      autoComplete="email"
+                      placeholder="you@organisation.com"
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-slate-900 text-sm focus:outline-none focus:border-amber-500 transition-colors"
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="checkout-phone"
+                      className="block text-slate-500 text-xs mb-1.5"
+                    >
+                      Phone / WhatsApp
+                    </label>
+                    <CountryPhoneField
+                      id="checkout-phone"
+                      name="phone"
+                      value={phone}
+                      required
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-slate-900 text-sm focus:outline-none focus:border-amber-500 transition-colors"
+                      onChange={setPhone}
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="checkout-certificate"
+                      className="block text-slate-500 text-xs mb-1.5"
+                    >
+                      Upload previous certificate
+                    </label>
+                    <input
+                      id="checkout-certificate"
+                      type="file"
+                      accept=".pdf,.png,.jpg,.jpeg,.webp"
+                      required
+                      onChange={(e) => setCertificateFile(e.target.files?.[0] ?? null)}
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-slate-900 text-sm file:mr-3 file:rounded-lg file:border-0 file:bg-slate-900 file:px-3 file:py-2 file:text-xs file:font-bold file:text-white focus:outline-none focus:border-amber-500 transition-colors"
+                    />
+                    <p className="text-[11px] text-slate-400 mt-1.5">
+                      Upload a PDF or image. If you need to submit multiple certificates,
+                      combine them into one PDF.
+                    </p>
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="checkout-certificate-note"
+                      className="block text-slate-500 text-xs mb-1.5"
+                    >
+                      Note to admissions
+                    </label>
+                    <textarea
+                      id="checkout-certificate-note"
+                      value={certificateNote}
+                      onChange={(e) => setCertificateNote(e.target.value)}
+                      rows={4}
+                      placeholder="Add certificate ID, completion date, or anything admissions should know."
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-slate-900 text-sm focus:outline-none focus:border-amber-500 transition-colors"
+                    />
+                  </div>
+
+                  {(error || verification.error) && (
+                    <p className="flex items-start gap-2 text-xs text-rose-600 bg-rose-50 border border-rose-200 rounded-xl p-3">
+                      <AlertCircle className="w-4 h-4 shrink-0 mt-px" />
+                      <span>{error ?? verification.error}</span>
+                    </p>
+                  )}
+
+                  {verification.status === 'sent' && (
+                    <p className="flex items-start gap-2 text-xs text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-xl p-3">
+                      <Check className="w-4 h-4 shrink-0 mt-px" />
+                      <span>
+                        Your certificate has been submitted. Admissions will verify it and
+                        send the correct payment instruction for {plan.name}.
+                      </span>
+                    </p>
+                  )}
+
+                  <button
+                    type="submit"
+                    disabled={verification.sending}
+                    className="w-full py-4 rounded-xl bg-amber-500 hover:bg-amber-400 disabled:opacity-60 disabled:cursor-not-allowed text-slate-950 font-bold text-sm flex items-center justify-center gap-2 transition-colors shadow-lg shadow-amber-500/20"
+                  >
+                    {verification.sending ? (
+                      <>
+                        <Loader2 className="w-4 h-4" />
+                        Sending certificate...
+                      </>
+                    ) : (
+                      <>
+                        <Upload className="w-4 h-4" />
+                        Submit for verification
+                      </>
+                    )}
+                  </button>
+
+                  {fastTrackPlan && (
+                    <Link
+                      to={`/checkout/${fastTrackPlan.code}`}
+                      className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-xs font-bold text-slate-700 transition hover:border-amber-300"
+                    >
+                      Skip the ladder with {fastTrackPlan.name} at{' '}
+                      {formatNaira(fastTrackPlan.amountKobo)}
+                      <ArrowRight className="w-4 h-4" />
+                    </Link>
+                  )}
+                </form>
+              ) : unavailable ? (
                 <div className="p-5 rounded-2xl bg-amber-50 border border-amber-300 space-y-3">
                   <p className="flex items-start gap-2.5 text-xs text-amber-900 leading-relaxed">
                     <Info className="w-4 h-4 shrink-0 mt-px" />
@@ -260,6 +459,20 @@ export const CheckoutView: React.FC = () => {
                   </p>
                 )}
                 <p className="text-xs text-slate-400 leading-relaxed">{plan.tagline}</p>
+                {isFastTrackPlan(plan.code) && (
+                  <p className="mt-2 rounded-xl border border-amber-400/30 bg-amber-400/10 p-3 text-[11px] leading-relaxed text-amber-100">
+                    {FAST_TRACK_SUMMARY}{' '}
+                    {fastTrackStep?.fastTrackCertificateName
+                      ? `Awarded: ${fastTrackStep.fastTrackCertificateName}.`
+                      : 'Awarded: Intensive Completion Certificate.'}
+                  </p>
+                )}
+                {needsCertificateReview && (
+                  <p className="mt-2 rounded-xl border border-amber-400/30 bg-amber-400/10 p-3 text-[11px] leading-relaxed text-amber-100">
+                    Full cohort admission pauses here until admissions verifies your
+                    previous certificate{certificateRequirements.length > 1 ? 's' : ''}.
+                  </p>
+                )}
               </div>
 
               {mentor && (
@@ -314,9 +527,19 @@ export const CheckoutView: React.FC = () => {
                 What happens next
               </h4>
               <ol className="space-y-1.5 text-[11px] text-slate-500 leading-relaxed list-decimal list-inside">
-                <li>Paystack's secure page opens for payment.</li>
-                <li>We confirm the payment with Paystack directly.</li>
-                <li>Your access opens straight away and a receipt is emailed.</li>
+                {needsCertificateReview ? (
+                  <>
+                    <li>You upload your previous cohort certificate.</li>
+                    <li>Admissions verifies it before payment is requested.</li>
+                    <li>Your full cohort access opens after approval and payment.</li>
+                  </>
+                ) : (
+                  <>
+                    <li>Paystack's secure page opens for payment.</li>
+                    <li>We confirm the payment with Paystack directly.</li>
+                    <li>Your access opens straight away and a receipt is emailed.</li>
+                  </>
+                )}
               </ol>
             </div>
           </aside>

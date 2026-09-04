@@ -121,7 +121,7 @@ export function useEnrollment(): Enrollment {
   const entitlements = useSyncExternalStore(subscribe, read, () => EMPTY);
 
   const packages = entitlements
-    .filter((e) => PLANS[e.plan]?.kind === "package")
+    .filter((e) => PLANS[e.plan]?.kind === "package" || PLANS[e.plan]?.kind === "course-bundle")
     .sort((a, b) => PLANS[a.plan].amountKobo - PLANS[b.plan].amountKobo)
     .map((e) => e.plan);
 

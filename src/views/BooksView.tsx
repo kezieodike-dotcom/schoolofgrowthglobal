@@ -58,6 +58,7 @@ export const BooksView: React.FC = () => {
           </>
         }
         subtitle="A marketplace for guides, workbooks and digital materials published by School of Growth Global and approved mentors."
+        imageSrc="/scenes/hero-team.jpg"
       />
 
       {featured && (

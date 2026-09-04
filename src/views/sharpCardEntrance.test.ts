@@ -3,14 +3,21 @@ import path from 'node:path';
 
 const root = process.cwd();
 const css = readFileSync(path.join(root, 'src', 'index.css'), 'utf8');
+const app = readFileSync(path.join(root, 'src', 'App.tsx'), 'utf8');
 
 for (const marker of [
   '@keyframes scroll-card-rise',
   '.scroll-card-grid > *',
+  '.scroll-card-reveal',
+  '.scroll-card-reveal-in',
   '.scroll-card',
   '.scroll-card-image',
-  'animation-timeline: view()',
-  'animation-range: entry 0% cover 32%',
+  'translate3d(0, 44px, 0) scale(0.965)',
+  '920ms',
+  'calc(var(--scroll-index, 0) * 80ms)',
+  '.motion-search:focus-within',
+  'translate3d(0, -2px, 0)',
+  '.motion-pressable:active',
   'prefers-reduced-motion: reduce',
 ]) {
   if (!css.includes(marker)) {
@@ -18,10 +25,28 @@ for (const marker of [
   }
 }
 
+for (const marker of [
+  'useLocation',
+  'useScrollReveal',
+  'IntersectionObserver',
+  'threshold: 0.12',
+  'MutationObserver',
+  'scroll-card-reveal',
+  'scroll-card-reveal-in',
+  '* 80',
+]) {
+  if (!app.includes(marker)) {
+    throw new Error(`App should control scroll reveals with ${marker}.`);
+  }
+}
+
 const pages = [
+  'src/views/HomeView.tsx',
   'src/views/CoursesView.tsx',
   'src/views/GrowthJobsView.tsx',
+  'src/views/EventsView.tsx',
   'src/views/BlogView.tsx',
+  'src/views/DonationsView.tsx',
 ];
 
 for (const file of pages) {

@@ -23,6 +23,7 @@ export const ContactView: React.FC = () => {
         icon={<Mail className="w-4 h-4" />}
         title={<>Talk to Our Team</>}
         subtitle="Whether you're an individual, an organization, or a government agency - we'll help you find the right pathway."
+        imageSrc="/scenes/coaching-collab.jpg"
       />
 
       <section className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-10">
