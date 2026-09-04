@@ -1,6 +1,7 @@
 import express from "express";
 import { loadServerEnv } from "../src/server/loadEnv.js";
 import { createAdminRouter, requireAdmin } from "../src/server/adminRoutes.js";
+import { isPaystackConfigured, paystackPublicKey } from "../src/server/paystackEnv.js";
 
 loadServerEnv();
 
@@ -54,14 +55,14 @@ app.get(["/api/health", "/health"], (_req, res) => {
 app.get(["/api/admin/status", "/admin/status"], (_req, res) => {
   res.json({
     enabled: Boolean(process.env.ADMIN_PASSWORD),
-    paystackConnected: Boolean(process.env.PAYSTACK_SECRET_KEY),
+    paystackConnected: isPaystackConfigured(),
   });
 });
 
 app.get(["/api/payments/config", "/payments/config"], (_req, res) => {
   res.json({
-    configured: Boolean(process.env.PAYSTACK_SECRET_KEY),
-    publicKey: process.env.PAYSTACK_PUBLIC_KEY ?? null,
+    configured: isPaystackConfigured(),
+    publicKey: paystackPublicKey() ?? null,
     currency: "NGN",
   });
 });

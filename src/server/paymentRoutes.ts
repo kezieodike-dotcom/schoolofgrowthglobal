@@ -10,6 +10,7 @@ import {
 } from "../lib/pricing.js";
 import { BOOKS } from "../data/mockData.js";
 import { calculateBookRevenueSplit, type BookPurchase } from "../lib/bookRevenue.js";
+import { isPaystackConfigured, paystackPublicKey, paystackSecretKey } from "./paystackEnv.js";
 import {
   findDonationFund,
   isDonationFundId,
@@ -47,12 +48,6 @@ import type { BookItem } from "../types.js";
  */
 
 const PAYSTACK_API = "https://api.paystack.co";
-
-const secretKey = () => process.env.PAYSTACK_SECRET_KEY;
-const publicKey = () => process.env.PAYSTACK_PUBLIC_KEY;
-
-/** True once a secret key is present, i.e. we can actually charge cards. */
-const isConfigured = () => Boolean(secretKey());
 
 /**
  * Where Paystack sends the payer after checkout. Must be an absolute URL, and
@@ -119,7 +114,7 @@ async function paystack<T>(
   const res = await fetch(`${PAYSTACK_API}${path}`, {
     method: init?.method ?? "GET",
     headers: {
-      Authorization: `Bearer ${secretKey()}`,
+      Authorization: `Bearer ${paystackSecretKey()}`,
       "Content-Type": "application/json",
     },
     body: init?.body ? JSON.stringify(init.body) : undefined,
@@ -186,8 +181,8 @@ export function createPaymentRouter(): Router {
    */
   router.get("/payments/config", (_req, res) => {
     res.json({
-      configured: isConfigured(),
-      publicKey: publicKey() ?? null,
+      configured: isPaystackConfigured(),
+      publicKey: paystackPublicKey() ?? null,
       currency: CURRENCY,
     });
   });
@@ -219,7 +214,7 @@ export function createPaymentRouter(): Router {
       return res.status(400).json({ error: "A valid email address is required." });
     }
 
-    if (!isConfigured()) {
+    if (!isPaystackConfigured()) {
       console.warn(
         `PAYSTACK_SECRET_KEY is not set, so this ${planCode} enrolment could not be taken.`
       );
@@ -320,7 +315,7 @@ export function createPaymentRouter(): Router {
   router.get("/payments/verify/:reference", async (req, res) => {
     const { reference } = req.params;
 
-    if (!isConfigured()) {
+    if (!isPaystackConfigured()) {
       return res.status(503).json({ error: NOT_CONFIGURED });
     }
 
@@ -439,12 +434,12 @@ export function createPaymentRouter(): Router {
     const signature = req.get("x-paystack-signature");
     const raw = req.rawBody;
 
-    if (!isConfigured() || !signature || !raw) {
+    if (!isPaystackConfigured() || !signature || !raw) {
       return res.sendStatus(400);
     }
 
     const expected = crypto
-      .createHmac("sha512", secretKey()!)
+      .createHmac("sha512", paystackSecretKey()!)
       .update(raw)
       .digest("hex");
 
