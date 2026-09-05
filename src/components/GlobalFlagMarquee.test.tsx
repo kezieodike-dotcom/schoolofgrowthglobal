@@ -4,6 +4,7 @@ import path from 'node:path';
 const root = process.cwd();
 const source = readFileSync(path.join(root, 'src', 'components', 'GlobalFlagMarquee.tsx'), 'utf8');
 const layout = readFileSync(path.join(root, 'src', 'components', 'Layout.tsx'), 'utf8');
+const home = readFileSync(path.join(root, 'src', 'views', 'HomeView.tsx'), 'utf8');
 const countryCount = (source.match(/country: '/g) ?? []).length;
 
 if (countryCount < 18) {
@@ -16,7 +17,7 @@ for (const country of ['Nigeria', 'United Kingdom', 'United States', 'Ghana', 'K
   }
 }
 
-if (!source.includes('LEADERSHIP. STRATEGY. TRANSFORMATION across borders')) {
+if (!source.includes('LEADERSHIP. STRATEGY. TRANSFORMATION ACROSS BORDERS')) {
   throw new Error('Global flag marquee should use the approved leadership strategy transformation copy.');
 }
 
@@ -41,6 +42,14 @@ if (/fixed|absolute/.test(source)) {
   throw new Error('Global flag marquee should stay in normal page flow and must not use fixed or absolute positioning.');
 }
 
-if (layout.indexOf('<HeaderNavbar />') > layout.indexOf('<GlobalFlagMarquee />')) {
-  throw new Error('Global flag marquee should render immediately below the header.');
+if (layout.includes('<GlobalFlagMarquee />') || layout.includes("from './GlobalFlagMarquee'")) {
+  throw new Error('Global flag marquee should not render from the shared layout.');
+}
+
+if (!home.includes('<GlobalFlagMarquee />')) {
+  throw new Error('Home page should render the global flag marquee.');
+}
+
+if (home.indexOf('<GlobalFlagMarquee />') > home.indexOf('{/* Hero Section */}')) {
+  throw new Error('Global flag marquee should appear before the home hero section.');
 }

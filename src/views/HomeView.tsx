@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { ViewType } from '../types';
 import { TrustedExecutivesSlider } from '../components/TrustedExecutivesSlider';
 import { TestimonialsSection } from '../components/TestimonialsSection';
+import { GlobalFlagMarquee } from '../components/GlobalFlagMarquee';
 import { FACULTY_MEMBERS } from '../data/mockData';
 import { useContentCollection } from '../lib/useContent';
 import {
@@ -52,6 +53,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 font-sans">
+      <GlobalFlagMarquee />
 
       {/* Hero Section */}
       <section className="relative overflow-hidden min-h-[calc(100dvh-5rem)] lg:min-h-0 pt-16 pb-10 sm:pt-20 sm:pb-14 lg:pt-20 lg:pb-32 border-b border-slate-200 bg-slate-950 lg:bg-slate-50">

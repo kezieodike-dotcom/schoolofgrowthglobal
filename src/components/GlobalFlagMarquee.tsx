@@ -72,7 +72,7 @@ export const GlobalFlagMarquee: React.FC = () => {
             Global Growth Community
           </p>
           <p className="text-xs font-medium text-slate-500">
-            LEADERSHIP. STRATEGY. TRANSFORMATION across borders
+            LEADERSHIP. STRATEGY. TRANSFORMATION ACROSS BORDERS
           </p>
         </div>
 
