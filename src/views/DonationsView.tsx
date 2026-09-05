@@ -285,7 +285,34 @@ export const DonationsView: React.FC = () => {
                 ))}
               </div>
 
+              <div className="mt-7 space-y-4">
+                {selectedFund.detailSections.map((section) => (
+                  <div
+                    key={section.title}
+                    className="rounded-2xl border border-white/10 bg-white/[0.06] p-4"
+                  >
+                    <h3 className="text-xs font-serif font-bold text-white">
+                      {section.title}
+                    </h3>
+                    <ul className="mt-3 space-y-2">
+                      {section.items.map((item) => (
+                        <li
+                          key={item}
+                          className="flex items-start gap-2 text-xs leading-relaxed text-slate-300"
+                        >
+                          <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-amber-300" />
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+
               <div className="mt-7 rounded-2xl border border-white/10 bg-white/[0.06] p-4">
+                <p className="mb-2 text-[11px] font-mono font-bold uppercase tracking-wider text-amber-300">
+                  Donor notice
+                </p>
                 <p className="flex items-start gap-2 text-xs leading-relaxed text-slate-300">
                   <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-amber-300" />
                   <span>

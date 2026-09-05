@@ -1,8 +1,13 @@
 import {
   COUNTRY_CODES,
+  countryFlagEmoji,
   defaultCountryCode,
   formatPhoneWithCountryCode,
 } from './countryCodes.js';
+
+if (COUNTRY_CODES.length < 230) {
+  throw new Error(`Country code selector should include all countries, found only ${COUNTRY_CODES.length}.`);
+}
 
 const nigeria = COUNTRY_CODES.find((country) => country.iso === 'NG');
 if (!nigeria || nigeria.dialCode !== '+234' || nigeria.flag !== 'NG') {
@@ -22,3 +27,22 @@ if (formatPhoneWithCountryCode('+234', '08012345678') !== '+234 8012345678') {
   throw new Error('Phone formatter should combine the selected code with the local number.');
 }
 
+const expectedCountries = [
+  ['IN', '+91', 'India'],
+  ['CN', '+86', 'China'],
+  ['BR', '+55', 'Brazil'],
+  ['FR', '+33', 'France'],
+  ['DE', '+49', 'Germany'],
+  ['AE', '+971', 'United Arab Emirates'],
+] as const;
+
+for (const [iso, dialCode, name] of expectedCountries) {
+  const match = COUNTRY_CODES.find((country) => country.iso === iso);
+  if (!match || match.dialCode !== dialCode || match.name !== name) {
+    throw new Error(`Country code selector should include ${name} with ${dialCode}.`);
+  }
+}
+
+if (countryFlagEmoji('NG') !== '🇳🇬' || countryFlagEmoji('GB') !== '🇬🇧') {
+  throw new Error('Country code selector should render real country flag colours.');
+}

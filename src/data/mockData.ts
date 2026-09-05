@@ -674,7 +674,7 @@ export const ELITE_COUNCIL_COURSE: Course = {
   rating: 4.98,
   reviewCount: 72,
   status: 'Level 4 access - application-based elite experience',
-  heroImage: '/scenes/executive-roundtable.jpg',
+  heroImage: '/scenes/summit-audience.jpg',
   description:
     'Institutional Transformation, Wealth, Influence & Legacy: an elite strategic transformation experience for high-level leaders building lasting impact.',
   price: formatNaira(PLANS.premium.amountKobo),

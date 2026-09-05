@@ -75,7 +75,7 @@ export const COURSE_LADDER_SUMMARY =
   "Full cohorts now work as a growth ladder: each higher cohort requires the certificate from the level before it, so students build capability step by step.";
 
 export const FAST_TRACK_SUMMARY =
-  "Busy learners can choose a two-week fast-track intensive at 50% of the full cohort price. It covers selected high-impact modules and awards an intensive completion certificate.";
+  "Two-week fast-track intensives are selected-module extracts from the full Growth Ladder, priced through the 50% intensive route. They solve a specific problem or develop a specific capability, and award an intensive completion certificate rather than the full cohort certificate.";
 
 export const COMPLETE_LADDER_DISCOUNT_KOBO = 50_000 * 100;
 

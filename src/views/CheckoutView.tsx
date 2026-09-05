@@ -81,6 +81,13 @@ export const CheckoutView: React.FC = () => {
   // specific mentor, so the summary confirms who the subscription is for.
   const mentorId = searchParams.get('mentor');
   const referral = searchParams.get('ref') ?? '';
+  const deliveryParam = searchParams.get('delivery');
+  const deliveryMode =
+    deliveryParam === 'live-class'
+      ? 'Live class'
+      : deliveryParam === 'self-paced'
+        ? 'Self-paced learning'
+        : null;
   const mentor = mentorId ? MENTORS.find((m) => m.id === mentorId) : undefined;
   const certificateRequirements = certificateRequirementsFor(plan.code);
   const needsCertificateReview = requiresCertificateReview(plan.code);
@@ -133,6 +140,7 @@ export const CheckoutView: React.FC = () => {
           phone: phone.trim(),
           referral,
           mentorId: mentor?.id,
+          deliveryMode,
         }),
       });
 
@@ -467,6 +475,11 @@ export const CheckoutView: React.FC = () => {
                       : 'Awarded: Intensive Completion Certificate.'}
                   </p>
                 )}
+                {isFastTrackPlan(plan.code) && deliveryMode && (
+                  <p className="mt-2 rounded-xl border border-emerald-400/30 bg-emerald-400/10 p-3 text-[11px] leading-relaxed text-emerald-100">
+                    Delivery option: <strong>{deliveryMode}</strong>.
+                  </p>
+                )}
                 {needsCertificateReview && (
                   <p className="mt-2 rounded-xl border border-amber-400/30 bg-amber-400/10 p-3 text-[11px] leading-relaxed text-amber-100">
                     Full cohort admission pauses here until admissions verifies your
@@ -509,11 +522,6 @@ export const CheckoutView: React.FC = () => {
                     Total due
                   </p>
                   <p className="text-[11px] text-slate-500 mt-0.5">{plan.billing}</p>
-                  {plan.paymentOptions?.map((option) => (
-                    <p key={option} className="text-[11px] text-emerald-300 mt-1">
-                      Payment option: {option}
-                    </p>
-                  ))}
                 </div>
                 <span className="text-3xl font-serif font-bold text-amber-400">
                   {formatNaira(plan.amountKobo)}

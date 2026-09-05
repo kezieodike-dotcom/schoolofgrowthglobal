@@ -49,11 +49,30 @@ expected.forEach((want, index) => {
 });
 
 const accelerator = PACKAGES[1];
-if (!accelerator.paymentOptions?.includes('₦25,000 × 2')) {
-  throw new Error('Growth Accelerator should advertise the two-part ₦25,000 payment option.');
+if (accelerator.durationDays !== 180) {
+  throw new Error(`Growth Accelerator should give 6 months access, found ${accelerator.durationDays} days.`);
 }
 
-const executiveCircle = PACKAGES[2];
-if (!executiveCircle.paymentOptions?.includes('₦100,000 × 2')) {
-  throw new Error('Executive Circle should advertise the two-part ₦100,000 payment option.');
+if (accelerator.billing !== 'Nigeria launch price / 6 months access') {
+  throw new Error(`Growth Accelerator billing should say 6 months access, found "${accelerator.billing}".`);
+}
+
+if (!accelerator.features.includes('6 months of access')) {
+  throw new Error('Growth Accelerator feature list should say 6 months of access.');
+}
+
+for (const packagePlan of PACKAGES) {
+  if (packagePlan.paymentOptions?.length) {
+    throw new Error(`${packagePlan.name} should require full payment, not advertise part payment.`);
+  }
+  if (packagePlan.features.some((feature) => /× 2|part payment|installment/i.test(feature))) {
+    throw new Error(`${packagePlan.name} should not include installment language in features.`);
+  }
+}
+
+const fullPaymentText = JSON.stringify(PACKAGES);
+for (const forbidden of ['₦25,000 × 2', '₦100,000 × 2']) {
+  if (fullPaymentText.includes(forbidden)) {
+    throw new Error(`Packages should not advertise old part-payment option ${forbidden}.`);
+  }
 }

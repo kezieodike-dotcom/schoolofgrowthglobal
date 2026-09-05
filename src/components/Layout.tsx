@@ -4,6 +4,7 @@ import { HeaderNavbar } from './HeaderNavbar';
 import { Footer } from './Footer';
 import { GrowthAIFloatingWidget } from './GrowthAIFloatingWidget';
 import { TierPreviewSwitcher } from './TierPreviewSwitcher';
+import { GlobalFlagMarquee } from './GlobalFlagMarquee';
 
 /** Scrolls to top on every route change. */
 const ScrollToTop: React.FC = () => {
@@ -23,6 +24,7 @@ export const Layout: React.FC = () => {
     <div className="min-h-screen bg-slate-50 text-slate-900 font-sans flex flex-col selection:bg-amber-500 selection:text-slate-950">
       <ScrollToTop />
       <HeaderNavbar />
+      {!isCommandCenter && <GlobalFlagMarquee />}
 
       <div className="flex-1">
         <Outlet />

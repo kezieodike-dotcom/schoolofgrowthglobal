@@ -28,6 +28,7 @@ export type LeadSource =
   | "syllabus"
   | "corporate"
   | "consultation"
+  | "certificateVerification"
   | "newsletter"
   | "mentor";
 
@@ -97,6 +98,7 @@ export function recordLead(input: {
       "Interested In",
       "Growth Division",
       "Requested Product",
+      "Requested Full Cohort",
       "Current Title & Organization",
       "Team Size / Focus Area"
     ),

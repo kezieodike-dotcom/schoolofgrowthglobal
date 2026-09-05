@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import {
   COUNTRY_CODES,
+  countryFlagEmoji,
   defaultCountryCode,
   formatPhoneWithCountryCode,
 } from '../lib/countryCodes';
@@ -17,17 +18,6 @@ interface CountryPhoneFieldProps {
   placeholder?: string;
   onChange?: (value: string) => void;
 }
-
-const flagClass: Record<string, string> = {
-  NG: 'from-emerald-700 via-white to-emerald-700',
-  GB: 'from-blue-800 via-white to-red-700',
-  US: 'from-blue-800 via-white to-red-700',
-  GH: 'from-red-600 via-yellow-400 to-emerald-700',
-  CA: 'from-red-600 via-white to-red-600',
-  ZA: 'from-emerald-700 via-yellow-400 to-blue-800',
-  KE: 'from-black via-red-700 to-emerald-700',
-  AE: 'from-red-600 via-white to-emerald-700',
-};
 
 export const CountryPhoneField: React.FC<CountryPhoneFieldProps> = ({
   id,
@@ -69,24 +59,24 @@ export const CountryPhoneField: React.FC<CountryPhoneFieldProps> = ({
 
   return (
     <div className="space-y-2">
-      <div className="grid grid-cols-[132px_1fr] gap-2">
+      <div className="grid grid-cols-[minmax(148px,0.44fr)_1fr] gap-2">
         <div className="relative">
           <span className="sr-only">Country code</span>
           <span
             aria-hidden="true"
-            className={`pointer-events-none absolute left-2.5 top-1/2 h-5 w-8 -translate-y-1/2 rounded bg-gradient-to-r ${flagClass[selected.iso] ?? 'from-slate-300 to-slate-100'} border border-slate-200 text-[8px] font-black text-slate-950 flex items-center justify-center`}
+            className="pointer-events-none absolute left-2.5 top-1/2 h-6 w-8 -translate-y-1/2 rounded border border-slate-200 bg-white text-base leading-none flex items-center justify-center"
           >
-            {selected.flag}
+            {countryFlagEmoji(selected.iso)}
           </span>
           <select
             value={countryIso}
             onChange={(event) => updateCountry(event.target.value)}
-            className={`${className} pl-12 pr-2`}
+            className={`${className} pl-12 pr-2 truncate`}
             aria-label="Country code"
           >
             {COUNTRY_CODES.map((country) => (
               <option key={country.iso} value={country.iso}>
-                {country.dialCode} {country.name}
+                {countryFlagEmoji(country.iso)} {country.dialCode} {country.name}
               </option>
             ))}
           </select>

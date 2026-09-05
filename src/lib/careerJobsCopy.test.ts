@@ -8,8 +8,8 @@ if (CAREER_JOBS_EMAIL !== 'careerjobs.schoolofgrowthglobal@gmail.com') {
   throw new Error('Career Jobs should use the official Career Jobs email.');
 }
 
-if (!EMPLOYER_JOB_POSTING_MESSAGE.toLowerCase().includes('job opportunity')) {
-  throw new Error('Employers should be told where to send job opportunities.');
+if (!EMPLOYER_JOB_POSTING_MESSAGE.toLowerCase().includes('job or contract opportunity')) {
+  throw new Error('Employers should be told where to send job or contract opportunities.');
 }
 
 if (!TALENT_POOL_MESSAGE.toLowerCase().includes('skillful talented and competent')) {

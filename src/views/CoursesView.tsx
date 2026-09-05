@@ -73,11 +73,11 @@ const COHORT_CARD_STYLES: Record<
     lockClass: 'bg-slate-950 text-amber-300 border-slate-700',
   },
   'elite-council': {
-    card: 'border-amber-500 bg-slate-950 hover:border-amber-400 shadow-slate-300/80',
+    card: 'border-amber-400 bg-gradient-to-br from-white via-amber-50/80 to-slate-100 hover:border-amber-500 shadow-amber-100/80',
     label: 'Elite pathway',
     labelClass: 'bg-amber-400 text-slate-950',
-    levelClass: 'bg-slate-900 text-amber-300 border-amber-500/40',
-    lockClass: 'bg-amber-400 text-slate-950 border-amber-300',
+    levelClass: 'bg-white text-slate-800 border-amber-300',
+    lockClass: 'bg-white text-amber-700 border-amber-300',
   },
 };
 
@@ -113,6 +113,10 @@ export const CoursesView: React.FC = () => {
       : null;
     const fastTrack = cohortPackageCode ? fastTrackPlanFor(cohortPackageCode) : null;
     const isEliteCohort = course.id === 'elite-council';
+    const eliteSurfaceClass = isEliteCohort ? 'bg-white/90 border-amber-200' : 'bg-white/80 border-slate-200';
+    const eliteChipClass = isEliteCohort
+      ? 'bg-white border-amber-200 text-slate-700'
+      : 'bg-white border-slate-200 text-slate-600';
 
     return (
       <Link
@@ -163,43 +167,45 @@ export const CoursesView: React.FC = () => {
         <div className="p-5 flex flex-col flex-1">
           {cohortStyle && (
             <div className="mb-3 flex items-center justify-between gap-3">
-              <span className={`rounded-full px-2.5 py-1 text-[10px] font-mono font-bold uppercase tracking-wider ${cohortStyle.labelClass}`}>
+              <span className={`rounded-full px-3 py-1.5 text-[11px] font-mono font-bold uppercase tracking-wider ${cohortStyle.labelClass}`}>
                 {cohortStyle.label}
               </span>
-              <span className={`text-[10px] font-mono px-2 py-0.5 rounded border ${cohortStyle.levelClass}`}>
+              <span className={`text-[11px] font-mono px-2.5 py-1 rounded border ${cohortStyle.levelClass}`}>
                 Cohort
               </span>
             </div>
           )}
-          <div className="flex items-center justify-between mb-2 text-xs">
+          <div className={`flex items-center justify-between mb-2 ${cohortStyle ? 'text-xs' : 'text-[11px]'}`}>
             <span
-              className={`font-mono px-2 py-0.5 rounded border ${
+              className={`font-mono rounded border ${
+                cohortStyle ? 'px-2.5 py-1' : 'px-2 py-0.5'
+              } ${
                 cohortStyle?.levelClass ?? 'bg-slate-100 text-slate-600 border-slate-300'
               }`}
             >
               {course.level}
             </span>
-            <span className={`flex items-center gap-1 font-mono ${isEliteCohort ? 'text-amber-300' : 'text-amber-600'}`}>
+            <span className={`flex items-center gap-1 font-mono ${isEliteCohort ? 'text-amber-700' : 'text-amber-600'}`}>
               <Star className="w-3.5 h-3.5 fill-amber-400" /> {course.rating}
             </span>
           </div>
-          <h4 className={`text-lg font-serif font-bold transition-colors mb-2 ${
-            isEliteCohort ? 'text-white group-hover:text-amber-300' : 'text-slate-900 group-hover:text-amber-700'
+          <h4 className={`${cohortStyle ? 'text-xl sm:text-2xl' : 'text-lg sm:text-xl'} font-serif font-bold transition-colors mb-2 leading-tight ${
+            isEliteCohort ? 'text-slate-950 group-hover:text-amber-700' : 'text-slate-900 group-hover:text-amber-700'
           }`}>
             {course.title}
           </h4>
-          <p className={`text-xs line-clamp-2 mb-4 flex-1 ${isEliteCohort ? 'text-slate-300' : 'text-slate-500'}`}>
+          <p className={`${cohortStyle ? 'text-sm sm:text-[15px] line-clamp-3' : 'text-xs line-clamp-2'} leading-relaxed mb-4 flex-1 ${isEliteCohort ? 'text-slate-600' : 'text-slate-500'}`}>
             {course.description}
           </p>
           {course.modules.length > 0 && (
-            <div className={`mb-4 rounded-xl border p-3 space-y-2 ${
-              isEliteCohort ? 'bg-slate-900 border-slate-800' : 'bg-white/80 border-slate-200'
+            <div className={`mb-4 rounded-xl border ${cohortStyle ? 'p-4 space-y-3' : 'p-3 space-y-2'} ${
+              eliteSurfaceClass
             }`}>
               <div className="flex items-center justify-between gap-2">
-                <span className={`text-[10px] font-mono uppercase tracking-wider ${isEliteCohort ? 'text-slate-400' : 'text-slate-500'}`}>
+                <span className={`${cohortStyle ? 'text-xs' : 'text-[10px]'} font-mono uppercase tracking-wider ${isEliteCohort ? 'text-slate-600' : 'text-slate-500'}`}>
                   Course preview
                 </span>
-                <span className="text-[10px] font-mono text-amber-700">
+                <span className={`${cohortStyle ? 'text-xs' : 'text-[10px]'} font-mono text-amber-700`}>
                   {course.modules.length} modules
                 </span>
               </div>
@@ -207,10 +213,8 @@ export const CoursesView: React.FC = () => {
                 {course.modules.slice(0, 4).map((module) => (
                   <span
                     key={module.title}
-                    className={`rounded-full border px-2 py-1 text-[10px] ${
-                      isEliteCohort
-                        ? 'bg-slate-950 border-slate-700 text-slate-300'
-                        : 'bg-white border-slate-200 text-slate-600'
+                    className={`rounded-full border ${cohortStyle ? 'px-2.5 py-1.5 text-[11px]' : 'px-2 py-1 text-[10px]'} ${
+                      eliteChipClass
                     }`}
                   >
                     {module.title}
@@ -220,25 +224,25 @@ export const CoursesView: React.FC = () => {
             </div>
           )}
           {cohortPackageCode && fastTrack && (
-            <div className={`mb-4 rounded-xl border p-3 ${
-              isEliteCohort ? 'bg-slate-900 border-slate-800 text-slate-300' : 'bg-amber-50 border-amber-200 text-amber-950'
+            <div className={`mb-4 rounded-xl border p-4 ${
+              isEliteCohort ? 'bg-white/90 border-amber-200 text-amber-950' : 'bg-amber-50 border-amber-200 text-amber-950'
             }`}>
-              <p className="text-[10px] font-mono font-bold uppercase tracking-wider">
+              <p className="text-xs font-mono font-bold uppercase tracking-wider">
                 Full Growth Ladder
               </p>
-              <p className="mt-1 text-[11px] leading-relaxed">
+              <p className="mt-1 text-xs leading-relaxed">
                 {describePrerequisiteFor(cohortPackageCode)}
               </p>
-              <p className="mt-2 text-[11px] leading-relaxed">
+              <p className="mt-2 text-xs leading-relaxed">
                 Two-week fast-track intensive: {formatNaira(fastTrack.amountKobo)} for
                 selected modules.
               </p>
             </div>
           )}
-          <div className={`pt-4 border-t flex items-center justify-between text-xs ${
-            isEliteCohort ? 'border-slate-800' : 'border-slate-200'
+          <div className={`pt-4 border-t flex items-center justify-between ${cohortStyle ? 'text-sm' : 'text-xs'} ${
+            isEliteCohort ? 'border-amber-200' : 'border-slate-200'
           }`}>
-            <span className={`flex items-center gap-1.5 font-mono ${isEliteCohort ? 'text-slate-400' : 'text-slate-500'}`}>
+            <span className={`flex items-center gap-1.5 font-mono ${isEliteCohort ? 'text-slate-600' : 'text-slate-500'}`}>
               <Clock className="w-3.5 h-3.5" /> {course.duration}
             </span>
             {unlocked ? (
@@ -246,7 +250,7 @@ export const CoursesView: React.FC = () => {
                 Start <ChevronRight className="w-3.5 h-3.5" />
               </span>
             ) : (
-              <span className={`font-mono flex items-center gap-1 ${isEliteCohort ? 'text-amber-300' : 'text-slate-500'}`}>
+              <span className={`font-mono flex items-center gap-1 ${isEliteCohort ? 'text-amber-700' : 'text-slate-500'}`}>
                 <Lock className="w-3 h-3" />
                 {unlockedBy.name} unlocks this
               </span>
@@ -368,7 +372,8 @@ export const CoursesView: React.FC = () => {
                 </h2>
               </div>
               <p className="max-w-xl text-sm leading-relaxed text-slate-500">
-                {COURSE_LADDER_SUMMARY} Two-week fast-track intensive options are available for selected modules.
+                {COURSE_LADDER_SUMMARY}{' '}
+                {'Two-weeks fast track intensive transformation programmes designed to solve a specific problem or develop a specific capability are available for selected modules.'}
               </p>
             </div>
             <div className="mb-5 grid grid-cols-1 md:grid-cols-4 gap-3">

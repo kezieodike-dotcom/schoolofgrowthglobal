@@ -154,11 +154,9 @@ const PackageCard: React.FC<{ plan: Plan; owned: boolean }> = ({ plan, owned }) 
             </span>
           </div>
           <p className="text-[11px] text-slate-500 font-mono">{plan.billing}</p>
-          {plan.paymentOptions?.map((option) => (
-            <p key={option} className="text-[11px] text-emerald-700 font-semibold">
-              Payment option: {option}
-            </p>
-          ))}
+          <p className="text-[11px] text-emerald-700 font-semibold">
+            Full payment is required before access is granted.
+          </p>
         </div>
 
         <div
@@ -175,9 +173,9 @@ const PackageCard: React.FC<{ plan: Plan; owned: boolean }> = ({ plan, owned }) 
             {requirements}
           </p>
           <p className="mt-2 text-[11px] leading-relaxed text-slate-500">
-            Short on time? Choose the{' '}
+            Short on time? Choose the selected-module extract:{' '}
             <Link
-              to={`/checkout/${fastTrackPlan.code}`}
+              to={`/checkout/${fastTrackPlan.code}?delivery=self-paced`}
               className="font-bold text-amber-700 hover:underline"
             >
               {fastTrackPlan.name}
@@ -224,22 +222,40 @@ const PackageCard: React.FC<{ plan: Plan; owned: boolean }> = ({ plan, owned }) 
   );
 };
 
-const LadderPreview: React.FC<{ item: LadderItem }> = ({ item }) => {
+const LadderPreview: React.FC<{ item: LadderItem; tone?: 'consultation' | 'mentorship' }> = ({
+  item,
+  tone = 'consultation',
+}) => {
   const plan = PLANS[planCodeForLadder(item.title)];
+  const isMentorship = tone === 'mentorship';
 
   return (
-  <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+  <div
+    className={`rounded-2xl border p-4 shadow-sm ${
+      isMentorship ? 'border-emerald-200 bg-emerald-50/80' : 'border-amber-200 bg-white'
+    }`}
+  >
     <div className="flex flex-wrap items-center gap-2">
-      <span className="rounded-full bg-slate-100 px-2.5 py-1 text-[10px] font-bold uppercase text-slate-700">
+      <span
+        className={`rounded-full px-2.5 py-1 text-[10px] font-bold uppercase ${
+          isMentorship ? 'bg-emerald-700 text-white' : 'bg-amber-100 text-amber-800'
+        }`}
+      >
         {item.level}
       </span>
-      <span className="text-[11px] font-mono text-amber-700">{item.duration}</span>
+      <span className={`text-[11px] font-mono ${isMentorship ? 'text-emerald-800' : 'text-amber-700'}`}>
+        {item.duration}
+      </span>
     </div>
     <h4 className="mt-3 text-sm font-bold text-slate-900">{item.title}</h4>
     <p className="mt-1 text-xs leading-relaxed text-slate-500">{item.description}</p>
     <Link
       to={paymentLinkForLadder(item.title)}
-      className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-slate-950 px-3 py-2.5 text-[11px] font-bold text-white transition hover:bg-slate-800"
+      className={`mt-3 inline-flex w-full items-center justify-center gap-2 rounded-xl px-3 py-2.5 text-[11px] font-bold transition ${
+        isMentorship
+          ? 'bg-emerald-700 text-white hover:bg-emerald-800'
+          : 'bg-slate-950 text-white hover:bg-slate-800'
+      }`}
     >
       Pay from {formatNaira(plan.amountKobo)}
       <ArrowRight className="h-3.5 w-3.5" />
@@ -264,6 +280,60 @@ const PricingBandCard: React.FC<{ band: PricingBand; dark?: boolean }> = ({ band
       {band.description}
     </p>
   </div>
+);
+
+const CompleteLadderPaymentBox: React.FC = () => (
+  <Link
+    to="/checkout/complete-ladder"
+    className="motion-pressable group mt-8 block rounded-3xl border border-amber-300 bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 p-5 text-white shadow-xl shadow-amber-500/10 transition-all hover:-translate-y-1 hover:border-amber-400 sm:p-6"
+  >
+    <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+      <div className="space-y-2">
+        <p className="text-[11px] font-mono font-bold uppercase tracking-widest text-amber-300">
+          Complete Growth Ladder
+        </p>
+        <h3 className="text-xl font-serif font-bold sm:text-2xl">
+          Pay for all four tiers at once
+        </h3>
+        <p className="max-w-2xl text-xs leading-relaxed text-slate-300 sm:text-sm">
+          {COMPLETE_LADDER_SUMMARY} Instead of paying the four tiers separately,
+          make one full payment and receive a {formatNaira(COMPLETE_LADDER_DISCOUNT_KOBO)} discount.
+          International dollar invoices can receive a $50 discount through admissions.
+        </p>
+      </div>
+
+      <div className="grid min-w-full grid-cols-1 gap-3 rounded-2xl bg-white p-4 text-slate-950 shadow-lg sm:min-w-[420px] sm:grid-cols-3">
+        <div>
+          <p className="text-[10px] font-mono uppercase tracking-wider text-slate-500">
+            Original total
+          </p>
+          <p className="mt-1 text-base font-bold text-slate-500 line-through">
+            {formatNaira(COMPLETE_LADDER_ORIGINAL_KOBO)}
+          </p>
+        </div>
+        <div>
+          <p className="text-[10px] font-mono uppercase tracking-wider text-slate-500">
+            Discounted total
+          </p>
+          <p className="text-2xl font-serif font-bold text-slate-950">
+            {formatNaira(PLANS["complete-ladder"].amountKobo)}
+          </p>
+        </div>
+        <div className="flex flex-col justify-between gap-3">
+          <p
+            className="text-[11px] font-bold text-emerald-700"
+            aria-label="Save ₦50,000"
+          >
+            Save {formatNaira(COMPLETE_LADDER_DISCOUNT_KOBO)}
+          </p>
+          <span className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-amber-500 px-3 py-2.5 text-[11px] font-bold text-slate-950 transition group-hover:bg-amber-400">
+            Pay once
+            <ArrowRight className="h-3.5 w-3.5" />
+          </span>
+        </div>
+      </div>
+    </div>
+  </Link>
 );
 
 const CourseLadderSection: React.FC = () => (
@@ -330,59 +400,32 @@ const CourseLadderSection: React.FC = () => (
                     Full cohort
                     <ArrowRight className="h-3.5 w-3.5" />
                   </Link>
-                  <Link
-                    to={`/checkout/${intensivePlan.code}`}
-                    className="motion-pressable inline-flex items-center justify-center gap-2 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2.5 text-[11px] font-bold text-amber-800 transition hover:border-amber-300"
-                  >
-                    Two-week fast-track: {formatNaira(intensivePlan.amountKobo)}
-                    <ArrowRight className="h-3.5 w-3.5" />
-                  </Link>
+                  <div className="rounded-2xl border border-amber-200 bg-amber-50 p-3">
+                    <p className="text-[10px] font-mono font-bold uppercase tracking-wider text-amber-800">
+                      Two-week fast-track: {formatNaira(intensivePlan.amountKobo)}
+                    </p>
+                    <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-2">
+                      <Link
+                        to={`/checkout/${intensivePlan.code}?delivery=self-paced`}
+                        className="motion-pressable inline-flex items-center justify-center gap-2 rounded-xl bg-white px-3 py-2.5 text-[11px] font-bold text-slate-800 ring-1 ring-amber-200 transition hover:ring-amber-300"
+                      >
+                        Self-paced learning
+                        <ArrowRight className="h-3.5 w-3.5" />
+                      </Link>
+                      <Link
+                        to={`/checkout/${intensivePlan.code}?delivery=live-class`}
+                        className="motion-pressable inline-flex items-center justify-center gap-2 rounded-xl bg-slate-950 px-3 py-2.5 text-[11px] font-bold text-white transition hover:bg-slate-800"
+                      >
+                        Live class
+                        <ArrowRight className="h-3.5 w-3.5" />
+                      </Link>
+                    </div>
+                  </div>
                 </div>
               </div>
             );
           })}
         </div>
-
-        <Link
-          to="/checkout/complete-ladder"
-          className="motion-pressable group block rounded-3xl border border-amber-300 bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 p-5 sm:p-6 text-white shadow-xl shadow-amber-500/10 transition-all hover:-translate-y-1 hover:border-amber-400"
-        >
-          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
-            <div className="space-y-2">
-              <p className="text-[11px] font-mono font-bold uppercase tracking-widest text-amber-300">
-                Pay for all four ladders
-              </p>
-              <h3 className="text-xl sm:text-2xl font-serif font-bold">
-                Complete Growth Ladder
-              </h3>
-              <p className="max-w-2xl text-xs sm:text-sm leading-relaxed text-slate-300">
-                {COMPLETE_LADDER_SUMMARY} International dollar invoices can receive
-                a $50 discount through admissions.
-              </p>
-            </div>
-            <div className="rounded-2xl bg-white p-4 text-slate-950 shadow-lg min-w-[220px]">
-              <p className="text-[10px] font-mono uppercase tracking-wider text-slate-500">
-                All four combined
-              </p>
-              <p className="mt-1 text-sm text-slate-500 line-through">
-                {formatNaira(COMPLETE_LADDER_ORIGINAL_KOBO)}
-              </p>
-              <p className="text-3xl font-serif font-bold text-slate-950">
-                {formatNaira(PLANS["complete-ladder"].amountKobo)}
-              </p>
-              <p
-                className="mt-1 text-[11px] font-bold text-emerald-700"
-                aria-label="Save ₦50,000"
-              >
-                Save {formatNaira(COMPLETE_LADDER_DISCOUNT_KOBO)}
-              </p>
-              <span className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-amber-500 px-3 py-2.5 text-[11px] font-bold text-slate-950 transition group-hover:bg-amber-400">
-                Pay once
-                <ArrowRight className="h-3.5 w-3.5" />
-              </span>
-            </div>
-          </div>
-        </Link>
       </div>
     </div>
   </section>
@@ -437,6 +480,8 @@ export const PricingView: React.FC = () => {
             />
           ))}
         </div>
+
+        <CompleteLadderPaymentBox />
 
         {/* Trust strip */}
         <div className="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -578,7 +623,7 @@ export const PricingView: React.FC = () => {
                 </h3>
                 <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
                   {CONSULTATION_LADDER.map((item) => (
-                    <LadderPreview key={item.title} item={item} />
+                    <LadderPreview key={item.title} item={item} tone="consultation" />
                   ))}
                 </div>
               </div>
@@ -589,7 +634,7 @@ export const PricingView: React.FC = () => {
                 </h3>
                 <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                   {MENTORSHIP_LADDER.map((item) => (
-                    <LadderPreview key={item.title} item={item} />
+                    <LadderPreview key={item.title} item={item} tone="mentorship" />
                   ))}
                 </div>
               </div>

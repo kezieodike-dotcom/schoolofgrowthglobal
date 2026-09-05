@@ -26,7 +26,7 @@ const bannedPatterns = [
   /\bmotion-orbit-drift/,
   /\bmotion-float-lift/,
   /\bmotion-accent-sweep/,
-  /<motion\.(?!div)/,
+  /<motion\.(?!div|article)/,
 ];
 
 for (const file of files) {

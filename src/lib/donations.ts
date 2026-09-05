@@ -12,6 +12,11 @@ export interface DonationFund {
   headline: string;
   description: string;
   supports: string[];
+  detailSections: {
+    title: string;
+    items: string[];
+  }[];
+  notice?: string[];
 }
 
 export interface DonationPayment {
@@ -55,6 +60,44 @@ export const DONATION_FUNDS: DonationFund[] = [
       'Student business and startup support',
       'Academic, alumni travel and opportunity support',
     ],
+    detailSections: [
+      {
+        title: 'Scholarship & Programme Sponsorship',
+        items: [
+          'Programme fees for children, teenagers, young people and individuals from financially disadvantaged or ordinary/common-man families.',
+          'Mentorship access, training opportunities, educational resources and other approved programme-related expenses.',
+        ],
+      },
+      {
+        title: 'Student Business & Startup Support',
+        items: [
+          'Approved support for business startup, business development, expansion, product or service development, business tools and strategic business development.',
+          'School of Growth Global may assign a supervisor, mentor, consultant or designated representative to monitor and support approved beneficiaries.',
+        ],
+      },
+      {
+        title: 'Application requirements',
+        items: [
+          'Applicants may be required to show at least three months of active learning, unless an exception is approved.',
+          'A business proposal or plan, valid identification, business or personal information and a clear explanation of the intended impact may be requested.',
+          'Approval of an application does not create automatic entitlement to funding.',
+        ],
+      },
+      {
+        title: 'Academic Scholarship for Young Alumni Students',
+        items: [
+          'Academic assistance may support eligible young alumni still pursuing formal education and facing genuine financial difficulty.',
+          'Support depends on available funds, demonstrated need, academic circumstances and organizational assessment.',
+        ],
+      },
+      {
+        title: 'Travel & Opportunity Support for Alumni',
+        items: [
+          'Support may relate to approved national or international trips, conferences, exhibitions, strategic meetings, partnerships and business opportunities.',
+          'Eligible alumni must hold a verifiable School of Growth Global certificate and show reasonable potential for personal, professional, business or community impact.',
+        ],
+      },
+    ],
   },
   {
     id: 'impact-support-fund',
@@ -67,6 +110,35 @@ export const DONATION_FUNDS: DonationFund[] = [
       'Conference, seminar and event sponsorship',
       'Education, mentorship and life-transformation initiatives',
       'Appreciation and support for committed contributors',
+    ],
+    detailSections: [
+      {
+        title: 'Support the Impact',
+        items: [
+          'Your voluntary contribution helps sustain leadership development, business development, personal development, skills development, career development and entrepreneurship.',
+          'It also supports mentorship, education, human capacity development and life-transformation initiatives.',
+        ],
+      },
+      {
+        title: 'Appreciation of Impact',
+        items: [
+          'Individuals and organizations may contribute as appreciation for transformation, knowledge, opportunities and value received through School of Growth Global.',
+          'These contributions help the organization continue investing in people, programmes, systems and wider impact work.',
+        ],
+      },
+      {
+        title: 'Conference & Event Sponsorship',
+        items: [
+          'Contributions may sponsor conferences, seminars, workshops, training programmes and events organized or supported by School of Growth Global.',
+          'Sponsored events can help people from ordinary/common-man families access valuable learning, leadership, business and mentorship experiences.',
+        ],
+      },
+      {
+        title: 'Appreciation of Team Effort',
+        items: [
+          'Voluntary support may recognize and encourage team members, professionals, mentors, consultants, volunteers, facilitators and other contributors.',
+        ],
+      },
     ],
   },
   {
@@ -81,6 +153,44 @@ export const DONATION_FUNDS: DonationFund[] = [
       'Character, values, purpose and leadership formation',
       'Orphanage and vulnerable-child community outreach',
     ],
+    detailSections: [
+      {
+        title: 'Academic Support',
+        items: [
+          'Educational materials, school-related support, learning resources and academic development initiatives.',
+        ],
+      },
+      {
+        title: 'Welfare Support',
+        items: [
+          'Support for identified welfare needs of children and teenagers experiencing genuine financial or social difficulties.',
+        ],
+      },
+      {
+        title: 'Medical Support',
+        items: [
+          'Where appropriate and subject to available resources and verification, contributions may support approved medical needs.',
+        ],
+      },
+      {
+        title: 'Spiritual & Character Development',
+        items: [
+          'Programmes and activities that encourage positive character, responsible living, values, purpose, leadership and spiritual growth.',
+        ],
+      },
+      {
+        title: 'Orphanage & Community Outreach',
+        items: [
+          "Outreach to orphanages, children's homes and vulnerable-child communities, including properly identified partner organizations.",
+        ],
+      },
+      {
+        title: 'Technology & Digital Development',
+        items: [
+          'Digital literacy, technology education, computer-related learning, digital skills training, approved technology resources, entrepreneurship and innovation programmes.',
+        ],
+      },
+    ],
   },
 ];
 
@@ -94,6 +204,22 @@ export const DONATION_ALLOCATION_OPTION: DonationFund = {
     'Urgent scholarship or programme support',
     'Priority impact work across the School of Growth mission',
     'Responsible allocation based on current needs and available funds',
+  ],
+  detailSections: [
+    {
+      title: 'Responsible Allocation',
+      items: [
+        'School of Growth Global may direct the donation toward the fund or mission need where it can create timely and meaningful impact.',
+        'Allocation may support scholarship, education, mentorship, welfare, leadership, events, systems or other related mission activities.',
+      ],
+    },
+    {
+      title: 'Donor notice',
+      items: [
+        'Donations do not create ownership, employment, partnership, profit, repayment, governance or control rights.',
+        'Beneficiary selection, programme delivery and fund administration remain subject to organizational policies, available resources and applicable law.',
+      ],
+    },
   ],
 };
 

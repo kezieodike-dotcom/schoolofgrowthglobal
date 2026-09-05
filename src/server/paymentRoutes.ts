@@ -99,6 +99,7 @@ interface PaystackTransaction {
     name?: string;
     phone?: string;
     mentorId?: string;
+    deliveryMode?: string;
   } | null;
 }
 
@@ -204,6 +205,7 @@ export function createPaymentRouter(): Router {
       phone,
       referral,
       mentorId,
+      deliveryMode,
       donorNote,
     } = req.body ?? {};
 
@@ -277,6 +279,8 @@ export function createPaymentRouter(): Router {
               name: typeof name === "string" ? name : undefined,
               phone: typeof phone === "string" ? phone : undefined,
               referral: typeof referral === "string" ? referral : undefined,
+              deliveryMode:
+                plan && typeof deliveryMode === "string" ? deliveryMode : undefined,
               // Carried through so the confirmation email and the student's
               // first session can name the mentor they chose at checkout.
               mentorId: plan && typeof mentorId === "string" ? mentorId : undefined,

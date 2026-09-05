@@ -23,6 +23,7 @@ const SOURCES: LeadSource[] = [
   "syllabus",
   "corporate",
   "consultation",
+  "certificateVerification",
   "newsletter",
   "mentor",
 ];

@@ -19,6 +19,12 @@ for (const phrase of [
   'Support the Mission. Sustain the Impact. Transform More Lives',
   'Invest in a Child. Empower a Teenager. Shape a Leader',
   'Let School of Growth Global Allocate My Donation Where It Is Most Needed',
+  'Scholarship & Programme Sponsorship',
+  'Student Business & Startup Support',
+  'Academic Scholarship for Young Alumni Students',
+  'Travel & Opportunity Support for Alumni',
+  'Conference & Event Sponsorship',
+  'Technology & Digital Development',
 ]) {
   if (!source.includes(phrase)) {
     throw new Error(`Donation catalogue should include "${phrase}".`);

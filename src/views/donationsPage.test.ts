@@ -59,6 +59,10 @@ for (const phrase of [
   'handleFundSelection',
   'scrollIntoView',
   'id="donation-detail-panel"',
+  'selectedFund.detailSections',
+  'section.title',
+  'section.items',
+  'Donor notice',
 ]) {
   if (!page.includes(phrase)) {
     throw new Error(`Donation choices should jump donors to the detail/payment panel: ${phrase}.`);

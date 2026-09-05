@@ -88,16 +88,31 @@ export const GrowthJobsView: React.FC = () => {
               For employers
             </p>
             <h2 className="mt-2 text-xl font-serif font-bold text-slate-900">
-              Share a job opportunity
+              Share a job or contract opportunity
             </h2>
             <p className="mt-2 text-sm text-slate-600 leading-relaxed">
               {EMPLOYER_JOB_POSTING_MESSAGE}
             </p>
+            <div className="mt-4 flex flex-wrap gap-2">
+              <a
+                href={`mailto:${CAREER_JOBS_EMAIL}?subject=Career Jobs Opportunity`}
+                className="motion-pressable inline-flex items-center gap-2 rounded-xl bg-slate-950 px-4 py-2.5 text-sm font-bold text-white hover:bg-slate-800"
+              >
+                <Mail className="w-4 h-4" />
+                Share Job
+              </a>
+              <a
+                href={`mailto:${CAREER_JOBS_EMAIL}?subject=Career Contract Opportunity`}
+                className="motion-pressable inline-flex items-center gap-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2.5 text-sm font-bold text-amber-800 hover:border-amber-300"
+              >
+                <BriefcaseBusiness className="w-4 h-4" />
+                Share Contract
+              </a>
+            </div>
             <a
-              href={`mailto:${CAREER_JOBS_EMAIL}?subject=Career Jobs Opportunity`}
-              className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-amber-700 hover:text-amber-800"
+              href={`mailto:${CAREER_JOBS_EMAIL}?subject=Career Jobs and Contract Opportunity`}
+              className="mt-3 inline-flex items-center gap-2 text-xs font-bold text-amber-700 hover:text-amber-800"
             >
-              <Mail className="w-4 h-4" />
               {CAREER_JOBS_EMAIL}
             </a>
           </div>
