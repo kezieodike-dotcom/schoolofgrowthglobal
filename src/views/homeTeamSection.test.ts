@@ -20,3 +20,18 @@ if (teamIndex < testimonialsIndex) {
 if (!source.includes('FACULTY_MEMBERS')) {
   throw new Error('Meet Our Team should be driven by the existing faculty data.');
 }
+
+for (const phrase of [
+  'Explore the institution',
+  'Courses & cohorts',
+  'Mentorship & consultation',
+  'Career jobs',
+  'Events & live classes',
+  'Insights',
+  'Donate to impact',
+  'to="/about"'
+]) {
+  if (!source.includes(phrase)) {
+    throw new Error(`Home page should include the ${phrase} pathway.`);
+  }
+}

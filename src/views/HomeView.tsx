@@ -6,6 +6,7 @@ import { TestimonialsSection } from '../components/TestimonialsSection';
 import { GlobalFlagMarquee } from '../components/GlobalFlagMarquee';
 import { FACULTY_MEMBERS } from '../data/mockData';
 import { useContentCollection } from '../lib/useContent';
+import { askGrowthAI, describeError } from '../lib/growthAI';
 import {
   Crown,
   ArrowRight,
@@ -15,7 +16,13 @@ import {
   Send,
   UserPlus,
   Award,
-  UsersRound
+  UsersRound,
+  BookOpen,
+  Compass,
+  BriefcaseBusiness,
+  CalendarDays,
+  Lightbulb,
+  HeartHandshake
 } from 'lucide-react';
 
 interface HomeViewProps {
@@ -37,15 +44,13 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
     setAiAnswer(null);
 
     try {
-      const res = await fetch('/api/ai/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: aiQuestion, context: 'Home Page Intelligence Teaser' })
+      const { reply } = await askGrowthAI({
+        message: aiQuestion,
+        context: 'Home Page Intelligence Teaser'
       });
-      const data = await res.json();
-      setAiAnswer(data.reply || 'Strategic analysis completed.');
+      setAiAnswer(reply);
     } catch (err) {
-      setAiAnswer('Growth AI simulation active: Strategic growth requires disciplined capital allocation and clear accountability structures.');
+      setAiAnswer(describeError(err));
     } finally {
       setAiLoading(false);
     }
@@ -76,9 +81,9 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
             {/* Left Copy */}
             <div className="max-w-[37rem] space-y-5 pb-5 sm:space-y-6 lg:col-span-7 lg:max-w-none lg:pb-0">
 
-              <div className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/12 px-3 py-1.5 text-[11px] font-medium text-amber-100 backdrop-blur-md sm:px-3.5 lg:border-amber-300 lg:bg-white lg:text-xs lg:text-amber-700 lg:font-mono lg:backdrop-blur-none">
+              <div className="inline-flex -translate-y-1 items-center gap-2 rounded-full border border-white/25 bg-white/12 px-3 py-1.5 text-[11px] font-medium text-amber-100 backdrop-blur-md transition-transform sm:-translate-y-1.5 sm:px-3.5 lg:-translate-y-2 lg:border-amber-300 lg:bg-white lg:text-xs lg:text-amber-700 lg:font-mono lg:backdrop-blur-none">
                 <Crown className="w-3.5 h-3.5 text-amber-200 lg:text-amber-600" />
-                <span>Global Institutional Standard 2024</span>
+                <span>Global Institutional Standard 2026</span>
               </div>
 
               <h1 className="text-[2.55rem] sm:text-5xl lg:text-6xl font-serif font-semibold lg:font-bold text-white lg:text-slate-900 tracking-tight leading-[1.05] lg:leading-[1.1]">
@@ -271,6 +276,96 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
               )}
             </div>
 
+          </div>
+        </div>
+      </section>
+
+      {/* Homepage pathways */}
+      <section className="border-b border-slate-200 bg-slate-50 py-14 sm:py-18">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mb-8 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between sm:gap-8">
+            <div className="max-w-2xl space-y-3" data-scroll-reveal>
+              <div className="inline-flex items-center gap-2 rounded-full border border-amber-200 bg-white px-3 py-1 text-[11px] font-mono uppercase tracking-widest text-amber-700">
+                <Compass className="h-3.5 w-3.5" />
+                <span>Explore the institution</span>
+              </div>
+              <h2 className="text-2xl font-serif font-semibold leading-tight text-slate-900 sm:text-3xl lg:text-4xl">
+                Find the pathway that matches the season you are in.
+              </h2>
+              <p className="text-[15px] leading-7 text-slate-600">
+                Start with practical learning, connect with the right expertise, build your career,
+                or support growth that reaches further.
+              </p>
+            </div>
+            <Link
+              to="/about"
+              className="motion-pressable inline-flex w-fit items-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-800 transition-colors hover:border-amber-300 hover:text-amber-700"
+            >
+              <span>About School of Growth</span>
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+
+          <div className="scroll-card-grid grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {[
+              {
+                to: '/courses',
+                label: 'Courses & cohorts',
+                copy: 'Build capability through structured growth ladders and specialised learning tracks.',
+                icon: BookOpen,
+                accent: 'text-amber-700 bg-amber-50 border-amber-200'
+              },
+              {
+                to: '/mentorship',
+                label: 'Mentorship & consultation',
+                copy: 'Find clarity, strategy, accountability and expert guidance for your next move.',
+                icon: Compass,
+                accent: 'text-emerald-700 bg-emerald-50 border-emerald-200'
+              },
+              {
+                to: '/jobs',
+                label: 'Career jobs',
+                copy: 'Discover opportunities, submit your profile and connect with work that fits your strengths.',
+                icon: BriefcaseBusiness,
+                accent: 'text-sky-700 bg-sky-50 border-sky-200'
+              },
+              {
+                to: '/events',
+                label: 'Events & live classes',
+                copy: 'Join timely conversations, practical sessions and live experiences with the community.',
+                icon: CalendarDays,
+                accent: 'text-violet-700 bg-violet-50 border-violet-200'
+              },
+              {
+                to: '/blog',
+                label: 'Insights',
+                copy: 'Read thoughtful perspectives on leadership, strategy, careers and personal growth.',
+                icon: Lightbulb,
+                accent: 'text-orange-700 bg-orange-50 border-orange-200'
+              },
+              {
+                to: '/donate',
+                label: 'Donate to impact',
+                copy: 'Help make transformation, opportunity and leadership development accessible to more people.',
+                icon: HeartHandshake,
+                accent: 'text-rose-700 bg-rose-50 border-rose-200'
+              }
+            ].map(({ to, label, copy, icon: Icon, accent }) => (
+              <Link
+                key={to}
+                to={to}
+                className="scroll-card motion-pressable group rounded-lg border border-slate-200 bg-white p-5 shadow-sm transition-all hover:-translate-y-1 hover:border-slate-300 hover:shadow-lg hover:shadow-slate-900/5"
+              >
+                <div className="mb-5 flex items-start justify-between gap-4">
+                  <span className={`inline-flex h-10 w-10 items-center justify-center rounded-lg border ${accent}`}>
+                    <Icon className="h-5 w-5" />
+                  </span>
+                  <ArrowRight className="h-4 w-4 text-slate-400 transition-transform group-hover:translate-x-1 group-hover:text-slate-700" />
+                </div>
+                <h3 className="text-lg font-serif font-semibold text-slate-900">{label}</h3>
+                <p className="mt-2 text-sm leading-6 text-slate-600">{copy}</p>
+              </Link>
+            ))}
           </div>
         </div>
       </section>
