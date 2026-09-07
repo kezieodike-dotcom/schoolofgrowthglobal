@@ -15,6 +15,17 @@ for (const phrase of [
   'executive-circle',
   'elite-council',
   'isCohortCourse',
+  'Two-week fast-track intensives',
+  'SELF DISCOVERY & PRODUCTIVITY COURSE',
+  'MINDSET & CAREER DEVELOPMENT',
+  'Understanding Yourself',
+  'Purpose, Vision & Direction',
+  'Personal Productivity',
+  'Growth Mindset',
+  'Communication & People Skills',
+  'Career Development',
+  'delivery=self-paced',
+  'delivery=live-class',
 ]) {
   if (!source.includes(phrase)) {
     throw new Error(`Courses page should separate cohort programs from specialized courses: ${phrase}.`);
@@ -27,10 +38,10 @@ if (!source.includes('Four packages')) {
 
 if (
   !source.includes(
-    'Two-weeks fast track intensive transformation programmes designed to solve a specific problem or develop a specific capability are available for selected modules'
+    'The two-week pathways below are selected-module extracts from Growth Foundation.'
   )
 ) {
-  throw new Error('Courses page should explain the selected-module fast track transformation programmes.');
+  throw new Error('Courses page should explain the selected-module Growth Foundation intensives.');
 }
 
 for (const phrase of [

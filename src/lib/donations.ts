@@ -32,16 +32,16 @@ export interface DonationPayment {
 }
 
 export const minimumDonationKobo = 1_000 * KOBO_PER_NAIRA;
-export const maximumDonationKobo = 50_000_000 * KOBO_PER_NAIRA;
+export const maximumDonationKobo = 1_000_000_000_000 * KOBO_PER_NAIRA;
 
-export const SUGGESTED_DONATION_AMOUNTS_KOBO = [
-  5_000,
-  10_000,
-  25_000,
-  50_000,
-  100_000,
-  250_000,
-].map((amount) => amount * KOBO_PER_NAIRA);
+export const SUGGESTED_DONATION_RANGES = [
+  { label: '₦5,000 - ₦100,000', amountKobo: 5_000 * KOBO_PER_NAIRA },
+  { label: '₦105,000 - ₦1,000,000', amountKobo: 105_000 * KOBO_PER_NAIRA },
+  { label: '₦1.5 million - ₦100 million', amountKobo: 1_500_000 * KOBO_PER_NAIRA },
+  { label: '₦105 million - ₦1 billion', amountKobo: 105_000_000 * KOBO_PER_NAIRA },
+  { label: '₦1.5 billion - ₦100 billion', amountKobo: 1_500_000_000 * KOBO_PER_NAIRA },
+  { label: '₦105 billion - ₦1 trillion', amountKobo: 105_000_000_000 * KOBO_PER_NAIRA },
+] as const;
 
 export function formatDonationAmount(kobo: number): string {
   return `₦${(kobo / KOBO_PER_NAIRA).toLocaleString('en-NG')}`;
@@ -76,14 +76,6 @@ export const DONATION_FUNDS: DonationFund[] = [
         ],
       },
       {
-        title: 'Application requirements',
-        items: [
-          'Applicants may be required to show at least three months of active learning, unless an exception is approved.',
-          'A business proposal or plan, valid identification, business or personal information and a clear explanation of the intended impact may be requested.',
-          'Approval of an application does not create automatic entitlement to funding.',
-        ],
-      },
-      {
         title: 'Academic Scholarship for Young Alumni Students',
         items: [
           'Academic assistance may support eligible young alumni still pursuing formal education and facing genuine financial difficulty.',
@@ -95,6 +87,14 @@ export const DONATION_FUNDS: DonationFund[] = [
         items: [
           'Support may relate to approved national or international trips, conferences, exhibitions, strategic meetings, partnerships and business opportunities.',
           'Eligible alumni must hold a verifiable School of Growth Global certificate and show reasonable potential for personal, professional, business or community impact.',
+        ],
+      },
+      {
+        title: 'Application requirements',
+        items: [
+          'Applicants may be required to show at least three months of active learning, unless an exception is approved.',
+          'A business proposal or plan, valid identification, business or personal information and a clear explanation of the intended impact may be requested.',
+          'Approval of an application does not create automatic entitlement to funding.',
         ],
       },
     ],

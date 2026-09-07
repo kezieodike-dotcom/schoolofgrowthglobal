@@ -4,11 +4,10 @@ import { COURSES, SCHOOLS } from '../data/mockData';
 import { PageHero } from '../components/PageHero';
 import { useEnrollment } from '../lib/useEnrollment';
 import { useContentCollection } from '../lib/useContent';
-import { cheapestPackageFor, formatNaira, type CourseLevel, type PackageId } from '../lib/pricing';
+import { cheapestPackageFor, formatNaira, type CourseLevel } from '../lib/pricing';
 import {
   COURSE_LADDER_STEPS,
   COURSE_LADDER_SUMMARY,
-  describePrerequisiteFor,
   fastTrackPlanFor,
 } from '../lib/courseLadder';
 import {
@@ -34,12 +33,20 @@ const COHORT_COURSE_IDS = [
 const isCohortCourse = (course: { id: string }) =>
   COHORT_COURSE_IDS.includes(course.id as (typeof COHORT_COURSE_IDS)[number]);
 
-const COHORT_PACKAGE_BY_COURSE_ID: Record<(typeof COHORT_COURSE_IDS)[number], PackageId> = {
-  'growth-foundation-cohort': 'mini',
-  'growth-accelerator': 'medium',
-  'executive-circle': 'maxi',
-  'elite-council': 'premium',
-};
+const FOUNDATION_SPECIALIZED_COURSES = [
+  {
+    id: 'self-discovery-productivity',
+    title: 'SELF DISCOVERY & PRODUCTIVITY COURSE',
+    description: 'A focused two-week pathway for understanding yourself, clarifying your direction and building practical productivity systems.',
+    moduleTitles: ['Understanding Yourself', 'Purpose, Vision & Direction', 'Personal Productivity'],
+  },
+  {
+    id: 'mindset-career-development',
+    title: 'MINDSET & CAREER DEVELOPMENT',
+    description: 'A focused two-week pathway for strengthening your growth mindset, people skills and practical career direction.',
+    moduleTitles: ['Growth Mindset', 'Communication & People Skills', 'Career Development'],
+  },
+] as const;
 
 const COHORT_CARD_STYLES: Record<
   (typeof COHORT_COURSE_IDS)[number],
@@ -99,6 +106,8 @@ export const CoursesView: React.FC = () => {
 
   const cohortCourses = courses.filter(isCohortCourse);
   const specializedCourses = courses.filter((course) => !isCohortCourse(course));
+  const foundationCourse = managedCourses.items.find((course) => course.id === 'growth-foundation-cohort');
+  const foundationIntensivePlan = fastTrackPlanFor('mini');
 
   const renderCourseCard = (course: (typeof courses)[number]) => {
     const unlocked = canAccessLevel(course.level as CourseLevel);
@@ -108,10 +117,6 @@ export const CoursesView: React.FC = () => {
     const cohortStyle = isCohortCourse(course)
       ? COHORT_CARD_STYLES[course.id as (typeof COHORT_COURSE_IDS)[number]]
       : null;
-    const cohortPackageCode = isCohortCourse(course)
-      ? COHORT_PACKAGE_BY_COURSE_ID[course.id as (typeof COHORT_COURSE_IDS)[number]]
-      : null;
-    const fastTrack = cohortPackageCode ? fastTrackPlanFor(cohortPackageCode) : null;
     const isEliteCohort = course.id === 'elite-council';
     const eliteSurfaceClass = isEliteCohort ? 'bg-white/90 border-amber-200' : 'bg-white/80 border-slate-200';
     const eliteChipClass = isEliteCohort
@@ -221,22 +226,6 @@ export const CoursesView: React.FC = () => {
                   </span>
                 ))}
               </div>
-            </div>
-          )}
-          {cohortPackageCode && fastTrack && (
-            <div className={`mb-4 rounded-xl border p-4 ${
-              isEliteCohort ? 'bg-white/90 border-amber-200 text-amber-950' : 'bg-amber-50 border-amber-200 text-amber-950'
-            }`}>
-              <p className="text-xs font-mono font-bold uppercase tracking-wider">
-                Full Growth Ladder
-              </p>
-              <p className="mt-1 text-xs leading-relaxed">
-                {describePrerequisiteFor(cohortPackageCode)}
-              </p>
-              <p className="mt-2 text-xs leading-relaxed">
-                Two-week fast-track intensive: {formatNaira(fastTrack.amountKobo)} for
-                selected modules.
-              </p>
             </div>
           )}
           <div className={`pt-4 border-t flex items-center justify-between ${cohortStyle ? 'text-sm' : 'text-xs'} ${
@@ -372,8 +361,7 @@ export const CoursesView: React.FC = () => {
                 </h2>
               </div>
               <p className="max-w-xl text-sm leading-relaxed text-slate-500">
-                {COURSE_LADDER_SUMMARY}{' '}
-                {'Two-weeks fast track intensive transformation programmes designed to solve a specific problem or develop a specific capability are available for selected modules.'}
+                {COURSE_LADDER_SUMMARY}
               </p>
             </div>
             <div className="mb-5 grid grid-cols-1 md:grid-cols-4 gap-3">
@@ -422,8 +410,85 @@ export const CoursesView: React.FC = () => {
                 </h2>
               </div>
               <p className="max-w-xl text-sm leading-relaxed text-slate-500">
-                Focused courses that deepen skills across leadership, finance, AI, career growth and business execution.
+                Focused courses that deepen skills across leadership, finance, AI, career growth and business execution. The two-week pathways below are selected-module extracts from Growth Foundation.
               </p>
+            </div>
+            <div className="mb-8 rounded-3xl border border-amber-200 bg-amber-50/70 p-5 sm:p-6">
+              <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+                <div>
+                  <p className="text-[11px] font-mono font-bold uppercase tracking-widest text-amber-800">
+                    Two-week fast-track intensives
+                  </p>
+                  <h3 className="mt-1 text-xl sm:text-2xl font-serif font-bold text-slate-950">
+                    Focused capability, extracted from the full ladder.
+                  </h3>
+                </div>
+                <p className="max-w-xl text-sm leading-relaxed text-slate-600">
+                  Choose a specific pathway when you need a concentrated outcome. Each intensive covers selected modules from its source cohort and awards an Intensive Completion Certificate.
+                </p>
+              </div>
+              <div className="mt-5 grid grid-cols-1 md:grid-cols-2 gap-4">
+                {FOUNDATION_SPECIALIZED_COURSES.map((specializedCourse) => {
+                  const modules = specializedCourse.moduleTitles
+                    .map((title) => foundationCourse?.modules.find((module) => module.title === title))
+                    .filter((module): module is NonNullable<typeof module> => Boolean(module));
+
+                  return (
+                    <article
+                      key={specializedCourse.id}
+                      className="rounded-2xl border border-amber-200 bg-white p-5 shadow-sm"
+                    >
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <p className="text-[10px] font-mono font-bold uppercase tracking-wider text-amber-700">
+                            Selected-module intensive
+                          </p>
+                          <h4 className="mt-1 text-lg font-serif font-bold text-slate-950">
+                            {specializedCourse.title}
+                          </h4>
+                        </div>
+                        <span className="shrink-0 rounded-full bg-amber-100 px-2.5 py-1 text-[11px] font-mono font-bold text-amber-900">
+                          {formatNaira(foundationIntensivePlan.amountKobo)}
+                        </span>
+                      </div>
+                      <p className="mt-3 text-sm leading-relaxed text-slate-600">
+                        {specializedCourse.description}
+                      </p>
+                      <div className="mt-4 flex flex-wrap gap-2">
+                        {modules.map((module) => (
+                          <span
+                            key={module.title}
+                            className="rounded-full border border-amber-100 bg-amber-50 px-2.5 py-1.5 text-[11px] text-amber-900"
+                          >
+                            {module.title}
+                          </span>
+                        ))}
+                      </div>
+                      <div className="mt-4 flex flex-wrap items-center justify-between gap-2 border-t border-amber-100 pt-3">
+                        <span className="text-[11px] font-mono text-slate-500">
+                          2 weeks · From Growth Foundation · Intensive Completion Certificate
+                        </span>
+                        <div className="flex gap-2">
+                          <Link
+                            to={`/checkout/${foundationIntensivePlan.code}?delivery=self-paced`}
+                            className="motion-pressable inline-flex items-center gap-1.5 rounded-xl bg-white px-3 py-2 text-[11px] font-bold text-slate-800 ring-1 ring-amber-200 transition hover:ring-amber-300"
+                          >
+                            Self-paced
+                            <ArrowRight className="h-3.5 w-3.5" />
+                          </Link>
+                          <Link
+                            to={`/checkout/${foundationIntensivePlan.code}?delivery=live-class`}
+                            className="motion-pressable inline-flex items-center gap-1.5 rounded-xl bg-slate-950 px-3 py-2 text-[11px] font-bold text-white transition hover:bg-slate-800"
+                          >
+                            Live class
+                            <ArrowRight className="h-3.5 w-3.5" />
+                          </Link>
+                        </div>
+                      </div>
+                    </article>
+                  );
+                })}
+              </div>
             </div>
             <div className="scroll-card-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {specializedCourses.map(renderCourseCard)}

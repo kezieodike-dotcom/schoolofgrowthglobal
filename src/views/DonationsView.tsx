@@ -15,7 +15,7 @@ import { CountryPhoneField } from '../components/CountryPhoneField';
 import {
   DONATION_ALLOCATION_OPTION,
   DONATION_FUNDS,
-  SUGGESTED_DONATION_AMOUNTS_KOBO,
+  SUGGESTED_DONATION_RANGES,
   findDonationFund,
   formatDonationAmount,
   minimumDonationKobo,
@@ -403,21 +403,24 @@ export const DonationsView: React.FC = () => {
                     <label htmlFor="donation-amount" className="block text-xs text-slate-500 mb-1.5">
                       Amount you want to donate
                     </label>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mb-2">
-                      {SUGGESTED_DONATION_AMOUNTS_KOBO.map((amountKobo) => {
-                        const selectedAmount = amount === String(amountKobo / 100);
+                    <p className="mb-2 text-[11px] font-mono font-bold uppercase tracking-wider text-slate-500">
+                      Suggested giving ranges
+                    </p>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-2">
+                      {SUGGESTED_DONATION_RANGES.map((range) => {
+                        const selectedAmount = amount === String(range.amountKobo / 100);
                         return (
                           <button
-                            key={amountKobo}
+                            key={range.label}
                             type="button"
-                            onClick={() => setAmount(String(amountKobo / 100))}
+                            onClick={() => setAmount(String(range.amountKobo / 100))}
                             className={`motion-pressable rounded-xl border px-3 py-2 text-xs font-bold transition-colors ${
                               selectedAmount
                                 ? 'border-amber-400 bg-amber-50 text-slate-950'
                                 : 'border-slate-200 bg-slate-50 text-slate-600 hover:border-amber-300 hover:bg-amber-50 hover:text-slate-950'
                             }`}
                           >
-                            {formatNaira(amountKobo)}
+                            {range.label}
                           </button>
                         );
                       })}
@@ -432,7 +435,8 @@ export const DonationsView: React.FC = () => {
                       placeholder={formatDonationAmount(minimumDonationKobo)}
                     />
                     <p className="mt-1.5 text-[11px] text-slate-400">
-                      Minimum donation is {formatNaira(minimumDonationKobo)}.
+                      Choose a range to start with its lower amount, or enter any exact
+                      donation from {formatNaira(minimumDonationKobo)} up to ₦1 trillion.
                     </p>
                   </div>
 

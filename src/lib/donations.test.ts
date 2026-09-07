@@ -34,3 +34,16 @@ for (const phrase of [
 if (!source.includes('minimumDonationKobo') || !source.includes('parseDonationAmount')) {
   throw new Error('Donation amounts should be validated server-side before Paystack checkout.');
 }
+
+for (const range of [
+  '₦5,000 - ₦100,000',
+  '₦105,000 - ₦1,000,000',
+  '₦1.5 million - ₦100 million',
+  '₦105 million - ₦1 billion',
+  '₦1.5 billion - ₦100 billion',
+  '₦105 billion - ₦1 trillion',
+]) {
+  if (!source.includes(range)) {
+    throw new Error(`Donation catalogue should include the giving range "${range}".`);
+  }
+}

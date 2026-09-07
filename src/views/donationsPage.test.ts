@@ -63,6 +63,8 @@ for (const phrase of [
   'section.title',
   'section.items',
   'Donor notice',
+  'SUGGESTED_DONATION_RANGES',
+  'Suggested giving ranges',
 ]) {
   if (!page.includes(phrase)) {
     throw new Error(`Donation choices should jump donors to the detail/payment panel: ${phrase}.`);
