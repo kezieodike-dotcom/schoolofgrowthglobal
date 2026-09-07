@@ -17,12 +17,17 @@ for (const country of ['Nigeria', 'United Kingdom', 'United States', 'Ghana', 'K
   }
 }
 
-if (!source.includes('LEADERSHIP. STRATEGY. TRANSFORMATION ACROSS BORDERS')) {
-  throw new Error('Global flag marquee should use the approved leadership strategy transformation copy.');
+const globalCommunityMentions = source.match(/Global Growth Community/g) ?? [];
+if (globalCommunityMentions.length !== 1) {
+  throw new Error('Global flag marquee should show Global Growth Community once as the main copy.');
 }
 
 if (source.includes('Learners, mentors, donors and partners across borders')) {
   throw new Error('Global flag marquee should not use the old learner/mentor/donor partner copy.');
+}
+
+if (/across borders|ACROSS BORDERS/.test(source)) {
+  throw new Error('Global flag marquee should remove the across borders wording.');
 }
 
 for (const marker of [
