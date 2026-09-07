@@ -280,98 +280,177 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
         </div>
       </section>
 
-      {/* Homepage pathways */}
-      <section className="border-b border-slate-200 bg-slate-50 py-14 sm:py-18">
+      {/* Homepage pathways: separate editorial sections that lead into the site */}
+      <section className="border-b border-slate-200 bg-white py-16 sm:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="mb-8 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between sm:gap-8">
-            <div className="max-w-2xl space-y-3" data-scroll-reveal>
-              <div className="inline-flex items-center gap-2 rounded-full border border-amber-200 bg-white px-3 py-1 text-[11px] font-mono uppercase tracking-widest text-amber-700">
-                <Compass className="h-3.5 w-3.5" />
-                <span>Explore the institution</span>
+          <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
+            <div className="max-w-xl space-y-4" data-scroll-reveal>
+              <div className="inline-flex items-center gap-2 rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-[11px] font-mono uppercase tracking-widest text-amber-700">
+                <BookOpen className="h-3.5 w-3.5" />
+                <span>Learn with structure</span>
               </div>
-              <h2 className="text-2xl font-serif font-semibold leading-tight text-slate-900 sm:text-3xl lg:text-4xl">
-                Find the pathway that matches the season you are in.
+              <h2 className="text-3xl font-serif font-semibold leading-tight text-slate-900 sm:text-4xl">
+                Build the capability your next chapter requires.
               </h2>
               <p className="text-[15px] leading-7 text-slate-600">
-                Start with practical learning, connect with the right expertise, build your career,
-                or support growth that reaches further.
+                Move from foundation to advanced growth through cohort programmes, focused courses,
+                live classes and ideas you can apply immediately.
               </p>
             </div>
-            <Link
-              to="/about"
-              className="motion-pressable inline-flex w-fit items-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-800 transition-colors hover:border-amber-300 hover:text-amber-700"
-            >
-              <span>About School of Growth</span>
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-          </div>
-
-          <div className="scroll-card-grid grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {[
-              {
-                to: '/courses',
-                label: 'Courses & cohorts',
-                copy: 'Build capability through structured growth ladders and specialised learning tracks.',
-                icon: BookOpen,
-                accent: 'text-amber-700 bg-amber-50 border-amber-200'
-              },
-              {
-                to: '/mentorship',
-                label: 'Mentorship & consultation',
-                copy: 'Find clarity, strategy, accountability and expert guidance for your next move.',
-                icon: Compass,
-                accent: 'text-emerald-700 bg-emerald-50 border-emerald-200'
-              },
-              {
-                to: '/jobs',
-                label: 'Career jobs',
-                copy: 'Discover opportunities, submit your profile and connect with work that fits your strengths.',
-                icon: BriefcaseBusiness,
-                accent: 'text-sky-700 bg-sky-50 border-sky-200'
-              },
-              {
-                to: '/events',
-                label: 'Events & live classes',
-                copy: 'Join timely conversations, practical sessions and live experiences with the community.',
-                icon: CalendarDays,
-                accent: 'text-violet-700 bg-violet-50 border-violet-200'
-              },
-              {
-                to: '/blog',
-                label: 'Insights',
-                copy: 'Read thoughtful perspectives on leadership, strategy, careers and personal growth.',
-                icon: Lightbulb,
-                accent: 'text-orange-700 bg-orange-50 border-orange-200'
-              },
-              {
-                to: '/donate',
-                label: 'Donate to impact',
-                copy: 'Help make transformation, opportunity and leadership development accessible to more people.',
-                icon: HeartHandshake,
-                accent: 'text-rose-700 bg-rose-50 border-rose-200'
-              }
-            ].map(({ to, label, copy, icon: Icon, accent }) => (
-              <Link
-                key={to}
-                to={to}
-                className="scroll-card motion-pressable group rounded-lg border border-slate-200 bg-white p-5 shadow-sm transition-all hover:-translate-y-1 hover:border-slate-300 hover:shadow-lg hover:shadow-slate-900/5"
-              >
-                <div className="mb-5 flex items-start justify-between gap-4">
-                  <span className={`inline-flex h-10 w-10 items-center justify-center rounded-lg border ${accent}`}>
-                    <Icon className="h-5 w-5" />
-                  </span>
-                  <ArrowRight className="h-4 w-4 text-slate-400 transition-transform group-hover:translate-x-1 group-hover:text-slate-700" />
-                </div>
-                <h3 className="text-lg font-serif font-semibold text-slate-900">{label}</h3>
-                <p className="mt-2 text-sm leading-6 text-slate-600">{copy}</p>
+            <div className="grid gap-4 sm:grid-cols-3">
+              <Link to="/courses" className="scroll-card motion-pressable group rounded-lg bg-slate-950 p-5 text-white transition-all hover:-translate-y-1 hover:bg-slate-900">
+                <BookOpen className="mb-10 h-5 w-5 text-amber-400" />
+                <h3 className="text-lg font-serif font-semibold">Courses & cohorts</h3>
+                <p className="mt-2 text-sm leading-6 text-slate-300">Structured ladders and specialised growth programmes.</p>
+                <span className="mt-5 inline-flex items-center gap-2 text-xs font-semibold text-amber-400">Explore courses <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" /></span>
               </Link>
-            ))}
+              <Link to="/events" className="scroll-card motion-pressable group rounded-lg border border-slate-200 bg-slate-50 p-5 transition-all hover:-translate-y-1 hover:border-violet-300 hover:bg-violet-50">
+                <CalendarDays className="mb-10 h-5 w-5 text-violet-600" />
+                <h3 className="text-lg font-serif font-semibold text-slate-900">Events & live classes</h3>
+                <p className="mt-2 text-sm leading-6 text-slate-600">Join timely sessions and practical conversations.</p>
+                <span className="mt-5 inline-flex items-center gap-2 text-xs font-semibold text-violet-700">See what is next <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" /></span>
+              </Link>
+              <Link to="/blog" className="scroll-card motion-pressable group rounded-lg border border-slate-200 bg-slate-50 p-5 transition-all hover:-translate-y-1 hover:border-orange-300 hover:bg-orange-50">
+                <Lightbulb className="mb-10 h-5 w-5 text-orange-600" />
+                <h3 className="text-lg font-serif font-semibold text-slate-900">Insights</h3>
+                <p className="mt-2 text-sm leading-6 text-slate-600">Perspectives for better leadership and decisions.</p>
+                <span className="mt-5 inline-flex items-center gap-2 text-xs font-semibold text-orange-700">Read insights <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" /></span>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="border-b border-slate-200 bg-slate-950 py-16 text-white sm:py-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
+            <div className="max-w-2xl space-y-4" data-scroll-reveal>
+              <div className="inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-3 py-1 text-[11px] font-mono uppercase tracking-widest text-emerald-300">
+                <Compass className="h-3.5 w-3.5" />
+                <span>Move with guidance</span>
+              </div>
+              <h2 className="text-3xl font-serif font-semibold leading-tight sm:text-4xl">
+                You do not have to figure out your next move alone.
+              </h2>
+              <p className="max-w-xl text-[15px] leading-7 text-slate-300">
+                Get matched with experienced people who can help you make better decisions, or find
+                the opportunity where your capability can create value.
+              </p>
+              <div className="flex flex-wrap gap-3 pt-2">
+                <Link to="/mentorship" className="motion-pressable inline-flex items-center gap-2 rounded-lg bg-emerald-400 px-4 py-2.5 text-sm font-semibold text-slate-950 transition-colors hover:bg-emerald-300">
+                  Find a mentor or consultant <ArrowRight className="h-4 w-4" />
+                </Link>
+                <Link to="/jobs" className="motion-pressable inline-flex items-center gap-2 rounded-lg border border-slate-700 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:border-emerald-400 hover:text-emerald-300">
+                  Explore Career Jobs <BriefcaseBusiness className="h-4 w-4" />
+                </Link>
+              </div>
+            </div>
+            <div className="border-l border-slate-800 pl-6 lg:pl-10">
+              <p className="text-sm font-mono uppercase tracking-widest text-slate-500">Your next step can be</p>
+              <div className="mt-5 space-y-4 text-lg font-serif text-slate-200">
+                <p>More clarity.</p>
+                <p>Better strategy.</p>
+                <p>A stronger opportunity.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="border-b border-slate-200 bg-amber-50 py-16 sm:py-20">
+        <div className="mx-auto grid max-w-7xl gap-8 px-4 sm:px-6 lg:grid-cols-[1fr_auto] lg:items-center lg:px-8">
+          <div className="max-w-2xl space-y-4" data-scroll-reveal>
+            <div className="inline-flex items-center gap-2 rounded-full border border-amber-200 bg-white px-3 py-1 text-[11px] font-mono uppercase tracking-widest text-amber-700">
+              <HeartHandshake className="h-3.5 w-3.5" />
+              <span>Grow beyond yourself</span>
+            </div>
+            <h2 className="text-3xl font-serif font-semibold leading-tight text-slate-900 sm:text-4xl">
+              Be part of a global growth community.
+            </h2>
+            <p className="text-[15px] leading-7 text-slate-700">
+              Learn more about the institution, discover the people behind the work, read our books,
+              or support initiatives that make transformation more accessible.
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-3 lg:max-w-sm lg:justify-end">
+            <Link to="/about" className="motion-pressable inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-800 transition-colors hover:border-amber-400 hover:text-amber-700">
+              About us <ArrowRight className="h-4 w-4" />
+            </Link>
+            <Link to="/books" className="motion-pressable inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-800 transition-colors hover:border-amber-400 hover:text-amber-700">
+              Browse books <ArrowRight className="h-4 w-4" />
+            </Link>
+            <Link to="/donate" className="motion-pressable inline-flex items-center gap-2 rounded-lg bg-slate-950 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-slate-800">
+              Donate to impact <HeartHandshake className="h-4 w-4 text-amber-400" />
+            </Link>
           </div>
         </div>
       </section>
 
       {/* What Our Leaders Say - Animated Testimonials Columns */}
       <TestimonialsSection />
+
+      {/* Donation hero bridge */}
+      <section className="relative overflow-hidden bg-slate-950 py-14 sm:py-18">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="relative overflow-hidden rounded-[1.75rem] border border-slate-800 bg-slate-900 shadow-2xl shadow-slate-950/20 lg:min-h-[30rem]">
+            <img
+              src="/scenes/coaching-collab.jpg"
+              alt="A group learning together in a collaborative session"
+              className="absolute inset-0 h-full w-full object-cover opacity-45"
+            />
+            <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(2,6,23,0.98)_0%,rgba(2,6,23,0.86)_42%,rgba(2,6,23,0.42)_100%)]" />
+
+            <div className="relative grid gap-10 px-6 py-10 sm:px-10 sm:py-12 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:px-14 lg:py-14">
+              <div className="max-w-2xl space-y-5" data-scroll-reveal>
+                <div className="inline-flex items-center gap-2 rounded-full border border-amber-400/30 bg-amber-400/10 px-3 py-1 text-[11px] font-mono uppercase tracking-widest text-amber-300">
+                  <HeartHandshake className="h-3.5 w-3.5" />
+                  <span>Choose your impact</span>
+                </div>
+                <h2 className="text-3xl font-serif font-semibold leading-tight text-white sm:text-4xl lg:text-5xl">
+                  Your generosity can open a door someone else has been waiting for.
+                </h2>
+                <p className="max-w-xl text-[15px] leading-7 text-slate-300 sm:text-base">
+                  Help make practical growth, mentorship, education and leadership development
+                  accessible to people with potential but limited opportunity.
+                </p>
+                <Link
+                  to="/donate"
+                  className="motion-pressable inline-flex items-center gap-2 rounded-xl bg-amber-400 px-5 py-3 text-sm font-bold text-slate-950 shadow-lg shadow-amber-950/20 transition-colors hover:bg-amber-300"
+                >
+                  <span>Visit the donation page</span>
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </div>
+
+              <div className="max-w-md space-y-3 lg:justify-self-end" data-scroll-reveal>
+                <p className="mb-4 text-[11px] font-mono uppercase tracking-widest text-amber-300">
+                  Give toward a defined mission
+                </p>
+                {[
+                  ['Community Growth Fund', 'Make transformation accessible to everyone.'],
+                  ['Impact Support Fund', 'Sustain the work and transform more lives.'],
+                  ['Future Leaders Fund', 'Invest in a child. Shape a leader.']
+                ].map(([title, copy]) => (
+                  <Link
+                    key={title}
+                    to="/donate"
+                    className="motion-pressable group flex items-center justify-between gap-4 rounded-xl border border-white/15 bg-white/10 px-4 py-3 backdrop-blur-sm transition-colors hover:border-amber-300/60 hover:bg-white/15"
+                  >
+                    <span>
+                      <span className="block text-sm font-semibold text-white">{title}</span>
+                      <span className="mt-1 block text-xs leading-5 text-slate-300">{copy}</span>
+                    </span>
+                    <ArrowRight className="h-4 w-4 shrink-0 text-amber-300 transition-transform group-hover:translate-x-1" />
+                  </Link>
+                ))}
+                <p className="pt-2 text-xs leading-5 text-slate-400">
+                  You can also let School of Growth Global allocate your donation where it is most needed.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Meet Our Team */}
       <section className="py-14 sm:py-18 bg-slate-50 border-t border-slate-200">
