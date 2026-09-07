@@ -26,6 +26,14 @@ if (source.includes('Learners, mentors, donors and partners across borders')) {
   throw new Error('Global flag marquee should not use the old learner/mentor/donor partner copy.');
 }
 
+if (!source.includes('LEADERSHIP. STRATEGY. TRANSFORMATION')) {
+  throw new Error('Global flag marquee should show the leadership strategy transformation label.');
+}
+
+if (source.includes('International Reach')) {
+  throw new Error('Global flag marquee should not use the old International Reach label.');
+}
+
 if (/across borders|ACROSS BORDERS/.test(source)) {
   throw new Error('Global flag marquee should remove the across borders wording.');
 }

@@ -69,7 +69,7 @@ export const GlobalFlagMarquee: React.FC = () => {
       <div className="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-3 sm:px-6 lg:px-8">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-amber-700">
-            International Reach
+            LEADERSHIP. STRATEGY. TRANSFORMATION
           </p>
           <p className="text-xs font-medium text-slate-500">
             Global Growth Community
