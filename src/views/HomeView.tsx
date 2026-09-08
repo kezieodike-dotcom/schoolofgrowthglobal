@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ViewType } from '../types';
-import { TrustedExecutivesSlider } from '../components/TrustedExecutivesSlider';
 import { TestimonialsSection } from '../components/TestimonialsSection';
 import { GlobalFlagMarquee } from '../components/GlobalFlagMarquee';
 import { FACULTY_MEMBERS } from '../data/mockData';
@@ -14,7 +13,6 @@ import {
   ChevronRight,
   Terminal,
   Send,
-  UserPlus,
   Award,
   UsersRound,
   BookOpen,
@@ -22,7 +20,8 @@ import {
   BriefcaseBusiness,
   CalendarDays,
   Lightbulb,
-  HeartHandshake
+  HeartHandshake,
+  Building2
 } from 'lucide-react';
 
 interface HomeViewProps {
@@ -83,42 +82,36 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
 
               <div className="inline-flex -translate-y-1 items-center gap-2 rounded-full border border-white/25 bg-white/12 px-3 py-1.5 text-[11px] font-medium text-amber-100 backdrop-blur-md transition-transform sm:-translate-y-1.5 sm:px-3.5 lg:-translate-y-2 lg:border-amber-300 lg:bg-white lg:text-xs lg:text-amber-700 lg:font-mono lg:backdrop-blur-none">
                 <Crown className="w-3.5 h-3.5 text-amber-200 lg:text-amber-600" />
-                <span>Global Institutional Standard 2026</span>
+                <span>Leadership • Strategy • Transformation</span>
               </div>
 
               <h1 className="text-[2.55rem] sm:text-5xl lg:text-6xl font-serif font-semibold lg:font-bold text-white lg:text-slate-900 tracking-tight leading-[1.05] lg:leading-[1.1]">
-                Raise Your Growth. <br />
+                Build Your Capacity. <br />
                 <span className="text-amber-200 lg:bg-gradient-to-r lg:from-amber-500 lg:via-amber-600 lg:to-amber-700 lg:bg-clip-text lg:text-transparent">
                   Transform Your Impact.
                 </span>
               </h1>
 
               <p className="max-w-[34rem] text-[15px] leading-7 text-slate-100/88 sm:text-lg lg:max-w-2xl lg:text-slate-600 lg:leading-relaxed">
-                Elite educational frameworks, executive tracks, and institutional intelligence designed for high-impact leaders, Managing Directors, and venture architects worldwide.
+                A global growth ecosystem that equips individuals, professionals, organizations and institutions with the knowledge, skills, strategies and systems required to grow, lead, create value and produce measurable impact.
               </p>
 
               {/* Action Buttons */}
               <div className="flex flex-col gap-3 pt-1 sm:flex-row sm:flex-wrap sm:items-center lg:gap-4 lg:pt-2">
                 <Link
-                  to="/courses"
+                  to="/pricing"
                   className="motion-pressable flex w-full items-center justify-center gap-2 rounded-xl bg-amber-400 px-5 py-3 text-sm font-semibold text-slate-950 shadow-xl shadow-slate-950/25 transition-all hover:bg-amber-300 sm:w-auto lg:bg-gradient-to-r lg:from-amber-400 lg:via-amber-500 lg:to-amber-600 lg:shadow-amber-500/20 lg:hover:brightness-110"
                 >
-                  <span>Explore Programs</span>
+                  <span>Start Your Growth Journey</span>
                   <ArrowRight className="w-4 h-4" />
                 </Link>
 
-                {/*
-                  Points at /pricing rather than /register, matching the
-                  header's Enrol button. Registering only tells admissions who
-                  you are; paying for a package is what actually opens the
-                  courses, so the CTA should land where that happens.
-                */}
                 <Link
-                  to="/pricing"
+                  to="/courses"
                   className="motion-pressable flex w-full items-center justify-center gap-2 rounded-xl border border-white/25 bg-white/12 px-5 py-3 text-sm font-medium text-white backdrop-blur-md transition-all hover:bg-white/18 sm:w-auto lg:border-slate-300 lg:bg-white lg:text-slate-700 lg:backdrop-blur-none lg:hover:bg-slate-100"
                 >
-                  <UserPlus className="w-4 h-4 text-amber-200 lg:text-amber-600" />
-                  <span>Enrol Now</span>
+                  <span>Explore Programs</span>
+                  <ArrowRight className="w-4 h-4 text-amber-200 lg:text-amber-600" />
                 </Link>
               </div>
 
@@ -191,13 +184,41 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
         </div>
       </section>
 
-      {/* Corporate Partners Trust Bar */}
-      <section className="py-8 bg-white border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <p className="text-center text-xs font-mono uppercase tracking-widest text-slate-500 mb-6">
-            Trusted by Executives & Board Members From Global Institutions
-          </p>
-          <TrustedExecutivesSlider />
+      {/* Who We Serve */}
+      <section className="border-b border-slate-200 bg-white py-16 sm:py-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="max-w-2xl space-y-3" data-scroll-reveal>
+            <p className="text-xs font-mono font-semibold uppercase tracking-[0.2em] text-amber-700">
+              Who We Serve
+            </p>
+            <h2 className="text-3xl font-serif font-semibold leading-tight text-slate-900 sm:text-4xl">
+              One Institution. Three Growth Pathways.
+            </h2>
+          </div>
+
+          <div className="mt-10 grid gap-4 lg:grid-cols-3">
+            <article className="border-t-2 border-amber-400 bg-slate-50 p-6 sm:p-8">
+              <UsersRound className="h-6 w-6 text-amber-600" />
+              <h3 className="mt-12 text-xl font-serif font-semibold text-slate-900">Individuals</h3>
+              <p className="mt-3 text-[15px] leading-7 text-slate-600">
+                Build skills. Discover opportunities. Create your future.
+              </p>
+            </article>
+            <article className="border-t-2 border-emerald-500 bg-slate-50 p-6 sm:p-8">
+              <BriefcaseBusiness className="h-6 w-6 text-emerald-600" />
+              <h3 className="mt-12 text-xl font-serif font-semibold text-slate-900">Professionals &amp; Leaders</h3>
+              <p className="mt-3 text-[15px] leading-7 text-slate-600">
+                Advance your career. Strengthen leadership. Increase your impact.
+              </p>
+            </article>
+            <article className="border-t-2 border-slate-900 bg-slate-50 p-6 sm:p-8">
+              <Building2 className="h-6 w-6 text-slate-700" />
+              <h3 className="mt-12 text-xl font-serif font-semibold text-slate-900">Organizations &amp; Institutions</h3>
+              <p className="mt-3 text-[15px] leading-7 text-slate-600">
+                Build capable teams. Strengthen systems. Accelerate organizational growth.
+              </p>
+            </article>
+          </div>
         </div>
       </section>
 
