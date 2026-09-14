@@ -43,7 +43,9 @@ async function assertPortAvailable(port: number): Promise<void> {
     probe.once("listening", () => {
       probe.close(() => resolve());
     });
-    probe.listen(port, "0.0.0.0");
+    // Bind to IPv6 so Node accepts both localhost (::1) and IPv4 loopback
+    // connections on Windows. Browsers commonly resolve localhost to ::1.
+    probe.listen(port, "::");
   });
 }
 
@@ -94,7 +96,7 @@ async function startServer() {
     });
   }
 
-  const server = app.listen(PORT, "0.0.0.0", () => {
+  const server = app.listen(PORT, "::", () => {
     console.log(`School of Growth Global server running on http://localhost:${PORT}`);
   });
 
