@@ -2,6 +2,7 @@ import express from "express";
 import { loadServerEnv } from "../src/server/loadEnv.js";
 import { createAdminRouter, requireAdmin } from "../src/server/adminRoutes.js";
 import { isPaystackConfigured, paystackPublicKey } from "../src/server/paystackEnv.js";
+import { createAIRouter } from "../src/server/aiRoutes.js";
 
 loadServerEnv();
 
@@ -67,12 +68,16 @@ app.get(["/api/payments/config", "/payments/config"], (_req, res) => {
   });
 });
 
+// Bundle the Growth AI router directly so the chat endpoint does not depend on
+// Vercel resolving a runtime .js-to-.ts dynamic import. The Gemini SDK itself
+// stays lazy inside aiRoutes.ts, so health and lightweight probes remain cheap.
+const aiRouter = createAIRouter();
+
 let apiRouterPromise: Promise<express.Router> | null = null;
 
 async function loadApiRouter(): Promise<express.Router> {
   if (!apiRouterPromise) {
     apiRouterPromise = Promise.all([
-      import("../src/server/aiRoutes.js"),
       import("../src/server/paymentRoutes.js"),
       import("../src/server/mentorRoutes.js"),
       import("../src/server/leadRoutes.js"),
@@ -82,7 +87,6 @@ async function loadApiRouter(): Promise<express.Router> {
       import("../src/server/mentorReviewRoutes.js"),
     ]).then(
       ([
-        aiRoutes,
         paymentRoutes,
         mentorRoutes,
         leadRoutes,
@@ -92,7 +96,6 @@ async function loadApiRouter(): Promise<express.Router> {
         mentorReviewRoutes,
       ]) => {
         const router = express.Router();
-        router.use(aiRoutes.createAIRouter());
         router.use(paymentRoutes.createPaymentRouter());
         router.use(mentorRoutes.createMentorRouter(requireAdmin));
         router.use(leadRoutes.createLeadRouter(requireAdmin));
@@ -118,6 +121,8 @@ async function lazyApi(req: express.Request, res: express.Response, next: expres
 
 app.use("/api", adminRouter);
 app.use(adminRouter);
+app.use("/api", aiRouter);
+app.use(aiRouter);
 app.use("/api", lazyApi);
 app.use(lazyApi);
 

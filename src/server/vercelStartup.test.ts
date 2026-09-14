@@ -17,7 +17,6 @@ if (apiIndex.includes("runtime: 'nodejs'") || apiIndex.includes('runtime: "nodej
 }
 
 for (const moduleName of [
-  'aiRoutes',
   'paymentRoutes',
   'mentorRoutes',
   'leadRoutes',
@@ -36,7 +35,11 @@ for (const moduleName of [
 }
 
 if (!apiIndex.includes('import { createAdminRouter, requireAdmin } from "../src/server/adminRoutes.js";')) {
-  throw new Error('Vercel should statically import only the lightweight admin router so login is bundled.');
+  throw new Error('Vercel should statically import the lightweight admin router so login is bundled.');
+}
+
+if (!apiIndex.includes('import { createAIRouter } from "../src/server/aiRoutes.js";')) {
+  throw new Error('Vercel should statically bundle the Growth AI router so chat does not depend on runtime source imports.');
 }
 
 if (apiIndex.includes('import("../src/server/adminRoutes.js")')) {
