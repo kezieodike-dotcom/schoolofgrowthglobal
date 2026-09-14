@@ -20,6 +20,8 @@ export interface ChatMessage {
   text: string;
   /** True when the server answered from its no-API-key fallback, not the model. */
   simulated?: boolean;
+  /** True when the live provider failed and the server used guided diagnosis. */
+  fallback?: boolean;
   /** True when this message is an error notice rather than assistant output. */
   failed?: boolean;
 }
@@ -27,6 +29,7 @@ export interface ChatMessage {
 export interface AskResult {
   reply: string;
   simulated: boolean;
+  fallback: boolean;
 }
 
 /** Turns sent as context. Keeps the prompt bounded on long conversations. */
@@ -130,7 +133,11 @@ export async function askGrowthAI(opts: {
     throw new GrowthAIError(GENERIC_FAILURE);
   }
 
-  return { reply: data.reply, simulated: Boolean(data.simulated) };
+  return {
+    reply: data.reply,
+    simulated: Boolean(data.simulated),
+    fallback: Boolean(data.fallback),
+  };
 }
 
 export async function generateScenario(opts: {

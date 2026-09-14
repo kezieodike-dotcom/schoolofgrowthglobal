@@ -78,6 +78,12 @@ function isQuotaError(error: unknown): boolean {
   return message.includes('"code":429') || message.includes("RESOURCE_EXHAUSTED");
 }
 
+function guidedChatReply(message: string, notice: string): string {
+  const diagnosis = diagnoseGrowthChallenge(message);
+  return `${formatGrowthDiagnosis(diagnosis)}\n\n${notice}\n\n` +
+    "Action: book the recommended intervention so the team can match you with the right expert mix.";
+}
+
 // Load Gemini only when a live AI request needs it. This keeps health/admin
 // routes independent from the external SDK during Vercel cold starts.
 const getAI = async () => {
@@ -144,20 +150,22 @@ export function createAIRouter(): Router {
 
   // AI Chat Endpoint for Growth AI Coach
   router.post("/ai/chat", async (req, res) => {
+    const { message, context, history } = req.body;
+
     try {
-      const { message, context, history } = req.body;
       if (!message) {
         return res.status(400).json({ error: "Message is required" });
       }
 
       if (!process.env.GEMINI_API_KEY) {
-        const diagnosis = diagnoseGrowthChallenge(message);
         return res.json({
           simulated: true,
+          fallback: false,
           reply:
-            `${formatGrowthDiagnosis(diagnosis)}\n\n` +
-            "Why this matters: your complaint should be converted into a clear growth pathway, not left as a vague problem.\n\n" +
-            "Action: book the recommended intervention so the team can match you with the right expert mix."
+            guidedChatReply(
+              message,
+              "Why this matters: your complaint should be converted into a clear growth pathway, not left as a vague problem."
+            )
         });
       }
 
@@ -196,24 +204,29 @@ ${context ? `Current Context: ${context}` : ''}`;
       // dressing it up as advice hides the outage from the caller.
       const reply = response.text?.trim();
       if (!reply) {
-        return failAI(res, {
-          status: 502,
-          route: "/api/ai/chat",
-          error: new Error(
-            "Model returned no text (possible safety block or token limit)."
+        console.error(
+          "Growth AI returned no text; using guided fallback response."
+        );
+        return res.json({
+          simulated: true,
+          fallback: true,
+          reply: guidedChatReply(
+            message,
+            "Growth AI is using guided mode while live intelligence reconnects."
           ),
-          userMessage:
-            "Growth AI could not complete that response. Please rephrase your question and try again.",
         });
       }
 
-      res.json({ reply, simulated: false });
+      res.json({ reply, simulated: false, fallback: false });
     } catch (error: any) {
-      failAI(res, {
-        route: "/api/ai/chat",
-        error,
-        userMessage:
-          "Growth AI is temporarily unavailable. Please try again in a moment.",
+      console.error("Error in /api/ai/chat; using guided fallback:", error);
+      return res.json({
+        simulated: true,
+        fallback: true,
+        reply: guidedChatReply(
+          message,
+          "Growth AI is using guided mode while live intelligence reconnects."
+        ),
       });
     }
   });

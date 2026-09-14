@@ -323,12 +323,12 @@ export const StudentDashboardView: React.FC<StudentDashboardViewProps> = ({
     setQuestionsAsked((n) => n + 1);
 
     try {
-      const { reply, simulated } = await askGrowthAI({
+      const { reply, simulated, fallback } = await askGrowthAI({
         message: userText,
         context: `Student Portal for ${STUDENT_DATA.name}, on the ${experience.packageName} package`,
         history,
       });
-      setMessages((prev) => [...prev, { sender: 'assistant', text: reply, simulated }]);
+      setMessages((prev) => [...prev, { sender: 'assistant', text: reply, simulated, fallback }]);
     } catch (err) {
       setMessages((prev) => [
         ...prev,

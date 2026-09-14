@@ -75,12 +75,12 @@ export const GrowthAIFloatingWidget: React.FC = () => {
     setLoading(true);
 
     try {
-      const { reply, simulated } = await askGrowthAI({
+      const { reply, simulated, fallback } = await askGrowthAI({
         message: userMsg,
         context: 'Quick Floating Widget',
         history,
       });
-      setMessages(prev => [...prev, { sender: 'assistant', text: reply, simulated }]);
+      setMessages(prev => [...prev, { sender: 'assistant', text: reply, simulated, fallback }]);
     } catch (err) {
       setMessages(prev => [
         ...prev,
@@ -201,7 +201,7 @@ export const GrowthAIFloatingWidget: React.FC = () => {
                   {m.text}
                   {m.simulated && (
                     <span className="block mt-2 text-[10px] font-mono uppercase tracking-wide text-amber-400/70">
-                      Simulated · no API key set
+                      {m.fallback ? 'Guided fallback · live AI unavailable' : 'Guided mode · no API key set'}
                     </span>
                   )}
                 </div>
