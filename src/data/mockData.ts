@@ -1833,12 +1833,16 @@ export const FACULTY_MEMBERS: FacultyMember[] = [
   },
   {
     id: 'f3',
-    name: 'Emeka Nwachukwu',
-    role: 'Director of Venture Scaling',
-    institution: 'General Partner at Apex Ventures',
-    bio: 'Led 14 tech IPOs and managed over $3.2B in venture growth capital.',
-    credentials: ['MBA Stanford GSB', 'Board Director at 5 Global Unicorns'],
-    avatar: '/people/m4-nwachukwu.jpg'
+    name: 'Bright John',
+    role: 'Lead Growth Strategist, School of Growth Global',
+    institution: 'Business Management Essentials Certified',
+    bio: 'Business Growth Strategist | Leadership & Organizational Development Consultant',
+    credentials: [
+      'Business Management Essentials Certified',
+      'Business Growth Strategist',
+      'Leadership & Organizational Development Consultant'
+    ],
+    avatar: '/people/bright-john.png'
   },
   {
     id: 'f4',

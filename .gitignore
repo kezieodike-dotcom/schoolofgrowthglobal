@@ -10,6 +10,8 @@ coverage/
 
 # Mentor applications and approval decisions, written at runtime.
 # Real submitted data, not source — never commit it.
-.data/
-data/
+/.data/
+/data/
 .vercel/
+
+~$*

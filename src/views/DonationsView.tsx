@@ -34,7 +34,7 @@ export const DonationsView: React.FC = () => {
   const [config, setConfig] = useState<PaymentConfig | null>(null);
   const [mode, setMode] = useState<DonationMode>('specific');
   const [fundId, setFundId] = useState<SpecificDonationFundId>(DONATION_FUNDS[0].id);
-  const [amount, setAmount] = useState('10000');
+  const [amount, setAmount] = useState('');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
@@ -81,6 +81,12 @@ export const DonationsView: React.FC = () => {
 
     if (!termsAccepted) {
       setError('Please read and agree to the Donation Terms & Conditions before continuing.');
+      return;
+    }
+
+    const numAmount = Number(amount.replace(/[^0-9.]/g, ''));
+    if (!amount.trim() || isNaN(numAmount) || numAmount < 1000) {
+      setError(`Donation amount must be at least ${formatNaira(minimumDonationKobo)}.`);
       return;
     }
 
@@ -134,8 +140,8 @@ export const DonationsView: React.FC = () => {
               CHOOSE YOUR IMPACT
             </div>
             <div className="space-y-4">
-              <h1 className="max-w-3xl text-[2.45rem] sm:text-5xl lg:text-6xl font-serif font-semibold lg:font-bold leading-[1.08] sm:leading-tight tracking-tight text-white lg:text-slate-950">
-                Choose the impact your giving should create.
+              <h1 className="max-w-3xl text-[2.45rem] sm:text-5xl lg:text-6xl font-serif font-semibold lg:font-bold leading-[1.08] sm:leading-tight tracking-tight text-white lg:text-slate-950 italic">
+                Give Today. Shape Lives. Grow Businesses. Build a Legacy.
               </h1>
               <p className="max-w-2xl text-[15px] sm:text-base leading-7 sm:leading-relaxed text-slate-100/90 lg:text-slate-600">
                 Support practical growth, mentorship, education, welfare and leadership
@@ -173,15 +179,66 @@ export const DonationsView: React.FC = () => {
         </div>
       </section>
 
+      {/* 2. Our Global Impact Vision */}
+      <section className="border-b border-slate-200 bg-white py-12 sm:py-16">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="rounded-3xl border border-amber-200 bg-gradient-to-br from-amber-50/80 via-white to-amber-50/40 p-7 sm:p-10 shadow-sm space-y-4">
+            <div className="inline-flex items-center gap-2 rounded-full border border-amber-300 bg-amber-100/70 px-3.5 py-1 text-xs font-mono font-bold uppercase tracking-wider text-amber-800">
+              <HeartHandshake className="h-3.5 w-3.5 text-amber-700" />
+              Our Global Impact Vision
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-serif font-bold text-slate-950">
+              Donation Vision
+            </h2>
+            <p className="text-[15px] sm:text-base lg:text-[17px] leading-relaxed text-slate-700 font-normal">
+              Together, we are building a global growth movement and a legacy of transformation—mobilizing people, resources and partnerships to empower 100 million+ individuals and businesses with the knowledge, skills, opportunities and strategic support to grow, thrive and create measurable impact; expanding access and accelerating transformation through our Community Growth Fund and Impact Support Fund; and, through our Future Leaders Fund, reaching 1 billion+ children and teenagers with the knowledge, skills, welfare, spiritual growth, values, character and leadership foundation to become capable leaders, innovators and changemakers who will shape a better future. Together, we are unlocking human potential, strengthening enterprises, expanding opportunity and raising generations equipped to transform their families, communities, economies and the world.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* 3. Impact Numbers */}
+      <section className="border-b border-slate-200 bg-slate-950 py-12 sm:py-16 text-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center divide-y md:divide-y-0 md:divide-x divide-slate-800">
+            <div className="pt-6 md:pt-0 md:px-6 space-y-2">
+              <div className="text-4xl sm:text-5xl lg:text-6xl font-serif font-extrabold tracking-tight bg-gradient-to-r from-amber-300 via-amber-400 to-amber-500 bg-clip-text text-transparent">
+                100M+
+              </div>
+              <p className="text-sm sm:text-base font-medium text-slate-300">
+                Individuals &amp; Businesses Empowered
+              </p>
+            </div>
+            <div className="pt-6 md:pt-0 md:px-6 space-y-2">
+              <div className="text-4xl sm:text-5xl lg:text-6xl font-serif font-extrabold tracking-tight bg-gradient-to-r from-amber-300 via-amber-400 to-amber-500 bg-clip-text text-transparent">
+                1B+
+              </div>
+              <p className="text-sm sm:text-base font-medium text-slate-300">
+                Children &amp; Teenagers Reached
+              </p>
+            </div>
+            <div className="pt-6 md:pt-0 md:px-6 space-y-2">
+              <div className="text-4xl sm:text-5xl lg:text-6xl font-serif font-extrabold tracking-tight bg-gradient-to-r from-amber-300 via-amber-400 to-amber-500 bg-clip-text text-transparent">
+                3
+              </div>
+              <p className="text-sm sm:text-base font-medium text-slate-300">
+                Global Impact Funds
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
-        <section className="space-y-5">
+        {/* 4. Choose Where Your Giving Creates Impact */}
+        <section className="space-y-6">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <p className="text-[11px] font-mono font-bold uppercase tracking-widest text-amber-700">
                 Donate to a Specific Fund
               </p>
-              <h2 className="mt-1 text-2xl sm:text-3xl font-serif font-bold text-slate-950">
-                Choose one of the four giving options
+              <h2 className="mt-1 text-2xl sm:text-3xl lg:text-4xl font-serif font-bold text-slate-950">
+                Choose Where Your Giving Creates Impact
               </h2>
             </div>
             <p className="max-w-xl text-sm leading-relaxed text-slate-500">
@@ -189,43 +246,26 @@ export const DonationsView: React.FC = () => {
             </p>
           </div>
 
-          <div className="scroll-card-grid grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
-            {choices.map((fund, index) => {
-              const isWhereNeeded = fund.id === DONATION_ALLOCATION_OPTION.id;
-              const isSelected =
-                (isWhereNeeded && mode === 'where-needed') ||
-                (!isWhereNeeded && mode === 'specific' && selectedFund.id === fund.id);
+          <div className="scroll-card-grid grid grid-cols-1 md:grid-cols-3 gap-6">
+            {DONATION_FUNDS.map((fund, index) => {
+              const isSelected = mode === 'specific' && selectedFund.id === fund.id;
 
               return (
                 <button
                   key={fund.id}
                   type="button"
-                  aria-label={
-                    isWhereNeeded
-                      ? 'Let School of Growth Global Allocate My Donation Where It Is Most Needed'
-                      : `Donate to ${fund.name}`
-                  }
-                  onClick={() =>
-                    isWhereNeeded
-                      ? handleFundSelection('where-needed')
-                      : handleFundSelection('specific', fund.id as SpecificDonationFundId)
-                  }
-                  className={`scroll-card motion-pressable group min-h-72 text-left rounded-[1.5rem] border p-5 transition-all duration-200 active:translate-y-px ${
+                  aria-label={`Donate to ${fund.name}`}
+                  onClick={() => handleFundSelection('specific', fund.id as SpecificDonationFundId)}
+                  className={`scroll-card motion-pressable group min-h-72 text-left rounded-[1.5rem] border p-6 transition-all duration-200 active:translate-y-px ${
                     isSelected
-                      ? 'border-amber-400 bg-amber-50 shadow-[0_22px_45px_-30px_rgba(180,83,9,0.65)]'
+                      ? 'border-amber-400 bg-amber-50 shadow-[0_22px_45px_-30px_rgba(180,83,9,0.65)] ring-2 ring-amber-400/50'
                       : 'border-slate-200 bg-white hover:-translate-y-1 hover:border-amber-300 hover:shadow-[0_24px_50px_-34px_rgba(15,23,42,0.45)]'
                   }`}
                 >
                   <div className="flex h-full flex-col">
                     <div className="flex items-start justify-between gap-3">
-                      <span
-                        className={`flex h-11 w-11 items-center justify-center rounded-2xl text-xs font-bold ${
-                          isWhereNeeded
-                            ? 'bg-slate-950 text-amber-300'
-                            : 'bg-amber-100 text-amber-800'
-                        }`}
-                      >
-                        {isWhereNeeded ? <Sprout className="h-5 w-5" /> : index + 1}
+                      <span className="flex h-11 w-11 items-center justify-center rounded-2xl text-xs font-bold bg-amber-100 text-amber-800">
+                        {index + 1}
                       </span>
                       {isSelected && (
                         <span className="inline-flex items-center gap-1 rounded-full bg-amber-500 px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-slate-950">
@@ -253,6 +293,47 @@ export const DonationsView: React.FC = () => {
                 </button>
               );
             })}
+          </div>
+
+          <div className="pt-2">
+            <button
+              type="button"
+              aria-label="Let School of Growth Global Allocate My Donation Where It Is Most Needed"
+              onClick={() => handleFundSelection('where-needed')}
+              className={`motion-pressable group w-full text-left rounded-2xl border p-5 sm:p-6 transition-all duration-200 active:translate-y-px ${
+                mode === 'where-needed'
+                  ? 'border-amber-400 bg-amber-50 shadow-md ring-2 ring-amber-400/50'
+                  : 'border-slate-200 bg-white hover:border-amber-300 hover:bg-slate-50/80 shadow-sm'
+              }`}
+            >
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div className="flex items-start sm:items-center gap-4">
+                  <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-slate-950 text-amber-300">
+                    <Sprout className="h-6 w-6" />
+                  </span>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <h3 className="text-lg font-serif font-bold text-slate-950">
+                        {DONATION_ALLOCATION_OPTION.name}
+                      </h3>
+                      {mode === 'where-needed' && (
+                        <span className="inline-flex items-center gap-1 rounded-full bg-amber-500 px-2.5 py-0.5 text-[10px] font-black uppercase tracking-wider text-slate-950">
+                          <Check className="h-3 w-3" />
+                          Selected
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-sm text-slate-600 mt-1">
+                      {DONATION_ALLOCATION_OPTION.headline}
+                    </p>
+                  </div>
+                </div>
+                <span className="inline-flex items-center gap-2 text-xs font-bold text-slate-950 shrink-0 self-end sm:self-center">
+                  Select and donate
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </span>
+              </div>
+            </button>
           </div>
         </section>
 
@@ -432,7 +513,7 @@ export const DonationsView: React.FC = () => {
                       required
                       inputMode="decimal"
                       className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm outline-none transition-colors focus:border-amber-500 focus:bg-white"
-                      placeholder={formatDonationAmount(minimumDonationKobo)}
+                      placeholder="0"
                     />
                     <p className="mt-1.5 text-[11px] text-slate-400">
                       Choose a range to start with its lower amount, or enter any exact
