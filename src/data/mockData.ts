@@ -1842,7 +1842,7 @@ export const FACULTY_MEMBERS: FacultyMember[] = [
       'Business Growth Strategist',
       'Leadership & Organizational Development Consultant'
     ],
-    avatar: '/people/bright-john.png'
+    avatar: '/people/bright-john.jpg'
   },
   {
     id: 'f4',
