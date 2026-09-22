@@ -903,6 +903,14 @@ const CoursesTab: React.FC<{
             </Link>
           </div>
 
+          <Link
+            to="/lms"
+            className="flex items-center justify-between gap-4 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-semibold text-amber-800 hover:border-amber-300 hover:bg-amber-100 transition-colors"
+          >
+            <span className="flex items-center gap-2"><BookOpen className="w-4 h-4" /> Open your interactive Growth Foundation course flow</span>
+            <ArrowRight className="w-4 h-4 shrink-0" />
+          </Link>
+
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3">
             {foundation.modules.map((module) => (
               <Link

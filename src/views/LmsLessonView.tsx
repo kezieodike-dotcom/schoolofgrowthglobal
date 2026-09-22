@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, Navigate } from 'react-router-dom';
 import { useLmsCourse, useLmsProgress, useLmsSubmission } from '../lib/useLms';
+import { useEnrollment } from '../lib/useEnrollment';
 import { ReadingBlock, KeyInsightBlock, FrameworkBlock, QuestionBlock, ReflectionBlock } from '../components/lms/LmsBlocks';
 import { ValueDiscoveryExercise } from '../components/lms/ValueDiscoveryExercise';
 import { SelfAwarenessAudit } from '../components/lms/SelfAwarenessAudit';
@@ -81,8 +82,8 @@ const CompletionStandard: React.FC = () => (
 );
 
 // ─── Block Renderer ───────────────────────────────────────────────────────────
-const BlockRenderer: React.FC<{ block: LmsBlock; courseId: string }> = ({ block, courseId }) => {
-  const { data, save, saving, savedAt } = useLmsSubmission(courseId, block.id);
+const BlockRenderer: React.FC<{ block: LmsBlock; courseId: string; moduleId: string }> = ({ block, courseId, moduleId }) => {
+  const { data, save, saving, savedAt } = useLmsSubmission(courseId, block.id, moduleId);
 
   switch (block.type) {
     case 'reading':
@@ -126,6 +127,7 @@ export const LmsLessonView: React.FC = () => {
   }>();
 
   const { course, loading } = useLmsCourse(courseId);
+  const enrollment = useEnrollment();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const module = course?.modules.find(m => m.id === moduleId);
@@ -150,6 +152,10 @@ export const LmsLessonView: React.FC = () => {
         </div>
       </div>
     );
+  }
+
+  if (!enrollment.canAccessLevel('Emerging Leaders')) {
+    return <Navigate to="/portal" replace />;
   }
 
   if (!lesson) {
@@ -276,7 +282,7 @@ export const LmsLessonView: React.FC = () => {
               <AssessmentTable />
             ) : (
               lesson.blocks.map(block => (
-                <BlockRenderer key={block.id} block={block} courseId={courseId} />
+                <BlockRenderer key={block.id} block={block} courseId={courseId} moduleId={moduleId} />
               ))
             )}
 

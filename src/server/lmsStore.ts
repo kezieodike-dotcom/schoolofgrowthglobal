@@ -12,7 +12,19 @@ export function getLmsCourse(id: string): LmsCourse | null {
   const filePath = path.join(lmsDir, `${id}.json`);
   try {
     const raw = fs.readFileSync(filePath, 'utf8');
-    return JSON.parse(raw) as LmsCourse;
+    const course = JSON.parse(raw.replace(/^\uFEFF/, '')) as LmsCourse;
+    if (id === 'growth-foundation') {
+      const module2Path = path.join(lmsDir, 'growth-foundation-module-2.json');
+      try {
+        const module2 = JSON.parse(fs.readFileSync(module2Path, 'utf8').replace(/^\uFEFF/, '')) as LmsCourse['modules'][number];
+        if (!course.modules.some((module) => module.id === module2.id)) {
+          course.modules.push(module2);
+        }
+      } catch {
+        // Module 1 remains available if an optional later module is absent.
+      }
+    }
+    return course;
   } catch {
     return null;
   }

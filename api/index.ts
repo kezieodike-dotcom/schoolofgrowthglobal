@@ -3,6 +3,7 @@ import { loadServerEnv } from "../src/server/loadEnv.js";
 import { createAdminRouter, requireAdmin } from "../src/server/adminRoutes.js";
 import { isPaystackConfigured, paystackPublicKey } from "../src/server/paystackEnv.js";
 import { createAIRouter } from "../src/server/aiRoutes.js";
+import { createLmsRouter } from "../src/server/lmsRoutes.js";
 
 loadServerEnv();
 
@@ -72,6 +73,7 @@ app.get(["/api/payments/config", "/payments/config"], (_req, res) => {
 // Vercel resolving a runtime .js-to-.ts dynamic import. The Gemini SDK itself
 // stays lazy inside aiRoutes.ts, so health and lightweight probes remain cheap.
 const aiRouter = createAIRouter();
+const lmsRouter = createLmsRouter();
 
 let apiRouterPromise: Promise<express.Router> | null = null;
 
@@ -123,6 +125,8 @@ app.use("/api", adminRouter);
 app.use(adminRouter);
 app.use("/api", aiRouter);
 app.use(aiRouter);
+app.use("/api", lmsRouter);
+app.use(lmsRouter);
 app.use("/api", lazyApi);
 app.use(lazyApi);
 

@@ -1,22 +1,30 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import React from 'react';
+import { Link, Navigate } from 'react-router-dom';
 import { useLmsCourse, useLmsProgress } from '../lib/useLms';
+import { useEnrollment } from '../lib/useEnrollment';
 import { BookOpen, ChevronRight, CheckCircle2, Clock, Award, ArrowRight } from 'lucide-react';
 
 export const LmsStudentDashboardView: React.FC = () => {
   const courseId = 'growth-foundation';
+  const enrollment = useEnrollment();
   const { course, loading } = useLmsCourse(courseId);
 
-  const module = course?.modules[0];
-  const lessons = module?.lessons ?? [];
+  const modules = course?.modules ?? [];
+  const lessons = modules.flatMap((courseModule) => courseModule.lessons);
   const { progress, isLessonComplete } = useLmsProgress(courseId, lessons.length);
 
   const completedCount = progress.completedLessons.length;
   const remaining = lessons.length - completedCount;
 
   // Find the next lesson to continue from
-  const nextLesson = lessons.find(l => !isLessonComplete(l.id));
-  const firstLesson = lessons[0];
+  const nextLesson = modules
+    .flatMap((courseModule) => courseModule.lessons.map((lesson) => ({ lesson, module: courseModule })))
+    .find(({ lesson }) => !isLessonComplete(lesson.id));
+  const firstLesson = modules[0]?.lessons[0];
+
+  if (!enrollment.canAccessLevel('Emerging Leaders')) {
+    return <Navigate to="/portal" replace />;
+  }
 
   if (loading) {
     return (
@@ -33,10 +41,8 @@ export const LmsStudentDashboardView: React.FC = () => {
         <div className="max-w-5xl mx-auto px-4 py-12">
           <p className="text-amber-400 text-sm font-semibold uppercase tracking-wider mb-2">Student Dashboard</p>
           <h1 className="text-3xl md:text-4xl font-bold mb-2">{course?.title ?? 'Growth Foundation'}</h1>
-          <p className="text-slate-300">{module?.title}</p>
-          {module?.transformation && (
-            <p className="text-slate-400 text-sm mt-2 font-mono">{module.transformation}</p>
-          )}
+          <p className="text-slate-300">{modules.length} learning modules available</p>
+          <p className="text-slate-400 text-sm mt-2 font-mono">Leadership · Strategy · Transformation</p>
         </div>
       </div>
 
@@ -71,8 +77,8 @@ export const LmsStudentDashboardView: React.FC = () => {
 
             <Link
               to={nextLesson
-                ? `/lms/${courseId}/${module?.id}/${nextLesson.id}`
-                : `/lms/${courseId}/${module?.id}/${firstLesson?.id}`}
+                ? `/lms/${courseId}/${nextLesson.module.id}/${nextLesson.lesson.id}`
+                : `/lms/${courseId}/${modules[0]?.id}/${firstLesson?.id}`}
               className="flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-white font-bold px-6 py-3 rounded-xl transition-colors whitespace-nowrap"
             >
               {completedCount === 0 ? 'Start Learning' : 'Continue Learning'}
@@ -99,40 +105,44 @@ export const LmsStudentDashboardView: React.FC = () => {
           ))}
         </div>
 
-        {/* Module Lessons List */}
-        <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden">
-          <div className="bg-slate-900 px-6 py-4">
-            <h2 className="text-amber-400 font-bold text-base">{module?.title} — Lessons</h2>
-            {module?.coreQuestion && (
-              <p className="text-slate-300 text-sm mt-0.5">Core Question: <em>{module.coreQuestion}</em></p>
-            )}
-          </div>
-          <div className="divide-y divide-slate-100">
-            {lessons.map((lesson, idx) => {
-              const done = isLessonComplete(lesson.id);
-              return (
-                <Link
-                  key={lesson.id}
-                  to={`/lms/${courseId}/${module?.id}/${lesson.id}`}
-                  className="flex items-center gap-4 px-6 py-4 hover:bg-amber-50 transition-colors group"
-                >
-                  <span className="shrink-0">
-                    {done
-                      ? <CheckCircle2 size={20} className="text-green-500" />
-                      : <Circle size={20} className="text-slate-200 group-hover:text-amber-300 transition-colors" />
-                    }
-                  </span>
-                  <span className="flex-1 text-slate-700 group-hover:text-amber-700 font-medium text-sm">
-                    {lesson.title}
-                  </span>
-                  {done && (
-                    <span className="text-xs text-green-600 font-semibold bg-green-50 px-2 py-0.5 rounded-full">Done</span>
-                  )}
-                  <ChevronRight size={16} className="text-slate-300 group-hover:text-amber-400 transition-colors" />
-                </Link>
-              );
-            })}
-          </div>
+        {/* Course flow */}
+        <div className="space-y-6">
+          {modules.map((courseModule, moduleIndex) => (
+            <section key={courseModule.id} className="bg-white rounded-2xl border border-slate-200 overflow-hidden">
+              <div className="bg-slate-900 px-6 py-4">
+                <p className="text-amber-400 text-xs font-semibold uppercase tracking-wider">Module {moduleIndex + 1}</p>
+                <h2 className="text-white font-bold text-base mt-1">{courseModule.title}</h2>
+                {courseModule.coreQuestion && (
+                  <p className="text-slate-300 text-sm mt-0.5">Core Question: <em>{courseModule.coreQuestion}</em></p>
+                )}
+                {courseModule.transformation && (
+                  <p className="text-slate-400 text-xs mt-2 font-mono">{courseModule.transformation}</p>
+                )}
+              </div>
+              <div className="divide-y divide-slate-100">
+                {courseModule.lessons.map((lesson) => {
+                  const done = isLessonComplete(lesson.id);
+                  return (
+                    <Link
+                      key={lesson.id}
+                      to={`/lms/${courseId}/${courseModule.id}/${lesson.id}`}
+                      className="flex items-center gap-4 px-6 py-4 hover:bg-amber-50 transition-colors group"
+                    >
+                      <span className="shrink-0">
+                        {done
+                          ? <CheckCircle2 size={20} className="text-green-500" />
+                          : <Circle size={20} className="text-slate-200 group-hover:text-amber-300 transition-colors" />
+                        }
+                      </span>
+                      <span className="flex-1 text-slate-700 group-hover:text-amber-700 font-medium text-sm">{lesson.title}</span>
+                      {done && <span className="text-xs text-green-600 font-semibold bg-green-50 px-2 py-0.5 rounded-full">Done</span>}
+                      <ChevronRight size={16} className="text-slate-300 group-hover:text-amber-400 transition-colors" />
+                    </Link>
+                  );
+                })}
+              </div>
+            </section>
+          ))}
         </div>
 
         {/* Module Completion Standard Preview */}

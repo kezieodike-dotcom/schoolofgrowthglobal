@@ -65,7 +65,7 @@ export function useLmsProgress(courseId: string, totalLessons: number) {
 
 // ─── Submission (Auto-Save) ─────────────────────────────────────────────────
 
-export function useLmsSubmission(courseId: string, blockId: string) {
+export function useLmsSubmission(courseId: string, blockId: string, moduleId = 'module-1') {
   const [data, setData] = useState<any>(null);
   const [saving, setSaving] = useState(false);
   const [savedAt, setSavedAt] = useState<Date | null>(null);
@@ -88,7 +88,7 @@ export function useLmsSubmission(courseId: string, blockId: string) {
       const submission: LmsSubmission = {
         userId: DEFAULT_USER_ID,
         courseId,
-        moduleId: 'module-1',
+        moduleId,
         lessonId: '',
         blockId,
         data: newData,
