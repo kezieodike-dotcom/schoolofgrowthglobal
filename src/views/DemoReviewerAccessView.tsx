@@ -29,7 +29,7 @@ export const DemoReviewerAccessView: React.FC = () => {
   );
 
   useEffect(() => {
-    fetch('/api/demo-reviewer/status')
+    fetch('/api/demo-reviewer/status', { cache: 'no-store' })
       .then((res) => res.json())
       .then((body) => setEnabled(Boolean(body.enabled)))
       .catch(() => setEnabled(false));
