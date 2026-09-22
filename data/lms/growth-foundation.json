@@ -1,0 +1,507 @@
+﻿{
+  "id": "growth-foundation",
+  "title": "Growth Foundation",
+  "modules": [
+    {
+      "id": "module-1",
+      "title": "Module 1 â€” Understanding Yourself",
+      "coreQuestion": "Who am I—",
+      "transformation": "Self-Awareness -> Self-Management -> Personal Capability",
+      "lessons": [
+        {
+          "id": "lesson-1",
+          "title": "1.0 MODULE INTRODUCTION",
+          "blocks": [
+            {
+              "id": "block-1790097604171-l0zs2",
+              "type": "reading",
+              "content": "Every meaningful form of growth begins with understanding.\n\nBefore you can effectively build a career, business, organization, community or institution, you must first develop the ability to understand yourself.\n\nMany people attempt to change their circumstances without understanding the person who is responsible for navigating those circumstances.\n\nThey acquire information without developing judgment.\n\nThey pursue opportunities without knowing their strengths.\n\nThey make decisions without understanding their values.\n\nThey enter relationships without understanding their behavioural patterns.\n\nThey choose careers without understanding their capabilities.\n\nThey start businesses without understanding their motivations.\n\nThey desire success without understanding what kind of person they must become to sustain it.\n\nThis module begins with the individual.\n\nThe objective is not to put the learner into a box or give them a permanent label.\n\nThe objective is to help the learner develop self-awareness.\n\nSelf-awareness means developing an increasingly accurate understanding of:\n\nwho you are;\n\nhow you think;\n\nhow you behave;\n\nwhat you value;\n\nwhat motivates you;\n\nwhat you are capable of;\n\nwhere you are weak;\n\nwhat influences your decisions;\n\nhow you affect other people;\n\nwhat you need to learn;\n\nand who you are becoming.\n\nThe goal is not perfection.\n\nThe goal is accurate self-knowledge followed by intentional development."
+            }
+          ]
+        },
+        {
+          "id": "lesson-2",
+          "title": "1.1 LEARNING OUTCOMES",
+          "blocks": [
+            {
+              "id": "block-1790097604171-jt8he",
+              "type": "reading",
+              "content": "By the end of this module, you should be able to:\n\nexplain what self-awareness means;\n\ndistinguish identity from personality, behaviour and circumstances;\n\nidentify your major strengths;\n\nidentify your development areas;\n\nclarify your personal values;\n\nexamine beliefs that influence your decisions;\n\nunderstand basic behavioural tendencies;\n\nrecognize the relationship between emotions and behaviour;\n\ndemonstrate greater personal responsibility;\n\nidentify areas where you need greater discipline;\n\ndistinguish healthy confidence from arrogance;\n\nidentify character qualities that need development;\n\nrecognize potential without confusing potential with achievement;\n\ncreate a personal development profile;\n\ncreate a practical personal growth plan."
+            }
+          ]
+        },
+        {
+          "id": "lesson-3",
+          "title": "1.2 WHAT DOES IT MEAN TO KNOW YOURSELF—",
+          "blocks": [
+            {
+              "id": "block-1790097604171-5qbi0",
+              "type": "reading",
+              "content": "Knowing yourself does not mean knowing every answer about your life.\n\nIt means developing enough awareness to ask better questions about yourself and to make better decisions because of what you discover.\n\nA useful way to think about the self is:"
+            }
+          ]
+        },
+        {
+          "id": "lesson-4",
+          "title": "Identity + Values + Beliefs + Personality + Abilities + Behaviour + Experiences + Environment + Choices",
+          "blocks": [
+            {
+              "id": "block-1790097604171-4yv6k",
+              "type": "reading",
+              "content": "These factors interact with one another.\n\nFor example:\n\nA personâ€™s experience may influence a belief.\n\nA belief may influence a decision.\n\nA decision may produce a behaviour.\n\nRepeated behaviour may become a habit.\n\nRepeated habits may influence results.\n\nResults may reinforce the personâ€™s beliefs.\n\nTherefore, personal growth requires us to examine not only our results but also the internal patterns producing those results."
+            }
+          ]
+        },
+        {
+          "id": "lesson-5",
+          "title": "1.3 IDENTITY",
+          "blocks": []
+        },
+        {
+          "id": "lesson-6",
+          "title": "Identity answers the question:",
+          "blocks": [
+            {
+              "id": "block-1790097604171-juj55",
+              "type": "reading",
+              "content": "Who am I—"
+            }
+          ]
+        },
+        {
+          "id": "lesson-7",
+          "title": "Identity should not be reduced to:",
+          "blocks": [
+            {
+              "id": "block-1790097604171-wungy",
+              "type": "reading",
+              "content": "your job;\n\nyour salary;\n\nyour academic qualification;\n\nyour business;\n\nyour social status;\n\nyour possessions;\n\nyour current problems;\n\nyour successes;\n\nor other peopleâ€™s opinions of you.\n\nThese may describe parts of your current life, but they do not completely define your human capacity.\n\nA person may currently be unemployed and still possess significant capabilities.\n\nA person may have a degree but still have major development gaps.\n\nA person may own a successful business but still need to develop leadership capacity.\n\nYour current condition is not necessarily your final capacity.\n\nTherefore, ask:\n\nWhat kind of person am I—\n\nWhat matters to me—\n\nWhat do I naturally do well—\n\nWhat do people consistently recognize in me—\n\nWhat behaviours repeatedly create problems for me—\n\nWhat kind of person do I want to become—\n\nWhat capabilities must I develop—"
+            }
+          ]
+        },
+        {
+          "id": "lesson-8",
+          "title": "1.4 PERSONALITY AND BEHAVIOURAL TENDENCIES",
+          "blocks": [
+            {
+              "id": "block-1790097604171-q6v3l",
+              "type": "reading",
+              "content": "Personality refers broadly to relatively consistent patterns in how people think, feel and behave.\n\nPeople differ.\n\nSome people naturally enjoy social interaction.\n\nOthers prefer solitude.\n\nSome process information quickly.\n\nOthers need more time.\n\nSome make decisions analytically.\n\nOthers are highly intuitive.\n\nSome enjoy structure.\n\nOthers prefer flexibility.\n\nNo personality pattern automatically makes someone superior.\n\nHowever, self-awareness requires recognizing both the advantages and limitations of your natural tendencies.\n\nFor example:\n\nA highly social person may be excellent at networking but need to develop listening and reflection.\n\nA highly analytical person may produce excellent analysis but need to improve communication and speed of execution.\n\nA highly structured person may be reliable but struggle when circumstances change.\n\nA highly flexible person may adapt quickly but struggle with consistency.\n\nThe question is therefore not:\n\nâ€œWhich personality is best—â€\n\nThe better question is:\n\nâ€œHow can I understand my tendencies and develop the capabilities required by my responsibilities—â€"
+            }
+          ]
+        },
+        {
+          "id": "lesson-9",
+          "title": "1.5 STRENGTHS",
+          "blocks": [
+            {
+              "id": "block-1790097604171-5uxrt",
+              "type": "reading",
+              "content": "A strength is an area in which you have comparatively strong natural ability, developed skill, experience, knowledge, character or capacity to produce useful results."
+            }
+          ]
+        },
+        {
+          "id": "lesson-10",
+          "title": "Strengths can include:",
+          "blocks": [
+            {
+              "id": "block-1790097604171-vxfju",
+              "type": "reading",
+              "content": "communication;\n\nleadership;\n\ncreativity;\n\nanalysis;\n\norganization;\n\ntechnical ability;\n\nteaching;\n\nrelationship building;\n\nproblem solving;\n\nsales;\n\ndiscipline;\n\nresilience;\n\nlearning ability;\n\nstrategic thinking;\n\nempathy;\n\nexecution.\n\nA strength becomes significantly more valuable when it can be converted into value for other people.\n\nTherefore:"
+            },
+            {
+              "id": "framework-1790097604171",
+              "type": "framework",
+              "content": "Strength + Skill + Application = Value"
+            },
+            {
+              "id": "block-1790097604171-a28wt",
+              "type": "reading",
+              "content": "Do not merely ask:\n\nâ€œWhat am I good at—â€\n\nAsk:\n\nâ€œWhat am I good at, and where can that capability solve a meaningful problem—â€"
+            }
+          ]
+        },
+        {
+          "id": "lesson-11",
+          "title": "1.6 WEAKNESSES AND DEVELOPMENT GAPS",
+          "blocks": [
+            {
+              "id": "block-1790097604172-lb0fe",
+              "type": "reading",
+              "content": "A weakness is not a declaration that you are a bad person.\n\nIt is an area in which your current capability, behaviour or consistency is insufficient for the result you want to achieve.\n\nExamples include:\n\npoor time management;\n\nweak communication;\n\nlack of technical knowledge;\n\npoor financial discipline;\n\ninability to receive feedback;\n\nprocrastination;\n\nemotional reactivity;\n\npoor planning;\n\ninconsistency;\n\nlack of confidence;\n\ninability to delegate;\n\nweak digital skills.\n\nThere are several possible responses to a weakness:\n\ndevelop it;\n\ncreate a system that compensates for it;\n\ncollaborate with someone stronger in that area;\n\ndelegate it where appropriate;\n\navoid placing yourself unnecessarily in situations where the weakness creates unacceptable risk.\n\nMaturity includes knowing the difference.\n\nYou do not need to become excellent at everything.\n\nBut you must know what you are weak at."
+            }
+          ]
+        },
+        {
+          "id": "lesson-12",
+          "title": "1.7 VALUES",
+          "blocks": []
+        },
+        {
+          "id": "lesson-13",
+          "title": "Values are principles or qualities that influence what a person considers important and how they make decisions.",
+          "blocks": [
+            {
+              "id": "block-1790097604172-qu1ad",
+              "type": "reading",
+              "content": "Examples include:\n\nintegrity;\n\nexcellence;\n\nfreedom;\n\nfamily;\n\nservice;\n\nfaith;\n\nlearning;\n\nsecurity;\n\ncreativity;\n\nresponsibility;\n\njustice;\n\nleadership;\n\ngrowth;\n\ncontribution."
+            }
+          ]
+        },
+        {
+          "id": "lesson-14",
+          "title": "Values become particularly important when two desirable options compete.",
+          "blocks": [
+            {
+              "id": "block-1790097604172-z3ogp",
+              "type": "reading",
+              "content": "For example:\n\nYou may want more money.\n\nYou may also value time with your family.\n\nYou may want rapid career advancement.\n\nYou may also value personal freedom."
+            }
+          ]
+        },
+        {
+          "id": "lesson-15",
+          "title": "Values help you determine what kind of success you are actually pursuing.",
+          "blocks": [
+            {
+              "id": "value-discovery-exercise",
+              "type": "value_discovery"
+            }
+          ]
+        },
+        {
+          "id": "lesson-16",
+          "title": "1.8 BELIEFS",
+          "blocks": [
+            {
+              "id": "block-1790097604172-gl4d2",
+              "type": "reading",
+              "content": "A belief is something a person accepts as true or meaningful."
+            }
+          ]
+        },
+        {
+          "id": "lesson-17",
+          "title": "Beliefs can influence:",
+          "blocks": [
+            {
+              "id": "block-1790097604172-k4cs7",
+              "type": "reading",
+              "content": "expectations;\n\ndecisions;\n\nbehaviour;"
+            }
+          ]
+        },
+        {
+          "id": "lesson-18",
+          "title": "confidence;",
+          "blocks": [
+            {
+              "id": "block-1790097604172-cqskk",
+              "type": "reading",
+              "content": "relationships;\n\nlearning;\n\nrisk-taking;\n\npersistence.\n\nSome beliefs empower development.\n\nOthers restrict it.\n\nExamples of limiting beliefs include:\n\nâ€œI am not intelligent.â€\n\nâ€œPeople like me cannot succeed.â€\n\nâ€œI cannot learn technology.â€\n\nâ€œI always fail.â€\n\nâ€œRich people are bad.â€\n\nâ€œLeadership is only for certain people.â€\n\nâ€œBecause I failed once, I cannot succeed.â€\n\nThese statements should not simply be replaced with positive slogans.\n\nThey should be examined.\n\nAsk:\n\nIs this belief actually true—\n\nWhat evidence supports it—\n\nWhat evidence challenges it—\n\nWhere did I learn it—\n\nWhat behaviour does it produce—\n\nWhat would become possible if I replaced it with a more accurate belief—\n\nThe objective is not blind positivity.\n\nThe objective is accurate and constructive thinking."
+            }
+          ]
+        },
+        {
+          "id": "lesson-19",
+          "title": "1.9 EMOTIONAL INTELLIGENCE",
+          "blocks": []
+        },
+        {
+          "id": "lesson-20",
+          "title": "Emotional intelligence is the ability to recognize, understand and manage emotions while responding appropriately to other peopleâ€™s emotions.",
+          "blocks": [
+            {
+              "id": "block-1790097604172-5lvq3",
+              "type": "reading",
+              "content": "A practical framework includes:\n\nSelf-awareness\n\nRecognize what you are feeling.\n\nSelf-management\n\nControl your response rather than allowing every emotion to control your behaviour.\n\nSocial awareness\n\nRecognize what other people may be experiencing.\n\nRelationship management\n\nRespond in ways that build healthy and productive relationships.\n\nEmotions provide information.\n\nThey should neither be ignored nor automatically obeyed.\n\nFor example:\n\nAnger may indicate that you perceive injustice.\n\nFear may indicate perceived risk.\n\nEnvy may reveal an unexamined desire.\n\nSadness may signal loss.\n\nExcitement may indicate meaningful opportunity.\n\nThe mature question is:\n\nâ€œWhat is this emotion telling me, and what is the appropriate response—â€"
+            }
+          ]
+        },
+        {
+          "id": "lesson-21",
+          "title": "1.10 PERSONAL RESPONSIBILITY",
+          "blocks": []
+        },
+        {
+          "id": "lesson-22",
+          "title": "Personal responsibility means accepting ownership of your decisions, actions and responses.",
+          "blocks": [
+            {
+              "id": "block-1790097604172-lw6ph",
+              "type": "reading",
+              "content": "It does not mean pretending that circumstances do not matter.\n\nCircumstances matter.\n\nFamily background matters.\n\nEconomic conditions matter.\n\nEducation matters.\n\nSociety matters.\n\nGovernment policies matter.\n\nOpportunities are not equally distributed.\n\nHowever, personal growth requires identifying the part of reality that is within your influence.\n\nAsk yourself:\n\nWhat can I control—\n\nWhat can I influence—\n\nWhat must I accept—\n\nWhat can I learn—\n\nWhat can I change—\n\nWhat help do I need—\n\nA person who takes responsibility moves from:\n\nâ€œWhose fault is this—â€\n\ntoward:\n\nâ€œWhat can I do next—â€\n\nThat shift is foundational to growth."
+            }
+          ]
+        },
+        {
+          "id": "lesson-23",
+          "title": "1.11 SELF-DISCIPLINE",
+          "blocks": [
+            {
+              "id": "block-1790097604172-bbs69",
+              "type": "reading",
+              "content": "Motivation can start an action.\n\nDiscipline helps sustain it."
+            }
+          ]
+        },
+        {
+          "id": "lesson-24",
+          "title": "Self-discipline is the capacity to act according to important commitments even when immediate feelings do not support the action.",
+          "blocks": [
+            {
+              "id": "block-1790097604172-jfk20",
+              "type": "reading",
+              "content": "Examples:\n\nstudying when you would rather watch entertainment;\n\nsaving when you want to spend;\n\nexercising when you feel lazy;\n\ncompleting work before seeking distraction;\n\nkeeping promises;\n\narriving when you said you would;\n\ncontinuing a worthwhile project after the initial excitement disappears.\n\nDiscipline is developed through repeated behaviour.\n\nStart small.\n\nDo not attempt to transform your entire life in one day.\n\nCreate one meaningful commitment.\n\nKeep it.\n\nRepeat it.\n\nIncrease the difficulty gradually."
+            }
+          ]
+        },
+        {
+          "id": "lesson-25",
+          "title": "1.12 CONFIDENCE",
+          "blocks": []
+        },
+        {
+          "id": "lesson-26",
+          "title": "Confidence is not believing that you can never fail.",
+          "blocks": [
+            {
+              "id": "block-1790097604172-jj9f8",
+              "type": "reading",
+              "content": "Healthy confidence means having a realistic belief that you can learn, act, adapt and respond to challenges.\n\nThere is a difference between:"
+            }
+          ]
+        },
+        {
+          "id": "lesson-27",
+          "title": "Confidence: â€œI can learn how to do this.â€",
+          "blocks": [
+            {
+              "id": "block-1790097604172-5bi1j",
+              "type": "reading",
+              "content": "and\n\nArrogance: â€œI already know everything.â€"
+            }
+          ]
+        },
+        {
+          "id": "lesson-28",
+          "title": "Confidence can grow through:",
+          "blocks": [
+            {
+              "id": "block-1790097604172-mw8t1",
+              "type": "reading",
+              "content": "preparation;\n\ncompetence;\n\nexperience;\n\nkeeping promises to yourself;\n\nlearning from failure;\n\nreceiving feedback;\n\ntaking progressively difficult challenges.\n\nOne of the strongest foundations of confidence is evidence.\n\nEvery time you make a meaningful commitment and keep it, you create evidence that you can trust yourself."
+            }
+          ]
+        },
+        {
+          "id": "lesson-29",
+          "title": "1.13 CHARACTER",
+          "blocks": []
+        },
+        {
+          "id": "lesson-30",
+          "title": "Character concerns the qualities that influence how you behave, especially when there is pressure, temptation or no external supervision.",
+          "blocks": [
+            {
+              "id": "block-1790097604172-wubm4",
+              "type": "reading",
+              "content": "Important character qualities include:\n\nintegrity;\n\nhonesty;\n\nresponsibility;\n\ncourage;\n\nhumility;\n\nperseverance;\n\nrespect;\n\nfairness;\n\nreliability;\n\nself-control.\n\nCompetence without character can become dangerous."
+            }
+          ]
+        },
+        {
+          "id": "lesson-31",
+          "title": "Character without competence can become ineffective.",
+          "blocks": [
+            {
+              "id": "block-1790097604172-rp7uz",
+              "type": "reading",
+              "content": "The goal is:"
+            }
+          ]
+        },
+        {
+          "id": "lesson-32",
+          "title": "Character + Competence + Capacity",
+          "blocks": [
+            {
+              "id": "block-1790097604172-jhx1y",
+              "type": "reading",
+              "content": "A person should become both trustworthy and capable."
+            }
+          ]
+        },
+        {
+          "id": "lesson-33",
+          "title": "1.14 DISCOVERING YOUR POTENTIAL",
+          "blocks": [
+            {
+              "id": "block-1790097604172-4n03s",
+              "type": "reading",
+              "content": "Potential is possibility, not achievement.\n\nA person may have potential but fail to develop it.\n\nTherefore:\n\nPotential without development remains possibility.\n\nYour potential can be explored through:\n\ninterests;"
+            }
+          ]
+        },
+        {
+          "id": "lesson-34",
+          "title": "strengths;",
+          "blocks": [
+            {
+              "id": "block-1790097604172-0uyid",
+              "type": "reading",
+              "content": "learning speed;\n\ncuriosity;\n\nexperiences;\n\npatterns of achievement;\n\nfeedback;\n\nproblems you enjoy solving;\n\nresponsibilities you handle well.\n\nDo not ask only:\n\nâ€œWhat am I passionate about—â€\n\nAlso ask:\n\nâ€œWhat problems am I capable of becoming excellent at solving—â€\n\nThe world rewards useful capability."
+            }
+          ]
+        },
+        {
+          "id": "lesson-35",
+          "title": "1.15 THE SELF-AWARENESS AUDIT",
+          "blocks": [
+            {
+              "id": "self-awareness-audit",
+              "type": "self_awareness_audit"
+            }
+          ]
+        },
+        {
+          "id": "lesson-36",
+          "title": "1.16 STUDENT PROJECT",
+          "blocks": [
+            {
+              "id": "student-project",
+              "type": "growth_project"
+            }
+          ]
+        },
+        {
+          "id": "lesson-37",
+          "title": "1.17 PROJECT ASSESSMENT",
+          "blocks": [
+            {
+              "id": "block-1790097604172-r9085",
+              "type": "reading",
+              "content": "Total: 100 marks\n\nArea\n\nMarks\n\nSelf-awareness\n\n15\n\nStrength identification\n\n10\n\nDevelopment-gap analysis\n\n15"
+            }
+          ]
+        },
+        {
+          "id": "lesson-38",
+          "title": "Values and beliefs",
+          "blocks": [
+            {
+              "id": "block-1790097604172-o0cfb",
+              "type": "reading",
+              "content": "10\n\nEmotional/behavioural awareness\n\n10"
+            }
+          ]
+        },
+        {
+          "id": "lesson-39",
+          "title": "Personal responsibility",
+          "blocks": [
+            {
+              "id": "block-1790097604172-vzlef",
+              "type": "reading",
+              "content": "10\n\nCapability assessment\n\n10\n\n90-day development plan\n\n15\n\nQuality of reflection\n\n5\n\nTotal\n\n100\n\nA certificate should not be based merely on watching the lessons.\n\nThe learner should demonstrate completion of the project."
+            }
+          ]
+        },
+        {
+          "id": "lesson-40",
+          "title": "1.18 IMPLEMENTATION CHALLENGE",
+          "blocks": [
+            {
+              "id": "implementation-challenge",
+              "type": "implementation_challenge"
+            }
+          ]
+        },
+        {
+          "id": "lesson-41",
+          "title": "1.19 REFLECTION QUESTIONS",
+          "blocks": [
+            {
+              "id": "block-1790097604172-o6gej",
+              "type": "reading",
+              "content": "Before completing this module, answer:"
+            },
+            {
+              "id": "reflection-1790097604172-6ux20",
+              "type": "reflection",
+              "content": "What did I discover about myself—"
+            },
+            {
+              "id": "reflection-1790097604172-rrgy1",
+              "type": "reflection",
+              "content": "What surprised me—"
+            },
+            {
+              "id": "reflection-1790097604172-q1pkc",
+              "type": "reflection",
+              "content": "What weakness have I been avoiding—"
+            },
+            {
+              "id": "reflection-1790097604172-yyqxg",
+              "type": "reflection",
+              "content": "What strength have I underused—"
+            },
+            {
+              "id": "reflection-1790097604172-ownnn",
+              "type": "reflection",
+              "content": "Which belief needs examination—"
+            },
+            {
+              "id": "reflection-1790097604172-qc6f6",
+              "type": "reflection",
+              "content": "What behaviour is limiting my growth—"
+            },
+            {
+              "id": "reflection-1790097604172-3uvdt",
+              "type": "reflection",
+              "content": "What capability would produce the greatest improvement in my life—"
+            },
+            {
+              "id": "reflection-1790097604172-3js3i",
+              "type": "reflection",
+              "content": "What am I responsible for changing—"
+            },
+            {
+              "id": "reflection-1790097604172-gbyj4",
+              "type": "reflection",
+              "content": "Who do I need to become to achieve my next level—"
+            },
+            {
+              "id": "reflection-1790097604172-mj1bh",
+              "type": "reflection",
+              "content": "What will I do differently beginning today—"
+            }
+          ]
+        },
+        {
+          "id": "lesson-42",
+          "title": "1.20 FINAL MODULE MESSAGE",
+          "blocks": [
+            {
+              "id": "block-1790097604172-fmw85",
+              "type": "reading",
+              "content": "Growth begins when awareness becomes responsibility.\n\nYou cannot improve what you refuse to examine.\n\nYou cannot deliberately develop what you have not identified.\n\nYou cannot consistently produce a different result while repeatedly operating through the same unexamined patterns.\n\nTherefore, do not leave this module merely knowing more words about self-awareness.\n\nLeave with a clearer understanding of yourself.\n\nKnow your strengths.\n\nKnow your gaps.\n\nKnow your values.\n\nExamine your beliefs.\n\nManage your emotions.\n\nDevelop your discipline.\n\nBuild your confidence through competence.\n\nStrengthen your character.\n\nAnd most importantly:\n\nTake responsibility for becoming more capable.\n\nYour next level will require a version of you with greater knowledge, stronger skills, better judgement, healthier behaviours and greater capacity.\n\nThat development begins here."
+            }
+          ]
+        },
+        {
+          "id": "lesson-43",
+          "title": "MODULE COMPLETION STANDARD",
+          "blocks": [
+            {
+              "id": "block-1790097604172-9nydb",
+              "type": "reading",
+              "content": "You have completed this module when you can:\n\nUnderstand yourself â†’ identify your gaps â†’ define what must change â†’ create a development plan â†’ begin taking measurable action.\n\nSchool of Growth Global\n\nLeadership. Strategy. Transformation.\n\nGrowth is not merely knowing more. Growth is becoming more capable of creating value, solving problems, producing results and increasing your capacity to make an impact."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

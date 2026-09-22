@@ -39,6 +39,8 @@ import { AdminMentorsView } from './views/admin/AdminMentorsView';
 import { AdminMessagesView } from './views/admin/AdminMessagesView';
 import { AdminCatalogueView } from './views/admin/AdminCatalogueView';
 import { AdminIntegrationsView } from './views/admin/AdminIntegrationsView';
+import { LmsStudentDashboardView } from './views/LmsStudentDashboardView';
+import { LmsLessonView } from './views/LmsLessonView';
 
 // ── Legacy route adapters ────────────────────────────────────────────────
 const HomeRoute: React.FC = () => <HomeView onNavigate={useLegacyNavigate()} />;
@@ -141,6 +143,10 @@ const AppRoutes: React.FC = () => {
         <Route path="integrations" element={<AdminIntegrationsView />} />
         <Route path="*" element={<Navigate to="/admin" replace />} />
       </Route>
+
+      {/* LMS - outside <Layout> so it has its own full-screen chrome */}
+      <Route path="lms" element={<LmsStudentDashboardView />} />
+      <Route path="lms/:courseId/:moduleId/:lessonId" element={<LmsLessonView />} />
 
       <Route path="mentor/inbox" element={<MentorInboxView />} />
 

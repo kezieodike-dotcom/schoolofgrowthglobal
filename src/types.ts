@@ -221,3 +221,63 @@ export interface StudentProgress {
     nextSession: string;
   };
 }
+
+
+// --- LMS Types ---
+export type LmsBlockType = 
+  | 'reading' 
+  | 'key_insight' 
+  | 'framework' 
+  | 'question' 
+  | 'reflection' 
+  | 'activity' 
+  | 'assignment' 
+  | 'resource'
+  | 'value_discovery'
+  | 'self_awareness_audit'
+  | 'growth_project'
+  | 'implementation_challenge';
+
+export interface LmsBlock {
+  id: string;
+  type: LmsBlockType;
+  content?: string; // Markdown or HTML
+  metadata?: any;
+}
+
+export interface LmsLesson {
+  id: string;
+  title: string;
+  blocks: LmsBlock[];
+}
+
+export interface LmsModule {
+  id: string;
+  title: string;
+  coreQuestion?: string;
+  transformation?: string;
+  lessons: LmsLesson[];
+}
+
+export interface LmsCourse {
+  id: string;
+  title: string;
+  modules: LmsModule[];
+}
+
+export interface LmsProgress {
+  userId: string;
+  courseId: string;
+  moduleId?: string;
+  completedLessons: string[];
+  progressPercentage: number;
+}
+
+export interface LmsSubmission {
+  userId: string;
+  courseId: string;
+  moduleId: string;
+  lessonId: string;
+  blockId: string;
+  data: any; // JSON payload of answers
+}
