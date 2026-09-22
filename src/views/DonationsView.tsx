@@ -140,7 +140,7 @@ export const DonationsView: React.FC = () => {
               CHOOSE YOUR IMPACT
             </div>
             <div className="space-y-4">
-              <h1 className="max-w-3xl text-[2.45rem] sm:text-5xl lg:text-6xl font-serif font-semibold lg:font-bold leading-[1.08] sm:leading-tight tracking-tight text-white lg:text-slate-950 italic">
+              <h1 className="max-w-2xl text-[2.1rem] sm:text-4xl lg:text-5xl font-serif font-semibold lg:font-bold leading-[1.08] sm:leading-tight tracking-tight text-white lg:text-slate-950 italic">
                 Give Today. Shape Lives. Grow Businesses. Build a Legacy.
               </h1>
               <p className="max-w-2xl text-[15px] sm:text-base leading-7 sm:leading-relaxed text-slate-100/90 lg:text-slate-600">

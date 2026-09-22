@@ -407,6 +407,39 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
         </div>
       </section>
 
+      {/* Former student story */}
+      <section className="border-b border-slate-200 bg-slate-50 py-16 sm:py-20">
+        <div className="mx-auto grid max-w-7xl gap-10 px-4 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:px-8">
+          <div className="order-2 max-w-xl space-y-4 lg:order-1" data-scroll-reveal>
+            <div className="inline-flex items-center gap-2 rounded-full border border-amber-200 bg-white px-3 py-1 text-[11px] font-mono uppercase tracking-widest text-amber-700">
+              <UsersRound className="h-3.5 w-3.5" />
+              <span>Student story</span>
+            </div>
+            <h2 className="text-3xl font-serif font-semibold leading-tight text-slate-900 sm:text-4xl">
+              Hear from the School of Growth Global community.
+            </h2>
+            <p className="max-w-lg text-[15px] leading-7 text-slate-600">
+              A former student shares their experience of learning, growth and transformation at SGG.
+            </p>
+          </div>
+
+          <div className="order-1 lg:order-2" data-scroll-reveal>
+            <div className="overflow-hidden rounded-2xl border border-slate-200 bg-slate-950 shadow-xl shadow-slate-900/10">
+              <video
+                className="mx-auto aspect-[9/16] max-h-[38rem] w-full object-contain sm:aspect-video lg:aspect-[4/5]"
+                controls
+                playsInline
+                preload="metadata"
+                aria-label="A former student speaking about School of Growth Global"
+              >
+                <source src="/videos/former-student-story.mp4" type="video/mp4" />
+                Your browser does not support embedded video.
+              </video>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* What Our Leaders Say - Animated Testimonials Columns */}
       <TestimonialsSection />
 
