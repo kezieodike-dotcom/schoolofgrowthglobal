@@ -26,6 +26,7 @@ const SOURCES: LeadSource[] = [
   "certificateVerification",
   "newsletter",
   "mentor",
+  "consultant",
 ];
 
 const MAX_FIELDS = 40;

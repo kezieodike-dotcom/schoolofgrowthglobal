@@ -14,6 +14,7 @@ import {
   Loader2,
   ArrowRight,
   Wallet,
+  BriefcaseBusiness,
 } from 'lucide-react';
 
 /**
@@ -98,13 +99,13 @@ export const RegisterView: React.FC = () => {
         eyebrow="Registration"
         icon={<UserPlus className="w-4 h-4" />}
         title={<>Join School of Growth</>}
-        subtitle="Register as a student to begin a programme, or apply to mentor the next generation of leaders."
+        subtitle="Register as a student to begin a programme, or apply as a mentor or consultant to help the next generation of leaders grow."
         imageSrc="/scenes/hero-team.jpg"
       />
 
       <section className="py-12 sm:py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Audience switcher */}
-        <div className="flex flex-col sm:flex-row gap-3 mb-8 max-w-2xl mx-auto lg:mx-0">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-8 max-w-4xl mx-auto lg:mx-0">
           <div className="flex-1 flex items-center gap-3 px-5 py-4 rounded-xl border bg-white border-amber-400 shadow-md ring-1 ring-amber-200 text-left">
             <span className="p-2 rounded-lg bg-amber-50 text-amber-600">
               <GraduationCap className="w-5 h-5" />
@@ -132,6 +133,23 @@ export const RegisterView: React.FC = () => {
               </span>
               <span className="block text-[11px] text-slate-500 mt-0.5">
                 Share hard-won expertise with leaders building what you built.
+              </span>
+            </span>
+          </Link>
+
+          <Link
+            to="/register/consultant"
+            className="flex items-center gap-3 px-5 py-4 rounded-xl border bg-white/60 border-slate-200 hover:border-slate-300 hover:bg-white text-left transition-all"
+          >
+            <span className="p-2 rounded-lg bg-slate-100 text-slate-500">
+              <BriefcaseBusiness className="w-5 h-5" />
+            </span>
+            <span>
+              <span className="block text-sm font-bold font-serif text-slate-600">
+                Register as a Consultant
+              </span>
+              <span className="block text-[11px] text-slate-500 mt-0.5">
+                Offer specialist advice, strategy and practical support.
               </span>
             </span>
           </Link>

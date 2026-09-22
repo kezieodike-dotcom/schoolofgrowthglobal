@@ -30,7 +30,8 @@ export type LeadSource =
   | "consultation"
   | "certificateVerification"
   | "newsletter"
-  | "mentor";
+  | "mentor"
+  | "consultant";
 
 export interface Lead {
   id: string;

@@ -176,6 +176,7 @@ const AppRoutes: React.FC = () => {
         */}
         <Route path="register" element={<RegisterView />} />
         <Route path="register/mentor" element={<MentorRegistrationView />} />
+        <Route path="register/consultant" element={<MentorRegistrationView />} />
         <Route path="register/:role" element={<RegisterView />} />
 
         {/*

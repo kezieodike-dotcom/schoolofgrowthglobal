@@ -236,6 +236,21 @@ export const FORMS = {
       },
     ],
   },
+
+  consultant: {
+    title: "Consultant Application",
+    replyToField: "email",
+    fields: [
+      { name: "name", label: "Full Name", required: true },
+      { name: "email", label: "Email", type: "email", required: true },
+      { name: "phone", label: "Phone / WhatsApp", type: "tel", required: true },
+      { name: "area", label: "Primary Consulting Area", required: true },
+      { name: "specialisms", label: "Consulting Specialisms", required: true },
+      { name: "experience", label: "Years of Experience", required: true },
+      { name: "location", label: "City & Country", required: true },
+      { name: "bio", label: "Professional Background", type: "textarea", required: true },
+    ],
+  },
 } satisfies Record<string, FormDef>;
 
 export type FormKey = keyof typeof FORMS;

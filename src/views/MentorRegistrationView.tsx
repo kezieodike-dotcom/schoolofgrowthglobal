@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { PageHero } from '../components/PageHero';
 import { CountryPhoneField } from '../components/CountryPhoneField';
 import { useFormSubmit, HONEYPOT_PROPS } from '../lib/useFormSubmit';
@@ -51,7 +51,6 @@ import {
  *    what that person will see before committing to it.
  */
 
-const DRAFT_KEY = 'sog.mentorApplication.draft.v1';
 const REVIEW_STEP = MENTOR_STEPS.length;
 
 /** True when at least one answer has been given - an empty form is not a draft. */
@@ -63,6 +62,11 @@ function hasContent(values: unknown): boolean {
 }
 
 export const MentorRegistrationView: React.FC = () => {
+  const { pathname } = useLocation();
+  const isConsultant = pathname === '/register/consultant';
+  const draftKey = isConsultant
+    ? 'sog.consultantApplication.draft.v1'
+    : 'sog.mentorApplication.draft.v1';
   const [step, setStep] = useState(0);
   const [values, setValues] = useState<Record<string, FieldValue>>(emptyValues);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -71,7 +75,7 @@ export const MentorRegistrationView: React.FC = () => {
   const [draftRestored, setDraftRestored] = useState(false);
   const [draftSaved, setDraftSaved] = useState(false);
 
-  const { status, error, submitValues, sending } = useFormSubmit('mentor');
+  const { status, error, submitValues, sending } = useFormSubmit(isConsultant ? 'consultant' : 'mentor');
   const honeypotRef = useRef<HTMLInputElement>(null);
   const formTopRef = useRef<HTMLDivElement>(null);
 
@@ -90,7 +94,7 @@ export const MentorRegistrationView: React.FC = () => {
   // ── Draft persistence ─────────────────────────────────────────────
   useEffect(() => {
     try {
-      const raw = localStorage.getItem(DRAFT_KEY);
+      const raw = localStorage.getItem(draftKey);
       const saved = raw ? JSON.parse(raw) : null;
       if (saved && typeof saved === 'object' && hasContent(saved.values)) {
         // Merged over a fresh blank set so a draft written before a field
@@ -112,19 +116,19 @@ export const MentorRegistrationView: React.FC = () => {
       // an empty draft that greets the next visit with "we restored your
       // draft" over a blank form.
       if (hasContent(values)) {
-        localStorage.setItem(DRAFT_KEY, JSON.stringify({ values, step }));
+        localStorage.setItem(draftKey, JSON.stringify({ values, step }));
         setDraftSaved(true);
         const timer = setTimeout(() => setDraftSaved(false), 1600);
         return () => clearTimeout(timer);
       }
-      localStorage.removeItem(DRAFT_KEY);
+      localStorage.removeItem(draftKey);
     } catch {
       // Quota or private browsing - the form still works, just not resumable.
     }
   }, [values, step, ready]);
 
   const discardDraft = () => {
-    localStorage.removeItem(DRAFT_KEY);
+    localStorage.removeItem(draftKey);
     setValues(emptyValues());
     setErrors({});
     setStep(0);
@@ -200,7 +204,7 @@ export const MentorRegistrationView: React.FC = () => {
 
     // Honeypot: a hidden input no human fills in.
     if (honeypotRef.current?.value.trim()) {
-      localStorage.removeItem(DRAFT_KEY);
+      localStorage.removeItem(draftKey);
       return;
     }
 
@@ -219,7 +223,10 @@ export const MentorRegistrationView: React.FC = () => {
       await fetch('/api/mentors/apply', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ answers: Object.fromEntries(entries) }),
+        body: JSON.stringify({
+          answers: Object.fromEntries(entries),
+          applicationType: isConsultant ? 'consultant' : 'mentor',
+        }),
       });
     } catch {
       // Intentionally ignored - see above.
@@ -228,7 +235,7 @@ export const MentorRegistrationView: React.FC = () => {
     const delivered = await submitValues(entries, {
       replyTo: String(values.email ?? ''),
     });
-    if (delivered) localStorage.removeItem(DRAFT_KEY);
+    if (delivered) localStorage.removeItem(draftKey);
   };
 
   // ── Success ───────────────────────────────────────────────────────
@@ -241,10 +248,12 @@ export const MentorRegistrationView: React.FC = () => {
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
       <PageHero
-        eyebrow="Mentor Registration"
+        eyebrow={isConsultant ? 'Consultant Registration' : 'Mentor Registration'}
         icon={<Users className="w-4 h-4" />}
-        title={<>Register as a Mentor</>}
-        subtitle="Join the directory students choose from. Tell us what you have built, how you work, and who you are best placed to help."
+        title={<>Register as a {isConsultant ? 'Consultant' : 'Mentor'}</>}
+        subtitle={isConsultant
+          ? 'Join the specialist directory. Tell us what you advise on, how you work, and who you are best placed to help.'
+          : 'Join the directory students choose from. Tell us what you have built, how you work, and who you are best placed to help.'}
         imageSrc="/scenes/leadership-meeting.jpg"
       />
 
@@ -256,7 +265,7 @@ export const MentorRegistrationView: React.FC = () => {
                 Mentor / Consultant onboarding
               </p>
               <h2 className="mt-3 text-2xl sm:text-3xl font-serif font-bold leading-tight text-slate-950">
-                Become a Mentor. Create Impact. Earn From Your Expertise.
+                {isConsultant ? 'Become a Consultant. Create Value. Earn From Your Expertise.' : 'Become a Mentor. Create Impact. Earn From Your Expertise.'}
               </h2>
               <p className="mt-3 text-sm sm:text-base text-slate-600 leading-relaxed">
                 Your knowledge, experience, and ability to guide others have value.
@@ -272,7 +281,7 @@ export const MentorRegistrationView: React.FC = () => {
                 href="#mentor-application"
                 className="mt-5 inline-flex items-center justify-center gap-2 rounded-xl bg-amber-500 px-5 py-3 text-xs font-bold text-slate-950 shadow-lg shadow-amber-500/20 transition hover:bg-amber-400"
               >
-                Apply as a Mentor/Consultant
+                Apply as a {isConsultant ? 'Consultant' : 'Mentor/Consultant'}
                 <ChevronRight className="w-4 h-4" />
               </a>
             </div>

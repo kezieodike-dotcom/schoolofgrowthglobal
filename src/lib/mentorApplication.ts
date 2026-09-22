@@ -63,6 +63,10 @@ export const EXPERTISE_AREAS = [
   "Career & Personal Development",
   "Beauty & Fitness",
   "Health, Diet & Well-Being",
+  "Legal Consultation & Mentorship",
+  "Hotel Consulting",
+  "Interior & Exterior Design Consulting",
+  "Civil Construction Consulting",
 ];
 
 export const SPECIALISMS = [
@@ -90,6 +94,11 @@ export const SPECIALISMS = [
   "Health, Diet & Well-Being",
   "Supply Chain",
   "Legal & Compliance",
+  "Legal Consultation",
+  "Hotel Operations & Hospitality",
+  "Interior Design",
+  "Exterior Design",
+  "Civil Construction",
 ];
 
 export const INDUSTRIES = [
