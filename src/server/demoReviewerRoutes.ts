@@ -3,7 +3,17 @@ import crypto from 'crypto';
 import { createDemoReviewerAccess } from '../lib/demoReviewerAccess.js';
 import { issueMentorToken } from './messageRoutes.js';
 
-const reviewerPassword = () => process.env.DEMO_REVIEWER_PASSWORD?.trim();
+const LOCAL_DEMO_REVIEWER_PASSWORD = 'SGG-Demo-Student-2026!';
+
+function reviewerPassword(): string | undefined {
+  const configured = process.env.DEMO_REVIEWER_PASSWORD?.trim();
+  if (configured) return configured;
+
+  // Local previews should remain usable even when a developer has not copied
+  // the optional reviewer setting into an environment file. Production still
+  // requires an explicit secret before issuing demo access.
+  return process.env.NODE_ENV === 'production' ? undefined : LOCAL_DEMO_REVIEWER_PASSWORD;
+}
 
 function matchesSecret(supplied: string, configured: string): boolean {
   const a = crypto.createHash('sha256').update(supplied).digest();
