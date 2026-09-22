@@ -141,7 +141,12 @@ export const DonationsView: React.FC = () => {
             </div>
             <div className="space-y-4">
               <h1 className="max-w-2xl text-[2.1rem] sm:text-4xl lg:text-5xl font-serif font-semibold lg:font-bold leading-[1.08] sm:leading-tight tracking-tight text-white lg:text-slate-950 italic">
-                Give Today. Shape Lives. Grow Businesses. Build a Legacy.
+                <>
+                  <span className="block sm:inline">Give Today.</span>{' '}
+                  <span className="block sm:inline">Shape Lives.</span>{' '}
+                  <span className="block sm:inline">Grow Businesses.</span>{' '}
+                  <span className="block sm:inline">Build a Legacy.</span>
+                </>
               </h1>
               <p className="max-w-2xl text-[15px] sm:text-base leading-7 sm:leading-relaxed text-slate-100/90 lg:text-slate-600">
                 Support practical growth, mentorship, education, welfare and leadership
