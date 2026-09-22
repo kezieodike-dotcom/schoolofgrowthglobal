@@ -4,6 +4,7 @@ import { createAdminRouter, requireAdmin } from "../src/server/adminRoutes.js";
 import { isPaystackConfigured, paystackPublicKey } from "../src/server/paystackEnv.js";
 import { createAIRouter } from "../src/server/aiRoutes.js";
 import { createLmsRouter } from "../src/server/lmsRoutes.js";
+import { createDemoReviewerRouter } from "../src/server/demoReviewerRoutes.js";
 
 loadServerEnv();
 
@@ -74,6 +75,7 @@ app.get(["/api/payments/config", "/payments/config"], (_req, res) => {
 // stays lazy inside aiRoutes.ts, so health and lightweight probes remain cheap.
 const aiRouter = createAIRouter();
 const lmsRouter = createLmsRouter();
+const demoReviewerRouter = createDemoReviewerRouter();
 
 let apiRouterPromise: Promise<express.Router> | null = null;
 
@@ -127,6 +129,8 @@ app.use("/api", aiRouter);
 app.use(aiRouter);
 app.use("/api", lmsRouter);
 app.use(lmsRouter);
+app.use("/api", demoReviewerRouter);
+app.use(demoReviewerRouter);
 app.use("/api", lazyApi);
 app.use(lazyApi);
 

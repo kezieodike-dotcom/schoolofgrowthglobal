@@ -22,7 +22,6 @@ for (const moduleName of [
   'leadRoutes',
   'messageRoutes',
   'contentRoutes',
-  'demoReviewerRoutes',
   'mentorReviewRoutes',
 ]) {
   const staticImportPattern = new RegExp(
@@ -40,6 +39,10 @@ if (!apiIndex.includes('import { createAdminRouter, requireAdmin } from "../src/
 
 if (!apiIndex.includes('import { createAIRouter } from "../src/server/aiRoutes.js";')) {
   throw new Error('Vercel should statically bundle the Growth AI router so chat does not depend on runtime source imports.');
+}
+
+if (!apiIndex.includes('import { createDemoReviewerRouter } from "../src/server/demoReviewerRoutes.js";')) {
+  throw new Error('Vercel should statically bundle the demo reviewer router so preview access does not depend on lazy imports.');
 }
 
 if (apiIndex.includes('import("../src/server/adminRoutes.js")')) {
