@@ -653,6 +653,20 @@ const OverviewTab: React.FC<{
         </div>
       </section>
 
+      <section className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-slate-900 text-white rounded-lg p-5 sm:p-6 shadow-sm">
+        <div>
+          <p className="text-[10px] font-mono uppercase tracking-widest text-amber-400 font-bold">Your course access</p>
+          <h3 className="text-base sm:text-lg font-bold mt-1">Open Growth Foundation</h3>
+          <p className="text-xs text-slate-300 mt-1">Module 1 and Module 2 are available in your interactive student course flow.</p>
+        </div>
+        <Link
+          to="/lms"
+          className="inline-flex items-center justify-center gap-2 rounded-lg bg-amber-400 px-4 py-2.5 text-xs font-bold text-slate-950 hover:bg-amber-300 transition-colors whitespace-nowrap"
+        >
+          Open Growth Foundation <ArrowRight className="w-4 h-4" />
+        </Link>
+      </section>
+
       <ReferralShareCard
         audience="student"
         name={STUDENT_DATA.name}
