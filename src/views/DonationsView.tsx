@@ -131,7 +131,7 @@ export const DonationsView: React.FC = () => {
         />
         <div className="absolute inset-0 bg-gradient-to-b from-slate-950/82 via-slate-950/62 to-slate-950/88 lg:hidden" />
         <div className="absolute inset-0 hidden bg-[radial-gradient(circle_at_20%_0%,rgba(245,158,11,0.16),transparent_34%),linear-gradient(135deg,#ffffff_0%,#f8fafc_55%,#fff7ed_100%)] lg:block" />
-        <div className="relative max-w-7xl mx-auto grid min-h-[calc(100dvh-5rem)] grid-cols-1 lg:min-h-0 lg:grid-cols-12 gap-8 px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20 items-end lg:items-center">
+        <div className="relative max-w-7xl mx-auto grid min-h-[calc(100dvh-5rem)] grid-cols-1 lg:min-h-0 lg:grid-cols-12 gap-8 px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20 items-center">
           <div className="lg:col-span-6 space-y-6">
             <div className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/12 px-3.5 py-1.5 text-xs font-mono font-bold uppercase tracking-wider text-amber-100 shadow-sm backdrop-blur-md lg:border-amber-200 lg:bg-white/85 lg:text-amber-700 lg:backdrop-blur-none">
               <HeartHandshake className="h-3.5 w-3.5" />
@@ -142,10 +142,10 @@ export const DonationsView: React.FC = () => {
             <div className="space-y-4">
               <h1 className="max-w-2xl text-[2.1rem] sm:text-4xl lg:text-5xl font-serif font-semibold lg:font-bold leading-[1.08] sm:leading-tight tracking-tight text-white lg:text-slate-950 italic">
                 <>
-                  <span className="block sm:inline">Give Today.</span>{' '}
-                  <span className="block sm:inline">Shape Lives.</span>{' '}
-                  <span className="block sm:inline">Grow Businesses.</span>{' '}
-                  <span className="block sm:inline">Build a Legacy.</span>
+                  <span className="block">Give Today.</span>
+                  <span className="block">Shape Lives.</span>
+                  <span className="block">Grow Businesses.</span>
+                  <span className="block">Build a Legacy.</span>
                 </>
               </h1>
               <p className="max-w-2xl text-[15px] sm:text-base leading-7 sm:leading-relaxed text-slate-100/90 lg:text-slate-600">
