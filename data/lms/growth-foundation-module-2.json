@@ -1,8 +1,20 @@
 {
   "id": "module-2",
   "title": "Module 2 — Growth Mindset",
+  "level": "Level 1 — Growth Foundation",
+  "programme": "Growth Foundation",
   "coreQuestion": "How do I think, learn, adapt and improve?",
   "transformation": "Awareness → Capability",
+  "institutionalPhilosophy": "Leadership. Strategy. Transformation.",
+  "sourceMetadata": [
+    "SCHOOL OF GROWTH GLOBAL",
+    "LEVEL 1 — GROWTH FOUNDATION",
+    "MODULE 2 — GROWTH MINDSET",
+    "Core Question: How do I think, learn, adapt and improve?",
+    "Transformation: Awareness → Capability",
+    "Programme: Growth Foundation",
+    "Institutional Philosophy: Leadership. Strategy. Transformation."
+  ],
   "lessons": [
     {
       "id": "module-2-lesson-1",
@@ -11,7 +23,7 @@
         {
           "id": "module-2-block-1",
           "type": "reading",
-          "content": "Growth begins with awareness, but awareness alone is not enough.\\n\\nA person may know their strengths and weaknesses and still remain unchanged.\\n\\nWhy?\\n\\nBecause knowing what must change does not automatically give a person the mindset, learning ability, resilience, discipline and adaptability required to change it.\\n\\nThis is why Growth Mindset is the second foundation of personal development.\\n\\nGrowth is not simply becoming older.\\n\\nGrowth is not merely acquiring certificates.\\n\\nGrowth is not collecting information.\\n\\nGrowth is not positive thinking.\\n\\nGrowth is not comparing yourself with other people.\\n\\nGrowth is the progressive development of your:\\n\\nknowledge;\\n\\nskills;\\n\\njudgement;\\n\\ncharacter;\\n\\nhabits;\\n\\nemotional maturity;\\n\\nproblem-solving ability;\\n\\ncapacity to create value;\\n\\nability to adapt;\\n\\nability to produce results.\\n\\nA growth mindset is the belief and operating posture that human capability can be developed through learning, deliberate practice, feedback, appropriate strategy, persistence and adaptation.\\n\\nThis does not mean that everybody has identical abilities or that effort alone guarantees success.\\n\\nIt means that your current level is not necessarily your final level.\\n\\nYou can learn.\\n\\nYou can improve.\\n\\nYou can develop.\\n\\nYou can change your methods.\\n\\nYou can seek help.\\n\\nYou can acquire new skills.\\n\\nYou can recover from failure.\\n\\nYou can become more capable.\\n\\nThat is the foundation of growth."
+          "content": "Growth begins with awareness, but awareness alone is not enough.\n\nA person may know their strengths and weaknesses and still remain unchanged.\n\nWhy?\n\nBecause knowing what must change does not automatically give a person the mindset, learning ability, resilience, discipline and adaptability required to change it.\n\nThis is why Growth Mindset is the second foundation of personal development.\n\nGrowth is not simply becoming older.\n\nGrowth is not merely acquiring certificates.\n\nGrowth is not collecting information.\n\nGrowth is not positive thinking.\n\nGrowth is not comparing yourself with other people.\n\nGrowth is the progressive development of your:\n\nknowledge;\n\nskills;\n\njudgement;\n\ncharacter;\n\nhabits;\n\nemotional maturity;\n\nproblem-solving ability;\n\ncapacity to create value;\n\nability to adapt;\n\nability to produce results.\n\nA growth mindset is the belief and operating posture that human capability can be developed through learning, deliberate practice, feedback, appropriate strategy, persistence and adaptation.\n\nThis does not mean that everybody has identical abilities or that effort alone guarantees success.\n\nIt means that your current level is not necessarily your final level.\n\nYou can learn.\n\nYou can improve.\n\nYou can develop.\n\nYou can change your methods.\n\nYou can seek help.\n\nYou can acquire new skills.\n\nYou can recover from failure.\n\nYou can become more capable.\n\nThat is the foundation of growth."
         }
       ]
     },
@@ -22,7 +34,7 @@
         {
           "id": "module-2-block-2",
           "type": "reading",
-          "content": "By the end of this module, the learner should be able to:\\n\\ndefine growth in practical terms;\\n\\ndistinguish growth from temporary motivation;\\n\\nexplain fixed and growth-oriented mindsets;\\n\\nidentify personal limiting beliefs;\\n\\nunderstand how learning actually occurs;\\n\\ndevelop a practical learning system;\\n\\novercome avoidance caused by fear;\\n\\ninterpret failure constructively;\\n\\nuse feedback for improvement;\\n\\ndevelop resilience;\\n\\nadapt to changing circumstances;\\n\\napply continuous improvement;\\n\\ncreate personal habits that support growth;\\n\\nencourage a growth-oriented environment;\\n\\ndevelop a measurable 30-day Growth Mindset Challenge."
+          "content": "By the end of this module, the learner should be able to:\n\ndefine growth in practical terms;\n\ndistinguish growth from temporary motivation;\n\nexplain fixed and growth-oriented mindsets;\n\nidentify personal limiting beliefs;\n\nunderstand how learning actually occurs;\n\ndevelop a practical learning system;\n\novercome avoidance caused by fear;\n\ninterpret failure constructively;\n\nuse feedback for improvement;\n\ndevelop resilience;\n\nadapt to changing circumstances;\n\napply continuous improvement;\n\ncreate personal habits that support growth;\n\nencourage a growth-oriented environment;\n\ndevelop a measurable 30-day Growth Mindset Challenge."
         }
       ]
     },
@@ -33,7 +45,7 @@
         {
           "id": "module-2-block-3",
           "type": "reading",
-          "content": "Growth is the development of greater capacity.\\n\\nA useful model is:\\n\\nGrowth = Increased Capacity + Improved Behaviour + Better Decisions + Better Results\\n\\nCapacity may include:\\n\\nknowledge;\\n\\ntechnical skills;\\n\\ncommunication;\\n\\nemotional intelligence;\\n\\nleadership;\\n\\nfinancial capability;\\n\\ncreativity;\\n\\nstrategic thinking;\\n\\nproblem-solving;\\n\\nphysical capability;\\n\\ndigital capability;\\n\\nrelational capability.\\n\\nGrowth should eventually become visible in behaviour and results.\\n\\nFor example:\\n\\nIf someone claims to have developed time-management skills but continues to miss important deadlines, the learning has not yet translated sufficiently into capability.\\n\\nIf an entrepreneur learns marketing but does not improve customer acquisition, the knowledge has not yet become effective execution.\\n\\nIf a manager attends leadership training but continues to create confusion, avoid accountability and mistreat employees, the training has not yet become leadership capability.\\n\\nTherefore:\\n\\nKnowledge is an input. Capability is the ability to apply knowledge effectively. Results are evidence that capability is being applied in reality."
+          "content": "Growth is the development of greater capacity.\n\nA useful model is:\n\nGrowth = Increased Capacity + Improved Behaviour + Better Decisions + Better Results\n\nCapacity may include:\n\nknowledge;\n\ntechnical skills;\n\ncommunication;\n\nemotional intelligence;\n\nleadership;\n\nfinancial capability;\n\ncreativity;\n\nstrategic thinking;\n\nproblem-solving;\n\nphysical capability;\n\ndigital capability;\n\nrelational capability.\n\nGrowth should eventually become visible in behaviour and results.\n\nFor example:\n\nIf someone claims to have developed time-management skills but continues to miss important deadlines, the learning has not yet translated sufficiently into capability.\n\nIf an entrepreneur learns marketing but does not improve customer acquisition, the knowledge has not yet become effective execution.\n\nIf a manager attends leadership training but continues to create confusion, avoid accountability and mistreat employees, the training has not yet become leadership capability.\n\nTherefore:\n\nKnowledge is an input. Capability is the ability to apply knowledge effectively. Results are evidence that capability is being applied in reality."
         }
       ]
     },
@@ -44,7 +56,7 @@
         {
           "id": "module-2-block-4",
           "type": "reading",
-          "content": "At School of Growth Global, we distinguish four important stages.\\n\\nStage 1 — Awareness\\n\\nYou recognize something.\\n\\nExample:\\n\\n“I realize I am poor at managing my time.”\\n\\nStage 2 — Knowledge\\n\\nYou understand what better time management requires.\\n\\nExample:\\n\\n“I understand prioritization, planning and scheduling.”\\n\\nStage 3 — Capability\\n\\nYou can consistently apply what you know.\\n\\nExample:\\n\\n“I plan my week, prioritize important tasks and meet deadlines.”\\n\\nStage 4 — Results\\n\\nYour improved capability produces measurable outcomes.\\n\\nExample:\\n\\n“I have reduced missed deadlines and completed important projects consistently.”\\n\\nTherefore:\\n\\nAwareness → Knowledge → Capability → Results\\n\\nA major purpose of Growth Foundation is to move learners beyond awareness toward capability."
+          "content": "At School of Growth Global, we distinguish four important stages.\n\nStage 1 — Awareness\n\nYou recognize something.\n\nExample:\n\n“I realize I am poor at managing my time.”\n\nStage 2 — Knowledge\n\nYou understand what better time management requires.\n\nExample:\n\n“I understand prioritization, planning and scheduling.”\n\nStage 3 — Capability\n\nYou can consistently apply what you know.\n\nExample:\n\n“I plan my week, prioritize important tasks and meet deadlines.”\n\nStage 4 — Results\n\nYour improved capability produces measurable outcomes.\n\nExample:\n\n“I have reduced missed deadlines and completed important projects consistently.”\n\nTherefore:\n\nAwareness → Knowledge → Capability → Results\n\nA major purpose of Growth Foundation is to move learners beyond awareness toward capability."
         }
       ]
     },
@@ -55,7 +67,7 @@
         {
           "id": "module-2-block-5",
           "type": "reading",
-          "content": "A fixed mindset tends to treat ability as relatively permanent.\\n\\nIts internal language may sound like:\\n\\n“I am just not good at this.”\\n\\n“I have never been good with numbers.”\\n\\n“I cannot learn technology.”\\n\\n“People like me do not become successful.”\\n\\n“I failed, so I am not capable.”\\n\\n“I am either talented or I am not.”\\n\\nA growth-oriented mindset asks different questions:\\n\\n“What do I need to learn?”\\n\\n“What strategy am I using?”\\n\\n“What can I practise?”\\n\\n“What can I improve?”\\n\\n“Who can teach me?”\\n\\n“What did the failure reveal?”\\n\\n“What should I do differently next time?”\\n\\n“How can I become more capable?”\\n\\nThe difference is important.\\n\\nThe fixed approach focuses heavily on identity and limitation.\\n\\nThe growth approach focuses more heavily on development and possibility."
+          "content": "A fixed mindset tends to treat ability as relatively permanent.\n\nIts internal language may sound like:\n\n“I am just not good at this.”\n\n“I have never been good with numbers.”\n\n“I cannot learn technology.”\n\n“People like me do not become successful.”\n\n“I failed, so I am not capable.”\n\n“I am either talented or I am not.”\n\nA growth-oriented mindset asks different questions:\n\n“What do I need to learn?”\n\n“What strategy am I using?”\n\n“What can I practise?”\n\n“What can I improve?”\n\n“Who can teach me?”\n\n“What did the failure reveal?”\n\n“What should I do differently next time?”\n\n“How can I become more capable?”\n\nThe difference is important.\n\nThe fixed approach focuses heavily on identity and limitation.\n\nThe growth approach focuses more heavily on development and possibility."
         }
       ]
     },
@@ -66,7 +78,7 @@
         {
           "id": "module-2-block-6",
           "type": "reading",
-          "content": "Growth mindset must not become another form of motivational fantasy.\\n\\nYou cannot simply tell yourself:\\n\\n“I can do anything.”\\n\\nSome things require:\\n\\ntime;\\n\\nresources;\\n\\neducation;\\n\\nexperience;\\n\\nopportunity;\\n\\nhealth;\\n\\nrelationships;\\n\\ncapital;\\n\\ntechnology;\\n\\ninstitutional support;\\n\\nfavourable conditions.\\n\\nEffort is important, but effort must be combined with effective strategy.\\n\\nA useful model is:\\n\\nEffort + Strategy + Feedback + Practice + Adaptation = Development\\n\\nIf something is not working, simply trying harder may not solve the problem.\\n\\nYou may need a better method."
+          "content": "Growth mindset must not become another form of motivational fantasy.\n\nYou cannot simply tell yourself:\n\n“I can do anything.”\n\nSome things require:\n\ntime;\n\nresources;\n\neducation;\n\nexperience;\n\nopportunity;\n\nhealth;\n\nrelationships;\n\ncapital;\n\ntechnology;\n\ninstitutional support;\n\nfavourable conditions.\n\nEffort is important, but effort must be combined with effective strategy.\n\nA useful model is:\n\nEffort + Strategy + Feedback + Practice + Adaptation = Development\n\nIf something is not working, simply trying harder may not solve the problem.\n\nYou may need a better method."
         }
       ]
     },
@@ -77,7 +89,7 @@
         {
           "id": "module-2-block-7",
           "type": "reading",
-          "content": "One of the most useful mental shifts is moving from:\\n\\n“I cannot do this.”\\n\\nto:\\n\\n“I cannot do this yet.”\\n\\n“Yet” does not guarantee success.\\n\\nIt creates room for development.\\n\\nCompare:\\n\\n“I am bad at public speaking.”\\n\\nwith:\\n\\n“My current public-speaking ability is below the level I want, so I need deliberate practice.”\\n\\nThe second statement is more useful because it identifies a development problem rather than creating a permanent identity.\\n\\nUse the word “yet” carefully.\\n\\nIt should lead to action.\\n\\nNot:\\n\\n“I cannot do it yet.”\\n\\nand then doing nothing.\\n\\nInstead:\\n\\n“I cannot do it yet, so what must I learn and practise?”"
+          "content": "One of the most useful mental shifts is moving from:\n\n“I cannot do this.”\n\nto:\n\n“I cannot do this yet.”\n\n“Yet” does not guarantee success.\n\nIt creates room for development.\n\nCompare:\n\n“I am bad at public speaking.”\n\nwith:\n\n“My current public-speaking ability is below the level I want, so I need deliberate practice.”\n\nThe second statement is more useful because it identifies a development problem rather than creating a permanent identity.\n\nUse the word “yet” carefully.\n\nIt should lead to action.\n\nNot:\n\n“I cannot do it yet.”\n\nand then doing nothing.\n\nInstead:\n\n“I cannot do it yet, so what must I learn and practise?”"
         }
       ]
     },
@@ -88,7 +100,7 @@
         {
           "id": "module-2-block-8",
           "type": "reading",
-          "content": "One of the most important capabilities in the modern world is learning how to learn.\\n\\nTechnology changes.\\n\\nIndustries change.\\n\\nJobs change.\\n\\nMarkets change.\\n\\nGovernment systems change.\\n\\nCustomer behaviour changes.\\n\\nBusiness models change.\\n\\nTherefore, a person who only knows what they were taught may eventually become obsolete.\\n\\nA person who knows how to learn can continue developing."
+          "content": "One of the most important capabilities in the modern world is learning how to learn.\n\nTechnology changes.\n\nIndustries change.\n\nJobs change.\n\nMarkets change.\n\nGovernment systems change.\n\nCustomer behaviour changes.\n\nBusiness models change.\n\nTherefore, a person who only knows what they were taught may eventually become obsolete.\n\nA person who knows how to learn can continue developing."
         }
       ]
     },
@@ -99,7 +111,7 @@
         {
           "id": "module-2-block-9",
           "type": "reading",
-          "content": "Use the following cycle:\\n\\n1. Identify\\n\\nWhat do I need to learn?\\n\\n2. Understand\\n\\nWhat does the subject mean?\\n\\n3. Practise\\n\\nCan I perform the skill?\\n\\n4. Apply\\n\\nCan I use it in a real situation?\\n\\n5. Receive feedback\\n\\nWhat am I doing correctly or incorrectly?\\n\\n6. Improve\\n\\nWhat should I change?\\n\\n7. Repeat\\n\\nCan I perform it consistently?\\n\\nThis produces:\\n\\nLearn → Practise → Apply → Feedback → Improve → Repeat"
+          "content": "Use the following cycle:\n\n1. Identify\n\nWhat do I need to learn?\n\n2. Understand\n\nWhat does the subject mean?\n\n3. Practise\n\nCan I perform the skill?\n\n4. Apply\n\nCan I use it in a real situation?\n\n5. Receive feedback\n\nWhat am I doing correctly or incorrectly?\n\n6. Improve\n\nWhat should I change?\n\n7. Repeat\n\nCan I perform it consistently?\n\nThis produces:\n\nLearn → Practise → Apply → Feedback → Improve → Repeat"
         }
       ]
     },
@@ -110,7 +122,7 @@
         {
           "id": "module-2-block-10",
           "type": "reading",
-          "content": "A useful development principle is to combine different forms of learning:\\n\\nFormal learning\\n\\nCourses, books, lectures, certifications and structured programmes.\\n\\nSocial learning\\n\\nMentors, coaches, colleagues, peers and communities.\\n\\nExperiential learning\\n\\nProjects, work, experimentation, responsibility and real-world practice.\\n\\nThe exact proportions should not be treated as a scientific law.\\n\\nThe important lesson is:\\n\\nDo not depend on classroom learning alone.\\n\\nIf you want to become good at sales, practise selling.\\n\\nIf you want to become a leader, lead something.\\n\\nIf you want to become a writer, write.\\n\\nIf you want to become a businessperson, build and test.\\n\\nIf you want to become a better communicator, communicate deliberately."
+          "content": "A useful development principle is to combine different forms of learning:\n\nFormal learning\n\nCourses, books, lectures, certifications and structured programmes.\n\nSocial learning\n\nMentors, coaches, colleagues, peers and communities.\n\nExperiential learning\n\nProjects, work, experimentation, responsibility and real-world practice.\n\nThe exact proportions should not be treated as a scientific law.\n\nThe important lesson is:\n\nDo not depend on classroom learning alone.\n\nIf you want to become good at sales, practise selling.\n\nIf you want to become a leader, lead something.\n\nIf you want to become a writer, write.\n\nIf you want to become a businessperson, build and test.\n\nIf you want to become a better communicator, communicate deliberately."
         }
       ]
     },
@@ -121,7 +133,7 @@
         {
           "id": "module-2-block-11",
           "type": "reading",
-          "content": "Fear is a normal human response.\\n\\nFear may arise because of:\\n\\nuncertainty;\\n\\npossible rejection;\\n\\nembarrassment;\\n\\nfinancial loss;\\n\\nfailure;\\n\\ncriticism;\\n\\nunfamiliar environments;\\n\\nresponsibility;\\n\\nsocial judgement.\\n\\nThe objective is not to eliminate every fear.\\n\\nThe objective is to prevent unnecessary fear from controlling your decisions.\\n\\nAsk:\\n\\nWhat exactly am I afraid of?\\n\\nWhat evidence supports this fear?\\n\\nWhat is the realistic worst-case scenario?\\n\\nWhat is the likely scenario?\\n\\nWhat can I control?\\n\\nWhat preparation would reduce the risk?\\n\\nWhat is the smallest responsible action I can take?\\n\\nThis converts vague fear into an actionable problem."
+          "content": "Fear is a normal human response.\n\nFear may arise because of:\n\nuncertainty;\n\npossible rejection;\n\nembarrassment;\n\nfinancial loss;\n\nfailure;\n\ncriticism;\n\nunfamiliar environments;\n\nresponsibility;\n\nsocial judgement.\n\nThe objective is not to eliminate every fear.\n\nThe objective is to prevent unnecessary fear from controlling your decisions.\n\nAsk:\n\nWhat exactly am I afraid of?\n\nWhat evidence supports this fear?\n\nWhat is the realistic worst-case scenario?\n\nWhat is the likely scenario?\n\nWhat can I control?\n\nWhat preparation would reduce the risk?\n\nWhat is the smallest responsible action I can take?\n\nThis converts vague fear into an actionable problem."
         }
       ]
     },
@@ -132,7 +144,7 @@
         {
           "id": "module-2-block-12",
           "type": "reading",
-          "content": "Growth frequently follows this pattern:\\n\\nUncertainty → Fear → Preparation → Action → Experience → Learning → Increased Capability\\n\\nYou do not always become confident before acting.\\n\\nOften, confidence grows because you act, learn and discover that you can handle more than you previously believed.\\n\\nStart with manageable challenges.\\n\\nDo not confuse courage with recklessness.\\n\\nCourage means acting responsibly despite reasonable fear."
+          "content": "Growth frequently follows this pattern:\n\nUncertainty → Fear → Preparation → Action → Experience → Learning → Increased Capability\n\nYou do not always become confident before acting.\n\nOften, confidence grows because you act, learn and discover that you can handle more than you previously believed.\n\nStart with manageable challenges.\n\nDo not confuse courage with recklessness.\n\nCourage means acting responsibly despite reasonable fear."
         }
       ]
     },
@@ -143,7 +155,7 @@
         {
           "id": "module-2-block-13",
           "type": "reading",
-          "content": "Failure is an event.\\n\\nIt should not automatically become an identity.\\n\\nThere is a major difference between:\\n\\n“I failed at this project.”\\n\\nand:\\n\\n“I am a failure.”\\n\\nThe first describes an event.\\n\\nThe second attacks identity.\\n\\nA useful failure analysis asks:\\n\\nWhat happened?\\n\\nDescribe the facts.\\n\\nWhat was the intended result?\\n\\nDefine the target.\\n\\nWhat actually happened?\\n\\nMeasure the result.\\n\\nWhy did the gap occur?\\n\\nIdentify causes.\\n\\nWhat was under my control?\\n\\nIdentify responsibility.\\n\\nWhat was outside my control?\\n\\nIdentify external factors.\\n\\nWhat did I learn?\\n\\nExtract knowledge.\\n\\nWhat will I change?\\n\\nDefine action.\\n\\nWhat will I test next?\\n\\nCreate the next experiment.\\n\\nTherefore:\\n\\nFailure → Analysis → Learning → Adjustment → Better Attempt"
+          "content": "Failure is an event.\n\nIt should not automatically become an identity.\n\nThere is a major difference between:\n\n“I failed at this project.”\n\nand:\n\n“I am a failure.”\n\nThe first describes an event.\n\nThe second attacks identity.\n\nA useful failure analysis asks:\n\nWhat happened?\n\nDescribe the facts.\n\nWhat was the intended result?\n\nDefine the target.\n\nWhat actually happened?\n\nMeasure the result.\n\nWhy did the gap occur?\n\nIdentify causes.\n\nWhat was under my control?\n\nIdentify responsibility.\n\nWhat was outside my control?\n\nIdentify external factors.\n\nWhat did I learn?\n\nExtract knowledge.\n\nWhat will I change?\n\nDefine action.\n\nWhat will I test next?\n\nCreate the next experiment.\n\nTherefore:\n\nFailure → Analysis → Learning → Adjustment → Better Attempt"
         }
       ]
     },
@@ -154,7 +166,7 @@
         {
           "id": "module-2-block-14",
           "type": "reading",
-          "content": "People sometimes say:\\n\\n“Failure is the best teacher.”\\n\\nFailure itself is not necessarily a teacher.\\n\\nReflection turns experience into learning.\\n\\nA person can fail repeatedly without improving.\\n\\nThe difference is whether they examine the experience.\\n\\nTherefore:\\n\\nExperience + Reflection = Learning\\n\\nAnd:\\n\\nLearning + Application = Development"
+          "content": "People sometimes say:\n\n“Failure is the best teacher.”\n\nFailure itself is not necessarily a teacher.\n\nReflection turns experience into learning.\n\nA person can fail repeatedly without improving.\n\nThe difference is whether they examine the experience.\n\nTherefore:\n\nExperience + Reflection = Learning\n\nAnd:\n\nLearning + Application = Development"
         }
       ]
     },
@@ -165,7 +177,7 @@
         {
           "id": "module-2-block-15",
           "type": "reading",
-          "content": "Feedback is information about performance that can help someone improve.\\n\\nFeedback can come from:\\n\\ncustomers;\\n\\nmanagers;\\n\\nteachers;\\n\\nmentors;\\n\\ncolleagues;\\n\\nemployees;\\n\\nfriends;\\n\\ndata;\\n\\nperformance results;\\n\\nmarket response.\\n\\nFeedback can be positive or corrective.\\n\\nA mature learner does not only ask:\\n\\n“Did I do well?”\\n\\nThey ask:\\n\\n“What does the evidence tell me about how I can improve?”"
+          "content": "Feedback is information about performance that can help someone improve.\n\nFeedback can come from:\n\ncustomers;\n\nmanagers;\n\nteachers;\n\nmentors;\n\ncolleagues;\n\nemployees;\n\nfriends;\n\ndata;\n\nperformance results;\n\nmarket response.\n\nFeedback can be positive or corrective.\n\nA mature learner does not only ask:\n\n“Did I do well?”\n\nThey ask:\n\n“What does the evidence tell me about how I can improve?”"
         }
       ]
     },
@@ -176,7 +188,7 @@
         {
           "id": "module-2-block-16",
           "type": "reading",
-          "content": "When receiving feedback:\\n\\n1. Listen.\\n\\nDo not immediately defend yourself.\\n\\n2. Clarify.\\n\\nAsk for specific examples.\\n\\n3. Separate information from emotion.\\n\\nYou may dislike the delivery while still benefiting from the information.\\n\\n4. Evaluate.\\n\\nNot every piece of feedback is correct.\\n\\n5. Act.\\n\\nApply useful feedback.\\n\\n6. Follow up.\\n\\nCheck whether your performance improved.\\n\\nA useful question is:\\n\\n“What is one thing I could do differently that would improve my performance?”"
+          "content": "When receiving feedback:\n\n1. Listen.\n\nDo not immediately defend yourself.\n\n2. Clarify.\n\nAsk for specific examples.\n\n3. Separate information from emotion.\n\nYou may dislike the delivery while still benefiting from the information.\n\n4. Evaluate.\n\nNot every piece of feedback is correct.\n\n5. Act.\n\nApply useful feedback.\n\n6. Follow up.\n\nCheck whether your performance improved.\n\nA useful question is:\n\n“What is one thing I could do differently that would improve my performance?”"
         }
       ]
     },
@@ -187,7 +199,7 @@
         {
           "id": "module-2-block-17",
           "type": "reading",
-          "content": "Effective feedback should be:\\n\\nspecific;\\n\\ntimely;\\n\\nrespectful;\\n\\nevidence-based;\\n\\nfocused on behaviour;\\n\\nactionable.\\n\\nInstead of:\\n\\n“You are lazy.”\\n\\nSay:\\n\\n“The report was submitted two days after the agreed deadline. What prevented completion, and what system can we put in place to prevent this happening again?”\\n\\nThe second approach addresses behaviour and creates room for improvement."
+          "content": "Effective feedback should be:\n\nspecific;\n\ntimely;\n\nrespectful;\n\nevidence-based;\n\nfocused on behaviour;\n\nactionable.\n\nInstead of:\n\n“You are lazy.”\n\nSay:\n\n“The report was submitted two days after the agreed deadline. What prevented completion, and what system can we put in place to prevent this happening again?”\n\nThe second approach addresses behaviour and creates room for improvement."
         }
       ]
     },
@@ -198,7 +210,7 @@
         {
           "id": "module-2-block-18",
           "type": "reading",
-          "content": "Resilience is the capacity to respond constructively to difficulty, recover from setbacks and continue adapting.\\n\\nResilience does not mean pretending that difficulties do not hurt.\\n\\nIt means developing the capacity to respond rather than collapse permanently.\\n\\nResilience can be strengthened through:\\n\\nsupportive relationships;\\n\\nrealistic thinking;\\n\\npreparation;\\n\\nhealthy routines;\\n\\nproblem-solving;\\n\\nlearning from experience;\\n\\nflexibility;\\n\\npurpose;\\n\\nasking for help;\\n\\nmaintaining perspective."
+          "content": "Resilience is the capacity to respond constructively to difficulty, recover from setbacks and continue adapting.\n\nResilience does not mean pretending that difficulties do not hurt.\n\nIt means developing the capacity to respond rather than collapse permanently.\n\nResilience can be strengthened through:\n\nsupportive relationships;\n\nrealistic thinking;\n\npreparation;\n\nhealthy routines;\n\nproblem-solving;\n\nlearning from experience;\n\nflexibility;\n\npurpose;\n\nasking for help;\n\nmaintaining perspective."
         }
       ]
     },
@@ -209,7 +221,7 @@
         {
           "id": "module-2-block-19",
           "type": "reading",
-          "content": "When facing a setback:\\n\\nSTOP\\n\\nDo not make an important decision purely from emotional reaction.\\n\\nASSESS\\n\\nWhat actually happened?\\n\\nACCEPT\\n\\nWhat cannot be changed?\\n\\nIDENTIFY\\n\\nWhat can still be influenced?\\n\\nPLAN\\n\\nWhat are the next possible actions?\\n\\nACT\\n\\nTake the most useful responsible action.\\n\\nREVIEW\\n\\nWhat did the experience teach you?\\n\\nCONTINUE\\n\\nAdapt and move forward."
+          "content": "When facing a setback:\n\nSTOP\n\nDo not make an important decision purely from emotional reaction.\n\nASSESS\n\nWhat actually happened?\n\nACCEPT\n\nWhat cannot be changed?\n\nIDENTIFY\n\nWhat can still be influenced?\n\nPLAN\n\nWhat are the next possible actions?\n\nACT\n\nTake the most useful responsible action.\n\nREVIEW\n\nWhat did the experience teach you?\n\nCONTINUE\n\nAdapt and move forward."
         }
       ]
     },
@@ -220,7 +232,7 @@
         {
           "id": "module-2-block-20",
           "type": "reading",
-          "content": "The world does not remain static.\\n\\nA business may face:\\n\\nnew competitors;\\n\\nchanging customer preferences;\\n\\nnew technology;\\n\\ninflation;\\n\\nregulation;\\n\\nsupply problems;\\n\\nchanging platforms.\\n\\nA professional may face:\\n\\nrestructuring;\\n\\nautomation;\\n\\nnew technology;\\n\\nchanging job requirements;\\n\\nnew leadership;\\n\\neconomic conditions.\\n\\nA government institution may face:\\n\\ndemographic changes;\\n\\nnew public expectations;\\n\\ntechnology;\\n\\npolicy changes;\\n\\nbudget constraints.\\n\\nAdaptability means responding intelligently to changing conditions.\\n\\nIt does not mean abandoning your values every time circumstances change.\\n\\nTherefore:\\n\\nStable principles + Flexible methods = Healthy adaptability\\n\\nKnow what must remain constant.\\n\\nKnow what can change."
+          "content": "The world does not remain static.\n\nA business may face:\n\nnew competitors;\n\nchanging customer preferences;\n\nnew technology;\n\ninflation;\n\nregulation;\n\nsupply problems;\n\nchanging platforms.\n\nA professional may face:\n\nrestructuring;\n\nautomation;\n\nnew technology;\n\nchanging job requirements;\n\nnew leadership;\n\neconomic conditions.\n\nA government institution may face:\n\ndemographic changes;\n\nnew public expectations;\n\ntechnology;\n\npolicy changes;\n\nbudget constraints.\n\nAdaptability means responding intelligently to changing conditions.\n\nIt does not mean abandoning your values every time circumstances change.\n\nTherefore:\n\nStable principles + Flexible methods = Healthy adaptability\n\nKnow what must remain constant.\n\nKnow what can change."
         }
       ]
     },
@@ -231,7 +243,7 @@
         {
           "id": "module-2-block-21",
           "type": "reading",
-          "content": "Whenever circumstances change, ask:\\n\\nWhat changed?\\n\\nWhy did it change?\\n\\nWhat does this change mean?\\n\\nWhat assumptions are no longer valid?\\n\\nWhat remains true?\\n\\nWhat must we stop doing?\\n\\nWhat must we start doing?\\n\\nWhat must we improve?\\n\\nWhat new capability do we need?\\n\\nHow will we measure the response?\\n\\nThis framework can be used in:\\n\\npersonal life;\\n\\ncareers;\\n\\nbusinesses;\\n\\nNGOs;\\n\\nschools;\\n\\nministries;\\n\\ngovernment institutions."
+          "content": "Whenever circumstances change, ask:\n\nWhat changed?\n\nWhy did it change?\n\nWhat does this change mean?\n\nWhat assumptions are no longer valid?\n\nWhat remains true?\n\nWhat must we stop doing?\n\nWhat must we start doing?\n\nWhat must we improve?\n\nWhat new capability do we need?\n\nHow will we measure the response?\n\nThis framework can be used in:\n\npersonal life;\n\ncareers;\n\nbusinesses;\n\nNGOs;\n\nschools;\n\nministries;\n\ngovernment institutions."
         }
       ]
     },
@@ -242,7 +254,7 @@
         {
           "id": "module-2-block-22",
           "type": "reading",
-          "content": "Continuous improvement means deliberately looking for ways to make a process, behaviour, product, service or result better over time.\\n\\nImprovement does not always require dramatic transformation.\\n\\nSometimes a 1% improvement in a critical process repeated consistently can create significant long-term results.\\n\\nUse the cycle:\\n\\nPLAN → DO → CHECK → IMPROVE\\n\\nPLAN\\n\\nWhat are we trying to improve?\\n\\nDO\\n\\nImplement the change.\\n\\nCHECK\\n\\nWhat happened?\\n\\nIMPROVE\\n\\nKeep, modify or replace the approach.\\n\\nThen repeat."
+          "content": "Continuous improvement means deliberately looking for ways to make a process, behaviour, product, service or result better over time.\n\nImprovement does not always require dramatic transformation.\n\nSometimes a 1% improvement in a critical process repeated consistently can create significant long-term results.\n\nUse the cycle:\n\nPLAN → DO → CHECK → IMPROVE\n\nPLAN\n\nWhat are we trying to improve?\n\nDO\n\nImplement the change.\n\nCHECK\n\nWhat happened?\n\nIMPROVE\n\nKeep, modify or replace the approach.\n\nThen repeat."
         }
       ]
     },
@@ -253,7 +265,7 @@
         {
           "id": "module-2-block-23",
           "type": "reading",
-          "content": "Consider a person who improves:\\n\\ncommunication;\\n\\nfinancial discipline;\\n\\ntechnical skills;\\n\\nhealth habits;\\n\\nnetworking;\\n\\nproductivity;\\n\\ndecision-making.\\n\\nEach improvement may appear small.\\n\\nBut together they can significantly increase personal capability.\\n\\nThe same principle applies to organizations.\\n\\nSmall improvements in:\\n\\ncustomer service;\\n\\nresponse time;\\n\\nsales conversion;\\n\\nemployee capability;\\n\\ncost control;\\n\\ndocumentation;\\n\\ntechnology;\\n\\nquality;\\n\\ncan collectively transform an organization."
+          "content": "Consider a person who improves:\n\ncommunication;\n\nfinancial discipline;\n\ntechnical skills;\n\nhealth habits;\n\nnetworking;\n\nproductivity;\n\ndecision-making.\n\nEach improvement may appear small.\n\nBut together they can significantly increase personal capability.\n\nThe same principle applies to organizations.\n\nSmall improvements in:\n\ncustomer service;\n\nresponse time;\n\nsales conversion;\n\nemployee capability;\n\ncost control;\n\ndocumentation;\n\ntechnology;\n\nquality;\n\ncan collectively transform an organization."
         }
       ]
     },
@@ -264,7 +276,7 @@
         {
           "id": "module-2-block-24",
           "type": "reading",
-          "content": "Growth should eventually move beyond the individual.\\n\\nA growth culture exists when people within a group or institution are encouraged to:\\n\\nlearn;\\n\\nexperiment responsibly;\\n\\nshare knowledge;\\n\\nask questions;\\n\\nreceive feedback;\\n\\nsolve problems;\\n\\ntake responsibility;\\n\\nimprove systems;\\n\\nrecognize results;\\n\\nlearn from mistakes.\\n\\nA healthy growth culture does not mean accepting poor performance.\\n\\nIt means combining:\\n\\nHigh Standards + Learning + Accountability + Support"
+          "content": "Growth should eventually move beyond the individual.\n\nA growth culture exists when people within a group or institution are encouraged to:\n\nlearn;\n\nexperiment responsibly;\n\nshare knowledge;\n\nask questions;\n\nreceive feedback;\n\nsolve problems;\n\ntake responsibility;\n\nimprove systems;\n\nrecognize results;\n\nlearn from mistakes.\n\nA healthy growth culture does not mean accepting poor performance.\n\nIt means combining:\n\nHigh Standards + Learning + Accountability + Support"
         }
       ]
     },
@@ -275,7 +287,7 @@
         {
           "id": "module-2-block-25",
           "type": "reading",
-          "content": "A small business owner can begin with simple practices.\\n\\nWeekly improvement meeting\\n\\nAsk:\\n\\nWhat worked?\\n\\nWhat did not work?\\n\\nWhy?\\n\\nWhat did customers tell us?\\n\\nWhat should we improve?\\n\\nWho owns the action?\\n\\nWhen will we review it?\\n\\nEmployee learning\\n\\nEncourage staff to learn one relevant capability regularly.\\n\\nCustomer feedback\\n\\nCreate simple mechanisms for customers to provide feedback.\\n\\nDocumentation\\n\\nWhen a successful process is discovered, document it.\\n\\nRecognition\\n\\nRecognize improvement, initiative and responsible problem solving."
+          "content": "A small business owner can begin with simple practices.\n\nWeekly improvement meeting\n\nAsk:\n\nWhat worked?\n\nWhat did not work?\n\nWhy?\n\nWhat did customers tell us?\n\nWhat should we improve?\n\nWho owns the action?\n\nWhen will we review it?\n\nEmployee learning\n\nEncourage staff to learn one relevant capability regularly.\n\nCustomer feedback\n\nCreate simple mechanisms for customers to provide feedback.\n\nDocumentation\n\nWhen a successful process is discovered, document it.\n\nRecognition\n\nRecognize improvement, initiative and responsible problem solving."
         }
       ]
     },
@@ -286,7 +298,7 @@
         {
           "id": "module-2-block-26",
           "type": "reading",
-          "content": "The same principles can be applied to public institutions.\\n\\nA growth-oriented government department should continually ask:\\n\\nAre citizens receiving the service?\\n\\nHow long does the process take?\\n\\nWhere are delays occurring?\\n\\nWhat resources are being wasted?\\n\\nWhat complaints are recurring?\\n\\nWhat technology can improve service?\\n\\nWhat skills do employees need?\\n\\nWhat evidence should guide policy?\\n\\nHow can transparency and accountability improve?\\n\\nThe objective is not simply to work harder.\\n\\nIt is to improve the system."
+          "content": "The same principles can be applied to public institutions.\n\nA growth-oriented government department should continually ask:\n\nAre citizens receiving the service?\n\nHow long does the process take?\n\nWhere are delays occurring?\n\nWhat resources are being wasted?\n\nWhat complaints are recurring?\n\nWhat technology can improve service?\n\nWhat skills do employees need?\n\nWhat evidence should guide policy?\n\nHow can transparency and accountability improve?\n\nThe objective is not simply to work harder.\n\nIt is to improve the system."
         }
       ]
     },
@@ -297,7 +309,7 @@
         {
           "id": "module-2-block-27",
           "type": "reading",
-          "content": "Every learner should begin developing a personal operating system.\\n\\nUse these seven questions:\\n\\n1. What am I trying to improve?\\n\\n2. Why does it matter?\\n\\n3. What capability do I need?\\n\\n4. What will I learn?\\n\\n5. How will I practise?\\n\\n6. How will I measure improvement?\\n\\n7. What will I change based on the evidence?\\n\\nThis converts growth from an idea into a system."
+          "content": "Every learner should begin developing a personal operating system.\n\nUse these seven questions:\n\n1. What am I trying to improve?\n\n2. Why does it matter?\n\n3. What capability do I need?\n\n4. What will I learn?\n\n5. How will I practise?\n\n6. How will I measure improvement?\n\n7. What will I change based on the evidence?\n\nThis converts growth from an idea into a system."
         }
       ]
     },
@@ -308,7 +320,7 @@
         {
           "id": "module-2-block-28",
           "type": "reading",
-          "content": "Memorize this:\\n\\nAWARENESS\\n\\n↓\\n\\nGOAL\\n\\n↓\\n\\nLEARNING\\n\\n↓\\n\\nPRACTICE\\n\\n↓\\n\\nACTION\\n\\n↓\\n\\nFEEDBACK\\n\\n↓\\n\\nREFLECTION\\n\\n↓\\n\\nADAPTATION\\n\\n↓\\n\\nIMPROVEMENT\\n\\n↓\\n\\nNEW CAPABILITY\\n\\n↓\\n\\nNEW LEVEL OF RESPONSIBILITY\\n\\nGrowth is therefore not a destination.\\n\\nIt is a repeatable process."
+          "content": "Memorize this:\n\nAWARENESS\n\n↓\n\nGOAL\n\n↓\n\nLEARNING\n\n↓\n\nPRACTICE\n\n↓\n\nACTION\n\n↓\n\nFEEDBACK\n\n↓\n\nREFLECTION\n\n↓\n\nADAPTATION\n\n↓\n\nIMPROVEMENT\n\n↓\n\nNEW CAPABILITY\n\n↓\n\nNEW LEVEL OF RESPONSIBILITY\n\nGrowth is therefore not a destination.\n\nIt is a repeatable process."
         }
       ]
     },
@@ -319,10 +331,10 @@
         {
           "id": "module-2-block-29",
           "type": "reflection",
-          "content": "Rate yourself from 1–10.\\n\\nTABLE\\nCapability | Current Score | Desired Score\\nLearning ability |  | \\nDiscipline |  | \\nAdaptability |  | \\nResilience |  | \\nConfidence |  | \\nCommunication |  | \\nProblem solving |  | \\nDecision-making |  | \\nTime management |  | \\nTechnical skills |  | \\nEmotional management |  | \\nFinancial discipline |  | \\n\\nNow select your three largest gaps.\\n\\nDo not attempt to fix everything simultaneously.\\n\\nPrioritize.",
+          "content": "Rate yourself from 1–10.\n\nTABLE\nCapability | Current Score | Desired Score\nLearning ability |  | \nDiscipline |  | \nAdaptability |  | \nResilience |  | \nConfidence |  | \nCommunication |  | \nProblem solving |  | \nDecision-making |  | \nTime management |  | \nTechnical skills |  | \nEmotional management |  | \nFinancial discipline |  | \n\nNow select your three largest gaps.\n\nDo not attempt to fix everything simultaneously.\n\nPrioritize.",
           "metadata": {
             "interactive": true,
-            "sourceSection": 29
+            "sourceSection": "29.0 PRACTICAL TOOL — THE PERSONAL GROWTH SCORECARD"
           }
         }
       ]
@@ -334,10 +346,10 @@
         {
           "id": "module-2-block-30",
           "type": "reflection",
-          "content": "For each development area, score:\\n\\nImportance: 1–5\\n\\nCurrent capability: 1–5\\n\\nUrgency: 1–5\\n\\nThen identify the areas with the greatest combination of:\\n\\nimportance;\\n\\nurgency;\\n\\ndevelopment gap.\\n\\nThese become your immediate priorities.",
+          "content": "For each development area, score:\n\nImportance: 1–5\n\nCurrent capability: 1–5\n\nUrgency: 1–5\n\nThen identify the areas with the greatest combination of:\n\nimportance;\n\nurgency;\n\ndevelopment gap.\n\nThese become your immediate priorities.",
           "metadata": {
             "interactive": true,
-            "sourceSection": 30
+            "sourceSection": "30.0 PERSONAL DEVELOPMENT PRIORITY MATRIX"
           }
         }
       ]
@@ -349,10 +361,10 @@
         {
           "id": "module-2-block-31",
           "type": "reflection",
-          "content": "The learner must choose one capability to improve.\\n\\nExamples:\\n\\ncommunication;\\n\\npublic speaking;\\n\\ndigital literacy;\\n\\nfinancial discipline;\\n\\nsales;\\n\\ntime management;\\n\\nwriting;\\n\\nleadership;\\n\\ntechnical skill;\\n\\nemotional regulation;\\n\\nphysical discipline.\\n\\nCreate:\\n\\nTarget\\n\\nWhat exactly will improve?\\n\\nBaseline\\n\\nWhere am I today?\\n\\nLearning plan\\n\\nWhat will I study?\\n\\nPractice plan\\n\\nHow frequently will I practise?\\n\\nApplication\\n\\nWhere will I use the skill?\\n\\nFeedback\\n\\nWho or what will evaluate me?\\n\\nMeasurement\\n\\nWhat evidence will show improvement?\\n\\nReview\\n\\nWhat will I change after 30 days?",
+          "content": "The learner must choose one capability to improve.\n\nExamples:\n\ncommunication;\n\npublic speaking;\n\ndigital literacy;\n\nfinancial discipline;\n\nsales;\n\ntime management;\n\nwriting;\n\nleadership;\n\ntechnical skill;\n\nemotional regulation;\n\nphysical discipline.\n\nCreate:\n\nTarget\n\nWhat exactly will improve?\n\nBaseline\n\nWhere am I today?\n\nLearning plan\n\nWhat will I study?\n\nPractice plan\n\nHow frequently will I practise?\n\nApplication\n\nWhere will I use the skill?\n\nFeedback\n\nWho or what will evaluate me?\n\nMeasurement\n\nWhat evidence will show improvement?\n\nReview\n\nWhat will I change after 30 days?",
           "metadata": {
             "interactive": true,
-            "sourceSection": 31
+            "sourceSection": "31.0 THE 30-DAY GROWTH CHALLENGE"
           }
         }
       ]
@@ -364,10 +376,10 @@
         {
           "id": "module-2-block-32",
           "type": "reflection",
-          "content": "PROJECT TITLE:\\n\\nMY 30-DAY GROWTH MINDSET TRANSFORMATION PROJECT\\n\\nThis project is designed to move the learner from understanding growth to demonstrating growth.\\n\\nThe learner must select one meaningful development area.\\n\\nPART A — IDENTIFY THE GAP\\n\\nComplete:\\n\\nThe capability I want to develop is:\\n\\nWhy this capability matters:\\n\\nMy current level is:\\n\\nEvidence of my current level:\\n\\nThe result I want:\\n\\nPART B — IDENTIFY THE MINDSET BARRIER\\n\\nAnswer:\\n\\nWhat have I previously believed about this capability?\\n\\nHave I ever told myself “I cannot do this”?\\n\\nWhat fear is associated with developing this capability?\\n\\nWhat past experience may have influenced this belief?\\n\\nIs the belief completely accurate?\\n\\nWhat evidence challenges it?\\n\\nWhat more constructive and realistic belief can I adopt?\\n\\nPART C — BUILD THE LEARNING PLAN\\n\\nIdentify:\\n\\nKnowledge required\\n\\nWhat do I need to understand?\\n\\nSkill required\\n\\nWhat must I learn to do?\\n\\nResources\\n\\nWhat books, courses, people, videos, tools or other resources will I use?\\n\\nPractice\\n\\nHow will I practise?\\n\\nApplication\\n\\nWhere will I apply the skill in real life?\\n\\nPART D — 30-DAY EXECUTION PLAN\\n\\nCreate a weekly plan.\\n\\nWEEK 1 — AWARENESS & LEARNING\\n\\nLearn the fundamentals.\\n\\nRecord:\\n\\nwhat you learned;\\n\\nwhat surprised you;\\n\\nwhat you still do not understand.\\n\\nWEEK 2 — PRACTICE\\n\\nBegin deliberate practice.\\n\\nRecord:\\n\\nactivities completed;\\n\\nmistakes;\\n\\ndifficulties;\\n\\nimprovements.\\n\\nWEEK 3 — APPLICATION\\n\\nUse the capability in a real situation.\\n\\nRecord:\\n\\nwhat you attempted;\\n\\nresult;\\n\\nfeedback received;\\n\\nlessons learned.\\n\\nWEEK 4 — IMPROVEMENT\\n\\nModify your approach.\\n\\nRecord:\\n\\nwhat changed;\\n\\nwhat improved;\\n\\nwhat remains weak;\\n\\nnext development step.\\n\\nPART E — FAILURE & FEEDBACK LOG\\n\\nDuring the 30 days, record at least three learning experiences.\\n\\nTABLE\\nDate | Situation | Result | What I learned | Feedback | What I will change\\n\\nThe objective is not to manufacture failure.\\n\\nThe objective is to demonstrate the ability to learn from experience.\\n\\nPART F — FINAL REFLECTION\\n\\nAt the end of 30 days, answer:\\n\\nWhat was my starting point?\\n\\nWhat did I learn?\\n\\nWhat did I practise?\\n\\nWhat did I apply?\\n\\nWhat failed?\\n\\nWhat feedback did I receive?\\n\\nWhat did I change?\\n\\nWhat improved?\\n\\nWhat evidence demonstrates improvement?\\n\\nWhat still needs development?\\n\\nWhat will I do during the next 30 days?",
+          "content": "PROJECT TITLE:\n\nMY 30-DAY GROWTH MINDSET TRANSFORMATION PROJECT\n\nThis project is designed to move the learner from understanding growth to demonstrating growth.\n\nThe learner must select one meaningful development area.\n\nPART A — IDENTIFY THE GAP\n\nComplete:\n\nThe capability I want to develop is:\n\nWhy this capability matters:\n\nMy current level is:\n\nEvidence of my current level:\n\nThe result I want:\n\nPART B — IDENTIFY THE MINDSET BARRIER\n\nAnswer:\n\nWhat have I previously believed about this capability?\n\nHave I ever told myself “I cannot do this”?\n\nWhat fear is associated with developing this capability?\n\nWhat past experience may have influenced this belief?\n\nIs the belief completely accurate?\n\nWhat evidence challenges it?\n\nWhat more constructive and realistic belief can I adopt?\n\nPART C — BUILD THE LEARNING PLAN\n\nIdentify:\n\nKnowledge required\n\nWhat do I need to understand?\n\nSkill required\n\nWhat must I learn to do?\n\nResources\n\nWhat books, courses, people, videos, tools or other resources will I use?\n\nPractice\n\nHow will I practise?\n\nApplication\n\nWhere will I apply the skill in real life?\n\nPART D — 30-DAY EXECUTION PLAN\n\nCreate a weekly plan.\n\nWEEK 1 — AWARENESS & LEARNING\n\nLearn the fundamentals.\n\nRecord:\n\nwhat you learned;\n\nwhat surprised you;\n\nwhat you still do not understand.\n\nWEEK 2 — PRACTICE\n\nBegin deliberate practice.\n\nRecord:\n\nactivities completed;\n\nmistakes;\n\ndifficulties;\n\nimprovements.\n\nWEEK 3 — APPLICATION\n\nUse the capability in a real situation.\n\nRecord:\n\nwhat you attempted;\n\nresult;\n\nfeedback received;\n\nlessons learned.\n\nWEEK 4 — IMPROVEMENT\n\nModify your approach.\n\nRecord:\n\nwhat changed;\n\nwhat improved;\n\nwhat remains weak;\n\nnext development step.\n\nPART E — FAILURE & FEEDBACK LOG\n\nDuring the 30 days, record at least three learning experiences.\n\nTABLE\nDate | Situation | Result | What I learned | Feedback | What I will change\n |  |  |  |  | \n |  |  |  |  | \n |  |  |  |  | \n\nThe objective is not to manufacture failure.\n\nThe objective is to demonstrate the ability to learn from experience.\n\nPART F — FINAL REFLECTION\n\nAt the end of 30 days, answer:\n\nWhat was my starting point?\n\nWhat did I learn?\n\nWhat did I practise?\n\nWhat did I apply?\n\nWhat failed?\n\nWhat feedback did I receive?\n\nWhat did I change?\n\nWhat improved?\n\nWhat evidence demonstrates improvement?\n\nWhat still needs development?\n\nWhat will I do during the next 30 days?",
           "metadata": {
             "interactive": true,
-            "sourceSection": 32
+            "sourceSection": "32.0 STUDENT PROJECT"
           }
         }
       ]
@@ -379,10 +391,10 @@
         {
           "id": "module-2-block-33",
           "type": "reflection",
-          "content": "The learner should submit evidence appropriate to the selected capability.\\n\\nExamples:\\n\\nCommunication\\n\\nBefore-and-after writing samples.\\n\\nPublic speaking\\n\\nRecorded presentation plus evaluation.\\n\\nDigital skills\\n\\nCompleted digital project.\\n\\nFinancial discipline\\n\\nPersonal budget and 30-day tracking record.\\n\\nSales\\n\\nProspecting and sales activity record.\\n\\nBusiness\\n\\nCustomer interviews, offer test or sales evidence.\\n\\nCareer\\n\\nImproved CV, applications and interview practice.\\n\\nLeadership\\n\\nTeam/project activity and feedback.\\n\\nProductivity\\n\\n30-day task/goal tracking.\\n\\nThe project must demonstrate:\\n\\nAction + Evidence + Reflection + Improvement",
+          "content": "The learner should submit evidence appropriate to the selected capability.\n\nExamples:\n\nCommunication\n\nBefore-and-after writing samples.\n\nPublic speaking\n\nRecorded presentation plus evaluation.\n\nDigital skills\n\nCompleted digital project.\n\nFinancial discipline\n\nPersonal budget and 30-day tracking record.\n\nSales\n\nProspecting and sales activity record.\n\nBusiness\n\nCustomer interviews, offer test or sales evidence.\n\nCareer\n\nImproved CV, applications and interview practice.\n\nLeadership\n\nTeam/project activity and feedback.\n\nProductivity\n\n30-day task/goal tracking.\n\nThe project must demonstrate:\n\nAction + Evidence + Reflection + Improvement",
           "metadata": {
             "interactive": true,
-            "sourceSection": 33
+            "sourceSection": "33.0 PROJECT EVIDENCE"
           }
         }
       ]
@@ -394,10 +406,10 @@
         {
           "id": "module-2-block-34",
           "type": "reflection",
-          "content": "Total: 100 marks\\n\\nTABLE\\nAssessment Area | Marks\\nUnderstanding of growth principles | 10\\nIdentification of development gap | 10\\nMindset analysis | 10\\nLearning plan | 15\\nPractical execution | 20\\nFeedback and failure analysis | 10\\nEvidence of improvement | 15\\nReflection | 5\\nFuture development plan | 5\\nTOTAL | 100",
+          "content": "Total: 100 marks\n\nTABLE\nAssessment Area | Marks\nUnderstanding of growth principles | 10\nIdentification of development gap | 10\nMindset analysis | 10\nLearning plan | 15\nPractical execution | 20\nFeedback and failure analysis | 10\nEvidence of improvement | 15\nReflection | 5\nFuture development plan | 5\nTOTAL | 100",
           "metadata": {
             "interactive": true,
-            "sourceSection": 34
+            "sourceSection": "34.0 PROJECT ASSESSMENT"
           }
         }
       ]
@@ -409,10 +421,10 @@
         {
           "id": "module-2-block-35",
           "type": "reflection",
-          "content": "Before completing this module, the learner should be able to answer “yes” to the following:\\n\\nI understand that:\\n\\n☐ My current ability can be developed.\\n\\n☐ Growth requires action, not motivation alone.\\n\\n☐ Effort must be combined with strategy.\\n\\n☐ Learning requires practice and application.\\n\\n☐ Failure can provide useful information when properly analysed.\\n\\n☐ Feedback can accelerate improvement.\\n\\n☐ Resilience can be developed.\\n\\n☐ Adaptability is essential in changing environments.\\n\\n☐ Continuous improvement applies to both individuals and organizations.\\n\\n☐ A growth culture requires learning and accountability.",
+          "content": "Before completing this module, the learner should be able to answer “yes” to the following:\n\nI understand that:\n\n☐ My current ability can be developed.\n\n☐ Growth requires action, not motivation alone.\n\n☐ Effort must be combined with strategy.\n\n☐ Learning requires practice and application.\n\n☐ Failure can provide useful information when properly analysed.\n\n☐ Feedback can accelerate improvement.\n\n☐ Resilience can be developed.\n\n☐ Adaptability is essential in changing environments.\n\n☐ Continuous improvement applies to both individuals and organizations.\n\n☐ A growth culture requires learning and accountability.",
           "metadata": {
             "interactive": true,
-            "sourceSection": 35
+            "sourceSection": "35.0 MASTER COMPETENCY CHECK"
           }
         }
       ]
@@ -424,7 +436,7 @@
         {
           "id": "module-2-block-36",
           "type": "reading",
-          "content": "The principles in this module can be applied at four levels.\\n\\nPERSONAL\\n\\nImprove your:\\n\\nhabits;\\n\\ndiscipline;\\n\\nemotional management;\\n\\nhealth routines;\\n\\nlearning;\\n\\nrelationships;\\n\\nfinancial behaviour.\\n\\nCAREER\\n\\nImprove your:\\n\\nskills;\\n\\nemployability;\\n\\ncommunication;\\n\\nproductivity;\\n\\nprofessional reputation;\\n\\nleadership capability.\\n\\nBUSINESS\\n\\nImprove your:\\n\\nproduct;\\n\\nservice;\\n\\ncustomer experience;\\n\\nsales;\\n\\nmarketing;\\n\\noperations;\\n\\nemployees;\\n\\nsystems.\\n\\nGOVERNMENT / INSTITUTIONS\\n\\nImprove:\\n\\nservice delivery;\\n\\nprocesses;\\n\\nemployee capability;\\n\\npolicy implementation;\\n\\nresource utilization;\\n\\ncitizen experience;\\n\\naccountability;\\n\\ninstitutional performance.\\n\\nThe same principles apply.\\n\\nThe scale changes."
+          "content": "The principles in this module can be applied at four levels.\n\nPERSONAL\n\nImprove your:\n\nhabits;\n\ndiscipline;\n\nemotional management;\n\nhealth routines;\n\nlearning;\n\nrelationships;\n\nfinancial behaviour.\n\nCAREER\n\nImprove your:\n\nskills;\n\nemployability;\n\ncommunication;\n\nproductivity;\n\nprofessional reputation;\n\nleadership capability.\n\nBUSINESS\n\nImprove your:\n\nproduct;\n\nservice;\n\ncustomer experience;\n\nsales;\n\nmarketing;\n\noperations;\n\nemployees;\n\nsystems.\n\nGOVERNMENT / INSTITUTIONS\n\nImprove:\n\nservice delivery;\n\nprocesses;\n\nemployee capability;\n\npolicy implementation;\n\nresource utilization;\n\ncitizen experience;\n\naccountability;\n\ninstitutional performance.\n\nThe same principles apply.\n\nThe scale changes."
         }
       ]
     },
@@ -435,7 +447,7 @@
         {
           "id": "module-2-block-37",
           "type": "reading",
-          "content": "At School of Growth Global, we do not teach growth as empty motivation.\\n\\nWe teach people to develop the capacity to:\\n\\nUnderstand → Learn → Apply → Solve → Improve → Create Value → Produce Results\\n\\nThis is why every learner is expected to move beyond the classroom.\\n\\nKnowledge must eventually become capability.\\n\\nCapability must eventually become action.\\n\\nAction must eventually produce measurable results."
+          "content": "At School of Growth Global, we do not teach growth as empty motivation.\n\nWe teach people to develop the capacity to:\n\nUnderstand → Learn → Apply → Solve → Improve → Create Value → Produce Results\n\nThis is why every learner is expected to move beyond the classroom.\n\nKnowledge must eventually become capability.\n\nCapability must eventually become action.\n\nAction must eventually produce measurable results."
         }
       ]
     },
@@ -446,7 +458,7 @@
         {
           "id": "module-2-block-38",
           "type": "reading",
-          "content": "Your current level is a starting point, not necessarily your destination.\\n\\nYou do not need to know everything before you begin.\\n\\nYou do not need to be perfect before you act.\\n\\nYou do not need to have unlimited resources before you start developing.\\n\\nBegin with what you have.\\n\\nLearn what you do not know.\\n\\nPractise what you have learned.\\n\\nAsk for feedback.\\n\\nStudy your mistakes.\\n\\nChange your strategy when necessary.\\n\\nBuild resilience.\\n\\nRemain adaptable.\\n\\nKeep improving.\\n\\nBut remember:\\n\\nGrowth is not the belief that everything is possible simply because you want it.\\n\\nGrowth is the disciplined commitment to becoming more capable of dealing with reality.\\n\\nThe question is not:\\n\\n“Can I become anything I want?”\\n\\nThe better question is:\\n\\n“What can I become if I deliberately develop the knowledge, skills, character, relationships, systems and strategies required to create meaningful value?”\\n\\nThat is a more powerful question.\\n\\nBecause growth is not about becoming someone else.\\n\\nIt is about developing the capacity to become more capable of fulfilling your responsibility, creating value and producing meaningful results.\\n\\nYour responsibility is to grow.\\n\\nYour environment may change.\\n\\nYour circumstances may change.\\n\\nYour opportunities may change.\\n\\nYour strategy may change.\\n\\nBut your commitment to learning and development can remain.\\n\\nREMEMBER:\\n\\nAwareness without action produces little change.\\n\\nKnowledge without application produces limited capability.\\n\\nFailure without reflection produces repeated mistakes.\\n\\nFeedback without humility produces little improvement.\\n\\nEffort without strategy produces unnecessary frustration.\\n\\nGrowth requires learning, action, reflection and adaptation.\\n\\nMODULE 2 COMPLETION STATEMENT\\n\\nI understand that growth is a process of developing greater capacity.\\n\\nI accept responsibility for my development.\\n\\nI will remain willing to learn.\\n\\nI will practise what I learn.\\n\\nI will seek useful feedback.\\n\\nI will learn from setbacks.\\n\\nI will adapt when circumstances change.\\n\\nI will continually improve my capabilities.\\n\\nI will measure my progress through evidence and results.\\n\\nI am not finished developing.\\n\\nI am responsible for my growth.\\n\\nSCHOOL OF GROWTH GLOBAL\\n\\nLeadership. Strategy. Transformation.\\n\\nGrowth Foundation\\n\\nModule 2 — Growth Mindset\\n\\nAwareness → Capability"
+          "content": "Your current level is a starting point, not necessarily your destination.\n\nYou do not need to know everything before you begin.\n\nYou do not need to be perfect before you act.\n\nYou do not need to have unlimited resources before you start developing.\n\nBegin with what you have.\n\nLearn what you do not know.\n\nPractise what you have learned.\n\nAsk for feedback.\n\nStudy your mistakes.\n\nChange your strategy when necessary.\n\nBuild resilience.\n\nRemain adaptable.\n\nKeep improving.\n\nBut remember:\n\nGrowth is not the belief that everything is possible simply because you want it.\n\nGrowth is the disciplined commitment to becoming more capable of dealing with reality.\n\nThe question is not:\n\n“Can I become anything I want?”\n\nThe better question is:\n\n“What can I become if I deliberately develop the knowledge, skills, character, relationships, systems and strategies required to create meaningful value?”\n\nThat is a more powerful question.\n\nBecause growth is not about becoming someone else.\n\nIt is about developing the capacity to become more capable of fulfilling your responsibility, creating value and producing meaningful results.\n\nYour responsibility is to grow.\n\nYour environment may change.\n\nYour circumstances may change.\n\nYour opportunities may change.\n\nYour strategy may change.\n\nBut your commitment to learning and development can remain.\n\nREMEMBER:\n\nAwareness without action produces little change.\n\nKnowledge without application produces limited capability.\n\nFailure without reflection produces repeated mistakes.\n\nFeedback without humility produces little improvement.\n\nEffort without strategy produces unnecessary frustration.\n\nGrowth requires learning, action, reflection and adaptation.\n\nMODULE 2 COMPLETION STATEMENT\n\nI understand that growth is a process of developing greater capacity.\n\nI accept responsibility for my development.\n\nI will remain willing to learn.\n\nI will practise what I learn.\n\nI will seek useful feedback.\n\nI will learn from setbacks.\n\nI will adapt when circumstances change.\n\nI will continually improve my capabilities.\n\nI will measure my progress through evidence and results.\n\nI am not finished developing.\n\nI am responsible for my growth.\n\nSCHOOL OF GROWTH GLOBAL\n\nLeadership. Strategy. Transformation.\n\nGrowth Foundation\n\nModule 2 — Growth Mindset\n\nAwareness → Capability"
         }
       ]
     }

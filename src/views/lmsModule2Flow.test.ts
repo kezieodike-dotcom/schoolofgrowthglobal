@@ -6,6 +6,7 @@ const module = JSON.parse(
 );
 if (!module || !module.title.includes('Growth Mindset')) throw new Error('Module 2 was not imported.');
 if (module.coreQuestion !== 'How do I think, learn, adapt and improve?') throw new Error('Module 2 core question is missing.');
+if (!module.sourceMetadata?.includes('Institutional Philosophy: Leadership. Strategy. Transformation.')) throw new Error('Module 2 source metadata is missing.');
 if (module.lessons.length < 38) throw new Error('Module 2 lessons are incomplete.');
 if (!module.lessons.some((lesson: { title: string }) => lesson.title.includes('STUDENT PROJECT'))) throw new Error('Student project lesson is missing.');
 if (!module.lessons.some((lesson: { title: string }) => lesson.title.includes('PROJECT ASSESSMENT'))) throw new Error('Project assessment lesson is missing.');
