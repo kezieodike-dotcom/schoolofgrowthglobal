@@ -14,25 +14,23 @@ export function getLmsCourse(id: string): LmsCourse | null {
     const raw = fs.readFileSync(filePath, 'utf8');
     const course = JSON.parse(raw.replace(/^\uFEFF/, '')) as LmsCourse;
     if (id === 'growth-foundation') {
-      const module1Path = path.join(lmsDir, 'growth-foundation-module-1.json');
-      try {
-        const module1 = JSON.parse(fs.readFileSync(module1Path, 'utf8').replace(/^\uFEFF/, '')) as LmsCourse['modules'][number];
-        const module1Index = course.modules.findIndex((module) => module.id === module1.id);
-        if (module1Index >= 0) course.modules[module1Index] = module1;
-        else course.modules.unshift(module1);
-      } catch {
-        // The bundled course remains available if the uploaded source is absent.
-      }
-
-      const module2Path = path.join(lmsDir, 'growth-foundation-module-2.json');
-      try {
-        const module2 = JSON.parse(fs.readFileSync(module2Path, 'utf8').replace(/^\uFEFF/, '')) as LmsCourse['modules'][number];
-        if (!course.modules.some((module) => module.id === module2.id)) {
-          course.modules.push(module2);
+      const mergeUploadedModule = (filename: string, insertFirst = false) => {
+        try {
+          const modulePath = path.join(lmsDir, filename);
+          const uploadedModule = JSON.parse(fs.readFileSync(modulePath, 'utf8').replace(/^\uFEFF/, '')) as LmsCourse['modules'][number];
+          const moduleIndex = course.modules.findIndex((module) => module.id === uploadedModule.id);
+          if (moduleIndex >= 0) course.modules[moduleIndex] = uploadedModule;
+          else if (insertFirst) course.modules.unshift(uploadedModule);
+          else course.modules.push(uploadedModule);
+        } catch {
+          // The bundled course remains available if an optional uploaded module is absent.
         }
-      } catch {
-        // Module 1 remains available if an optional later module is absent.
-      }
+      };
+
+      mergeUploadedModule('growth-foundation-module-1.json', true);
+      mergeUploadedModule('growth-foundation-module-2.json');
+      mergeUploadedModule('growth-foundation-module-3.json');
+      mergeUploadedModule('growth-foundation-module-4.json');
     }
     return course;
   } catch {

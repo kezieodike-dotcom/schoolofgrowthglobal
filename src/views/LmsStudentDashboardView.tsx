@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import { useLmsCourse, useLmsProgress } from '../lib/useLms';
 import { useEnrollment } from '../lib/useEnrollment';
-import { BookOpen, ChevronRight, CheckCircle2, Clock, Award, ArrowRight } from 'lucide-react';
+import { BookOpen, ChevronDown, ChevronRight, CheckCircle2, Clock, Award, ArrowRight } from 'lucide-react';
 
 export const LmsStudentDashboardView: React.FC = () => {
   const courseId = 'growth-foundation';
+  const [openModuleId, setOpenModuleId] = useState<string | null>(null);
   const enrollment = useEnrollment();
   const { course, loading } = useLmsCourse(courseId);
 
@@ -109,38 +110,56 @@ export const LmsStudentDashboardView: React.FC = () => {
         <div className="space-y-6">
           {modules.map((courseModule, moduleIndex) => (
             <section key={courseModule.id} className="bg-white rounded-2xl border border-slate-200 overflow-hidden">
-              <div className="bg-slate-900 px-6 py-4">
-                <p className="text-amber-400 text-xs font-semibold uppercase tracking-wider">Module {moduleIndex + 1}</p>
-                <h2 className="text-white font-bold text-base mt-1">{courseModule.title}</h2>
-                {courseModule.coreQuestion && (
-                  <p className="text-slate-300 text-sm mt-0.5">Core Question: <em>{courseModule.coreQuestion}</em></p>
-                )}
-                {courseModule.transformation && (
-                  <p className="text-slate-400 text-xs mt-2 font-mono">{courseModule.transformation}</p>
-                )}
-              </div>
-              <div className="divide-y divide-slate-100">
-                {courseModule.lessons.map((lesson) => {
-                  const done = isLessonComplete(lesson.id);
-                  return (
-                    <Link
-                      key={lesson.id}
-                      to={`/lms/${courseId}/${courseModule.id}/${lesson.id}`}
-                      className="flex items-center gap-4 px-6 py-4 hover:bg-amber-50 transition-colors group"
-                    >
-                      <span className="shrink-0">
-                        {done
-                          ? <CheckCircle2 size={20} className="text-green-500" />
-                          : <Circle size={20} className="text-slate-200 group-hover:text-amber-300 transition-colors" />
-                        }
-                      </span>
-                      <span className="flex-1 text-slate-700 group-hover:text-amber-700 font-medium text-sm">{lesson.title}</span>
-                      {done && <span className="text-xs text-green-600 font-semibold bg-green-50 px-2 py-0.5 rounded-full">Done</span>}
-                      <ChevronRight size={16} className="text-slate-300 group-hover:text-amber-400 transition-colors" />
-                    </Link>
-                  );
-                })}
-              </div>
+              <button
+                type="button"
+                onClick={() => setOpenModuleId((current) => current === courseModule.id ? null : courseModule.id)}
+                aria-expanded={openModuleId === courseModule.id}
+                className="flex w-full items-center justify-between gap-4 bg-slate-900 px-6 py-5 text-left transition-colors hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-amber-400"
+              >
+                <span>
+                  <span className="block text-amber-400 text-xs font-semibold uppercase tracking-wider">Module {moduleIndex + 1}</span>
+                  <span className="mt-1 block text-white font-bold text-base">{courseModule.title}</span>
+                </span>
+                <ChevronDown
+                  size={20}
+                  className={`shrink-0 text-amber-400 transition-transform ${openModuleId === courseModule.id ? 'rotate-180' : ''}`}
+                />
+              </button>
+
+              {openModuleId === courseModule.id && (
+                <div>
+                  <div className="border-b border-slate-800 bg-slate-900 px-6 pb-4">
+                    {courseModule.coreQuestion && (
+                      <p className="text-slate-300 text-sm">Core Question: <em>{courseModule.coreQuestion}</em></p>
+                    )}
+                    {courseModule.transformation && (
+                      <p className="text-slate-400 text-xs mt-2 font-mono">{courseModule.transformation}</p>
+                    )}
+                  </div>
+                  <div className="divide-y divide-slate-100">
+                    {courseModule.lessons.map((lesson) => {
+                      const done = isLessonComplete(lesson.id);
+                      return (
+                        <Link
+                          key={lesson.id}
+                          to={`/lms/${courseId}/${courseModule.id}/${lesson.id}`}
+                          className="flex items-center gap-4 px-6 py-4 hover:bg-amber-50 transition-colors group"
+                        >
+                          <span className="shrink-0">
+                            {done
+                              ? <CheckCircle2 size={20} className="text-green-500" />
+                              : <Circle size={20} className="text-slate-200 group-hover:text-amber-300 transition-colors" />
+                            }
+                          </span>
+                          <span className="flex-1 text-slate-700 group-hover:text-amber-700 font-medium text-sm">{lesson.title}</span>
+                          {done && <span className="text-xs text-green-600 font-semibold bg-green-50 px-2 py-0.5 rounded-full">Done</span>}
+                          <ChevronRight size={16} className="text-slate-300 group-hover:text-amber-400 transition-colors" />
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
             </section>
           ))}
         </div>
