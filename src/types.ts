@@ -108,6 +108,9 @@ export interface BlogPost {
   date: string;
   image: string;
   featured?: boolean;
+  gallery?: string[];
+  externalUrl?: string;
+  sponsored?: boolean;
 }
 
 export interface Course {

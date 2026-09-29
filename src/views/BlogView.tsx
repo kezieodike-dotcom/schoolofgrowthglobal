@@ -6,7 +6,7 @@ import { useContentCollection } from '../lib/useContent';
 import type { BlogPost } from '../types';
 import { Newspaper, Clock, ArrowLeft, ArrowRight, Tag } from 'lucide-react';
 
-const CATEGORIES = ['All', 'Leadership', 'Strategy', 'Finance', 'Technology', 'Wealth Creation', 'Personal Growth'];
+const CATEGORIES = ['All', 'Leadership', 'Strategy', 'Finance', 'Technology', 'Wealth Creation', 'Personal Growth', 'Business Spotlight'];
 
 // ── Article reader ────────────────────────────────────────────────────────
 const Article: React.FC<{ slug: string; posts: BlogPost[] }> = ({ slug, posts }) => {
@@ -34,6 +34,11 @@ const Article: React.FC<{ slug: string; posts: BlogPost[] }> = ({ slug, posts })
         <span className="text-[10px] font-mono px-2.5 py-1 rounded bg-amber-50 text-amber-600 border border-amber-300">
           {post.category}
         </span>
+        {post.sponsored && (
+          <span className="ml-2 text-[10px] font-mono px-2.5 py-1 rounded bg-slate-900 text-amber-300">
+            FEATURED BUSINESS
+          </span>
+        )}
         <h1 className="mt-4 text-3xl sm:text-4xl font-serif font-bold text-slate-900 leading-tight">{post.title}</h1>
 
         <div className="flex items-center gap-3 mt-5 text-xs text-slate-500 font-mono">
@@ -44,29 +49,63 @@ const Article: React.FC<{ slug: string; posts: BlogPost[] }> = ({ slug, posts })
           <span className="flex items-center gap-1"><Clock className="w-3.5 h-3.5" /> {post.readTime}</span>
         </div>
 
-        <img src={post.image} alt={post.title} className="w-full h-72 object-cover rounded-2xl border border-slate-200 mt-8" />
+        <div className={`mt-8 grid gap-3 ${post.gallery && post.gallery.length > 1 ? 'grid-cols-2' : 'grid-cols-1'}`}>
+          {(post.gallery ?? [post.image]).map((image, index) => (
+            <img
+              key={image}
+              src={image}
+              alt={`${post.title} product ${index + 1}`}
+              className={`w-full object-cover rounded-2xl border border-slate-200 ${index === 0 && post.gallery && post.gallery.length > 2 ? 'col-span-2 h-80' : 'h-56'}`}
+            />
+          ))}
+        </div>
 
         <div className="prose mt-8 space-y-5 text-slate-600 text-sm leading-relaxed">
           <p className="text-base text-slate-700">{post.excerpt}</p>
-          <p>
-            At School of Growth Global, our faculty translate decades of frontline executive experience into practical
-            frameworks you can apply immediately. This briefing distills the core principles our leaders use when the
-            stakes are highest.
-          </p>
-          <p>
-            The most effective leaders treat this not as a one-off decision but as a repeatable system - one that
-            compounds clarity, protects the downside, and keeps the organization aligned as conditions change. Below,
-            we outline the mental models, sequencing, and guardrails that separate durable outcomes from reactive ones.
-          </p>
-          <blockquote className="border-l-2 border-amber-500 pl-4 italic text-slate-600">
-            "Strategy is not a document. It is the discipline of choosing what not to do, then executing the rest with
-            conviction." - {post.author}
-          </blockquote>
-          <p>
-            Members of the institution can explore the full framework, worksheets, and a guided Growth AI walkthrough
-            inside the Student Portal.
-          </p>
+          {post.sponsored ? (
+            <p>
+              Explore the Mimi Collections product range through the business's TikTok profile using the link below.
+            </p>
+          ) : (
+            <>
+              <p>
+                At School of Growth Global, our faculty translate decades of frontline executive experience into practical
+                frameworks you can apply immediately. This briefing distills the core principles our leaders use when the
+                stakes are highest.
+              </p>
+              <p>
+                The most effective leaders treat this not as a one-off decision but as a repeatable system - one that
+                compounds clarity, protects the downside, and keeps the organization aligned as conditions change. Below,
+                we outline the mental models, sequencing, and guardrails that separate durable outcomes from reactive ones.
+              </p>
+              <blockquote className="border-l-2 border-amber-500 pl-4 italic text-slate-600">
+                "Strategy is not a document. It is the discipline of choosing what not to do, then executing the rest with
+                conviction." - {post.author}
+              </blockquote>
+              <p>
+                Members of the institution can explore the full framework, worksheets, and a guided Growth AI walkthrough
+                inside the Student Portal.
+              </p>
+            </>
+          )}
         </div>
+
+        {post.externalUrl && (
+          <div className="mt-8 rounded-2xl border border-amber-300 bg-amber-50 p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div>
+              <p className="text-[10px] font-mono uppercase tracking-wider text-amber-700">Featured business</p>
+              <p className="mt-1 text-sm font-semibold text-slate-900">Discover more from {post.author}</p>
+            </div>
+            <a
+              href={post.externalUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="motion-pressable inline-flex items-center gap-2 rounded-xl bg-slate-950 px-5 py-3 text-xs font-bold text-white hover:bg-slate-800"
+            >
+              Visit Mimi Collections <ArrowRight className="w-3.5 h-3.5" />
+            </a>
+          </div>
+        )}
 
         <div className="scroll-card mt-10 p-6 rounded-2xl bg-white shadow-sm border border-amber-300 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm text-slate-600">Want the applied version, with tools and mentorship?</p>

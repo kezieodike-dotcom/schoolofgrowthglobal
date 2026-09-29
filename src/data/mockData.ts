@@ -1672,6 +1672,26 @@ export const BOOKS: BookItem[] = [
 // -- Blog & Knowledge Centre -----------------------------------------------
 export const BLOG_POSTS: BlogPost[] = [
   {
+    id: 'mimi-collections-business-spotlight',
+    slug: 'mimi-collections-business-spotlight',
+    title: 'Business Spotlight: Mimi Collections',
+    category: 'Business Spotlight',
+    excerpt: 'Mimi Collections offers quality, long-lasting perfumes with impressive projection and sillage, alongside carefully selected accessories to elevate your style. Smell good, look good, and leave a lasting impression.',
+    author: 'Mimi Collections',
+    authorRole: 'Featured Business Partner',
+    readTime: '2 min read',
+    date: 'Sep 29, 2026',
+    image: '/insights/mimi-collections/perfumes-1.png',
+    gallery: [
+      '/insights/mimi-collections/perfumes-1.png',
+      '/insights/mimi-collections/watches-1.png',
+      '/insights/mimi-collections/watch-2.png',
+      '/insights/mimi-collections/perfumes-2.png',
+    ],
+    externalUrl: 'https://www.tiktok.com/@mimicollections00?_r=1&_t=ZS-9A1z1baPW44',
+    sponsored: true,
+  },
+  {
     id: 'b1',
     slug: 'governing-enterprise-ai',
     title: 'Governing Enterprise AI: A Board-Level Playbook',

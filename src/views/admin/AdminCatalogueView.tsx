@@ -159,7 +159,7 @@ const FIELDS: Record<ContentKind, Field[]> = {
       key: 'category',
       label: 'Category',
       type: 'select',
-      options: ['Leadership', 'Strategy', 'Finance', 'Technology', 'Wealth Creation', 'Personal Growth'],
+      options: ['Leadership', 'Strategy', 'Finance', 'Technology', 'Wealth Creation', 'Personal Growth', 'Business Spotlight'],
     },
     { key: 'author', label: 'Author' },
     { key: 'authorRole', label: 'Author role' },
