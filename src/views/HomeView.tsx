@@ -21,7 +21,8 @@ import {
   CalendarDays,
   Lightbulb,
   HeartHandshake,
-  Building2
+  Building2,
+  ExternalLink
 } from 'lucide-react';
 
 interface HomeViewProps {
@@ -338,6 +339,39 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
                 <span className="mt-5 inline-flex items-center gap-2 text-xs font-semibold text-orange-700">Read insights <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" /></span>
               </Link>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="border-b border-slate-200 bg-white py-16 sm:py-20">
+        <div className="mx-auto grid max-w-7xl items-center gap-10 px-4 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:px-8">
+          <div className="overflow-hidden rounded-lg border border-slate-200 bg-slate-50" data-scroll-reveal>
+            <img
+              src="/research/sgg-research-and-insights.png"
+              alt="SGG Research and Inside: Real Stories, Deep Research, Practical Lessons"
+              className="h-auto max-h-[34rem] w-full object-contain"
+            />
+          </div>
+          <div className="max-w-2xl space-y-5" data-scroll-reveal>
+            <div className="inline-flex items-center gap-2 rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-[11px] font-mono uppercase tracking-widest text-amber-700">
+              <Lightbulb className="h-3.5 w-3.5" />
+              <span>SGG RESEARCH AND INSIGHTS</span>
+            </div>
+            <h2 className="text-3xl font-serif font-semibold leading-tight text-slate-900 sm:text-4xl">
+              Real stories. Deep research. Practical lessons.
+            </h2>
+            <p className="text-[15px] leading-7 text-slate-600">
+              Follow the School of Growth Global channel for thoughtful research, real stories and practical lessons
+              that support better leadership, strategy and transformation.
+            </p>
+            <a
+              href="https://whatsapp.com/channel/0029Vb8KcvyCsU9J6o0Bei2f"
+              target="_blank"
+              rel="noreferrer"
+              className="motion-pressable inline-flex items-center gap-2 rounded-lg bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-slate-800"
+            >
+              Follow us on WhatsApp <ExternalLink className="h-4 w-4" />
+            </a>
           </div>
         </div>
       </section>
