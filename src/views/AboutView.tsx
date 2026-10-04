@@ -172,6 +172,9 @@ export const AboutView: React.FC = () => {
             <Link to="/courses" className="px-6 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-sm">
               Explore Courses
             </Link>
+            <Link to="/schools" className="px-6 py-3 rounded-xl bg-slate-950 hover:bg-slate-800 text-white font-semibold text-sm">
+              View Schools &amp; Faculties
+            </Link>
             <Link to="/contact" className="px-6 py-3 rounded-xl bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 font-semibold text-sm">
               Contact Us
             </Link>

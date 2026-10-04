@@ -1,0 +1,862 @@
+{
+  "title": "Global Faculty & School Architecture",
+  "institutionalPositioning": "School of Growth Global is a global learning and transformation institution developing people with the character, knowledge, skills, strategies and systems required to grow themselves, lead people, build organizations, serve communities, strengthen institutions and create measurable impact.",
+  "architectureStatement": "9 major faculties, with specialized Schools under each",
+  "faculties": [
+    {
+      "number": 1,
+      "title": "PERSONAL & LIFE TRANSFORMATION",
+      "notes": [],
+      "schools": [
+        {
+          "number": 1,
+          "title": "School of Personal Development",
+          "notes": [],
+          "subjects": [
+            "Self-discovery",
+            "Identity",
+            "Confidence",
+            "Discipline",
+            "Growth mindset",
+            "Emotional intelligence",
+            "Personal responsibility",
+            "Resilience",
+            "Character development",
+            "Personal effectiveness"
+          ]
+        },
+        {
+          "number": 2,
+          "title": "School of Purpose, Vision & Life Direction",
+          "notes": [],
+          "subjects": [
+            "Purpose discovery",
+            "Vision",
+            "Values",
+            "Life direction",
+            "Calling",
+            "Strengths and gifts",
+            "Personal mission",
+            "Goal setting",
+            "Life planning",
+            "Legacy"
+          ]
+        },
+        {
+          "number": 3,
+          "title": "School of Productivity & Personal Effectiveness",
+          "notes": [],
+          "subjects": [
+            "Time management",
+            "Goal execution",
+            "Focus",
+            "Habits",
+            "Procrastination",
+            "Planning",
+            "Personal systems",
+            "Performance",
+            "Accountability"
+          ]
+        },
+        {
+          "number": 4,
+          "title": "School of Emotional Intelligence & Human Behaviour",
+          "notes": [],
+          "subjects": [
+            "Understanding emotions",
+            "Self-awareness",
+            "Emotional regulation",
+            "Empathy",
+            "Social intelligence",
+            "Relationship management",
+            "Emotional resilience",
+            "Human behaviour"
+          ]
+        },
+        {
+          "number": 5,
+          "title": "School of Character, Ethics & Integrity",
+          "notes": [],
+          "subjects": [
+            "Integrity",
+            "Responsibility",
+            "Accountability",
+            "Discipline",
+            "Honesty",
+            "Ethical decision-making",
+            "Personal standards",
+            "Professional ethics",
+            "Leadership character"
+          ]
+        }
+      ]
+    },
+    {
+      "number": 2,
+      "title": "LEADERSHIP & ORGANIZATIONAL EXCELLENCE",
+      "notes": [
+        "*This should become one of SGG's flagship faculties.*"
+      ],
+      "schools": [
+        {
+          "number": 6,
+          "title": "School of Leadership",
+          "notes": [],
+          "core_areas": [
+            "Foundations of leadership",
+            "Self-leadership",
+            "Leadership character",
+            "Visionary leadership",
+            "Strategic leadership",
+            "People management",
+            "Team building",
+            "Delegation",
+            "Influence",
+            "Decision-making",
+            "Problem-solving",
+            "Conflict management",
+            "Communication",
+            "Emotional intelligence",
+            "Organizational leadership",
+            "Change leadership",
+            "Crisis leadership",
+            "Leadership accountability",
+            "Leadership legacy"
+          ]
+        },
+        {
+          "number": 7,
+          "title": "School of Strategic Leadership & Decision-Making",
+          "notes": [],
+          "subjects": [
+            "Strategic thinking",
+            "Systems thinking",
+            "Critical thinking",
+            "Scenario planning",
+            "Risk assessment",
+            "Strategic decision-making",
+            "Institutional strategy",
+            "Crisis decisions",
+            "Long-term planning",
+            "Execution"
+          ]
+        },
+        {
+          "number": 8,
+          "title": "School of People Management & Organizational Leadership",
+          "notes": [],
+          "subjects": [
+            "Managing people",
+            "Talent development",
+            "Team performance",
+            "Organizational culture",
+            "Motivation",
+            "Delegation",
+            "Performance management",
+            "Conflict resolution",
+            "Employee engagement",
+            "Organizational structure"
+          ]
+        },
+        {
+          "number": 9,
+          "title": "School of Influence, Negotiation & Diplomacy",
+          "notes": [],
+          "subjects": [
+            "Influence",
+            "Persuasion",
+            "Negotiation",
+            "Diplomacy",
+            "Stakeholder management",
+            "Conflict resolution",
+            "Mediation",
+            "Difficult conversations",
+            "Strategic relationships"
+          ]
+        },
+        {
+          "number": 10,
+          "title": "School of Executive Leadership",
+          "notes": [],
+          "designed_for": [
+            "CEOs",
+            "Executives",
+            "Directors",
+            "Senior managers",
+            "Institutional leaders",
+            "Public-sector executives"
+          ],
+          "subjects_include": [
+            "Executive decision-making",
+            "Corporate governance",
+            "Strategic leadership",
+            "Crisis management",
+            "Executive communication",
+            "Institutional transformation",
+            "Board leadership",
+            "Leadership succession"
+          ]
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "title": "KINGDOM, BIBLICAL LEADERSHIP & MINISTRY",
+      "notes": [],
+      "schools": [
+        {
+          "number": 11,
+          "title": "School of Kingdom Leadership",
+          "notes": [
+            "Focus: Raising people who understand leadership as stewardship, service and responsibility before God."
+          ],
+          "subjects": [
+            "Kingdom leadership",
+            "Biblical leadership principles",
+            "Servant leadership",
+            "Leadership character",
+            "Divine purpose and assignment",
+            "Stewardship",
+            "Integrity",
+            "Leadership responsibility",
+            "Kingdom influence",
+            "Leading people",
+            "Building institutions",
+            "Kingdom impact",
+            "Leadership legacy"
+          ]
+        },
+        {
+          "number": 12,
+          "title": "School of Biblical Leadership",
+          "notes": [],
+          "subjects": [
+            "Biblical models of leadership",
+            "Leaders in Scripture",
+            "Leadership principles from Jesus",
+            "Moses and organizational leadership",
+            "Joshua and succession",
+            "David and leadership",
+            "Joseph and strategic administration",
+            "Daniel and leadership in government",
+            "Nehemiah and organizational rebuilding",
+            "Esther and influence",
+            "Paul and mission leadership",
+            "Servant leadership",
+            "Character and accountability"
+          ]
+        },
+        {
+          "number": 13,
+          "title": "School of Ministry & Christian Leadership",
+          "notes": [],
+          "subjects": [
+            "Foundations of ministry",
+            "Understanding ministry",
+            "Calling and assignment",
+            "Ministry leadership",
+            "Ministry administration",
+            "Church/Ministry structure",
+            "Ministry ethics",
+            "Pastoral leadership",
+            "Team development",
+            "Volunteer management",
+            "Ministry communication",
+            "Ministry planning",
+            "Ministry growth",
+            "Ministry sustainability",
+            "Leadership succession"
+          ]
+        },
+        {
+          "number": 14,
+          "title": "School of Discipleship & Spiritual Formation",
+          "notes": [],
+          "subjects": [
+            "Biblical foundations",
+            "Discipleship",
+            "Spiritual maturity",
+            "Prayer",
+            "Study of God's Word",
+            "Faith",
+            "Worship",
+            "Obedience",
+            "Character formation",
+            "Spiritual disciplines",
+            "Mentorship",
+            "Spiritual accountability",
+            "Making disciples",
+            "Raising leaders"
+          ]
+        },
+        {
+          "number": 15,
+          "title": "School of Biblical Studies & God's Word",
+          "notes": [
+            "This can eventually develop into a serious Biblical Studies Institute."
+          ],
+          "subjects": [
+            "Bible study methods",
+            "Biblical interpretation",
+            "Old Testament foundations",
+            "New Testament foundations",
+            "Understanding Scripture",
+            "Biblical doctrines",
+            "Christology",
+            "Kingdom of God",
+            "Christian ethics",
+            "Applying Scripture",
+            "Teaching God's Word",
+            "Bible research"
+          ]
+        },
+        {
+          "number": 16,
+          "title": "School of Prayer & Spiritual Life",
+          "notes": [],
+          "subjects": [
+            "Foundations of prayer",
+            "Personal prayer life",
+            "Intercession",
+            "Prayer and spiritual discipline",
+            "Prayer in ministry",
+            "Prayer and leadership",
+            "Fasting",
+            "Worship",
+            "Spiritual sensitivity",
+            "Developing a consistent spiritual life"
+          ]
+        },
+        {
+          "number": 17,
+          "title": "School of Christian Character & Spiritual Formation",
+          "notes": [
+            "This directly accommodates your emphasis on the Fruit of the Spirit."
+          ],
+          "subjects": [
+            "Love",
+            "Joy",
+            "Peace",
+            "Longsuffering",
+            "Gentleness",
+            "Goodness",
+            "Faith",
+            "Meekness",
+            "Temperance",
+            "Forgiveness",
+            "Humility",
+            "Integrity",
+            "Compassion",
+            "Service"
+          ]
+        },
+        {
+          "number": 18,
+          "title": "School of Spiritual Gifts & Kingdom Service",
+          "notes": [
+            "The emphasis should be that character, biblical grounding and accountability accompany spiritual gifting."
+          ],
+          "subjects": [
+            "Understanding spiritual gifts",
+            "Identifying gifts",
+            "Developing gifts responsibly",
+            "Gifts and service",
+            "Gifts and leadership",
+            "Gifts and ministry",
+            "Team ministry",
+            "Spiritual maturity",
+            "Accountability",
+            "Character alongside gifting"
+          ]
+        },
+        {
+          "number": 19,
+          "title": "School of Kingdom Strategy & Mission",
+          "notes": [
+            "This could become one of the most distinctive SGG Schools."
+          ],
+          "subjects": [
+            "Understanding God's Kingdom mission",
+            "Kingdom strategy",
+            "Mission strategy",
+            "Strategic planning",
+            "Kingdom influence",
+            "Marketplace mission",
+            "Community transformation",
+            "Leadership multiplication",
+            "Institution building",
+            "Mission expansion",
+            "Resource mobilization",
+            "Sustainable Kingdom impact",
+            "Global mission strategy"
+          ]
+        },
+        {
+          "number": 20,
+          "title": "School of Christian Administration & Stewardship",
+          "notes": [],
+          "subjects": [
+            "Ministry administration",
+            "Stewardship",
+            "Resource management",
+            "Financial stewardship",
+            "People management",
+            "Ministry systems",
+            "Planning",
+            "Documentation",
+            "Accountability",
+            "Governance",
+            "Institutional sustainability",
+            "Ministry project management"
+          ]
+        },
+        {
+          "number": 21,
+          "title": "School of Christian Humanitarianism & Compassion",
+          "notes": [
+            "This connects your Kingdom vision with practical social impact."
+          ],
+          "subjects": [
+            "Biblical compassion",
+            "Human dignity",
+            "Community service",
+            "Poverty intervention",
+            "Education initiatives",
+            "Youth development",
+            "Vulnerable populations",
+            "Humanitarian project design",
+            "Resource mobilization",
+            "NGO/nonprofit management",
+            "Impact measurement",
+            "Sustainable community development"
+          ]
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "title": "GOVERNANCE, PUBLIC LEADERSHIP & INSTITUTIONAL TRANSFORMATION",
+      "notes": [
+        "*This should become another flagship SGG faculty.*",
+        "And I would deliberately make it academically neutral and comparative so it can train people across different political systems."
+      ],
+      "schools": [
+        {
+          "number": 22,
+          "title": "School of Public Leadership & Governance",
+          "notes": [],
+          "subjects": [
+            "Foundations of governance",
+            "Public leadership",
+            "Public institutions",
+            "State capacity",
+            "Public accountability",
+            "Public-sector management",
+            "Policy implementation",
+            "Institutional development",
+            "Public service ethics",
+            "Strategic government",
+            "Crisis governance",
+            "Citizen-centered governance"
+          ]
+        },
+        {
+          "number": 23,
+          "title": "School of Political Leadership & Statesmanship",
+          "notes": [],
+          "subjects": [
+            "Political leadership",
+            "Statesmanship",
+            "Political institutions",
+            "Political philosophy",
+            "Leadership character",
+            "Public responsibility",
+            "Political strategy",
+            "Stakeholder management",
+            "Coalition building",
+            "Negotiation",
+            "Political communication",
+            "Public trust",
+            "Leadership succession",
+            "National development"
+          ]
+        },
+        {
+          "number": 24,
+          "title": "School of Democracy & Democratic Governance",
+          "notes": [],
+          "subjects": [
+            "Democratic institutions",
+            "Constitutional principles",
+            "Elections",
+            "Rule of law",
+            "Separation of powers",
+            "Legislative institutions",
+            "Executive institutions",
+            "Judicial institutions",
+            "Civil society",
+            "Citizen participation",
+            "Transparency",
+            "Accountability",
+            "Democratic leadership"
+          ]
+        },
+        {
+          "number": 25,
+          "title": "School of Comparative Governance & Political Systems",
+          "notes": [
+            "This is where you can responsibly teach democratic, authoritarian, hybrid and other governance systems comparatively.",
+            "The goal is understanding how systems operate and what their documented consequences are, rather than promoting a particular political system."
+          ],
+          "subjects": [
+            "Types of political systems",
+            "Democratic governance",
+            "Authoritarian governance",
+            "Hybrid regimes",
+            "Centralized vs decentralized systems",
+            "Institutional structures",
+            "Leadership models",
+            "Accountability mechanisms",
+            "Policy implementation",
+            "State capacity",
+            "Political institutions",
+            "Comparative case studies",
+            "Strengths and limitations of different institutional arrangements"
+          ]
+        },
+        {
+          "number": 26,
+          "title": "School of Public Policy & National Development",
+          "notes": [],
+          "subjects": [
+            "Policy development",
+            "Policy analysis",
+            "Evidence-based policymaking",
+            "Public economics",
+            "Education policy",
+            "Health policy",
+            "Employment policy",
+            "Infrastructure",
+            "Technology policy",
+            "Youth policy",
+            "Social protection",
+            "Policy implementation",
+            "Monitoring and evaluation"
+          ]
+        },
+        {
+          "number": 27,
+          "title": "School of Government Administration & Public Management",
+          "notes": [],
+          "subjects": [
+            "Government administration",
+            "Public-sector leadership",
+            "Bureaucratic systems",
+            "Public finance",
+            "Human-resource management",
+            "Government project management",
+            "Procurement",
+            "Service delivery",
+            "Performance management",
+            "Institutional reform",
+            "Digital government"
+          ]
+        },
+        {
+          "number": 28,
+          "title": "School of Diplomacy, International Relations & Global Affairs",
+          "notes": [],
+          "subjects": [
+            "International relations",
+            "Diplomacy",
+            "Foreign policy",
+            "International organizations",
+            "Negotiation",
+            "Conflict resolution",
+            "Geopolitics",
+            "International development",
+            "Global partnerships",
+            "Diplomatic communication",
+            "Strategic national interests"
+          ]
+        },
+        {
+          "number": 29,
+          "title": "School of Presidential & Executive Leadership",
+          "notes": [
+            "This could be an advanced executive school, rather than an introductory programme."
+          ],
+          "designed_for": [
+            "Presidents",
+            "Prime ministers",
+            "Governors",
+            "Ministers",
+            "Mayors",
+            "Senior government officials",
+            "Heads of institutions",
+            "Global executives"
+          ],
+          "subjects": [
+            "Executive leadership",
+            "National vision",
+            "Executive decision-making",
+            "Crisis leadership",
+            "National strategy",
+            "Institutional coordination",
+            "Cabinet/team leadership",
+            "Executive communication",
+            "Public trust",
+            "National development strategy",
+            "Succession",
+            "Legacy",
+            "Global diplomacy"
+          ]
+        }
+      ]
+    },
+    {
+      "number": 5,
+      "title": "SOCIAL IMPACT & HUMANITARIAN DEVELOPMENT",
+      "notes": [],
+      "schools": [
+        {
+          "number": 30,
+          "title": "School of Social Impact",
+          "notes": [],
+          "subjects": [
+            "Social problems",
+            "Impact strategy",
+            "Community transformation",
+            "Social entrepreneurship",
+            "Impact measurement",
+            "Programme design",
+            "Partnerships",
+            "Volunteer management",
+            "Sustainable development"
+          ]
+        },
+        {
+          "number": 31,
+          "title": "School of Humanitarian Leadership",
+          "notes": [],
+          "subjects": [
+            "Humanitarian principles",
+            "Crisis response",
+            "Community needs assessment",
+            "Humanitarian programme management",
+            "Disaster response",
+            "Refugee/displacement issues",
+            "Resource coordination",
+            "Humanitarian leadership",
+            "Impact measurement"
+          ]
+        },
+        {
+          "number": 32,
+          "title": "School of NGO & Nonprofit Leadership",
+          "notes": [],
+          "subjects": [
+            "NGO establishment",
+            "Governance",
+            "Fundraising",
+            "Grant management",
+            "Programme management",
+            "Volunteer management",
+            "Partnerships",
+            "Financial accountability",
+            "Monitoring and evaluation"
+          ]
+        },
+        {
+          "number": 33,
+          "title": "School of Community Development",
+          "notes": [],
+          "subjects": [
+            "Community leadership",
+            "Needs assessment",
+            "Community organizing",
+            "Local development",
+            "Youth development",
+            "Education",
+            "Entrepreneurship",
+            "Community partnerships",
+            "Sustainable development"
+          ]
+        }
+      ]
+    },
+    {
+      "number": 6,
+      "title": "BUSINESS, WEALTH & ECONOMIC DEVELOPMENT",
+      "notes": [],
+      "schools": [
+        {
+          "number": 34,
+          "title": "School of Entrepreneurship",
+          "notes": []
+        },
+        {
+          "number": 35,
+          "title": "School of Business Growth & Strategy",
+          "notes": []
+        },
+        {
+          "number": 36,
+          "title": "School of Sales & Marketing",
+          "notes": []
+        },
+        {
+          "number": 37,
+          "title": "School of Wealth & Financial Intelligence",
+          "notes": []
+        },
+        {
+          "number": 38,
+          "title": "School of Investment & Asset Building",
+          "notes": []
+        },
+        {
+          "number": 39,
+          "title": "School of Corporate Leadership",
+          "notes": []
+        },
+        {
+          "number": 40,
+          "title": "School of Economic Development",
+          "notes": []
+        },
+        {
+          "number": 41,
+          "title": "School of Social Entrepreneurship",
+          "notes": []
+        }
+      ]
+    },
+    {
+      "number": 7,
+      "title": "CAREER, PROFESSIONAL & DIGITAL EXCELLENCE",
+      "notes": [],
+      "schools": [
+        {
+          "number": 42,
+          "title": "School of Career Development",
+          "notes": []
+        },
+        {
+          "number": 43,
+          "title": "School of Professional Excellence",
+          "notes": []
+        },
+        {
+          "number": 44,
+          "title": "School of Human Resources",
+          "notes": []
+        },
+        {
+          "number": 45,
+          "title": "School of Project Management",
+          "notes": []
+        },
+        {
+          "number": 46,
+          "title": "School of Communication & Public Speaking",
+          "notes": []
+        },
+        {
+          "number": 47,
+          "title": "School of Teaching, Training & Coaching",
+          "notes": []
+        },
+        {
+          "number": 48,
+          "title": "School of Digital Skills",
+          "notes": []
+        },
+        {
+          "number": 49,
+          "title": "School of Artificial Intelligence & Future Skills",
+          "notes": []
+        },
+        {
+          "number": 50,
+          "title": "School of Media & Content Creation",
+          "notes": []
+        }
+      ]
+    },
+    {
+      "number": 8,
+      "title": "RELATIONSHIPS, FAMILY & HUMAN DEVELOPMENT",
+      "notes": [],
+      "schools": [
+        {
+          "number": 51,
+          "title": "School of Relationships & Marriage",
+          "notes": []
+        },
+        {
+          "number": 52,
+          "title": "School of Family & Parenting",
+          "notes": []
+        },
+        {
+          "number": 53,
+          "title": "School of Youth Development",
+          "notes": []
+        },
+        {
+          "number": 54,
+          "title": "School of Women Leadership",
+          "notes": []
+        },
+        {
+          "number": 55,
+          "title": "School of Men, Responsibility & Leadership",
+          "notes": []
+        },
+        {
+          "number": 56,
+          "title": "School of Human Relationships & Social Intelligence",
+          "notes": []
+        }
+      ]
+    },
+    {
+      "number": 9,
+      "title": "INNOVATION, RESEARCH & FUTURE LEADERSHIP",
+      "notes": [],
+      "schools": [
+        {
+          "number": 57,
+          "title": "School of Innovation & Problem-Solving",
+          "notes": []
+        },
+        {
+          "number": 58,
+          "title": "School of Research & Strategic Intelligence",
+          "notes": []
+        },
+        {
+          "number": 59,
+          "title": "School of Future Leadership",
+          "notes": []
+        },
+        {
+          "number": 60,
+          "title": "School of Technology & Digital Transformation",
+          "notes": []
+        },
+        {
+          "number": 61,
+          "title": "School of Systems Thinking",
+          "notes": []
+        },
+        {
+          "number": 62,
+          "title": "School of Global Leadership & International Development",
+          "notes": []
+        }
+      ]
+    }
+  ]
+}

@@ -19,6 +19,7 @@ const NAV_ITEMS: { to: string; label: string }[] = [
   { to: '/blog', label: 'Insights' },
   { to: '/donate', label: 'Donate' },
   { to: '/about', label: 'About' },
+  { to: '/schools', label: 'Schools' },
 ];
 
 export const HeaderNavbar: React.FC = () => {

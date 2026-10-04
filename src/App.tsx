@@ -22,6 +22,7 @@ import { ContactView } from './views/ContactView';
 import { RegisterView } from './views/RegisterView';
 import { MentorRegistrationView } from './views/MentorRegistrationView';
 import { MentorEnlistmentView } from './views/MentorEnlistmentView';
+import { SchoolsFacultiesView } from './views/SchoolsFacultiesView';
 import { MentorInboxView } from './views/MentorInboxView';
 import { DemoReviewerAccessView } from './views/DemoReviewerAccessView';
 
@@ -154,6 +155,7 @@ const AppRoutes: React.FC = () => {
       <Route element={<Layout />}>
         <Route index element={<HomeRoute />} />
         <Route path="about" element={<AboutView />} />
+        <Route path="schools" element={<SchoolsFacultiesView />} />
 
         <Route path="courses" element={<CoursesView />} />
         <Route path="courses/:courseId" element={<CourseDetailRoute />} />
