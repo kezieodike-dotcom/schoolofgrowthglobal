@@ -165,6 +165,12 @@ export async function uploadImage(input: ImageUploadInput): Promise<ImageUploadR
   const objectPath = buildImageUploadPath(input.kind, input.fileName, input.mimeType);
   const supabase = supabaseStorageConfig();
 
+  if (!supabase && process.env.VERCEL) {
+    throw new Error(
+      'Profile image storage is not configured on this deployment. Set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY in Vercel.'
+    );
+  }
+
   if (supabase) {
     try {
       return await uploadToSupabase(supabase, objectPath, input.mimeType, file);
@@ -180,5 +186,11 @@ export async function uploadImage(input: ImageUploadInput): Promise<ImageUploadR
     }
   }
 
-  return uploadLocally(objectPath, file);
+  try {
+    return await uploadLocally(objectPath, file);
+  } catch (error) {
+    throw new Error(
+      `Profile image storage is unavailable.${error instanceof Error ? ` ${error.message}` : ''}`
+    );
+  }
 }
