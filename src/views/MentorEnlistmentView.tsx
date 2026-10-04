@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, BriefcaseBusiness, CheckCircle2, Users } from 'lucide-react';
-import { PageHero } from '../components/PageHero';
 
 const benefits = [
   'Create a professional profile that can be discovered by students and clients.',
@@ -12,14 +11,31 @@ const benefits = [
 
 export const MentorEnlistmentView: React.FC = () => (
   <div className="min-h-screen bg-slate-50 text-slate-900">
-    <PageHero
-      eyebrow="Mentor / Consultant Enlistment"
-      icon={<Users className="h-4 w-4" />}
-      title={<>Put your experience to work.</>}
-      subtitle="Join the School of Growth Global expert network and build a profile for the people who need your guidance, strategy and practical support."
-      imageSrc="/scenes/coaching-collab.jpg"
-      imageOnDesktop
-    />
+    <section className="relative isolate min-h-[30rem] overflow-hidden border-b border-slate-800 bg-slate-950 sm:min-h-[34rem] lg:min-h-[38rem]">
+      <img
+        src="/scenes/leadership-meeting.jpg"
+        alt="Mentor and professionals in a focused strategy conversation"
+        className="absolute inset-0 h-full w-full object-cover object-[center_42%]"
+      />
+      <div className="absolute inset-0 bg-slate-950/62" />
+      <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/50 to-slate-950/20" />
+      <div className="absolute inset-x-0 bottom-0 h-px bg-amber-400/70" />
+
+      <div className="relative z-10 mx-auto flex min-h-[30rem] max-w-7xl items-end px-4 pb-14 pt-28 sm:min-h-[34rem] sm:px-6 sm:pb-16 lg:min-h-[38rem] lg:px-8 lg:pb-20">
+        <div className="max-w-3xl">
+          <div className="mb-6 inline-flex items-center gap-2 border border-amber-300/40 bg-slate-950/35 px-3.5 py-1.5 text-xs font-mono text-amber-100 backdrop-blur-sm">
+            <Users className="h-4 w-4" />
+            <span>Mentor / Consultant Enlistment</span>
+          </div>
+          <h1 className="max-w-2xl text-[2.55rem] font-serif font-semibold leading-[1.04] tracking-tight text-white sm:text-6xl lg:text-7xl">
+            Put your experience to work.
+          </h1>
+          <p className="mt-6 max-w-2xl text-[15px] leading-7 text-slate-100/90 sm:text-lg sm:leading-8">
+            Join the School of Growth Global expert network and build a profile for the people who need your guidance, strategy and practical support.
+          </p>
+        </div>
+      </div>
+    </section>
 
     <section className="border-b border-slate-200 bg-[#f7f5ef] py-12 sm:py-16 lg:py-20">
       <div className="mx-auto grid max-w-7xl gap-10 px-4 sm:px-6 lg:grid-cols-[0.82fr_1.18fr] lg:items-start lg:gap-16 lg:px-8">
