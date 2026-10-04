@@ -15,6 +15,7 @@ export type MentorFieldType =
   | "email"
   | "tel"
   | "url"
+  | "image"
   | "textarea"
   | "select"
   | "chips"
@@ -203,6 +204,14 @@ export const MENTOR_STEPS: MentorStep[] = [
         type: "text",
         required: true,
         placeholder: "Apex Ventures",
+      },
+      {
+        name: "photo",
+        label: "Profile photo",
+        type: "image",
+        required: true,
+        wide: true,
+        help: "Use a clear professional headshot. JPG, PNG, WebP or GIF up to 5MB.",
       },
       {
         name: "linkedin",

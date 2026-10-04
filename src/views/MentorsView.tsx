@@ -187,6 +187,11 @@ function useDirectory(): { mentors: Mentor[]; loading: boolean } {
               location: string;
               expertise: string[];
               bio: string;
+              experience?: string;
+              avatar?: string;
+              languages?: string[];
+              formats?: string[];
+              applicationType?: 'mentor' | 'consultant';
             }): Mentor => ({
               id: m.id,
               name: m.name,
@@ -198,10 +203,10 @@ function useDirectory(): { mentors: Mentor[]; loading: boolean } {
               sessions: 0,
               rate: 'Included in your subscription',
               availability: 'Available',
-              avatar: '',
+              avatar: m.avatar ?? '',
               specialization: m.expertise?.[0] ?? 'Personalized mentorship',
-              yearsExperience: 10,
-              languages: ['English'],
+              yearsExperience: Number.parseInt(m.experience ?? '', 10) || 10,
+              languages: m.languages?.length ? m.languages : ['English'],
               regionsServed: [m.location || 'Remote Global'],
               menteeCount: 0,
               intro: m.bio,
@@ -722,13 +727,10 @@ export const MentorsView: React.FC = () => {
             <div className="rounded-2xl bg-white border border-amber-300 p-6 sm:p-8 flex flex-col md:flex-row md:items-center justify-between gap-5">
               <div>
                 <h3 className="text-xl font-serif font-bold text-slate-900">Are you an experienced professional?</h3>
-                <p className="text-sm text-slate-500 mt-1">Apply to become a mentor and serve vetted students and subscribed mentees.</p>
+                <p className="text-sm text-slate-500 mt-1">Enlist as a mentor or consultant, build your profile and serve vetted students, clients and subscribed mentees.</p>
               </div>
-              <Link
-                to="/register/mentor"
-                className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-slate-950 text-white text-sm font-bold hover:bg-slate-800 transition-all"
-              >
-                Register as a Mentor <ArrowRight className="w-4 h-4" />
+              <Link to="/enlist" className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-slate-950 text-white text-sm font-bold hover:bg-slate-800 transition-all">
+                Start enlistment <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
           </main>

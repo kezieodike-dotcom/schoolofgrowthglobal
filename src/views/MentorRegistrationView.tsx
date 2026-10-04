@@ -29,6 +29,7 @@ import {
   Clock,
   Trash2,
   Banknote,
+  ImagePlus,
 } from 'lucide-react';
 
 /**
@@ -279,6 +280,7 @@ export const MentorRegistrationView: React.FC = () => {
               </p>
               <a
                 href="#mentor-application"
+                aria-label="Apply as a Mentor/Consultant"
                 className="mt-5 inline-flex items-center justify-center gap-2 rounded-xl bg-amber-500 px-5 py-3 text-xs font-bold text-slate-950 shadow-lg shadow-amber-500/20 transition hover:bg-amber-400"
               >
                 Apply as a {isConsultant ? 'Consultant' : 'Mentor/Consultant'}
@@ -671,7 +673,15 @@ const Field: React.FC<{
         )}
       </div>
 
-      {field.type === 'textarea' ? (
+      {field.type === 'image' ? (
+        <ProfileImageField
+          id={id}
+          value={text}
+          invalid={Boolean(error)}
+          describedBy={describedBy || undefined}
+          onChange={onChange}
+        />
+      ) : field.type === 'textarea' ? (
         <textarea
           id={id}
           value={text}
@@ -773,6 +783,90 @@ const Field: React.FC<{
           {error}
         </p>
       )}
+    </div>
+  );
+};
+
+const ProfileImageField: React.FC<{
+  id: string;
+  value: string;
+  invalid: boolean;
+  describedBy?: string;
+  onChange: (value: string) => void;
+}> = ({ id, value, invalid, describedBy, onChange }) => {
+  const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+
+  const handleFile = (file: File | undefined) => {
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) {
+      setUploadError('Choose an image that is 5MB or smaller.');
+      return;
+    }
+
+    setUploading(true);
+    setUploadError(null);
+    const reader = new FileReader();
+    reader.onload = async () => {
+      try {
+        const response = await fetch('/api/mentors/uploads/image', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            fileName: file.name,
+            mimeType: file.type,
+            data: reader.result,
+          }),
+        });
+        const body = await response.json().catch(() => null);
+        if (!response.ok || !body?.url) throw new Error(body?.error ?? 'Could not upload that profile image.');
+        onChange(body.url);
+      } catch (error) {
+        setUploadError(error instanceof Error ? error.message : 'Could not upload that profile image.');
+      } finally {
+        setUploading(false);
+      }
+    };
+    reader.onerror = () => {
+      setUploading(false);
+      setUploadError('Could not read that image. Please try another file.');
+    };
+    reader.readAsDataURL(file);
+  };
+
+  return (
+    <div
+      className={`flex flex-col sm:flex-row sm:items-center gap-4 rounded-xl border p-4 ${
+        invalid ? 'border-rose-300 bg-rose-50/40' : 'border-slate-200 bg-slate-50'
+      }`}
+      aria-describedby={describedBy}
+    >
+      <div className="w-20 h-20 shrink-0 overflow-hidden rounded-2xl border border-amber-300 bg-amber-50 flex items-center justify-center">
+        {value ? (
+          <img src={value} alt="Profile preview" className="h-full w-full object-cover" />
+        ) : (
+          <ImagePlus className="h-7 w-7 text-amber-600" />
+        )}
+      </div>
+      <div className="space-y-2">
+        <label
+          htmlFor={id}
+          className="inline-flex cursor-pointer items-center gap-2 rounded-lg bg-slate-950 px-4 py-2.5 text-xs font-bold text-white hover:bg-slate-800"
+        >
+          {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ImagePlus className="h-4 w-4" />}
+          {uploading ? 'Uploading photo...' : value ? 'Replace photo' : 'Upload photo'}
+        </label>
+        <input
+          id={id}
+          type="file"
+          accept="image/jpeg,image/png,image/webp,image/gif"
+          className="sr-only"
+          onChange={(event) => handleFile(event.target.files?.[0])}
+          aria-invalid={invalid}
+        />
+        <p className="text-[11px] text-slate-500">Your photo appears only after your application is approved.</p>
+        {uploadError && <p role="alert" className="text-[11px] text-rose-600">{uploadError}</p>}
+      </div>
     </div>
   );
 };

@@ -9,6 +9,7 @@ import {
   isWritable,
   type MentorStatus,
 } from "./mentorStore.js";
+import { uploadImage } from "./imageUpload.js";
 
 /**
  * Mentor applications: submission, review, and the public approved list.
@@ -73,8 +74,26 @@ export function createMentorRouter(
         bio: m.answers["Professional background"] ?? "",
         area: m.area,
         experience: m.experience,
+        avatar: m.answers["Profile photo"] ?? "",
+        languages: m.answers["Languages you mentor in"]?.split(",").map((value) => value.trim()).filter(Boolean) ?? [],
+        formats: m.answers["Session formats you offer"]?.split(",").map((value) => value.trim()).filter(Boolean) ?? [],
+        applicationType: m.applicationType ?? "mentor",
       })),
     });
+  });
+
+  router.post("/mentors/uploads/image", async (req, res) => {
+    try {
+      const upload = await uploadImage({
+        kind: "team",
+        fileName: typeof req.body?.fileName === "string" ? req.body.fileName : "mentor-profile",
+        mimeType: typeof req.body?.mimeType === "string" ? req.body.mimeType : "",
+        data: typeof req.body?.data === "string" ? req.body.data : "",
+      });
+      res.json(upload);
+    } catch (error) {
+      res.status(400).json({ error: error instanceof Error ? error.message : "Could not upload that profile image." });
+    }
   });
 
   /** Records an application from the registration wizard. */
@@ -100,7 +119,8 @@ export function createMentorRouter(
     }
 
     try {
-      const application = createApplication({ answers });
+      const applicationType = req.body?.applicationType === "consultant" ? "consultant" : "mentor";
+      const application = createApplication({ answers, applicationType });
       res.json({ stored: true, id: application.id });
     } catch (error) {
       console.error("Error storing mentor application:", error);

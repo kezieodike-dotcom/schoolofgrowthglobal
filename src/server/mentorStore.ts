@@ -36,6 +36,7 @@ export interface MentorApplication {
   area: string;
   experience: string;
   specialisms: string[];
+  applicationType?: "mentor" | "consultant";
 }
 
 const readAll = () => store.read();
@@ -68,6 +69,7 @@ export function listApproved(): MentorApplication[] {
 
 export function createApplication(input: {
   answers: Record<string, string>;
+  applicationType?: "mentor" | "consultant";
 }): MentorApplication {
   const answers = input.answers;
   const pick = (label: string) => answers[label]?.trim() ?? "";
@@ -90,6 +92,7 @@ export function createApplication(input: {
       .split(",")
       .map((s) => s.trim())
       .filter(Boolean),
+    applicationType: input.applicationType ?? "mentor",
   };
 
   const rows = readAll();

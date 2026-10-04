@@ -50,6 +50,7 @@ interface Application {
   area: string;
   experience: string;
   specialisms: string[];
+  applicationType?: 'mentor' | 'consultant';
 }
 
 interface Response {
@@ -196,6 +197,9 @@ const ApplicationCard: React.FC<{
               <Briefcase className="w-3 h-3 shrink-0" />
               {application.title}
               {application.organization && `, ${application.organization}`}
+            </p>
+            <p className="text-[10px] font-mono uppercase tracking-wider text-amber-700">
+              {application.applicationType ?? 'mentor'} application
             </p>
             <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[10px] font-mono text-slate-400">
               <a

@@ -21,6 +21,7 @@ import { DonationsView } from './views/DonationsView';
 import { ContactView } from './views/ContactView';
 import { RegisterView } from './views/RegisterView';
 import { MentorRegistrationView } from './views/MentorRegistrationView';
+import { MentorEnlistmentView } from './views/MentorEnlistmentView';
 import { MentorInboxView } from './views/MentorInboxView';
 import { DemoReviewerAccessView } from './views/DemoReviewerAccessView';
 
@@ -159,6 +160,7 @@ const AppRoutes: React.FC = () => {
 
         <Route path="mentorship" element={<MentorsView />} />
         <Route path="mentors" element={<MentorsView />} />
+        <Route path="enlist" element={<MentorEnlistmentView />} />
         <Route path="books" element={<BooksView />} />
         <Route path="jobs" element={<GrowthJobsView />} />
         <Route path="events" element={<EventsView />} />
