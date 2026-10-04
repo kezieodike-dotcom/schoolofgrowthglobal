@@ -166,7 +166,18 @@ export async function uploadImage(input: ImageUploadInput): Promise<ImageUploadR
   const supabase = supabaseStorageConfig();
 
   if (supabase) {
-    return uploadToSupabase(supabase, objectPath, input.mimeType, file);
+    try {
+      return await uploadToSupabase(supabase, objectPath, input.mimeType, file);
+    } catch (error) {
+      // A local/self-hosted environment can retain uploads even when a stale
+      // or temporarily unreachable Supabase project is configured. Production
+      // deployments with working storage still use Supabase as the durable
+      // source of truth.
+      console.warn(
+        'Supabase image upload failed; falling back to local storage:',
+        error instanceof Error ? error.message : error
+      );
+    }
   }
 
   return uploadLocally(objectPath, file);
