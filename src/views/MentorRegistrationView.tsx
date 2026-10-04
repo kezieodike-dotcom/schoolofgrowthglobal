@@ -797,41 +797,34 @@ const ProfileImageField: React.FC<{
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
 
-  const handleFile = (file: File | undefined) => {
+  const handleFile = async (file: File | undefined) => {
     if (!file) return;
-    if (file.size > 5 * 1024 * 1024) {
-      setUploadError('Choose an image that is 5MB or smaller.');
+    if (!file.type.startsWith('image/')) {
+      setUploadError('Choose a JPG, PNG, WebP or GIF image.');
       return;
     }
 
     setUploading(true);
     setUploadError(null);
-    const reader = new FileReader();
-    reader.onload = async () => {
-      try {
-        const response = await fetch('/api/mentors/uploads/image', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            fileName: file.name,
-            mimeType: file.type,
-            data: reader.result,
-          }),
-        });
-        const body = await response.json().catch(() => null);
-        if (!response.ok || !body?.url) throw new Error(body?.error ?? 'Could not upload that profile image.');
-        onChange(body.url);
-      } catch (error) {
-        setUploadError(error instanceof Error ? error.message : 'Could not upload that profile image.');
-      } finally {
-        setUploading(false);
-      }
-    };
-    reader.onerror = () => {
+    try {
+      const prepared = await prepareProfileImage(file);
+      const response = await fetch('/api/mentors/uploads/image', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          fileName: prepared.fileName,
+          mimeType: prepared.mimeType,
+          data: prepared.data,
+        }),
+      });
+      const body = await response.json().catch(() => null);
+      if (!response.ok || !body?.url) throw new Error(body?.error ?? 'Could not upload that profile image.');
+      onChange(body.url);
+    } catch (error) {
+      setUploadError(error instanceof Error ? error.message : 'Could not upload that profile image.');
+    } finally {
       setUploading(false);
-      setUploadError('Could not read that image. Please try another file.');
-    };
-    reader.readAsDataURL(file);
+    }
   };
 
   return (
@@ -870,6 +863,40 @@ const ProfileImageField: React.FC<{
     </div>
   );
 };
+
+const prepareProfileImage = (file: File): Promise<{ data: string; fileName: string; mimeType: string }> =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = () => reject(new Error('Could not read that image. Please try another file.'));
+    reader.onload = () => {
+      const image = new Image();
+      image.onerror = () => reject(new Error('Could not process that image. Please try another file.'));
+      image.onload = () => {
+        const maxDimension = 1600;
+        const scale = Math.min(1, maxDimension / Math.max(image.naturalWidth, image.naturalHeight));
+        const canvas = document.createElement('canvas');
+        canvas.width = Math.max(1, Math.round(image.naturalWidth * scale));
+        canvas.height = Math.max(1, Math.round(image.naturalHeight * scale));
+        const context = canvas.getContext('2d');
+        if (!context) {
+          reject(new Error('Could not process that image. Please try another file.'));
+          return;
+        }
+
+        context.drawImage(image, 0, 0, canvas.width, canvas.height);
+        let quality = 0.82;
+        let data = canvas.toDataURL('image/jpeg', quality);
+        while (data.length > 2_000_000 && quality > 0.5) {
+          quality -= 0.08;
+          data = canvas.toDataURL('image/jpeg', quality);
+        }
+
+        resolve({ data, fileName: `${file.name.replace(/\.[^.]+$/, '') || 'mentor-profile'}.jpg`, mimeType: 'image/jpeg' });
+      };
+      image.src = String(reader.result);
+    };
+    reader.readAsDataURL(file);
+  });
 
 /** Multi-select as toggleable chips - faster to scan than a tall checkbox list. */
 const ChipGroup: React.FC<{
