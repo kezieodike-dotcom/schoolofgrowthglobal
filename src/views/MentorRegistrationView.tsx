@@ -818,7 +818,10 @@ const ProfileImageField: React.FC<{
         }),
       });
       const body = await response.json().catch(() => null);
-      if (!response.ok || !body?.url) throw new Error(body?.error ?? 'Could not upload that profile image.');
+      if (!response.ok) {
+        throw new Error(body?.error ?? `Upload service returned HTTP ${response.status}.`);
+      }
+      if (!body?.url) throw new Error('Upload service returned an invalid response.');
       onChange(body.url);
     } catch (error) {
       setUploadError(error instanceof Error ? error.message : 'Could not upload that profile image.');
