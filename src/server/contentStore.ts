@@ -80,14 +80,18 @@ export async function listContent(kind?: ContentKind): Promise<ContentRecord[]> 
   const config = supabaseConfig();
   if (!config) {
     const rows = localStore.read();
-    return kind ? rows.filter((row) => row.kind === kind) : rows;
+    return (kind ? rows.filter((row) => row.kind === kind) : rows).filter(
+      (row) => !(row.kind === 'team' && row.id.startsWith('mentor-'))
+    );
   }
 
   const filter = kind ? `&kind=eq.${kind}` : '';
   const rows = await supabaseRequest<SupabaseRow[]>(
     `?select=id,kind,payload,published,created_at,updated_at${filter}&order=updated_at.desc`
   );
-  return rows.map(normalizeRow);
+  return rows.map(normalizeRow).filter(
+    (row) => !(row.kind === 'team' && row.id.startsWith('mentor-'))
+  );
 }
 
 export async function upsertContent<K extends ContentKind>(

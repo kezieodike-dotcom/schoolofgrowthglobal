@@ -1,11 +1,11 @@
 import { Router } from "express";
 import {
-  createApplication,
-  listApplications,
-  listApproved,
-  decideApplication,
-  reopenApplication,
-  countsByStatus,
+  listApplicationsAsync,
+  listApprovedAsync,
+  countsByStatusAsync,
+  createApplicationAsync,
+  decideApplicationAsync,
+  reopenApplicationAsync,
   isWritable,
   type MentorStatus,
 } from "./mentorStore.js";
@@ -64,8 +64,8 @@ export function createMentorRouter(
    * are in the record but must never reach the browser.
    */
   router.get("/mentors/directory", (_req, res) => {
-    res.json({
-      mentors: listApproved().map((m) => ({
+    listApprovedAsync().then((approved) => res.json({
+      mentors: approved.map((m) => ({
         id: m.id,
         name: m.name,
         role: m.organization ? `${m.title}, ${m.organization}` : m.title,
@@ -79,7 +79,7 @@ export function createMentorRouter(
         formats: m.answers["Session formats you offer"]?.split(",").map((value) => value.trim()).filter(Boolean) ?? [],
         applicationType: m.applicationType ?? "mentor",
       })),
-    });
+    })).catch((error) => res.status(500).json({ error: error instanceof Error ? error.message : "Could not load mentors." }));
   });
 
   router.post("/mentors/uploads/image", async (req, res) => {
@@ -97,7 +97,7 @@ export function createMentorRouter(
   });
 
   /** Records an application from the registration wizard. */
-  router.post("/mentors/apply", (req, res) => {
+  router.post("/mentors/apply", async (req, res) => {
     const answers = sanitiseAnswers(req.body?.answers);
     if (!answers) {
       return res.status(400).json({ error: "That does not look like an application." });
@@ -120,7 +120,7 @@ export function createMentorRouter(
 
     try {
       const applicationType = req.body?.applicationType === "consultant" ? "consultant" : "mentor";
-      const application = createApplication({ answers, applicationType });
+      const application = await createApplicationAsync({ answers, applicationType });
       res.json({ stored: true, id: application.id });
     } catch (error) {
       console.error("Error storing mentor application:", error);
@@ -130,7 +130,7 @@ export function createMentorRouter(
 
   // ── Admin ──────────────────────────────────────────────────────────
 
-  router.get("/admin/mentors", requireAdmin, (req, res) => {
+  router.get("/admin/mentors", requireAdmin, async (req, res) => {
     const status = req.query.status;
     const filter =
       status === "pending" || status === "approved" || status === "rejected"
@@ -141,12 +141,12 @@ export function createMentorRouter(
       // The panel needs to know whether its own buttons will work before it
       // renders them, not after someone clicks one.
       writable: isWritable(),
-      counts: countsByStatus(),
-      applications: listApplications(filter),
+      counts: await countsByStatusAsync(),
+      applications: await listApplicationsAsync(filter),
     });
   });
 
-  router.post("/admin/mentors/:id/decision", requireAdmin, (req, res) => {
+  router.post("/admin/mentors/:id/decision", requireAdmin, async (req, res) => {
     const { decision, note } = req.body ?? {};
 
     if (decision !== "approved" && decision !== "rejected" && decision !== "pending") {
@@ -161,8 +161,8 @@ export function createMentorRouter(
 
     const updated =
       decision === "pending"
-        ? reopenApplication(req.params.id)
-        : decideApplication(req.params.id, decision, typeof note === "string" ? note : undefined);
+          ? await reopenApplicationAsync(req.params.id)
+          : await decideApplicationAsync(req.params.id, decision, typeof note === "string" ? note : undefined);
 
     if (!updated) {
       return res.status(404).json({ error: "That application no longer exists." });
