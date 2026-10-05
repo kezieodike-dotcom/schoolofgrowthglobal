@@ -5,6 +5,7 @@ import { isPaystackConfigured, paystackPublicKey } from "../src/server/paystackE
 import { createAIRouter } from "../src/server/aiRoutes.js";
 import { createLmsRouter } from "../src/server/lmsRoutes.js";
 import { createDemoReviewerRouter } from "../src/server/demoReviewerRoutes.js";
+import { createMentorRouter } from "../src/server/mentorRoutes.js";
 
 loadServerEnv();
 
@@ -76,6 +77,7 @@ app.get(["/api/payments/config", "/payments/config"], (_req, res) => {
 const aiRouter = createAIRouter();
 const lmsRouter = createLmsRouter();
 const demoReviewerRouter = createDemoReviewerRouter();
+const mentorRouter = createMentorRouter(requireAdmin);
 
 let apiRouterPromise: Promise<express.Router> | null = null;
 
@@ -83,7 +85,6 @@ async function loadApiRouter(): Promise<express.Router> {
   if (!apiRouterPromise) {
     apiRouterPromise = Promise.all([
       import("../src/server/paymentRoutes.js"),
-      import("../src/server/mentorRoutes.js"),
       import("../src/server/leadRoutes.js"),
       import("../src/server/messageRoutes.js"),
       import("../src/server/contentRoutes.js"),
@@ -92,7 +93,6 @@ async function loadApiRouter(): Promise<express.Router> {
     ]).then(
       ([
         paymentRoutes,
-        mentorRoutes,
         leadRoutes,
         messageRoutes,
         contentRoutes,
@@ -101,7 +101,6 @@ async function loadApiRouter(): Promise<express.Router> {
       ]) => {
         const router = express.Router();
         router.use(paymentRoutes.createPaymentRouter());
-        router.use(mentorRoutes.createMentorRouter(requireAdmin));
         router.use(leadRoutes.createLeadRouter(requireAdmin));
         router.use(messageRoutes.createMessageRouter(requireAdmin));
         router.use(contentRoutes.createContentRouter(requireAdmin));
@@ -131,6 +130,8 @@ app.use("/api", lmsRouter);
 app.use(lmsRouter);
 app.use("/api", demoReviewerRouter);
 app.use(demoReviewerRouter);
+app.use("/api", mentorRouter);
+app.use(mentorRouter);
 app.use("/api", lazyApi);
 app.use(lazyApi);
 
