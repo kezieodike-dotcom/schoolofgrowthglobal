@@ -1127,10 +1127,25 @@ const ReviewStep: React.FC<{
 
 const SubmittedPanel: React.FC<{ name: string }> = ({ name }) => {
   const firstName = name.trim().split(/\s+/).slice(-1)[0] || '';
+  const panelRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // The form can be submitted from the bottom of a long review step. Move
+    // the success state into view and give it focus so the confirmation is
+    // immediate for both mouse and keyboard users.
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    panelRef.current?.focus();
+  }, []);
 
   return (
     <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4 py-16">
-      <div className="w-full max-w-lg p-8 sm:p-10 rounded-3xl bg-white border border-emerald-200 shadow-lg text-center space-y-6">
+      <div
+        ref={panelRef}
+        tabIndex={-1}
+        role="status"
+        aria-live="polite"
+        className="w-full max-w-lg p-8 sm:p-10 rounded-3xl bg-white border border-emerald-200 shadow-lg text-center space-y-6 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:ring-offset-4"
+      >
         <div className="w-16 h-16 rounded-full bg-emerald-50 border border-emerald-200 flex items-center justify-center mx-auto">
           <CheckCircle2 className="w-8 h-8 text-emerald-600" />
         </div>
