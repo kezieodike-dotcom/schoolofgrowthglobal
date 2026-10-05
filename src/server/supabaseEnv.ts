@@ -16,5 +16,7 @@ export function readSupabaseEnvWithDefault(name: string, fallback: string): stri
 }
 
 export function normalizeSupabaseUrl(value: string): string {
-  return value.trim().replace(/\/rest\/v1\/?$/i, '').replace(/\/+$/, '');
+  const trimmed = value.trim();
+  const withProtocol = /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
+  return withProtocol.replace(/\/rest\/v1\/?$/i, '').replace(/\/+$/, '');
 }
