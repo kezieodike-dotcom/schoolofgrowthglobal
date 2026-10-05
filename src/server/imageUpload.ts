@@ -117,7 +117,16 @@ async function uploadToSupabase(
 
   if (!res.ok) {
     const body = await res.text().catch(() => '');
-    throw new Error(body || 'Supabase Storage rejected the image upload.');
+    let detail = body.trim();
+    try {
+      const parsed = JSON.parse(detail) as { message?: string; error?: string; statusCode?: string };
+      detail = parsed.message || parsed.error || detail;
+    } catch {
+      // Supabase can return plain text for proxy and gateway failures.
+    }
+    throw new Error(
+      `Supabase Storage rejected the image upload (${res.status} ${res.statusText}).${detail ? ` ${detail}` : ''}`
+    );
   }
 
   return {
