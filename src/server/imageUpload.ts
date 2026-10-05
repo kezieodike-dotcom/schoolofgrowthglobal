@@ -175,6 +175,11 @@ export async function uploadImage(input: ImageUploadInput): Promise<ImageUploadR
     try {
       return await uploadToSupabase(supabase, objectPath, input.mimeType, file);
     } catch (error) {
+      if (process.env.VERCEL) {
+        throw new Error(
+          `Supabase Storage upload failed.${error instanceof Error ? ` ${error.message}` : ''}`
+        );
+      }
       // A local/self-hosted environment can retain uploads even when a stale
       // or temporarily unreachable Supabase project is configured. Production
       // deployments with working storage still use Supabase as the durable
