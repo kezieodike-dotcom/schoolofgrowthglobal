@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { ViewType } from '../types';
 import { TestimonialsSection } from '../components/TestimonialsSection';
 import { GlobalFlagMarquee } from '../components/GlobalFlagMarquee';
-import { Globe } from '../../components/ui/globe';
 import { FACULTY_MEMBERS } from '../data/mockData';
 import { useContentCollection } from '../lib/useContent';
 import { askGrowthAI, describeError } from '../lib/growthAI';
@@ -72,11 +71,6 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
         />
         <div className="absolute inset-0 bg-gradient-to-b from-slate-950/76 via-slate-950/46 to-slate-950/90 lg:hidden"></div>
         <div className="absolute inset-0 bg-[linear-gradient(115deg,rgba(15,23,42,0.82)_0%,rgba(15,23,42,0.55)_48%,rgba(15,23,42,0.18)_100%)] lg:hidden"></div>
-
-        {/* Global growth visual: stays behind the existing hero content and card. */}
-        <div className="pointer-events-none absolute -right-[18rem] top-1/2 z-0 h-[36rem] w-[36rem] -translate-y-1/2 opacity-35 mix-blend-screen sm:-right-[13rem] lg:-right-24 lg:h-[42rem] lg:w-[42rem] lg:opacity-45">
-          <Globe />
-        </div>
 
         {/* Subtle background glow */}
         <div className="absolute top-1/4 left-1/2 hidden h-[400px] w-[800px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-amber-50 blur-[120px] pointer-events-none lg:block"></div>
