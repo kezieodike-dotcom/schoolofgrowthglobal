@@ -2002,6 +2002,46 @@ export const IMPACT_STATS = [
 
 export const FACULTY_MEMBERS: FacultyMember[] = [
   {
+    id: 'f1',
+    name: 'Dr. Adebayo Okonkwo, PhD',
+    role: 'Dean of Executive Leadership',
+    institution: 'Former Managing Director at McKinsey & Oxford Fellow',
+    bio: 'Advisor to 20+ Fortune 500 boards on international expansion and capital allocation.',
+    credentials: ['PhD Economics, Oxford', 'Published Author on Global Resilience', 'Special Envoy for Tech Policy'],
+    avatar: '/people/m3-okonkwo.jpg'
+  },
+  {
+    id: 'f2',
+    name: 'Dr. Ngozi Okafor',
+    role: 'Chair of Organizational Dynamics',
+    institution: 'Harvard Business School Fellow',
+    bio: 'Pioneered adaptive leadership models used by multinational technology conglomerates.',
+    credentials: ['DBA Harvard Business School', 'Executive Coach to Fortune 100 CEOs'],
+    avatar: '/people/w1-okafor.jpg'
+  },
+  {
+    id: 'f3',
+    name: 'Bright John',
+    role: 'Lead Growth Strategist, School of Growth Global',
+    institution: 'Business Management Essentials Certified',
+    bio: 'Business Growth Strategist | Leadership & Organizational Development Consultant',
+    credentials: [
+      'Business Management Essentials Certified',
+      'Business Growth Strategist',
+      'Leadership & Organizational Development Consultant'
+    ],
+    avatar: '/people/bright-john.jpg'
+  },
+  {
+    id: 'f4',
+    name: 'Dr. Amara Balogun',
+    role: 'Chair of Artificial Intelligence',
+    institution: 'Former Chief AI Officer & MIT Research Fellow',
+    bio: 'Pioneer in ethical AI governance, agentic systems, and neural network risk modeling.',
+    credentials: ['PhD Computer Science, MIT', 'Advisor to African Union Tech Council'],
+    avatar: '/people/w3-balogun.jpg'
+  },
+  {
     id: 'john-akpan',
     name: 'John Akpan',
     role: 'Senior Strategic Adviser to the Founder',
