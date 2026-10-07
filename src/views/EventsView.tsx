@@ -13,8 +13,10 @@ export const EventsView: React.FC = () => {
   const [registered, setRegistered] = useState<string | null>(null);
   const managedEvents = useContentCollection('event', EVENTS);
 
-  const events = managedEvents.items.filter((e) => filter === 'All' || e.type === filter);
-  const featured = managedEvents.items[0] ?? EVENTS[0];
+  const conferenceSchedule = managedEvents.items.filter((event) => event.id.startsWith('global-growth-conference-'));
+  const existingEvents = managedEvents.items.filter((event) => !event.id.startsWith('global-growth-conference-'));
+  const events = [...conferenceSchedule, ...existingEvents].filter((e) => filter === 'All' || e.type === filter);
+  const featured = conferenceSchedule[0] ?? existingEvents[0] ?? EVENTS[0];
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
@@ -105,7 +107,7 @@ export const EventsView: React.FC = () => {
                 <div className="flex items-center justify-between border-t border-slate-100 pt-4">
                   <div>
                     <span className="text-sm font-bold font-serif text-amber-600">{event.price}</span>
-                    <span className="block text-[10px] text-emerald-600 font-mono">{event.seatsLeft} seats left</span>
+                    <span className="block text-[10px] text-emerald-600 font-mono">{event.seatsLeft > 0 ? `${event.seatsLeft} seats left` : 'Registration opens soon'}</span>
                   </div>
                   {event.liveClassUrl ? (
                     <a
