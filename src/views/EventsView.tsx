@@ -80,29 +80,29 @@ export const EventsView: React.FC = () => {
 
         <div className="scroll-card-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {events.map((event) => (
-            <div key={event.id} className="scroll-card group bg-white shadow-sm border border-slate-200 rounded-2xl overflow-hidden flex flex-col hover:border-slate-300 transition-all">
-              <div className="relative h-36 overflow-hidden">
-                <img src={event.image} alt={event.title} className="scroll-card-image w-full h-full object-cover opacity-80" />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent" />
-                <span className="absolute top-3 left-3 text-[10px] font-mono px-2 py-0.5 rounded bg-slate-950/80 text-amber-400 border border-amber-500/30">
+            <div key={event.id} className="scroll-card reference-card group flex flex-col overflow-hidden transition-all">
+              <div className="reference-card-media relative">
+                <img src={event.image} alt={event.title} className="scroll-card-image h-full w-full object-cover opacity-90" />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/55 to-transparent" />
+                <span className="reference-card-pill absolute left-4 top-4">
                   {event.type}
                 </span>
-                <span className="absolute top-3 right-3 text-[10px] font-mono px-2 py-0.5 rounded bg-slate-950/80 text-slate-300 border border-slate-700 flex items-center gap-1">
+                <span className="absolute right-4 top-4 flex items-center gap-1 rounded-full bg-white/90 px-2.5 py-1 text-[10px] font-semibold text-slate-700">
                   {modeIcon(event.mode)} {event.mode}
                 </span>
               </div>
 
-              <div className="p-5 flex flex-col flex-1">
-                <h4 className="text-lg font-serif font-bold text-slate-900 mb-2">{event.title}</h4>
-                <p className="text-xs text-slate-500 line-clamp-2 mb-4 flex-1">{event.description}</p>
+              <div className="reference-card-body flex flex-1 flex-col">
+                <h4 className="reference-card-title mb-2">{event.title}</h4>
+                <p className="reference-card-copy mb-5 line-clamp-3 flex-1">{event.description}</p>
 
-                <div className="space-y-1.5 text-[11px] text-slate-500 font-mono mb-4">
+                <div className="reference-card-meta mb-4 space-y-1.5 font-mono">
                   <div className="flex items-center gap-1.5"><CalendarDays className="w-3.5 h-3.5 text-amber-600" /> {event.date} • {event.time}</div>
                   <div className="flex items-center gap-1.5"><MapPin className="w-3.5 h-3.5 text-amber-600" /> {event.location}</div>
                   <div className="flex items-center gap-1.5"><Users className="w-3.5 h-3.5 text-amber-600" /> {event.speaker}</div>
                 </div>
 
-                <div className="pt-4 border-t border-slate-200 flex items-center justify-between">
+                <div className="flex items-center justify-between border-t border-slate-100 pt-4">
                   <div>
                     <span className="text-sm font-bold font-serif text-amber-600">{event.price}</span>
                     <span className="block text-[10px] text-emerald-600 font-mono">{event.seatsLeft} seats left</span>

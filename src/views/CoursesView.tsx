@@ -127,7 +127,7 @@ export const CoursesView: React.FC = () => {
       <Link
         key={course.id}
         to={`/courses/${course.id}`}
-        className={`scroll-card motion-pressable group border shadow-sm rounded-2xl overflow-hidden flex flex-col transition-all ${
+        className={`scroll-card reference-card motion-pressable group border shadow-sm overflow-hidden flex flex-col transition-all ${
           cohortStyle
             ? cohortStyle.card
             : unlocked
@@ -135,7 +135,7 @@ export const CoursesView: React.FC = () => {
               : 'bg-white border-slate-200 hover:border-amber-300'
         }`}
       >
-        <div className="relative h-40 overflow-hidden">
+        <div className="reference-card-media relative overflow-hidden">
           <img
             src={course.heroImage}
             alt={course.title}
@@ -144,7 +144,7 @@ export const CoursesView: React.FC = () => {
             }`}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent" />
-          <span className="absolute top-3 left-3 text-[10px] font-mono px-2 py-0.5 rounded bg-slate-950/80 text-amber-400 border border-amber-500/30">
+          <span className="reference-card-pill absolute left-4 top-4">
             {course.schoolName}
           </span>
 
@@ -169,7 +169,7 @@ export const CoursesView: React.FC = () => {
           )}
         </div>
 
-        <div className="p-5 flex flex-col flex-1">
+        <div className="reference-card-body flex flex-col flex-1">
           {cohortStyle && (
             <div className="mb-3 flex items-center justify-between gap-3">
               <span className={`rounded-full px-3 py-1.5 text-[11px] font-mono font-bold uppercase tracking-wider ${cohortStyle.labelClass}`}>
@@ -194,12 +194,12 @@ export const CoursesView: React.FC = () => {
               <Star className="w-3.5 h-3.5 fill-amber-400" /> {course.rating}
             </span>
           </div>
-          <h4 className={`${cohortStyle ? 'text-xl sm:text-2xl' : 'text-lg sm:text-xl'} font-serif font-bold transition-colors mb-2 leading-tight ${
+          <h4 className={`reference-card-title ${cohortStyle ? 'sm:text-2xl' : ''} transition-colors mb-2 ${
             isEliteCohort ? 'text-slate-950 group-hover:text-amber-700' : 'text-slate-900 group-hover:text-amber-700'
           }`}>
             {course.title}
           </h4>
-          <p className={`${cohortStyle ? 'text-sm sm:text-[15px] line-clamp-3' : 'text-xs line-clamp-2'} leading-relaxed mb-4 flex-1 ${isEliteCohort ? 'text-slate-600' : 'text-slate-500'}`}>
+          <p className={`reference-card-copy ${cohortStyle ? 'line-clamp-3' : 'line-clamp-3'} mb-4 flex-1 ${isEliteCohort ? 'text-slate-600' : ''}`}>
             {course.description}
           </p>
           {course.modules.length > 0 && (

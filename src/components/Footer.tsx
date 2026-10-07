@@ -62,6 +62,7 @@ export const Footer: React.FC = () => {
               <li><Link to="/jobs" className="hover:text-amber-700 transition-colors">Career Jobs</Link></li>
               <li><Link to="/pricing" className="hover:text-amber-700 transition-colors">Tuition &amp; Packages</Link></li>
               <li><Link to="/events" className="hover:text-amber-700 transition-colors">Events &amp; Summits</Link></li>
+              <li><Link to="/partnerships" className="hover:text-amber-700 transition-colors">Sponsorship &amp; Partnership</Link></li>
               <li><Link to="/blog" className="hover:text-amber-700 transition-colors">Knowledge Centre</Link></li>
               <li><Link to="/donate" className="hover:text-amber-700 transition-colors">Donations</Link></li>
             </ul>
@@ -132,10 +133,9 @@ export const Footer: React.FC = () => {
         <div className="mt-12 pt-8 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
           <p>© {new Date().getFullYear()} School of Growth Global. All rights reserved.</p>
           <div className="flex flex-wrap justify-center gap-4 sm:gap-6">
-            <a href="#" className="hover:text-slate-900">Privacy Protocol</a>
-            <a href="#" className="hover:text-slate-900">Institutional Terms</a>
-            <a href="#" className="hover:text-slate-900">Academic Integrity</a>
-            <a href="#" className="hover:text-slate-900">Security &amp; Compliance</a>
+            <Link to="/privacy" className="hover:text-slate-900">Privacy Policy</Link>
+            <Link to="/contact" className="hover:text-slate-900">Directions</Link>
+            <Link to="/contact" className="hover:text-slate-900">Security &amp; Compliance</Link>
             {/*
               Plain text among the legal links rather than a button. The panel
               is password-gated server-side, so this is a convenience for the

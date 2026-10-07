@@ -125,7 +125,7 @@ export const ContentNotificationCenter: React.FC = () => {
           setOpen((current) => !current);
           if (!open) markAllRead();
         }}
-        className="relative inline-flex h-10 w-10 items-center justify-center rounded-lg bg-slate-900 text-slate-300 border border-slate-800 hover:text-white hover:border-amber-500/50 transition-colors"
+        className="relative inline-flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-600 shadow-sm transition-colors hover:border-blue-300 hover:text-blue-700"
         aria-label="Site updates"
       >
         <Bell className="h-4 w-4" />

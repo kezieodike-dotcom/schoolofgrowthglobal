@@ -31,7 +31,7 @@ export const AdminLoginView: React.FC = () => {
         <div className="text-center space-y-3">
           <img
             src="/logo.jpg"
-            alt=""
+            alt="School of Growth Global crest"
             className="w-14 h-14 rounded-2xl object-cover mx-auto ring-1 ring-amber-500/30"
           />
           <div>

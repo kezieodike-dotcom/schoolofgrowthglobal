@@ -6,6 +6,7 @@ import { GlobalFlagMarquee } from '../components/GlobalFlagMarquee';
 import { FACULTY_MEMBERS } from '../data/mockData';
 import { useContentCollection } from '../lib/useContent';
 import { askGrowthAI, describeError } from '../lib/growthAI';
+import { FaqSection } from '../components/FaqSection';
 import {
   Crown,
   ArrowRight,
@@ -21,6 +22,7 @@ import {
   CalendarDays,
   Lightbulb,
   HeartHandshake,
+  Handshake,
   Building2,
   ExternalLink
 } from 'lucide-react';
@@ -198,21 +200,21 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
           </div>
 
           <div className="mt-10 grid gap-4 lg:grid-cols-3">
-            <article className="border-t-2 border-amber-400 bg-slate-50 p-6 sm:p-8">
+            <article className="reference-card border-t-2 border-amber-400 p-6 sm:p-8">
               <UsersRound className="h-6 w-6 text-amber-600" />
               <h3 className="mt-12 text-xl font-serif font-semibold text-slate-900">Individuals</h3>
               <p className="mt-3 text-[15px] leading-7 text-slate-600">
                 Build skills. Discover opportunities. Create your future.
               </p>
             </article>
-            <article className="border-t-2 border-emerald-500 bg-slate-50 p-6 sm:p-8">
+            <article className="reference-card border-t-2 border-emerald-500 p-6 sm:p-8">
               <BriefcaseBusiness className="h-6 w-6 text-emerald-600" />
               <h3 className="mt-12 text-xl font-serif font-semibold text-slate-900">Professionals &amp; Leaders</h3>
               <p className="mt-3 text-[15px] leading-7 text-slate-600">
                 Advance your career. Strengthen leadership. Increase your impact.
               </p>
             </article>
-            <article className="border-t-2 border-slate-900 bg-slate-50 p-6 sm:p-8">
+            <article className="reference-card border-t-2 border-slate-900 p-6 sm:p-8">
               <Building2 className="h-6 w-6 text-slate-700" />
               <h3 className="mt-12 text-xl font-serif font-semibold text-slate-900">Organizations &amp; Institutions</h3>
               <p className="mt-3 text-[15px] leading-7 text-slate-600">
@@ -320,25 +322,43 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
               </p>
             </div>
             <div className="grid gap-4 sm:grid-cols-3">
-              <Link to="/courses" className="scroll-card motion-pressable group rounded-lg bg-slate-950 p-5 text-white transition-all hover:-translate-y-1 hover:bg-slate-900">
-                <BookOpen className="mb-10 h-5 w-5 text-amber-400" />
-                <h3 className="text-lg font-serif font-semibold">Courses & cohorts</h3>
-                <p className="mt-2 text-sm leading-6 text-slate-300">Structured ladders and specialised growth programmes.</p>
-                <span className="mt-5 inline-flex items-center gap-2 text-xs font-semibold text-amber-400">Explore courses <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" /></span>
+              <Link to="/courses" className="scroll-card reference-card motion-pressable group p-5 transition-all">
+                <BookOpen className="mb-10 h-5 w-5 text-blue-600" />
+                <h3 className="reference-card-title">Courses &amp; cohorts</h3>
+                <p className="reference-card-copy mt-2">Structured ladders and specialised growth programmes.</p>
+                <span className="mt-5 inline-flex items-center gap-2 text-xs font-semibold text-blue-700">Explore courses <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" /></span>
               </Link>
-              <Link to="/events" className="scroll-card motion-pressable group rounded-lg border border-slate-200 bg-slate-50 p-5 transition-all hover:-translate-y-1 hover:border-violet-300 hover:bg-violet-50">
-                <CalendarDays className="mb-10 h-5 w-5 text-violet-600" />
-                <h3 className="text-lg font-serif font-semibold text-slate-900">Events & live classes</h3>
-                <p className="mt-2 text-sm leading-6 text-slate-600">Join timely sessions and practical conversations.</p>
-                <span className="mt-5 inline-flex items-center gap-2 text-xs font-semibold text-violet-700">See what is next <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" /></span>
+              <Link to="/events" className="scroll-card reference-card motion-pressable group p-5 transition-all">
+                <CalendarDays className="mb-10 h-5 w-5 text-blue-600" />
+                <h3 className="reference-card-title">Events &amp; live classes</h3>
+                <p className="reference-card-copy mt-2">Join timely sessions and practical conversations.</p>
+                <span className="mt-5 inline-flex items-center gap-2 text-xs font-semibold text-blue-700">See what is next <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" /></span>
               </Link>
-              <Link to="/blog" className="scroll-card motion-pressable group rounded-lg border border-slate-200 bg-slate-50 p-5 transition-all hover:-translate-y-1 hover:border-orange-300 hover:bg-orange-50">
-                <Lightbulb className="mb-10 h-5 w-5 text-orange-600" />
-                <h3 className="text-lg font-serif font-semibold text-slate-900">Insights</h3>
-                <p className="mt-2 text-sm leading-6 text-slate-600">Perspectives for better leadership and decisions.</p>
-                <span className="mt-5 inline-flex items-center gap-2 text-xs font-semibold text-orange-700">Read insights <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" /></span>
+              <Link to="/blog" className="scroll-card reference-card motion-pressable group p-5 transition-all">
+                <Lightbulb className="mb-10 h-5 w-5 text-blue-600" />
+                <h3 className="reference-card-title">Insights</h3>
+                <p className="reference-card-copy mt-2">Perspectives for better leadership and decisions.</p>
+                <span className="mt-5 inline-flex items-center gap-2 text-xs font-semibold text-blue-700">Read insights <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" /></span>
               </Link>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* High-visibility partnership pathway */}
+      <section className="border-b border-slate-200 bg-slate-950 py-14 sm:py-20">
+        <div className="mx-auto grid max-w-7xl gap-8 px-4 sm:px-6 lg:grid-cols-[1fr_1.15fr] lg:items-center lg:px-8">
+          <div data-scroll-reveal>
+            <div className="inline-flex items-center gap-2 rounded-full border border-amber-400/30 bg-amber-400/10 px-3 py-1 text-[11px] font-mono uppercase tracking-widest text-amber-300">
+              <Handshake className="h-3.5 w-3.5" />
+              Global Growth Conference
+            </div>
+            <h2 className="mt-4 max-w-xl text-3xl font-serif font-semibold leading-tight text-white sm:text-4xl lg:text-5xl">Partner with the Global Growth Movement.</h2>
+            <p className="mt-4 max-w-xl text-[15px] leading-7 text-slate-300">Join School of Growth Global in developing people, strengthening leadership capacity and creating measurable social and economic impact.</p>
+            <Link to="/partnerships" className="motion-pressable mt-7 inline-flex items-center gap-2 rounded-xl bg-amber-400 px-5 py-3 text-sm font-bold text-slate-950 hover:bg-amber-300">Explore partnership opportunities <ArrowRight className="h-4 w-4" /></Link>
+          </div>
+          <div className="grid gap-3 sm:grid-cols-2" data-scroll-reveal>
+            {['Conference Sponsorship', 'Corporate Partnership', 'Scholarship Sponsorship', 'Community & Social Impact Partnership'].map((item) => <Link key={item} to="/partnerships#partnership-application" className="group flex items-center justify-between gap-4 rounded-2xl border border-slate-800 bg-slate-900 px-5 py-4 text-sm font-semibold text-white transition-colors hover:border-amber-400/60 hover:bg-slate-800"><span>{item}</span><ArrowRight className="h-4 w-4 shrink-0 text-amber-300 transition-transform group-hover:translate-x-1" /></Link>)}
           </div>
         </div>
       </section>
@@ -477,6 +497,8 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
       {/* What Our Leaders Say - Animated Testimonials Columns */}
       <TestimonialsSection />
 
+      <FaqSection />
+
       {/* Donation hero bridge */}
       <section className="relative overflow-hidden bg-slate-950 py-14 sm:py-18">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -570,7 +592,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
             {featuredTeam.map((member) => (
               <article
                 key={member.id}
-                className="scroll-card group overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm transition-all hover:border-amber-300 hover:shadow-xl hover:shadow-slate-900/5"
+                className="scroll-card reference-card group overflow-hidden transition-all"
               >
                 <div className="aspect-[4/3] overflow-hidden bg-slate-100">
                   <img
@@ -579,15 +601,15 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
                     className="scroll-card-image h-full w-full object-cover object-center transition-transform duration-500"
                   />
                 </div>
-                <div className="p-5 space-y-3">
+                <div className="reference-card-body space-y-3">
                   <div className="space-y-1">
                     <h3 className="text-base font-serif font-semibold text-slate-900 leading-snug">
                       {member.name}
                     </h3>
-                    <p className="text-xs font-semibold text-amber-700">{member.role}</p>
-                    <p className="text-[11px] leading-relaxed text-slate-500">{member.institution}</p>
+                    <p className="text-xs font-semibold text-blue-700">{member.role}</p>
+                    <p className="reference-card-meta leading-relaxed">{member.institution}</p>
                   </div>
-                  <p className="text-sm leading-6 text-slate-600">{member.bio}</p>
+                  <p className="reference-card-copy text-sm">{member.bio}</p>
                   <div className="flex items-center gap-2 border-t border-slate-100 pt-3 text-[11px] font-medium text-slate-500">
                     <Award className="h-3.5 w-3.5 text-amber-600" />
                     <span>{member.credentials[0]}</span>

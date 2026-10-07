@@ -141,25 +141,25 @@ export const BooksView: React.FC = () => {
 };
 
 const BookCard: React.FC<{ book: BookItem }> = ({ book }) => (
-  <article className="group bg-white border border-slate-200 rounded-lg overflow-hidden shadow-sm flex flex-col">
+  <article className="reference-card group flex flex-col overflow-hidden">
     <img
       src={book.coverImage || '/scenes/hero-team.jpg'}
       alt={book.title}
-      className="h-56 w-full object-cover"
+      className="reference-card-media h-56 w-full object-cover"
     />
-    <div className="p-5 flex-1 flex flex-col">
+    <div className="reference-card-body flex flex-1 flex-col">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <p className="text-[10px] font-mono uppercase tracking-wider text-amber-700">
+          <p className="reference-card-pill">
             {book.category}
           </p>
-          <h3 className="mt-1 text-xl font-serif font-bold text-slate-950">{book.title}</h3>
+          <h3 className="reference-card-title mt-3">{book.title}</h3>
         </div>
         <span className="shrink-0 rounded-full bg-slate-50 border border-slate-200 px-2 py-1 text-[10px] font-bold text-slate-600">
           {book.format}
         </span>
       </div>
-      <p className="mt-2 text-sm text-slate-600 leading-relaxed">{book.subtitle || book.description}</p>
+      <p className="reference-card-copy mt-3">{book.subtitle || book.description}</p>
       <p className="mt-3 text-xs text-slate-500">
         By <strong className="text-slate-800">{book.authorName}</strong>
       </p>

@@ -647,7 +647,7 @@ const ContentForm: React.FC<{
                   <div className="grid grid-cols-1 sm:grid-cols-[96px_1fr] gap-3 rounded-lg border border-slate-200 bg-slate-50 p-3">
                     <div className="h-24 w-24 overflow-hidden rounded-md border border-slate-200 bg-white">
                       {value ? (
-                        <img src={value} alt="" className="h-full w-full object-cover" />
+                        <img src={value} alt={`${field.label} preview`} className="h-full w-full object-cover" />
                       ) : (
                         <span className="flex h-full w-full items-center justify-center text-slate-300">
                           <ImagePlus className="h-6 w-6" />

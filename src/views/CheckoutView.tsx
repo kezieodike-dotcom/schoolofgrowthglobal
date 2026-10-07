@@ -492,7 +492,7 @@ export const CheckoutView: React.FC = () => {
                 <div className="flex items-center gap-3 p-3 rounded-2xl bg-slate-800/70 border border-slate-700">
                   <img
                     src={mentor.avatar}
-                    alt=""
+                    alt={`${mentor.name} profile`}
                     className="w-10 h-10 rounded-xl object-cover border border-amber-500/40"
                   />
                   <div className="min-w-0">

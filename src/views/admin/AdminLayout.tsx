@@ -81,7 +81,7 @@ export const AdminLayout: React.FC = () => {
         }`}
       >
         <div className="h-16 flex items-center gap-3 px-5 border-b border-slate-800">
-          <img src="/logo.jpg" alt="" className="w-8 h-8 rounded-lg object-cover" />
+          <img src="/logo.jpg" alt="School of Growth Global crest" className="w-8 h-8 rounded-lg object-cover" />
           <div className="min-w-0">
             <p className="text-xs font-bold text-white truncate">
               School of Growth

@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import { BLOG_POSTS } from '../data/mockData';
 import { PageHero } from '../components/PageHero';
 import { useContentCollection } from '../lib/useContent';
+import { SocialShare } from '../components/SocialShare';
 import type { BlogPost } from '../types';
 import { Newspaper, Clock, ArrowLeft, ArrowRight, Tag } from 'lucide-react';
 
@@ -48,6 +49,7 @@ const Article: React.FC<{ slug: string; posts: BlogPost[] }> = ({ slug, posts })
           <span>•</span>
           <span className="flex items-center gap-1"><Clock className="w-3.5 h-3.5" /> {post.readTime}</span>
         </div>
+        <SocialShare title={post.title} className="mt-5" />
 
         <div className={`mt-8 grid gap-3 ${post.gallery && post.gallery.length > 1 ? 'grid-cols-2' : 'grid-cols-1'}`}>
           {(post.gallery ?? [post.image]).map((image, index) => (
@@ -196,22 +198,22 @@ export const BlogView: React.FC = () => {
             <Link
               key={post.id}
               to={`/blog/${post.slug}`}
-              className="scroll-card motion-pressable group bg-white shadow-sm border border-slate-200 rounded-2xl overflow-hidden flex flex-col hover:border-amber-400 transition-all"
+              className="scroll-card reference-card motion-pressable group flex flex-col overflow-hidden transition-all"
             >
-              <div className="h-40 overflow-hidden">
-                <img src={post.image} alt={post.title} className="scroll-card-image w-full h-full object-cover opacity-80 transition-transform duration-500" />
+              <div className="reference-card-media">
+                <img src={post.image} alt={post.title} className="scroll-card-image h-full w-full object-cover opacity-90 transition-transform duration-500" />
               </div>
-              <div className="p-5 flex flex-col flex-1">
-                <span className="text-[10px] font-mono text-amber-600 flex items-center gap-1 mb-2">
-                  <Tag className="w-3 h-3" /> {post.category}
+              <div className="reference-card-body flex flex-1 flex-col">
+                <span className="reference-card-pill mb-3">
+                  <Tag className="mr-1 h-3 w-3" /> {post.category}
                 </span>
-                <h4 className="text-lg font-serif font-bold text-slate-900 group-hover:text-amber-700 transition-colors mb-2 leading-snug">
+                <h4 className="reference-card-title mb-2 transition-colors group-hover:text-blue-700">
                   {post.title}
                 </h4>
-                <p className="text-xs text-slate-500 line-clamp-2 mb-4 flex-1">{post.excerpt}</p>
-                <div className="pt-4 border-t border-slate-200 flex items-center justify-between text-[11px] text-slate-500 font-mono">
+                <p className="reference-card-copy mb-5 line-clamp-3 flex-1">{post.excerpt}</p>
+                <div className="reference-card-meta flex items-center justify-between border-t border-slate-100 pt-4 font-mono">
                   <span>{post.date}</span>
-                  <span className="text-amber-600 font-bold flex items-center gap-1">
+                  <span className="flex items-center gap-1 font-bold text-blue-600">
                     Read <ArrowRight className="w-3.5 h-3.5" />
                   </span>
                 </div>

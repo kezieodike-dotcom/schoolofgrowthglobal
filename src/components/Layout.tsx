@@ -4,6 +4,7 @@ import { HeaderNavbar } from './HeaderNavbar';
 import { Footer } from './Footer';
 import { GrowthAIFloatingWidget } from './GrowthAIFloatingWidget';
 import { TierPreviewSwitcher } from './TierPreviewSwitcher';
+import { CookieConsent } from './CookieConsent';
 
 /** Scrolls to top on every route change. */
 const ScrollToTop: React.FC = () => {
@@ -30,6 +31,7 @@ export const Layout: React.FC = () => {
 
       {!isCommandCenter && <GrowthAIFloatingWidget />}
       {!isCommandCenter && <Footer />}
+      {!isCommandCenter && <CookieConsent />}
 
       {/* Development only - stripped from production builds. */}
       <TierPreviewSwitcher />

@@ -23,6 +23,7 @@ import { RegisterView } from './views/RegisterView';
 import { MentorRegistrationView } from './views/MentorRegistrationView';
 import { MentorEnlistmentView } from './views/MentorEnlistmentView';
 import { SchoolsFacultiesView } from './views/SchoolsFacultiesView';
+import { PartnershipView } from './views/PartnershipView';
 import { MentorInboxView } from './views/MentorInboxView';
 import { DemoReviewerAccessView } from './views/DemoReviewerAccessView';
 
@@ -43,6 +44,10 @@ import { AdminCatalogueView } from './views/admin/AdminCatalogueView';
 import { AdminIntegrationsView } from './views/admin/AdminIntegrationsView';
 import { LmsStudentDashboardView } from './views/LmsStudentDashboardView';
 import { LmsLessonView } from './views/LmsLessonView';
+import { PrivacyView } from './views/PrivacyView';
+import { ThankYouView } from './views/ThankYouView';
+import { NotFoundView } from './views/NotFoundView';
+import { Seo } from './components/Seo';
 
 // ── Legacy route adapters ────────────────────────────────────────────────
 const HomeRoute: React.FC = () => <HomeView onNavigate={useLegacyNavigate()} />;
@@ -127,7 +132,9 @@ const AppRoutes: React.FC = () => {
   useScrollReveal(pathname);
 
   return (
-    <Routes>
+    <>
+      <Seo />
+      <Routes>
       {/*
         The admin panel is deliberately outside <Layout>: it has its own
         navigation and must never render the public header, footer or the
@@ -163,6 +170,7 @@ const AppRoutes: React.FC = () => {
         <Route path="mentorship" element={<MentorsView />} />
         <Route path="mentors" element={<MentorsView />} />
         <Route path="enlist" element={<MentorEnlistmentView />} />
+        <Route path="partnerships" element={<PartnershipView />} />
         <Route path="books" element={<BooksView />} />
         <Route path="jobs" element={<GrowthJobsView />} />
         <Route path="events" element={<EventsView />} />
@@ -170,6 +178,8 @@ const AppRoutes: React.FC = () => {
         <Route path="blog/:slug" element={<BlogView />} />
         <Route path="donate" element={<DonationsView />} />
         <Route path="contact" element={<ContactView />} />
+        <Route path="privacy" element={<PrivacyView />} />
+        <Route path="thank-you" element={<ThankYouView />} />
         <Route path="demo-reviewer" element={<DemoReviewerAccessView />} />
 
         {/*
@@ -196,9 +206,10 @@ const AppRoutes: React.FC = () => {
         <Route path="portal" element={<PortalRoute />} />
         <Route path="command-center" element={<CommandCenterRoute />} />
 
-        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="*" element={<NotFoundView />} />
       </Route>
-    </Routes>
+      </Routes>
+    </>
   );
 };
 

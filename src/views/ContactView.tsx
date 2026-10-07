@@ -1,6 +1,7 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { PageHero } from '../components/PageHero';
-import { Mail, Phone, MapPin, Building2, CheckCircle2, Send, Loader2, AlertCircle } from 'lucide-react';
+import { Mail, Phone, MapPin, Building2, CheckCircle2, Send, Loader2, AlertCircle, ExternalLink, Navigation } from 'lucide-react';
 import { useFormSubmit, HONEYPOT_PROPS } from '../lib/useFormSubmit';
 
 const INTERESTS = [
@@ -74,6 +75,9 @@ export const ContactView: React.FC = () => {
               </div>
               <h3 className="text-lg font-serif font-bold text-slate-900">Message Sent</h3>
               <p className="text-sm text-slate-500">Thank you - a member of our team will respond within one business day.</p>
+              <Link to="/thank-you" className="inline-flex items-center justify-center rounded-xl bg-amber-500 px-5 py-2.5 text-xs font-bold text-slate-950 hover:bg-amber-400">
+                View thank-you page
+              </Link>
               <button
                 onClick={reset}
                 className="px-5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs"
@@ -132,6 +136,20 @@ export const ContactView: React.FC = () => {
               </button>
             </form>
           )}
+        </div>
+      </section>
+
+      <section className="border-t border-slate-200 bg-white py-16">
+        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-8 px-4 sm:px-6 lg:grid-cols-12 lg:px-8">
+          <div className="lg:col-span-5">
+            <p className="text-xs font-mono uppercase tracking-widest text-amber-700">Find us</p>
+            <h2 className="mt-2 text-3xl font-serif font-bold text-slate-900">Map &amp; directions</h2>
+            <p className="mt-4 text-sm leading-7 text-slate-600">Use Google Maps to search for School of Growth Global and get directions from your current location.</p>
+            <a href="https://www.google.com/maps/search/?api=1&query=School+of+Growth+Global" target="_blank" rel="noreferrer" className="mt-6 inline-flex items-center gap-2 rounded-xl bg-slate-950 px-5 py-3 text-xs font-bold text-white hover:bg-slate-800"><Navigation className="h-4 w-4" /> Get directions <ExternalLink className="h-3.5 w-3.5" /></a>
+          </div>
+          <div className="overflow-hidden rounded-2xl border border-slate-200 bg-slate-100 lg:col-span-7">
+            <iframe title="School of Growth Global location map" src="https://www.google.com/maps?q=School+of+Growth+Global&output=embed" className="h-72 w-full border-0 sm:h-80" loading="lazy" referrerPolicy="no-referrer-when-downgrade" />
+          </div>
         </div>
       </section>
     </div>

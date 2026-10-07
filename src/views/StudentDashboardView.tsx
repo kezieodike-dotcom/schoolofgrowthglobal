@@ -712,7 +712,7 @@ const OverviewTab: React.FC<{
               <div className="flex items-center gap-2 text-[11px] text-slate-500">
                 <img
                   src={track.instructorAvatar}
-                  alt=""
+                  alt={`${track.instructorName} profile`}
                   className="w-6 h-6 rounded-full object-cover border border-slate-200"
                 />
                 <span>{track.instructorName}</span>
@@ -982,7 +982,7 @@ const CoursesTab: React.FC<{
               <div className="h-24 overflow-hidden relative">
                 <img
                   src={course.heroImage}
-                  alt=""
+                  alt={`${course.title} course cover`}
                   className="w-full h-full object-cover opacity-80 transition-transform duration-500"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-900/70 to-transparent" />
@@ -1243,7 +1243,7 @@ const MessagesTab: React.FC<{
               >
                 <img
                   src={mentor.avatar}
-                  alt=""
+                  alt={`${mentor.name} profile`}
                   className="w-11 h-11 rounded-xl object-cover border border-amber-200"
                 />
                 <div className="min-w-0 flex-1">
@@ -1267,7 +1267,7 @@ const MessagesTab: React.FC<{
                 <div className="flex items-center gap-3 min-w-0">
                   <img
                     src={selected.avatar}
-                    alt=""
+                    alt={`${selected.name} profile`}
                     className="w-12 h-12 rounded-lg object-cover border border-amber-400"
                   />
                   <div className="min-w-0">
@@ -1374,7 +1374,7 @@ const MentorTab: React.FC<{
                 <div className="flex items-start gap-3">
                   <img
                     src={mentor.avatar}
-                    alt=""
+                  alt={`${mentor.name} profile`}
                     className="w-12 h-12 rounded-xl object-cover border-2 border-amber-300"
                   />
                   <div className="min-w-0 flex-1">

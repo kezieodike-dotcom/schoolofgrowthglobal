@@ -6,6 +6,7 @@ import {
   Check,
   HeartHandshake,
   Info,
+  Lightbulb,
   Loader2,
   ShieldCheck,
   Sprout,
@@ -167,7 +168,7 @@ export const DonationsView: React.FC = () => {
             <div className="scroll-card relative overflow-hidden rounded-[2rem] border border-white/70 bg-white shadow-[0_28px_70px_-32px_rgba(15,23,42,0.45)]">
               <img
                 src="/scenes/coaching-collab.jpg"
-                alt=""
+                alt="Learners collaborating in a School of Growth Global session"
                 className="scroll-card-image h-72 w-full object-cover sm:h-96 lg:h-[30rem]"
               />
               <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-950 via-slate-950/70 to-transparent p-5 sm:p-7 text-white">
@@ -185,17 +186,28 @@ export const DonationsView: React.FC = () => {
       </section>
 
       {/* 2. Our Global Impact Vision */}
-      <section className="border-b border-slate-200 bg-white py-12 sm:py-16">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="rounded-3xl border border-amber-200 bg-gradient-to-br from-amber-50/80 via-white to-amber-50/40 p-7 sm:p-10 shadow-sm space-y-4">
-            <div className="inline-flex items-center gap-2 rounded-full border border-amber-300 bg-amber-100/70 px-3.5 py-1 text-xs font-mono font-bold uppercase tracking-wider text-amber-800">
-              <HeartHandshake className="h-3.5 w-3.5 text-amber-700" />
-              Our Global Impact Vision
+      <section className="border-b border-slate-200 bg-slate-50 py-14 sm:py-20">
+        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-8 px-4 sm:px-6 lg:grid-cols-[0.72fr_1.28fr] lg:items-stretch lg:px-8">
+          <div className="flex flex-col justify-between rounded-3xl border border-amber-200 bg-amber-50 p-7 sm:p-9">
+            <div>
+              <div className="inline-flex items-center gap-2 rounded-full border border-amber-300 bg-white/75 px-3.5 py-1 text-xs font-mono font-bold uppercase tracking-wider text-amber-800">
+                <HeartHandshake className="h-3.5 w-3.5 text-amber-700" />
+                Our Global Impact Vision
+              </div>
+              <h2 className="mt-6 max-w-xs text-3xl font-serif font-bold leading-tight text-slate-950 sm:text-4xl">
+                Donation Vision
+              </h2>
+              <div className="mt-10 flex h-36 items-center justify-center rounded-2xl border border-amber-200/80 bg-white/45 sm:h-44" aria-hidden="true">
+                <Lightbulb className="h-24 w-24 stroke-[1.15] text-amber-500 sm:h-28 sm:w-28" />
+              </div>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-serif font-bold text-slate-950">
-              Donation Vision
-            </h2>
-            <p className="text-[15px] sm:text-base lg:text-[17px] leading-relaxed text-slate-700 font-normal">
+            <div className="mt-10 border-l-2 border-amber-400 pl-4 text-sm leading-6 text-amber-900/75">
+              Together, we are building a global growth movement and a legacy of transformation.
+            </div>
+          </div>
+
+          <div className="rounded-3xl border border-slate-200 bg-white p-7 shadow-sm sm:p-10">
+            <p className="max-w-3xl text-base leading-8 text-slate-700 sm:text-lg sm:leading-9">
               Together, we are building a global growth movement and a legacy of transformation—mobilizing people, resources and partnerships to empower 100 million+ individuals and businesses with the knowledge, skills, opportunities and strategic support to grow, thrive and create measurable impact; expanding access and accelerating transformation through our Community Growth Fund and Impact Support Fund; and, through our Future Leaders Fund, reaching 1 billion+ children and teenagers with the knowledge, skills, welfare, spiritual growth, values, character and leadership foundation to become capable leaders, innovators and changemakers who will shape a better future. Together, we are unlocking human potential, strengthening enterprises, expanding opportunity and raising generations equipped to transform their families, communities, economies and the world.
             </p>
           </div>

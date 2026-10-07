@@ -6,6 +6,7 @@ import {
   ArrowRight,
   UserPlus,
   GraduationCap,
+  ChevronDown,
 } from 'lucide-react';
 import { useEnrollment } from '../lib/useEnrollment';
 import { ContentNotificationCenter } from './ContentNotificationCenter';
@@ -20,57 +21,66 @@ const NAV_ITEMS: { to: string; label: string }[] = [
   { to: '/donate', label: 'Donate' },
   { to: '/about', label: 'About' },
   { to: '/schools', label: 'Schools' },
+  { to: '/partnerships', label: 'Partnerships' },
 ];
+
+const PRIMARY_NAV_ITEMS = NAV_ITEMS.slice(0, 5);
+const MORE_NAV_ITEMS = NAV_ITEMS.slice(5);
 
 export const HeaderNavbar: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [moreOpen, setMoreOpen] = useState(false);
   // An enrolled student has no use for a "Register" button; show them the way
   // into what they paid for instead.
   const { currentPackageName } = useEnrollment();
 
   const linkClass = ({ isActive }: { isActive: boolean }) =>
-    `px-3.5 py-2 rounded-full text-xs font-medium transition-all duration-200 ${
+    `px-3 py-2 rounded-lg text-[13px] font-medium transition-all duration-200 ${
       isActive
-        ? 'bg-amber-500 text-slate-950 shadow-md font-semibold'
-        : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
+        ? 'text-blue-700 font-semibold bg-blue-50'
+        : 'text-slate-600 hover:text-blue-700 hover:bg-blue-50/70'
     }`;
 
   return (
-    <header className="sticky top-0 z-[80] bg-slate-950/90 backdrop-blur-md border-b border-slate-800 text-slate-100">
+    <header className="sticky top-0 z-[80] border-b border-slate-200 bg-slate-50/95 text-slate-900 backdrop-blur-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
+        <div className="flex h-[4.5rem] items-center justify-between gap-6">
           {/* Logo Brand */}
-          <Link to="/" className="flex items-center gap-3 cursor-pointer group select-none">
+          <Link to="/" className="flex shrink-0 items-center gap-2.5 cursor-pointer group select-none">
             <img
               src="/logo.jpg"
               alt="School of Growth Global crest"
-              className="w-11 h-11 rounded-xl object-cover ring-1 ring-amber-500/30 shadow-lg shadow-amber-500/20 transition-transform duration-200"
+              className="h-9 w-9 rounded-lg object-cover ring-1 ring-amber-500/30 shadow-sm transition-transform duration-200"
             />
-            <div>
-              <div className="flex items-center">
-                <span className="font-serif font-bold text-base sm:text-xl tracking-tight text-white group-hover:text-amber-300 transition-colors">
-                  SCHOOL OF GROWTH GLOBAL
-                </span>
-              </div>
-            </div>
+            <span className="max-w-[10rem] font-serif text-sm font-bold leading-tight tracking-tight text-slate-900 transition-colors group-hover:text-blue-700 sm:max-w-none sm:text-base">SCHOOL OF GROWTH GLOBAL</span>
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center gap-1 bg-slate-900/60 p-1.5 rounded-full border border-slate-800">
-            {NAV_ITEMS.map((item) => (
+          <nav className="hidden items-center gap-1 lg:flex">
+            {PRIMARY_NAV_ITEMS.map((item) => (
               <NavLink key={item.to} to={item.to} className={linkClass}>
                 {item.label}
               </NavLink>
             ))}
+            <div className="relative">
+              <button type="button" onClick={() => setMoreOpen((open) => !open)} aria-expanded={moreOpen} className="inline-flex items-center gap-1 rounded-lg px-3 py-2 text-[13px] font-medium text-slate-600 transition-colors hover:bg-blue-50/70 hover:text-blue-700">
+                More <ChevronDown className={`h-3.5 w-3.5 transition-transform ${moreOpen ? 'rotate-180' : ''}`} />
+              </button>
+              {moreOpen && (
+                <div className="absolute right-0 top-11 z-50 min-w-48 rounded-xl border border-slate-200 bg-white p-1.5 shadow-xl">
+                  {MORE_NAV_ITEMS.map((item) => <NavLink key={item.to} to={item.to} onClick={() => setMoreOpen(false)} className={linkClass}>{item.label}</NavLink>)}
+                </div>
+              )}
+            </div>
           </nav>
 
           {/* Right Action Buttons */}
-          <div className="hidden lg:flex items-center gap-3">
+          <div className="hidden items-center gap-3 lg:flex">
             <ContentNotificationCenter />
             {currentPackageName ? (
               <Link
                 to="/portal"
-                className="flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold text-amber-300 bg-slate-900 border border-amber-500/30 hover:border-amber-500/60 transition-all"
+                className="flex items-center gap-2 rounded-full bg-blue-600 px-5 py-2.5 text-xs font-bold text-white shadow-sm transition-all hover:bg-blue-700"
               >
                 <GraduationCap className="w-3.5 h-3.5" />
                 <span>{currentPackageName} student</span>
@@ -79,7 +89,7 @@ export const HeaderNavbar: React.FC = () => {
             ) : (
               <Link
                 to="/pricing"
-                className="flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold text-slate-950 bg-gradient-to-r from-amber-400 via-amber-300 to-amber-500 hover:brightness-110 shadow-lg shadow-amber-500/10 transition-all"
+                className="flex items-center gap-2 rounded-full bg-blue-600 px-5 py-2.5 text-xs font-bold text-white shadow-sm transition-all hover:bg-blue-700"
               >
                 <UserPlus className="w-3.5 h-3.5" />
                 <span>Enrol</span>
@@ -94,7 +104,7 @@ export const HeaderNavbar: React.FC = () => {
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 rounded-lg bg-slate-900 text-slate-300 border border-slate-800"
+              className="rounded-lg border border-slate-200 bg-white p-2 text-slate-700 shadow-sm"
               aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
               aria-expanded={mobileMenuOpen}
             >
@@ -106,7 +116,7 @@ export const HeaderNavbar: React.FC = () => {
 
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
-        <div className="lg:hidden bg-slate-950 border-b border-slate-800 px-4 pt-2 pb-6 space-y-2">
+        <div className="space-y-2 border-b border-slate-200 bg-white px-4 pb-6 pt-2 lg:hidden">
           {NAV_ITEMS.map((item) => (
             <NavLink
               key={item.to}
@@ -115,8 +125,8 @@ export const HeaderNavbar: React.FC = () => {
               className={({ isActive }) =>
                 `w-full flex items-center justify-between p-3 rounded-xl text-sm font-medium transition-colors ${
                   isActive
-                    ? 'bg-amber-500/10 text-amber-300 border border-amber-500/30'
-                    : 'text-slate-300 bg-slate-900/50 hover:bg-slate-800'
+                    ? 'border border-blue-200 bg-blue-50 text-blue-700'
+                    : 'bg-slate-50 text-slate-600 hover:bg-blue-50'
                 }`
               }
             >
@@ -128,7 +138,7 @@ export const HeaderNavbar: React.FC = () => {
             <Link
               to={currentPackageName ? '/portal' : '/pricing'}
               onClick={() => setMobileMenuOpen(false)}
-              className="w-full py-2.5 rounded-lg bg-amber-500 text-slate-950 text-xs font-bold flex items-center justify-center gap-2"
+              className="flex w-full items-center justify-center gap-2 rounded-full bg-blue-600 py-2.5 text-xs font-bold text-white"
             >
               {currentPackageName ? (
                 <>

@@ -247,7 +247,7 @@ const MentorChooser: React.FC<{ onChoose: (mentor: Mentor, token: string) => voi
                     <div className="flex items-center gap-3">
                       <img
                         src={mentor.avatar}
-                        alt=""
+                        alt={`${mentor.name} profile`}
                         className="w-10 h-10 rounded-xl object-cover bg-slate-100"
                       />
                       <div className="min-w-0">
@@ -541,7 +541,7 @@ const MentorRail: React.FC<{
       <div className="space-y-3">
         <img
           src={mentor.avatar}
-          alt=""
+          alt={`${mentor.name} profile`}
           className="w-16 h-16 rounded-lg object-cover ring-1 ring-amber-500/30"
         />
         <div>
