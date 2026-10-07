@@ -29,6 +29,9 @@ export const CONTENT_LABEL: Record<ContentKind, string> = {
   book: 'Books',
 };
 
+// These records were demonstration profiles and must not reappear from persisted content.
+const RETIRED_DEMO_TEAM_IDS = new Set(['f1', 'f2', 'f3', 'f4']);
+
 export function slugify(value: string): string {
   return (
     value
@@ -53,6 +56,9 @@ export function mergeContent<T extends { id: string }>(
   const merged = new Map(seed.map((item) => [item.id, item]));
 
   for (const record of records) {
+    if (record.kind === 'team' && RETIRED_DEMO_TEAM_IDS.has(record.id)) {
+      continue;
+    }
     if (!record.published) {
       merged.delete(record.id);
       continue;
