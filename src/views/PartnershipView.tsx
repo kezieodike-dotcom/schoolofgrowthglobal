@@ -95,7 +95,17 @@ export const PartnershipView: React.FC = () => {
             <div className="mt-8 space-y-4 rounded-2xl border border-slate-800 bg-slate-900 p-5">
               <p className="text-xs font-mono uppercase tracking-wider text-amber-300">Official partnership channel</p>
               <a href="mailto:partnerships@schoolofgrowthglobal.com?subject=Global%20Growth%20Conference%20Sponsorship%20%26%20Partnership" className="flex items-center gap-3 text-sm font-semibold text-white hover:text-amber-300"><Mail className="h-4 w-4 text-amber-300" /> partnerships@schoolofgrowthglobal.com</a>
-              <a href="https://wa.me/2348160030188" target="_blank" rel="noreferrer" className="flex items-center gap-3 text-sm font-semibold text-white hover:text-amber-300"><MessageCircle className="h-4 w-4 text-amber-300" /> WhatsApp: +234 816 003 0188</a>
+              <a
+                href="https://wa.me/2348160030188"
+                target="_blank"
+                rel="noreferrer"
+                aria-label="Reach out on WhatsApp"
+                title="Reach out on WhatsApp"
+                className="inline-flex w-fit items-center gap-2 rounded-full border border-emerald-400/40 bg-emerald-400/10 px-3 py-2 text-sm font-semibold text-emerald-300 transition-colors hover:border-emerald-300 hover:bg-emerald-400/20 hover:text-white"
+              >
+                <MessageCircle className="h-5 w-5" aria-hidden="true" />
+                <span>Reach out on WhatsApp</span>
+              </a>
             </div>
           </div>
 
