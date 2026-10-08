@@ -2015,15 +2015,6 @@ export const FACULTY_MEMBERS: FacultyMember[] = [
     avatar: '/people/bright-john-generated.png'
   },
   {
-    id: 'f1',
-    name: 'Dr. Adebayo Okonkwo, PhD',
-    role: 'Dean of Executive Leadership',
-    institution: 'Former Managing Director at McKinsey & Oxford Fellow',
-    bio: 'Advisor to 20+ Fortune 500 boards on international expansion and capital allocation.',
-    credentials: ['PhD Economics, Oxford', 'Published Author on Global Resilience', 'Special Envoy for Tech Policy'],
-    avatar: '/people/m3-okonkwo.jpg'
-  },
-  {
     id: 'john-akpan',
     name: 'John Akpan',
     role: 'Senior Strategic Adviser to the Founder',
