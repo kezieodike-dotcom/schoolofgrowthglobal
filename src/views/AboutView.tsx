@@ -118,7 +118,7 @@ export const AboutView: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {managedTeam.items.map((member) => (
             <div key={member.id} className="bg-white shadow-sm border border-slate-200 rounded-2xl p-6 space-y-4">
-              <img src={member.avatar} alt={member.name} className="w-20 h-20 rounded-full object-cover mx-auto border-2 border-amber-300" />
+              <img src={member.avatar} alt={member.name} className={`w-20 h-20 rounded-full object-cover mx-auto border-2 border-amber-300 ${member.id === 'john-akpan' ? 'object-[center_18%]' : 'object-center'}`} />
               <div className="text-center space-y-1">
                 <h4 className="font-serif font-bold text-slate-900 text-base">{member.name}</h4>
                 <p className="text-xs text-amber-600 font-medium">{member.role}</p>

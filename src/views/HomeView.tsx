@@ -598,7 +598,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
                   <img
                     src={member.avatar}
                     alt={member.name}
-                    className="scroll-card-image h-full w-full object-cover object-center transition-transform duration-500"
+                    className={`scroll-card-image h-full w-full object-cover transition-transform duration-500 ${member.id === 'john-akpan' ? 'object-[center_18%]' : 'object-center'}`}
                   />
                 </div>
                 <div className="reference-card-body space-y-3">
