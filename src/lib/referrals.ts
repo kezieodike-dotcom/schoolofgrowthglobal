@@ -1,8 +1,9 @@
-export type ReferralAudience = 'student' | 'mentor';
+export type ReferralAudience = 'student' | 'mentor' | 'mentee';
 
 interface ReferralIdentity {
   name?: string;
   email?: string;
+  mentorId?: string;
 }
 
 const normalize = (value: string) =>
@@ -26,7 +27,7 @@ export function makeReferralCode(
   identity: ReferralIdentity = {}
 ): string {
   const label = normalize(identity.name || identity.email || 'growth-member');
-  const hash = shortHash(`${audience}:${identity.name ?? ''}:${identity.email ?? ''}`);
+  const hash = shortHash(`${audience}:${identity.mentorId ?? ''}:${identity.name ?? ''}:${identity.email ?? ''}`);
   return `${audience}-${label || 'growth-member'}-${hash}`;
 }
 
@@ -39,9 +40,12 @@ export function makeReferralUrl(opts: ReferralIdentity & {
     (typeof window !== 'undefined' && window.location?.origin
       ? window.location.origin
       : 'https://schoolofgrowthglobal.vercel.app');
-  const path = opts.audience === 'mentor' ? '/register/mentor' : '/register';
+  const path = opts.audience === 'mentor' ? '/register/mentor' : opts.audience === 'mentee' ? '/mentors' : '/register';
   const url = new URL(path, origin);
   url.searchParams.set('ref', makeReferralCode(opts.audience, opts));
+  if (opts.audience === 'mentee' && opts.mentorId) {
+    url.searchParams.set('mentor', opts.mentorId);
+  }
   return url.toString();
 }
 

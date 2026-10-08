@@ -591,10 +591,11 @@ const MentorRail: React.FC<{
       </div>
 
       <ReferralShareCard
-        audience="mentor"
+        audience="mentee"
+        mentorId={mentor.id}
         name={mentor.name}
-        title="Invite a mentor"
-        body="Share your mentor referral link with a trusted expert who should apply through the global platform."
+        title="Invite a mentee"
+        body="Share your personal mentor link with a prospective mentee so they can view your profile and request guidance."
         dark
       />
     </div>

@@ -6,6 +6,7 @@ interface ReferralShareCardProps {
   audience: ReferralAudience;
   name?: string;
   email?: string;
+  mentorId?: string;
   title?: string;
   body?: string;
   dark?: boolean;
@@ -15,14 +16,15 @@ export const ReferralShareCard: React.FC<ReferralShareCardProps> = ({
   audience,
   name,
   email,
+  mentorId,
   title = 'Invite and referral link',
   body = 'Share your personal link with someone who should join School of Growth Global.',
   dark,
 }) => {
   const [copied, setCopied] = useState(false);
   const referralUrl = useMemo(
-    () => makeReferralUrl({ audience, name, email }),
-    [audience, email, name]
+    () => makeReferralUrl({ audience, name, email, mentorId }),
+    [audience, email, mentorId, name]
   );
 
   const copy = async () => {

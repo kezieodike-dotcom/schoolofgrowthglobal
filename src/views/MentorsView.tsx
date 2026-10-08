@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import {
   ArrowRight,
   BriefcaseBusiness,
@@ -235,6 +235,7 @@ export const MentorsView: React.FC = () => {
   const [activeFocus, setActiveFocus] = useState<string>('All');
   const [bookingMentor, setBookingMentor] = useState<Mentor | null>(null);
   const [slotsFull, setSlotsFull] = useState(false);
+  const [searchParams] = useSearchParams();
 
   const { hasMentorship, mentorSlots, currentPackageName } = useEnrollment();
   const pairing = useMentorPairing(mentorSlots);
@@ -246,6 +247,13 @@ export const MentorsView: React.FC = () => {
         (plan) => plan.name === currentPackageName && plan.mentorshipDays > 0
       )
   );
+
+  useEffect(() => {
+    const referredMentorId = searchParams.get('mentor');
+    if (!referredMentorId || loading || bookingMentor) return;
+    const referredMentor = directory.find((mentor) => mentor.id === referredMentorId);
+    if (referredMentor) setBookingMentor(referredMentor);
+  }, [bookingMentor, directory, loading, searchParams]);
   const activeDivision =
     activeCategory === 'All'
       ? null
