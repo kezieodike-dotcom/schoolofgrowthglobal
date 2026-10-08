@@ -29,6 +29,9 @@ export const CONTENT_LABEL: Record<ContentKind, string> = {
   book: 'Books',
 };
 
+// This legacy team record was removed from the approved public faculty list.
+const RETIRED_TEAM_IDS = new Set(['f1']);
+
 
 export function slugify(value: string): string {
   return (
@@ -54,6 +57,9 @@ export function mergeContent<T extends { id: string }>(
   const merged = new Map(seed.map((item) => [item.id, item]));
 
   for (const record of records) {
+    if (record.kind === 'team' && RETIRED_TEAM_IDS.has(record.id)) {
+      continue;
+    }
     if (!record.published) {
       merged.delete(record.id);
       continue;

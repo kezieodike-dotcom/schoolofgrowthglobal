@@ -13,6 +13,7 @@ import {
 const localStore = createJsonStore<ContentRecord>('content.json');
 
 const DEFAULT_TABLE = 'sog_content_items';
+const RETIRED_TEAM_IDS = new Set(['f1']);
 
 interface SupabaseRow {
   id: string;
@@ -81,7 +82,7 @@ export async function listContent(kind?: ContentKind): Promise<ContentRecord[]> 
   if (!config) {
     const rows = localStore.read();
     return (kind ? rows.filter((row) => row.kind === kind) : rows).filter(
-      (row) => !(row.kind === 'team' && row.id.startsWith('mentor-'))
+      (row) => !(row.kind === 'team' && (row.id.startsWith('mentor-') || RETIRED_TEAM_IDS.has(row.id)))
     );
   }
 
@@ -90,7 +91,7 @@ export async function listContent(kind?: ContentKind): Promise<ContentRecord[]> 
     `?select=id,kind,payload,published,created_at,updated_at${filter}&order=updated_at.desc`
   );
   return rows.map(normalizeRow).filter(
-    (row) => !(row.kind === 'team' && row.id.startsWith('mentor-'))
+    (row) => !(row.kind === 'team' && (row.id.startsWith('mentor-') || RETIRED_TEAM_IDS.has(row.id)))
   );
 }
 
