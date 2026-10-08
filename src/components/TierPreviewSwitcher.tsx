@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useEnrollment, grantEntitlement, clearEntitlements } from '../lib/useEnrollment';
 import { PLANS, entitlementFor, type PlanCode } from '../lib/pricing';
-import { FlaskConical, X, RotateCcw } from 'lucide-react';
+import { FlaskConical, X, RotateCcw, ExternalLink } from 'lucide-react';
 
 /**
  * Development-only control for viewing the portal as each package.
@@ -22,8 +23,24 @@ import { FlaskConical, X, RotateCcw } from 'lucide-react';
 
 const PREVIEW_PREFIX = 'preview-';
 
+const PLAN_GROUPS: Array<{ label: string; kind: string }> = [
+  { label: 'Course access', kind: 'package' },
+  { label: 'Fast-track courses', kind: 'course-intensive' },
+  { label: 'Mentorship', kind: 'mentorship' },
+  { label: 'Consultation', kind: 'consultation' },
+  { label: 'Course bundle', kind: 'course-bundle' },
+];
+
+const PREVIEW_PAGES = [
+  { label: 'Mentor / Consultant pathway', path: '/enlist' },
+  { label: 'Mentor registration', path: '/register/mentor' },
+  { label: 'Consultant registration', path: '/register/consultant' },
+  { label: 'Student dashboard', path: '/portal' },
+] as const;
+
 export const TierPreviewSwitcher: React.FC = () => {
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
   const { packages, hasMentorship } = useEnrollment();
 
   if (!import.meta.env.DEV) return null;
@@ -68,25 +85,53 @@ export const TierPreviewSwitcher: React.FC = () => {
         </button>
       </header>
 
-      <div className="p-3 space-y-1.5">
-        {(Object.keys(PLANS) as PlanCode[]).map((code) => {
-          const plan = PLANS[code];
-          const active =
-            plan.kind === 'package' ? current === code : hasMentorship && !current;
+      <div className="max-h-[min(72vh,38rem)] overflow-y-auto p-3 space-y-3">
+        {PLAN_GROUPS.map((group) => {
+          const plans = (Object.keys(PLANS) as PlanCode[]).filter((code) => PLANS[code].kind === group.kind);
+          if (!plans.length) return null;
+
           return (
-            <button
-              key={code}
-              onClick={() => apply(code)}
-              className={`w-full text-left px-3 py-2 rounded-lg text-[11px] transition-colors ${
-                active
-                  ? 'bg-violet-500 font-bold'
-                  : 'bg-slate-800 hover:bg-slate-700 text-slate-300'
-              }`}
-            >
-              {plan.name}
-            </button>
+            <section key={group.kind}>
+              <p className="mb-1.5 px-1 text-[9px] font-bold uppercase tracking-[0.16em] text-violet-300">{group.label}</p>
+              <div className="space-y-1.5">
+                {plans.map((code) => {
+                  const plan = PLANS[code];
+                  const active =
+                    plan.kind === 'package' ? current === code : hasMentorship && !current;
+                  return (
+                    <button
+                      key={code}
+                      onClick={() => apply(code)}
+                      className={`w-full text-left px-3 py-2 rounded-lg text-[11px] transition-colors ${
+                        active
+                          ? 'bg-violet-500 font-bold'
+                          : 'bg-slate-800 hover:bg-slate-700 text-slate-300'
+                      }`}
+                    >
+                      {plan.name}
+                    </button>
+                  );
+                })}
+              </div>
+            </section>
           );
         })}
+
+        <section className="border-t border-slate-700 pt-3">
+          <p className="mb-1.5 px-1 text-[9px] font-bold uppercase tracking-[0.16em] text-violet-300">Pages</p>
+          <div className="space-y-1.5">
+            {PREVIEW_PAGES.map((page) => (
+              <button
+                key={page.path}
+                onClick={() => navigate(page.path)}
+                className="flex w-full items-center justify-between rounded-lg bg-slate-800 px-3 py-2 text-left text-[11px] text-slate-300 transition-colors hover:bg-slate-700 hover:text-white"
+              >
+                {page.label}
+                <ExternalLink className="h-3 w-3 shrink-0" />
+              </button>
+            ))}
+          </div>
+        </section>
 
         <button
           onClick={clearEntitlements}
