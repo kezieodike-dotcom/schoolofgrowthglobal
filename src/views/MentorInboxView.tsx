@@ -148,6 +148,30 @@ const MentorChooser: React.FC<{ onChoose: (mentor: Mentor, token: string) => voi
       .catch(() => setEnabled(false));
   }, []);
 
+  useEffect(() => {
+    if (!import.meta.env.DEV || new URLSearchParams(window.location.search).get('demo') !== '1') return;
+
+    let cancelled = false;
+    fetch('/api/mentor-inbox/demo', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ mentorId: selected.id }),
+    })
+      .then((res) => res.json().then((body) => ({ ok: res.ok, body })))
+      .then(({ ok, body }) => {
+        if (cancelled) return;
+        if (!ok || !body?.token) throw new Error(body?.error ?? 'Could not open the local mentor demo.');
+        onChoose(selected, body.token);
+      })
+      .catch((err) => {
+        if (!cancelled) setError(err instanceof Error ? err.message : 'Could not open the local mentor demo.');
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [onChoose, selected]);
+
   const submit = async (event: React.FormEvent) => {
     event.preventDefault();
     setBusy(true);

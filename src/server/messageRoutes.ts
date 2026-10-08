@@ -131,6 +131,21 @@ export function createMessageRouter(
     res.json(issueMentorToken(mentorId.trim()));
   });
 
+  // Local preview only. Production and deployed environments always use the
+  // password-protected mentor sign-in above.
+  router.post("/mentor-inbox/demo", (req, res) => {
+    if (process.env.NODE_ENV === "production" || process.env.VERCEL === "1") {
+      return res.status(404).json({ error: "Not found." });
+    }
+
+    const mentorId = typeof req.body?.mentorId === "string" ? req.body.mentorId.trim() : "";
+    if (!/^[a-z0-9-]{1,80}$/.test(mentorId)) {
+      return res.status(400).json({ error: "A valid mentor is required." });
+    }
+
+    res.json(issueMentorToken(mentorId));
+  });
+
   // ── Student ────────────────────────────────────────────────────────
 
   /**

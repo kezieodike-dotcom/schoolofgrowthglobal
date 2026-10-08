@@ -32,7 +32,7 @@ const PLAN_GROUPS: Array<{ label: string; kind: string }> = [
 ];
 
 const PREVIEW_PAGES = [
-  { label: 'Mentor dashboard', path: '/mentor/inbox' },
+  { label: 'Mentor dashboard', path: '/mentor/inbox?demo=1' },
   { label: 'Mentor / Consultant enlistment', path: '/enlist' },
   { label: 'Mentor registration', path: '/register/mentor' },
   { label: 'Consultant registration', path: '/register/consultant' },
