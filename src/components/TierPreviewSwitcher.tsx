@@ -32,7 +32,8 @@ const PLAN_GROUPS: Array<{ label: string; kind: string }> = [
 ];
 
 const PREVIEW_PAGES = [
-  { label: 'Mentor / Consultant pathway', path: '/enlist' },
+  { label: 'Mentor dashboard', path: '/mentor/inbox' },
+  { label: 'Mentor / Consultant enlistment', path: '/enlist' },
   { label: 'Mentor registration', path: '/register/mentor' },
   { label: 'Consultant registration', path: '/register/consultant' },
   { label: 'Student dashboard', path: '/portal' },
