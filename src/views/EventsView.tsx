@@ -25,7 +25,9 @@ export const EventsView: React.FC = () => {
         icon={<CalendarDays className="w-4 h-4" />}
         title={<>Conferences, Summits & Live Learning</>}
         subtitle="Register for global conferences, webinars, and bootcamps. Every event includes a QR ticket, livestream access, and downloadable resources."
-        imageSrc="/scenes/summit-audience.jpg"
+        imageSrc="/scenes/events-hero-graduation.jpg"
+        imageOnDesktop
+        imageOverlay="soft"
       />
 
       {/* Featured event banner */}

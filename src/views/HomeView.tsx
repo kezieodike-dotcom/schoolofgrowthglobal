@@ -11,7 +11,6 @@ import {
   Crown,
   ArrowRight,
   Sparkles,
-  ChevronRight,
   Terminal,
   Send,
   Award,
@@ -63,7 +62,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
       <GlobalFlagMarquee />
 
       {/* Hero Section */}
-      <section className="relative overflow-hidden min-h-[calc(100dvh-5rem)] lg:min-h-0 pt-16 pb-10 sm:pt-20 sm:pb-14 lg:pt-20 lg:pb-32 border-b border-slate-200 bg-slate-950 lg:bg-slate-50">
+      <section className="hero-grid-lines relative overflow-hidden min-h-[calc(100dvh-5rem)] lg:min-h-0 pt-16 pb-10 sm:pt-20 sm:pb-14 lg:pt-20 lg:pb-32 border-b border-slate-200 bg-slate-950 lg:bg-white">
 
         <img
           src="/scenes/hero-team.jpg"
@@ -78,10 +77,10 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
         <div className="absolute top-1/4 left-1/2 hidden h-[400px] w-[800px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-amber-50 blur-[120px] pointer-events-none lg:block"></div>
 
         <div className="relative z-10 mx-auto flex min-h-[calc(100dvh-11rem)] max-w-7xl items-end px-4 sm:min-h-[calc(100dvh-12rem)] sm:px-6 lg:block lg:min-h-0 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+          <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-8">
 
             {/* Left Copy */}
-            <div className="max-w-[37rem] space-y-5 pb-5 sm:space-y-6 lg:col-span-7 lg:max-w-none lg:pb-0">
+            <div className="mx-auto w-full max-w-[52rem] space-y-5 pb-5 text-center sm:space-y-6 lg:col-span-9 lg:col-start-2 lg:max-w-none lg:pb-0">
 
               <div className="inline-flex -translate-y-1 items-center gap-2 rounded-full border border-white/25 bg-white/12 px-3 py-1.5 text-[11px] font-medium text-amber-100 backdrop-blur-md transition-transform sm:-translate-y-1.5 sm:px-3.5 lg:-translate-y-2 lg:border-amber-300 lg:bg-white lg:text-xs lg:text-amber-700 lg:font-mono lg:backdrop-blur-none">
                 <Crown className="w-3.5 h-3.5 text-amber-200 lg:text-amber-600" />
@@ -95,12 +94,12 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
                 </span>
               </h1>
 
-              <p className="max-w-[34rem] text-[15px] leading-7 text-slate-100/88 sm:text-lg lg:max-w-2xl lg:text-slate-600 lg:leading-relaxed">
+              <p className="mx-auto max-w-[38rem] text-[15px] leading-7 text-slate-100/88 sm:text-lg lg:max-w-3xl lg:text-slate-600 lg:leading-relaxed">
                 A global growth ecosystem that equips individuals, professionals, organizations and institutions with the knowledge, skills, strategies and systems required to grow, lead, create value and produce measurable impact.
               </p>
 
               {/* Action Buttons */}
-              <div className="flex flex-col gap-3 pt-1 sm:flex-row sm:flex-wrap sm:items-center lg:gap-4 lg:pt-2">
+              <div className="flex flex-col items-center justify-center gap-3 pt-1 sm:flex-row sm:flex-wrap lg:gap-4 lg:pt-2">
                 <Link
                   to="/pricing"
                   className="motion-pressable flex w-full items-center justify-center gap-2 rounded-xl bg-amber-400 px-5 py-3 text-sm font-semibold text-slate-950 shadow-xl shadow-slate-950/25 transition-all hover:bg-amber-300 sm:w-auto lg:bg-gradient-to-r lg:from-amber-400 lg:via-amber-500 lg:to-amber-600 lg:shadow-amber-500/20 lg:hover:brightness-110"
@@ -119,7 +118,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
               </div>
 
               {/* Quick stats trust indicators */}
-              <div className="grid grid-cols-2 gap-4 border-t border-white/20 pt-6 text-slate-200/78 sm:grid-cols-3 sm:gap-6 lg:border-slate-200 lg:pt-8 lg:text-slate-500">
+              <div className="mx-auto grid w-full max-w-[38rem] grid-cols-2 gap-4 border-t border-white/20 pt-6 text-center text-slate-200/78 sm:grid-cols-3 sm:gap-6 lg:border-slate-200 lg:pt-8 lg:text-slate-500">
                 <div>
                   <div className="text-xl font-semibold font-serif text-white lg:font-bold lg:text-slate-900">10,000+</div>
                   <div className="text-xs">Global Alumni</div>
@@ -136,65 +135,18 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
 
             </div>
 
-            {/* Right Hero Visual Card */}
-            <div className="hidden lg:col-span-5 lg:block">
-              <div className="scroll-card relative rounded-2xl overflow-hidden border border-slate-200 shadow-2xl bg-white group">
-                <img
-                  src="/scenes/hero-team.jpg"
-                  alt="A team reviewing growth dashboards together in a modern office"
-                  className="w-full aspect-square sm:aspect-auto sm:h-[460px] object-cover object-center transition-transform duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
-
-                {/* Overlaid Badge Card */}
-                <div className="absolute bottom-3 left-3 right-3 p-3 space-y-1.5 sm:bottom-6 sm:left-6 sm:right-6 sm:p-5 sm:space-y-3 rounded-xl bg-slate-950/90 backdrop-blur-md border border-slate-800/90">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[9px] sm:text-[10px] font-mono uppercase tracking-widest text-amber-400 font-bold bg-amber-500/10 px-1.5 sm:px-2 py-0.5 rounded border border-amber-500/20">
-                      FEATURED COHORT
-                    </span>
-                    <span className="text-[10px] sm:text-xs font-mono text-emerald-400 flex items-center gap-1">
-                      <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
-                      4 Seats Left
-                    </span>
-                  </div>
-
-                  <h3 className="text-sm sm:text-base font-bold text-white font-serif leading-snug">
-                    Executive Strategy & Global Growth
-                  </h3>
-
-                  {/* Hidden on phones: the blurb is the tallest part of the card and
-                      the image behind it matters more at that width. */}
-                  <p className="hidden sm:block text-xs text-slate-300 line-clamp-2">
-                    Led by Dr. Adebayo Okonkwo, PhD. 12-week intensive C-suite governance & market expansion framework.
-                  </p>
-
-                  <div className="flex items-center justify-between pt-1.5 sm:pt-2 border-t border-slate-800">
-                    <span className="text-[10px] sm:text-xs text-slate-400 font-mono">Oct 15 Cohort</span>
-                    <button
-                      onClick={() => onNavigate('course-detail')}
-                      className="motion-pressable text-[10px] sm:text-xs text-amber-400 font-bold hover:text-amber-300 flex items-center gap-1 group/link"
-                    >
-                      <span>View Curriculum</span>
-                      <ChevronRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform" />
-                    </button>
-                  </div>
-                </div>
-
-              </div>
-            </div>
-
           </div>
         </div>
       </section>
 
       {/* Who We Serve */}
-      <section className="border-b border-slate-200 bg-white py-16 sm:py-20">
+      <section className="border-b border-slate-800 bg-slate-950 py-16 sm:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-2xl space-y-3" data-scroll-reveal>
-            <p className="text-xs font-mono font-semibold uppercase tracking-[0.2em] text-amber-700">
+            <p className="text-xs font-mono font-semibold uppercase tracking-[0.2em] text-amber-300">
               Who We Serve
             </p>
-            <h2 className="text-3xl font-serif font-semibold leading-tight text-slate-900 sm:text-4xl">
+            <h2 className="text-3xl font-serif font-semibold leading-tight text-white sm:text-4xl">
               One Institution. Three Growth Pathways.
             </h2>
           </div>

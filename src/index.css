@@ -93,6 +93,14 @@
 }
 
 @layer utilities {
+  .hero-grid-lines {
+    background-color: #ffffff;
+    background-image:
+      linear-gradient(rgba(148, 163, 184, 0.16) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(148, 163, 184, 0.16) 1px, transparent 1px) !important;
+    background-size: 32px 32px;
+  }
+
   .motion-soft-reveal {
     animation: soft-reveal 720ms cubic-bezier(0.16, 1, 0.3, 1) both;
   }
