@@ -16,7 +16,6 @@ export const EventsView: React.FC = () => {
   const conferenceSchedule = managedEvents.items.filter((event) => event.id.startsWith('global-growth-conference-'));
   const existingEvents = managedEvents.items.filter((event) => !event.id.startsWith('global-growth-conference-'));
   const events = [...conferenceSchedule, ...existingEvents].filter((e) => filter === 'All' || e.type === filter);
-  const featured = conferenceSchedule[0] ?? existingEvents[0] ?? EVENTS[0];
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
@@ -29,42 +28,6 @@ export const EventsView: React.FC = () => {
         imageOnDesktop
         imageOverlay="soft"
       />
-
-      {/* Featured event banner */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12">
-        <div className="scroll-card group relative rounded-3xl overflow-hidden border border-amber-300 shadow-2xl">
-          <img src={featured.image} alt={featured.title} className="scroll-card-image w-full h-72 object-cover opacity-60" />
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/80 to-transparent" />
-          <div className="absolute inset-0 flex flex-col justify-center p-8 sm:p-12 max-w-2xl space-y-4">
-            <span className="text-[10px] font-mono px-2.5 py-1 rounded bg-amber-500 text-slate-950 font-bold w-fit">
-              FEATURED • {featured.type.toUpperCase()}
-            </span>
-            <h2 className="text-3xl sm:text-4xl font-serif font-bold text-white">{featured.title}</h2>
-            <p className="text-sm text-slate-300 leading-relaxed">{featured.description}</p>
-            <div className="flex flex-wrap items-center gap-4 text-xs text-slate-300 font-mono">
-              <span className="flex items-center gap-1.5"><CalendarDays className="w-4 h-4 text-amber-400" /> {featured.date}</span>
-              <span className="flex items-center gap-1.5"><MapPin className="w-4 h-4 text-amber-400" /> {featured.location}</span>
-            </div>
-            {featured.liveClassUrl ? (
-              <a
-                href={featured.liveClassUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="motion-pressable px-6 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-sm w-fit flex items-center gap-2"
-              >
-                <ExternalLink className="w-4 h-4" /> Join Live Class
-              </a>
-            ) : (
-              <button
-                onClick={() => setRegistered(featured.id)}
-                className="motion-pressable px-6 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-sm w-fit flex items-center gap-2"
-              >
-                <Ticket className="w-4 h-4" /> Register Now
-              </button>
-            )}
-          </div>
-        </div>
-      </section>
 
       <section className="py-14 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Type filter */}
