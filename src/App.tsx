@@ -48,6 +48,7 @@ import { PrivacyView } from './views/PrivacyView';
 import { ThankYouView } from './views/ThankYouView';
 import { NotFoundView } from './views/NotFoundView';
 import { Seo } from './components/Seo';
+import { InstallPrompt } from './components/InstallPrompt';
 
 // ── Legacy route adapters ────────────────────────────────────────────────
 const HomeRoute: React.FC = () => <HomeView onNavigate={useLegacyNavigate()} />;
@@ -134,6 +135,7 @@ const AppRoutes: React.FC = () => {
   return (
     <>
       <Seo />
+      <InstallPrompt enabled={!pathname.startsWith('/admin') && !pathname.startsWith('/lms') && !pathname.startsWith('/mentor')} />
       <Routes>
       {/*
         The admin panel is deliberately outside <Layout>: it has its own
