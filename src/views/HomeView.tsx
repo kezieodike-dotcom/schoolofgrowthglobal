@@ -140,13 +140,13 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
       </section>
 
       {/* Who We Serve */}
-      <section className="border-b border-slate-800 bg-slate-950 py-16 sm:py-20">
+      <section className="border-b border-slate-200 bg-white py-16 sm:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-2xl space-y-3" data-scroll-reveal>
-            <p className="text-xs font-mono font-semibold uppercase tracking-[0.2em] text-amber-300">
+            <p className="text-xs font-mono font-semibold uppercase tracking-[0.2em] text-amber-700">
               Who We Serve
             </p>
-            <h2 className="text-3xl font-serif font-semibold leading-tight text-white sm:text-4xl">
+            <h2 className="text-3xl font-serif font-semibold leading-tight text-slate-900 sm:text-4xl">
               One Institution. Three Growth Pathways.
             </h2>
           </div>
