@@ -24,7 +24,6 @@ const pageHeroFiles = [
   ['src/views/BooksView.tsx', '/scenes/hero-team.jpg'],
   ['src/views/ContactView.tsx', '/scenes/coaching-collab.jpg'],
   ['src/views/CoursesView.tsx', '/scenes/bootcamp-team.jpg'],
-  ['src/views/EventsView.tsx', '/scenes/events-hero-graduation.jpg'],
   ['src/views/GrowthJobsView.tsx', '/scenes/finance-documents.jpg'],
   ['src/views/BlogView.tsx', '/scenes/leadership-meeting.jpg'],
   ['src/views/MentorsView.tsx', '/scenes/coaching-collab.jpg'],

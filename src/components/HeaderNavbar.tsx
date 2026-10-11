@@ -14,14 +14,14 @@ import { ContentNotificationCenter } from './ContentNotificationCenter';
 const NAV_ITEMS: { to: string; label: string }[] = [
   { to: '/courses', label: 'Courses' },
   { to: '/mentorship', label: 'Mentorship' },
-  { to: '/books', label: 'Books' },
+  { to: '/partnerships', label: 'Partnerships' },
   { to: '/jobs', label: 'Career Jobs' },
   { to: '/events', label: 'Events' },
   { to: '/blog', label: 'Insights' },
   { to: '/donate', label: 'Donate' },
   { to: '/about', label: 'About' },
   { to: '/schools', label: 'Schools' },
-  { to: '/partnerships', label: 'Partnerships' },
+  { to: '/books', label: 'Books' },
 ];
 
 const PRIMARY_NAV_ITEMS = NAV_ITEMS.slice(0, 5);

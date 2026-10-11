@@ -178,7 +178,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
       </section>
 
       {/* Interactive Growth AI Teaser Section */}
-      <section className="py-12 sm:py-16 bg-white border-y border-slate-200">
+      <section className="border-y border-slate-200 bg-slate-100 py-12 sm:py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
 
