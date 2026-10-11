@@ -201,7 +201,7 @@ export const BlogView: React.FC = () => {
               className="scroll-card reference-card motion-pressable group flex flex-col overflow-hidden transition-all"
             >
               <div className="reference-card-media">
-                <img src={post.image} alt={post.title} className="scroll-card-image h-full w-full object-cover opacity-90 transition-transform duration-500" />
+                <img src={post.image} alt={post.title} className="scroll-card-image h-full w-full object-cover opacity-100 transition-transform duration-500" />
               </div>
               <div className="reference-card-body flex flex-1 flex-col">
                 <span className="reference-card-pill mb-3">

@@ -140,7 +140,7 @@ export const CoursesView: React.FC = () => {
             src={course.heroImage}
             alt={course.title}
             className={`scroll-card-image w-full h-full object-cover transition-all duration-500 ${
-              unlocked ? 'opacity-80' : 'opacity-50 grayscale'
+              unlocked ? 'opacity-95' : 'opacity-75'
             }`}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent" />

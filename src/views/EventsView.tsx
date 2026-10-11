@@ -67,7 +67,7 @@ export const EventsView: React.FC = () => {
           {events.map((event) => (
             <div key={event.id} className="scroll-card reference-card group flex flex-col overflow-hidden transition-all">
               <div className="reference-card-media relative">
-                <img src={event.image} alt={event.title} className="scroll-card-image h-full w-full object-cover opacity-90" />
+                <img src={event.image} alt={event.title} className="scroll-card-image h-full w-full object-cover opacity-100" />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950/55 to-transparent" />
                 <span className="reference-card-pill absolute left-4 top-4">
                   {event.type}
