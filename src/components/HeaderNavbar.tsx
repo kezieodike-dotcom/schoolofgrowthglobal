@@ -116,7 +116,7 @@ export const HeaderNavbar: React.FC = () => {
 
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
-        <div className="space-y-2 border-b border-amber-300/70 bg-gradient-to-b from-amber-400 to-orange-600 px-4 pb-6 pt-2 lg:hidden">
+        <div className="space-y-2 border-b border-slate-800 bg-slate-950 px-4 pb-6 pt-2 lg:hidden">
           {NAV_ITEMS.map((item) => (
             <NavLink
               key={item.to}
@@ -125,8 +125,8 @@ export const HeaderNavbar: React.FC = () => {
               className={({ isActive }) =>
                 `w-full flex items-center justify-between p-3 rounded-xl text-sm font-medium transition-colors ${
                   isActive
-                    ? 'border border-white/40 bg-white/18 text-white'
-                    : 'bg-white/8 text-white/90 hover:bg-white/15'
+                    ? 'border border-amber-500/60 bg-amber-950/40 text-amber-200'
+                    : 'bg-slate-900/80 text-slate-200 hover:bg-slate-800'
                 }`
               }
             >
@@ -138,7 +138,7 @@ export const HeaderNavbar: React.FC = () => {
             <Link
               to={currentPackageName ? '/portal' : '/pricing'}
               onClick={() => setMobileMenuOpen(false)}
-              className="flex w-full items-center justify-center gap-2 rounded-full bg-slate-950 py-2.5 text-xs font-bold text-white"
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-amber-500 py-3 text-sm font-bold text-slate-950 shadow-sm transition-colors hover:bg-amber-400"
             >
               {currentPackageName ? (
                 <>
