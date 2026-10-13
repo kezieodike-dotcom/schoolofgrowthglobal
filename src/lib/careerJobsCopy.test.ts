@@ -4,7 +4,7 @@ import {
   TALENT_POOL_MESSAGE,
 } from './careerJobsCopy.js';
 
-if (CAREER_JOBS_EMAIL !== 'careerjobs.schoolofgrowthglobal@gmail.com') {
+if (CAREER_JOBS_EMAIL !== 'careerjobs@schoolofgrowthglobal.com') {
   throw new Error('Career Jobs should use the official Career Jobs email.');
 }
 

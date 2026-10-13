@@ -5,6 +5,7 @@ import { CountryPhoneField } from '../components/CountryPhoneField';
 import { FORMS, type FormField } from '../lib/formDefs';
 import { useFormSubmit, HONEYPOT_PROPS } from '../lib/useFormSubmit';
 import { PACKAGES, formatNaira } from '../lib/pricing';
+import { CONTACT_EMAILS } from '../lib/contactEmails';
 import {
   UserPlus,
   GraduationCap,
@@ -169,6 +170,9 @@ export const RegisterView: React.FC = () => {
                 <p className="text-sm text-slate-500 max-w-md mx-auto">
                   {STUDENT.confirmation}
                 </p>
+                <a href={`mailto:${CONTACT_EMAILS.admissions}`} className="text-xs font-semibold text-amber-700 hover:text-amber-800">
+                  Questions? Contact {CONTACT_EMAILS.admissions}
+                </a>
                 <div className="flex flex-col sm:flex-row gap-3 justify-center pt-1">
                   <Link
                     to="/pricing"

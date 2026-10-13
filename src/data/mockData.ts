@@ -702,7 +702,7 @@ export const FEATURED_COURSE: Course = {
   rating: 4.96,
   reviewCount: 342,
   status: 'Next Cohort Starts Oct 15 • 4 Seats Remaining',
-  heroImage: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=1200',
+    heroImage: '/scenes/events-hero-graduation.jpg',
   description: 'An intensive 12-week executive mastery program engineered for C-Suite leaders, Managing Directors, and Founders navigating hyper-scale growth, market disruption, and geopolitical complexity.',
   price: '$4,800 USD (Sponsorship Available)',
   featured: true,
@@ -778,7 +778,7 @@ export const COURSES: Course[] = [
     rating: 4.92,
     reviewCount: 218,
     status: 'Enrolling for November Cohort',
-    heroImage: 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&q=85&w=1200',
+    heroImage: '/scenes/leadership-meeting.jpg',
     description: 'Develop psychological stamina, rapid crisis communication, and adaptive command structures during systemic market shocks.',
     price: '$3,200 USD',
     outcomes: [
@@ -802,7 +802,7 @@ export const COURSES: Course[] = [
     rating: 4.98,
     reviewCount: 412,
     status: 'Instant Access Available',
-    heroImage: 'https://images.unsplash.com/photo-1535378917042-10a22c95931a?auto=format&fit=crop&q=85&w=1200',
+    heroImage: '/people/w3-balogun.jpg',
     description: 'Demystify enterprise AI architectures, LLM fine-tuning governance, and automated risk detection for modern tech directors.',
     price: '$3,900 USD',
     outcomes: [
@@ -826,7 +826,7 @@ export const COURSES: Course[] = [
     rating: 5.0,
     reviewCount: 89,
     status: 'Application Only • Limited 15 Seats',
-    heroImage: 'https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&q=85&w=1200',
+    heroImage: '/scenes/coaching-collab.jpg',
     description: 'An elite 6-month immersive fellowship pairing high-potential executives directly with global industry visionaries.',
     price: '$12,500 USD',
     outcomes: [
@@ -850,7 +850,7 @@ export const COURSES: Course[] = [
     rating: 4.94,
     reviewCount: 176,
     status: 'Enrolling for Winter Cohort',
-    heroImage: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&q=85&w=1200',
+    heroImage: '/scenes/wealth-planning.jpg',
     description: 'Master enterprise valuation, capital structuring, and cross-border M&A modeling used by global investment committees.',
     price: '$4,200 USD',
     outcomes: [
@@ -874,7 +874,7 @@ export const COURSES: Course[] = [
     rating: 4.9,
     reviewCount: 254,
     status: 'Instant Access Available',
-    heroImage: 'https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&q=85&w=1200',
+    heroImage: '/scenes/bootcamp-team.jpg',
     description: 'A tactical playbook for founders and intrapreneurs scaling from product-market fit to category leadership.',
     price: '$2,900 USD',
     outcomes: [
@@ -898,7 +898,7 @@ export const COURSES: Course[] = [
     rating: 4.97,
     reviewCount: 431,
     status: 'Instant Access Available',
-    heroImage: 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&q=85&w=1200',
+    heroImage: '/people/w1-okafor.jpg',
     description: 'Build the habits, mindset, and energy-management systems that sustain high performance under pressure.',
     price: '$1,600 USD',
     outcomes: [
@@ -1195,7 +1195,7 @@ export const EVENTS: EventItem[] = [
     description: 'Our flagship three-day summit on institutional growth, AI governance, and geopolitical strategy for the world\'s top executives.',
     price: 'From $1,200',
     seatsLeft: 42,
-    image: 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?auto=format&fit=crop&q=85&w=1200'
+    image: '/scenes/summit-audience.jpg'
   },
   {
     id: 'e2',
@@ -1209,7 +1209,7 @@ export const EVENTS: EventItem[] = [
     description: 'A 90-minute executive briefing on the metrics, risks, and controls boards need to govern enterprise AI.',
     price: 'Free',
     seatsLeft: 480,
-    image: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=85&w=1200'
+    image: '/scenes/hero-team.jpg'
   },
   {
     id: 'e3',
@@ -1223,7 +1223,7 @@ export const EVENTS: EventItem[] = [
     description: 'An intensive three-day simulation bootcamp on leading organizations through systemic market shocks.',
     price: '$2,400',
     seatsLeft: 18,
-    image: 'https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&q=85&w=1200'
+    image: '/scenes/bootcamp-team.jpg'
   },
   {
     id: 'e4',
@@ -1237,7 +1237,7 @@ export const EVENTS: EventItem[] = [
     description: 'A hands-on workshop for founders on building repeatable revenue engines and raising growth capital.',
     price: '$350',
     seatsLeft: 120,
-    image: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&q=85&w=1200'
+    image: '/scenes/coaching-collab.jpg'
   },
   {
     id: 'e5',
@@ -1251,7 +1251,7 @@ export const EVENTS: EventItem[] = [
     description: 'A global virtual summit spotlighting pathways to the C-suite and boardroom for emerging women leaders.',
     price: 'Free',
     seatsLeft: 900,
-    image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=85&w=1200'
+    image: '/people/w3-balogun.jpg'
   },
   {
     id: 'e6',
@@ -1265,7 +1265,7 @@ export const EVENTS: EventItem[] = [
     description: 'A practitioner seminar on institutional-grade valuation, capital structuring, and M&A modeling.',
     price: '$650',
     seatsLeft: 60,
-    image: 'https://images.unsplash.com/photo-1554224154-26032ffc0d07?auto=format&fit=crop&q=85&w=1200'
+    image: '/scenes/finance-documents.jpg'
   },
   {
     id: 'global-growth-conference-2027-01',
@@ -1349,7 +1349,7 @@ export const EVENTS: EventItem[] = [
     description: 'Programme highlights: Graduation of all programme tiers; induction of new cohorts across all programme tiers; Growth Foundation; Growth Accelerator; Executive Circle; Elite Council; leadership development; business and strategic growth sessions; recognition of graduates; global networking and community engagement. Event type: Virtual Conference, Induction & Graduation.',
     price: 'Registration details to be announced',
     seatsLeft: 0,
-    image: 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&q=85&w=1200'
+    image: '/people/john-akpan.png'
   },
   {
     id: 'global-growth-conference-2028-07',
@@ -1363,7 +1363,7 @@ export const EVENTS: EventItem[] = [
     description: 'Programme highlights: Graduation of all programme tiers; induction of new cohorts across all programme tiers; Growth Foundation; Growth Accelerator; Executive Circle; Elite Council; leadership development; business and career growth; strategic transformation sessions; recognition and awards; Global Growth Community networking. Event type: Virtual Conference, Induction & Graduation.',
     price: 'Registration details to be announced',
     seatsLeft: 0,
-    image: 'https://images.unsplash.com/photo-1523580846011-d3a5bc25702b?auto=format&fit=crop&q=85&w=1200'
+    image: '/people/bright-john.png'
   },
   {
     id: 'global-growth-conference-2028-10',
@@ -1391,7 +1391,7 @@ export const EVENTS: EventItem[] = [
     description: 'Programme highlights: Graduation across all programme tiers; induction of new cohorts across all programme tiers; Growth Foundation; Growth Accelerator; Executive Circle; Elite Council; leadership and growth sessions; recognition and awards; Global Growth Community engagement. Event type: Virtual Conference, Induction & Graduation.',
     price: 'Registration details to be announced',
     seatsLeft: 0,
-    image: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&q=85&w=1200'
+    image: '/scenes/events-hero-graduation.jpg'
   },
   {
     id: 'global-growth-conference-2029-04',
@@ -1405,7 +1405,7 @@ export const EVENTS: EventItem[] = [
     description: 'Programme highlights: Graduation across all programme tiers; induction of new cohorts across all programme tiers; Growth Foundation; Growth Accelerator; Executive Circle; Elite Council; leadership development; business and strategic growth; global networking; recognition and celebration. Event type: Virtual Conference, Induction & Graduation.',
     price: 'Registration details to be announced',
     seatsLeft: 0,
-    image: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=85&w=1200'
+    image: '/scenes/wealth-planning.jpg'
   },
   {
     id: 'global-growth-conference-2029-07',
@@ -1419,7 +1419,7 @@ export const EVENTS: EventItem[] = [
     description: 'Programme highlights: Graduation and induction across Growth Foundation, Growth Accelerator, Executive Circle and Elite Council Cohorts; leadership and strategic growth sessions; recognition and awards; global networking; Global Growth Community engagement. Event type: Virtual Conference, Induction & Graduation.',
     price: 'Registration details to be announced',
     seatsLeft: 0,
-    image: 'https://images.unsplash.com/photo-1535982330050-f1c2fb79ff78?auto=format&fit=crop&q=85&w=1200'
+    image: '/people/w2-adeyemi.jpg'
   },
   {
     id: 'global-growth-conference-2029-10',
@@ -1433,7 +1433,7 @@ export const EVENTS: EventItem[] = [
     description: 'Programme highlights: Graduation and induction across Growth Foundation, Growth Accelerator, Executive Circle and Elite Council Cohorts; leadership development; strategic growth sessions; recognition and awards; networking; Global Growth Community engagement. Event type: Physical Conference, Induction & Graduation.',
     price: 'Registration details to be announced',
     seatsLeft: 0,
-    image: 'https://images.unsplash.com/photo-1571260899304-425eee4c7efc?auto=format&fit=crop&q=85&w=1200'
+    image: '/people/w4-eze.jpg'
   }
 ];
 
@@ -1464,7 +1464,7 @@ export const GROWTH_JOBS: GrowthJob[] = [
     ],
     tags: ['Hospitality', 'Operations', 'Leadership'],
     image: '/career-jobs/general-manager.png',
-    applicationEmail: 'careerjobs.schoolofgrowthglobal@gmail.com',
+    applicationEmail: 'careerjobs@schoolofgrowthglobal.com',
     featured: true,
   },
   {
@@ -1490,7 +1490,7 @@ export const GROWTH_JOBS: GrowthJob[] = [
     ],
     tags: ['Hospitality', 'Front Office', 'Customer Service'],
     image: '/career-jobs/front-desk.png',
-    applicationEmail: 'careerjobs.schoolofgrowthglobal@gmail.com',
+    applicationEmail: 'careerjobs@schoolofgrowthglobal.com',
   },
   {
     id: 'client-house-keeper-port-harcourt',
@@ -1515,7 +1515,7 @@ export const GROWTH_JOBS: GrowthJob[] = [
     ],
     tags: ['Hospitality', 'Housekeeping', 'Operations'],
     image: '/career-jobs/house-keeper.png',
-    applicationEmail: 'careerjobs.schoolofgrowthglobal@gmail.com',
+    applicationEmail: 'careerjobs@schoolofgrowthglobal.com',
   },
   {
     id: 'client-sales-marketer-port-harcourt',
@@ -1541,7 +1541,7 @@ export const GROWTH_JOBS: GrowthJob[] = [
     ],
     tags: ['Sales', 'Marketing', 'Hospitality'],
     image: '/career-jobs/sales-marketer.png',
-    applicationEmail: 'careerjobs.schoolofgrowthglobal@gmail.com',
+    applicationEmail: 'careerjobs@schoolofgrowthglobal.com',
   },
   {
     id: 'client-laundry-attendant-port-harcourt',
@@ -1566,7 +1566,7 @@ export const GROWTH_JOBS: GrowthJob[] = [
     ],
     tags: ['Hospitality', 'Laundry', 'Hotel Operations'],
     image: '/career-jobs/laundry-attendant.png',
-    applicationEmail: 'careerjobs.schoolofgrowthglobal@gmail.com',
+    applicationEmail: 'careerjobs@schoolofgrowthglobal.com',
   },
   {
     id: 'client-waiter-waitress-port-harcourt',
@@ -1592,7 +1592,7 @@ export const GROWTH_JOBS: GrowthJob[] = [
     ],
     tags: ['Hospitality', 'Restaurant', 'Customer Service'],
     image: '/career-jobs/waiter-waitress.png',
-    applicationEmail: 'careerjobs.schoolofgrowthglobal@gmail.com',
+    applicationEmail: 'careerjobs@schoolofgrowthglobal.com',
   },
   {
     id: 'client-bar-manager-port-harcourt',
@@ -1619,7 +1619,7 @@ export const GROWTH_JOBS: GrowthJob[] = [
     ],
     tags: ['Hospitality', 'Bar Operations', 'Management'],
     image: '/career-jobs/bar-manager.png',
-    applicationEmail: 'careerjobs.schoolofgrowthglobal@gmail.com',
+    applicationEmail: 'careerjobs@schoolofgrowthglobal.com',
   },
   {
     id: 'client-accountant-port-harcourt',
@@ -1644,7 +1644,7 @@ export const GROWTH_JOBS: GrowthJob[] = [
     ],
     tags: ['Accounting', 'Finance', 'Reporting'],
     image: '/career-jobs/accountant.png',
-    applicationEmail: 'careerjobs.schoolofgrowthglobal@gmail.com',
+    applicationEmail: 'careerjobs@schoolofgrowthglobal.com',
   },
   {
     id: 'client-executive-chef-port-harcourt',
@@ -1672,7 +1672,7 @@ export const GROWTH_JOBS: GrowthJob[] = [
     ],
     tags: ['Hospitality', 'Kitchen', 'Chef'],
     image: '/career-jobs/executive-chef.png',
-    applicationEmail: 'careerjobs.schoolofgrowthglobal@gmail.com',
+    applicationEmail: 'careerjobs@schoolofgrowthglobal.com',
     featured: true,
   },
   {
@@ -1701,7 +1701,7 @@ export const GROWTH_JOBS: GrowthJob[] = [
     ],
     tags: ['Inventory', 'Store Keeping', 'Hospitality'],
     image: '/career-jobs/store-keeper.png',
-    applicationEmail: 'careerjobs.schoolofgrowthglobal@gmail.com',
+    applicationEmail: 'careerjobs@schoolofgrowthglobal.com',
   },
   {
     id: 'growth-strategy-associate',
@@ -1798,7 +1798,7 @@ export const BOOKS: BookItem[] = [
     authorName: 'School of Growth Global Faculty',
     ownerName: 'School of Growth Global',
     ownerType: 'Admin',
-    ownerEmail: 'infoschoolofgrowth@gmail.com',
+    ownerEmail: 'info@schoolofgrowthglobal.com',
     category: 'Personal Growth',
     description:
       'A practical digital guide for students, professionals and entrepreneurs who want to turn growth ideas into weekly action.',
@@ -1821,7 +1821,7 @@ export const BOOKS: BookItem[] = [
     authorName: 'School of Growth Career Desk',
     ownerName: 'School of Growth Global',
     ownerType: 'Admin',
-    ownerEmail: 'careerjobs.schoolofgrowthglobal@gmail.com',
+    ownerEmail: 'careerjobs@schoolofgrowthglobal.com',
     category: 'Career Development',
     description:
       'A direct, usable guide for job seekers and young professionals preparing to compete with stronger positioning.',
@@ -1869,7 +1869,7 @@ export const BLOG_POSTS: BlogPost[] = [
     authorRole: 'Chair of Artificial Intelligence',
     readTime: '8 min read',
     date: 'Oct 18, 2024',
-    image: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=85&w=1200',
+    image: '/scenes/hero-team.jpg',
     featured: true
   },
   {
@@ -1882,7 +1882,7 @@ export const BLOG_POSTS: BlogPost[] = [
     authorRole: 'Dean of Executive Leadership',
     readTime: '11 min read',
     date: 'Oct 09, 2024',
-    image: 'https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&q=85&w=1200',
+    image: '/scenes/leadership-meeting.jpg',
     featured: true
   },
   {
@@ -1895,7 +1895,7 @@ export const BLOG_POSTS: BlogPost[] = [
     authorRole: 'Chair of Organizational Dynamics',
     readTime: '7 min read',
     date: 'Sep 30, 2024',
-    image: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=85&w=1200'
+    image: '/scenes/coaching-collab.jpg'
   },
   {
     id: 'b4',
@@ -1907,7 +1907,7 @@ export const BLOG_POSTS: BlogPost[] = [
     authorRole: 'Institutional Finance Faculty',
     readTime: '9 min read',
     date: 'Sep 22, 2024',
-    image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&q=85&w=1200'
+    image: '/scenes/finance-documents.jpg'
   },
   {
     id: 'b5',
@@ -1919,7 +1919,7 @@ export const BLOG_POSTS: BlogPost[] = [
     authorRole: 'Director of Venture Scaling',
     readTime: '6 min read',
     date: 'Sep 14, 2024',
-    image: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&q=85&w=1200'
+    image: '/scenes/wealth-planning.jpg'
   },
   {
     id: 'b6',
@@ -1931,7 +1931,7 @@ export const BLOG_POSTS: BlogPost[] = [
     authorRole: 'Executive Coach',
     readTime: '5 min read',
     date: 'Sep 05, 2024',
-    image: 'https://images.unsplash.com/photo-1506784983877-45594efa4cbe?auto=format&fit=crop&q=85&w=1200'
+    image: '/scenes/bootcamp-team.jpg'
   }
 ];
 

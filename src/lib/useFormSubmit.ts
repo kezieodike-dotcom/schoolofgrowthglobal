@@ -35,7 +35,7 @@ const ACCESS_KEY = import.meta.env.VITE_WEB3FORMS_ACCESS_KEY as string | undefin
 export type SubmitStatus = 'idle' | 'sending' | 'sent' | 'error';
 
 const DELIVERY_FAILED =
-  'We could not deliver your message. Please email infoschoolofgrowth@gmail.com directly.';
+  'We could not deliver your message. Please email support@schoolofgrowthglobal.com directly.';
 const ATTACHMENT_TOO_LARGE =
   'Please upload a CV file under 5 MB.';
 

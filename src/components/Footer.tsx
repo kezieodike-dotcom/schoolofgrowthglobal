@@ -134,7 +134,7 @@ export const Footer: React.FC = () => {
           <p>© {new Date().getFullYear()} School of Growth Global. All rights reserved.</p>
           <div className="flex flex-wrap justify-center gap-4 sm:gap-6">
             <Link to="/privacy" className="hover:text-slate-900">Privacy Policy</Link>
-            <Link to="/contact" className="hover:text-slate-900">Directions</Link>
+            <Link to="/contact" className="hover:text-slate-900">Department Contacts</Link>
             <Link to="/contact" className="hover:text-slate-900">Security &amp; Compliance</Link>
             {/*
               Plain text among the legal links rather than a button. The panel

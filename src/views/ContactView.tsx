@@ -1,8 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { PageHero } from '../components/PageHero';
-import { Mail, Phone, MapPin, Building2, CheckCircle2, Send, Loader2, AlertCircle, ExternalLink, Navigation } from 'lucide-react';
+import { Mail, Phone, Building2, CheckCircle2, Send, Loader2, AlertCircle } from 'lucide-react';
 import { useFormSubmit, HONEYPOT_PROPS } from '../lib/useFormSubmit';
+import { CONTACT_EMAILS } from '../lib/contactEmails';
 
 const INTERESTS = [
   'Individual Enrollment',
@@ -12,6 +13,15 @@ const INTERESTS = [
   'Partnership',
   'Media / Speaking',
 ];
+
+const CONTACT_CHANNELS = [
+  ['General', CONTACT_EMAILS.general, 'Institutional communication'],
+  ['Admissions', CONTACT_EMAILS.admissions, 'Applications, enrolment and student admissions'],
+  ['Careers', CONTACT_EMAILS.careers, 'Careers, vacancies and talent'],
+  ['Global Growth Office', CONTACT_EMAILS.growth, 'Your Global Growth Strategist office'],
+  ['Partnerships & Investment', CONTACT_EMAILS.partnerships, 'Strategic partnerships, investors and sponsors'],
+  ['Student / Customer Support', CONTACT_EMAILS.support, 'Student and customer support'],
+] as const;
 
 export const ContactView: React.FC = () => {
   const { status, error, submit, reset, sending } = useFormSubmit('contact');
@@ -35,7 +45,7 @@ export const ContactView: React.FC = () => {
               <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-200"><Mail className="w-5 h-5 text-amber-600" /></div>
               <div>
                 <p className="text-xs text-slate-500">Email</p>
-                <p className="text-sm text-slate-900">infoschoolofgrowth@gmail.com</p>
+                <a href={`mailto:${CONTACT_EMAILS.general}`} className="text-sm text-slate-900 hover:text-amber-700">{CONTACT_EMAILS.general}</a>
               </div>
             </div>
             <div className="flex items-center gap-3">
@@ -45,12 +55,18 @@ export const ContactView: React.FC = () => {
                 <p className="text-sm text-slate-900">+41 44 000 0000</p>
               </div>
             </div>
-            <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-200"><MapPin className="w-5 h-5 text-amber-600" /></div>
-              <div>
-                <p className="text-xs text-slate-500">Global Campuses</p>
-                <p className="text-sm text-slate-900">Zurich • Singapore • New York • London</p>
-              </div>
+          </div>
+
+          <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+            <p className="text-xs font-mono font-bold uppercase tracking-wider text-amber-700">Department contacts</p>
+            <div className="mt-4 space-y-3">
+              {CONTACT_CHANNELS.map(([label, email, description]) => (
+                <a key={email} href={`mailto:${email}`} className="block rounded-xl border border-slate-100 bg-slate-50 px-3 py-2.5 transition-colors hover:border-amber-200 hover:bg-amber-50">
+                  <span className="block text-xs font-semibold text-slate-900">{label}</span>
+                  <span className="mt-0.5 block text-[11px] text-amber-700">{email}</span>
+                  <span className="mt-0.5 block text-[11px] leading-5 text-slate-500">{description}</span>
+                </a>
+              ))}
             </div>
           </div>
 
@@ -139,19 +155,6 @@ export const ContactView: React.FC = () => {
         </div>
       </section>
 
-      <section className="border-t border-slate-200 bg-white py-16">
-        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-8 px-4 sm:px-6 lg:grid-cols-12 lg:px-8">
-          <div className="lg:col-span-5">
-            <p className="text-xs font-mono uppercase tracking-widest text-amber-700">Find us</p>
-            <h2 className="mt-2 text-3xl font-serif font-bold text-slate-900">Map &amp; directions</h2>
-            <p className="mt-4 text-sm leading-7 text-slate-600">Use Google Maps to search for School of Growth Global and get directions from your current location.</p>
-            <a href="https://www.google.com/maps/search/?api=1&query=School+of+Growth+Global" target="_blank" rel="noreferrer" className="mt-6 inline-flex items-center gap-2 rounded-xl bg-slate-950 px-5 py-3 text-xs font-bold text-white hover:bg-slate-800"><Navigation className="h-4 w-4" /> Get directions <ExternalLink className="h-3.5 w-3.5" /></a>
-          </div>
-          <div className="overflow-hidden rounded-2xl border border-slate-200 bg-slate-100 lg:col-span-7">
-            <iframe title="School of Growth Global location map" src="https://www.google.com/maps?q=School+of+Growth+Global&output=embed" className="h-72 w-full border-0 sm:h-80" loading="lazy" referrerPolicy="no-referrer-when-downgrade" />
-          </div>
-        </div>
-      </section>
     </div>
   );
 };

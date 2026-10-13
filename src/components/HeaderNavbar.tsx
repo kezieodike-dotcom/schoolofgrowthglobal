@@ -42,7 +42,7 @@ export const HeaderNavbar: React.FC = () => {
     }`;
 
   return (
-    <header className="sticky top-0 z-[80] border-b border-amber-300/70 bg-gradient-to-r from-amber-400 via-amber-500 to-orange-600 text-white shadow-[0_8px_24px_-18px_rgba(234,88,12,0.85)]">
+    <header className="sticky top-0 z-[80] border-b border-orange-500 bg-[#ff9700] text-white shadow-[0_8px_24px_-18px_rgba(234,88,12,0.85)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-[4.5rem] items-center justify-between gap-6">
           {/* Logo Brand */}

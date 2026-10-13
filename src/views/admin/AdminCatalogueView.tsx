@@ -278,7 +278,7 @@ function defaultsFor(kind: ContentKind): ManagedItem {
       authorName: '',
       ownerName: 'School of Growth Global',
       ownerType: 'Admin',
-      ownerEmail: 'infoschoolofgrowth@gmail.com',
+      ownerEmail: 'info@schoolofgrowthglobal.com',
       category: 'Personal Growth',
       description: '',
       highlights: [],

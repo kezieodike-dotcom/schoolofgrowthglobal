@@ -134,7 +134,7 @@ async function paystack<T>(
 }
 
 const NOT_CONFIGURED =
-  "Payments are not switched on yet. Please contact infoschoolofgrowth@gmail.com to enrol.";
+  "Payments are not switched on yet. Please contact admissions@schoolofgrowthglobal.com to enrol.";
 
 async function findPublishedBook(bookId: string): Promise<BookItem | null> {
   const records = await listContent("book");
@@ -342,7 +342,7 @@ export function createPaymentRouter(): Router {
           console.error(`Transaction ${reference} succeeded but carries no known book:`, tx.metadata);
           return res.status(422).json({
             error:
-              "Your payment went through but we could not match it to a book. Please contact infoschoolofgrowth@gmail.com with your reference.",
+      "Your payment went through but we could not match it to a book. Please contact support@schoolofgrowthglobal.com with your reference.",
           });
         }
 
@@ -353,7 +353,7 @@ export function createPaymentRouter(): Router {
           );
           return res.status(422).json({
             error:
-              "Your payment amount does not match this book. Please contact infoschoolofgrowth@gmail.com with your reference.",
+      "Your payment amount does not match this book. Please contact support@schoolofgrowthglobal.com with your reference.",
           });
         }
 
@@ -368,7 +368,7 @@ export function createPaymentRouter(): Router {
           );
           return res.status(422).json({
             error:
-              "Your donation amount could not be matched. Please contact infoschoolofgrowth@gmail.com with your reference.",
+      "Your donation amount could not be matched. Please contact support@schoolofgrowthglobal.com with your reference.",
           });
         }
 
@@ -387,7 +387,7 @@ export function createPaymentRouter(): Router {
         );
         return res.status(422).json({
           error:
-            "Your payment went through but we could not match it to a plan. Please contact infoschoolofgrowth@gmail.com with your reference.",
+      "Your payment went through but we could not match it to a plan. Please contact support@schoolofgrowthglobal.com with your reference.",
         });
       }
 
@@ -403,7 +403,7 @@ export function createPaymentRouter(): Router {
         );
         return res.status(422).json({
           error:
-            "Your payment amount does not match this plan. Please contact infoschoolofgrowth@gmail.com with your reference.",
+      "Your payment amount does not match this plan. Please contact support@schoolofgrowthglobal.com with your reference.",
         });
       }
 
@@ -417,7 +417,7 @@ export function createPaymentRouter(): Router {
       console.error(`Error in /api/payments/verify/${reference}:`, error);
       res.status(502).json({
         error:
-          "We could not confirm that payment. If you were charged, email infoschoolofgrowth@gmail.com with your reference and we will sort it out.",
+      "We could not confirm that payment. If you were charged, email support@schoolofgrowthglobal.com with your reference and we will sort it out.",
       });
     }
   });

@@ -1,4 +1,6 @@
-export const CAREER_JOBS_EMAIL = 'careerjobs.schoolofgrowthglobal@gmail.com';
+import { CONTACT_EMAILS } from './contactEmails';
+
+export const CAREER_JOBS_EMAIL = CONTACT_EMAILS.careers;
 
 export const EMPLOYER_JOB_POSTING_MESSAGE =
   'Do you have a job or contract opportunity for capable professionals? Reach out to the School of Growth Global Career Jobs team by email.';

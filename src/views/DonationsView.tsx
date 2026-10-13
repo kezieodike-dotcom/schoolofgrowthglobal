@@ -444,7 +444,7 @@ export const DonationsView: React.FC = () => {
                     <Info className="mt-0.5 h-4 w-4 shrink-0" />
                     <span>
                       Online donations are not switched on yet. Please contact
-                      infoschoolofgrowth@gmail.com so the team can guide your support.
+                      support@schoolofgrowthglobal.com so the team can guide your support.
                     </span>
                   </div>
                 </div>

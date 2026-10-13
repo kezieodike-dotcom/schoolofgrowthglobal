@@ -24,7 +24,7 @@ for (const title of expectedRoles) {
   if (job.workMode !== 'On-site') {
     throw new Error(`${title} should be listed as an on-site role.`);
   }
-  if (job.applicationEmail !== 'careerjobs.schoolofgrowthglobal@gmail.com') {
+  if (job.applicationEmail !== 'careerjobs@schoolofgrowthglobal.com') {
     throw new Error(`${title} should keep the flyer application email.`);
   }
   if (!job.image.startsWith('/career-jobs/')) {

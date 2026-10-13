@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, Building2, CheckCircle2, Handshake, Mail, MessageCircle, Sparkles } from 'lucide-react';
 import { PageHero } from '../components/PageHero';
 import { useFormSubmit, HONEYPOT_PROPS } from '../lib/useFormSubmit';
+import { CONTACT_EMAILS } from '../lib/contactEmails';
 
 const OPPORTUNITIES = [
   'Conference Sponsorship', 'Corporate Partnership', 'Institutional Partnership',
@@ -94,7 +95,7 @@ export const PartnershipView: React.FC = () => {
             <p className="mt-5 text-sm leading-7 text-slate-300">Your organization can help create opportunities for people to learn, lead, build businesses, develop careers, solve problems and create measurable impact.</p>
             <div className="mt-8 space-y-4 rounded-2xl border border-slate-800 bg-slate-900 p-5">
               <p className="text-xs font-mono uppercase tracking-wider text-amber-300">Official partnership channel</p>
-              <a href="mailto:partnerships@schoolofgrowthglobal.com?subject=Global%20Growth%20Conference%20Sponsorship%20%26%20Partnership" className="flex items-center gap-3 text-sm font-semibold text-white hover:text-amber-300"><Mail className="h-4 w-4 text-amber-300" /> partnerships@schoolofgrowthglobal.com</a>
+              <a href={`mailto:${CONTACT_EMAILS.partnerships}?subject=Global%20Growth%20Conference%20Sponsorship%20%26%20Partnership`} className="flex items-center gap-3 text-sm font-semibold text-white hover:text-amber-300"><Mail className="h-4 w-4 text-amber-300" /> {CONTACT_EMAILS.partnerships}</a>
               <a
                 href="https://wa.me/2348160030188"
                 target="_blank"

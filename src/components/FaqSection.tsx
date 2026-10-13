@@ -8,7 +8,7 @@ const FAQS = [
   ['Can I learn on my phone?', 'Yes. The learning experience is responsive and designed for desktop, tablet and mobile use.'],
   ['How do I become a mentor or consultant?', 'Start from the Enlist page and complete the relevant application. Applications are reviewed before a profile is published.'],
   ['How long does it take to receive a response?', 'The team normally responds within one business day using the email address submitted on your form.'],
-  ['How can I contact the institution?', 'Use the Contact page, email infoschoolofgrowth@gmail.com, or use the directions link to find the institution on Google Maps.'],
+  ['How can I contact the institution?', 'Use the Contact page or email info@schoolofgrowthglobal.com. You can also write directly to admissions, careers, partnerships or student support from the department directory.'],
   ['Do I receive a certificate just for opening lessons?', 'No. Completion and certification depend on the defined course requirements, including required activities, submissions and assessments where applicable.'],
 ];
 

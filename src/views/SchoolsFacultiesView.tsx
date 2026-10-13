@@ -145,7 +145,7 @@ export const SchoolsFacultiesView: React.FC = () => {
                     {String(faculty.number).padStart(2, '0')}
                   </span>
                   <span>
-                    <span className="block text-[10px] font-mono uppercase tracking-[0.18em] text-slate-400">Faculty {faculty.number}</span>
+                    <span className="block text-[10px] font-mono uppercase tracking-[0.18em] text-[#ff9700]">Faculty {faculty.number}</span>
                     <span className="mt-1 block text-lg font-serif font-bold leading-tight text-slate-950 sm:text-xl">{faculty.title}</span>
                   </span>
                 </span>
