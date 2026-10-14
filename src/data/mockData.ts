@@ -1195,7 +1195,7 @@ export const EVENTS: EventItem[] = [
     description: 'Our flagship three-day summit on institutional growth, AI governance, and geopolitical strategy for the world\'s top executives.',
     price: 'From $1,200',
     seatsLeft: 42,
-    image: '/scenes/summit-audience.jpg'
+    image: '/scenes/events-hero-graduation.jpg'
   },
   {
     id: 'e2',
@@ -1209,7 +1209,7 @@ export const EVENTS: EventItem[] = [
     description: 'A 90-minute executive briefing on the metrics, risks, and controls boards need to govern enterprise AI.',
     price: 'Free',
     seatsLeft: 480,
-    image: '/scenes/hero-team.jpg'
+    image: '/scenes/graduation-blue-stage.jpg'
   },
   {
     id: 'e3',
@@ -1223,7 +1223,7 @@ export const EVENTS: EventItem[] = [
     description: 'An intensive three-day simulation bootcamp on leading organizations through systemic market shocks.',
     price: '$2,400',
     seatsLeft: 18,
-    image: '/scenes/bootcamp-team.jpg'
+    image: '/scenes/graduation-auditorium-blue.jpg'
   },
   {
     id: 'e4',
@@ -1237,7 +1237,7 @@ export const EVENTS: EventItem[] = [
     description: 'A hands-on workshop for founders on building repeatable revenue engines and raising growth capital.',
     price: '$350',
     seatsLeft: 120,
-    image: '/scenes/coaching-collab.jpg'
+    image: '/scenes/graduation-ceremony-stage.jpg'
   },
   {
     id: 'e5',
@@ -1251,7 +1251,7 @@ export const EVENTS: EventItem[] = [
     description: 'A global virtual summit spotlighting pathways to the C-suite and boardroom for emerging women leaders.',
     price: 'Free',
     seatsLeft: 900,
-    image: '/people/w3-balogun.jpg'
+    image: '/scenes/graduation-auditorium.jpg'
   },
   {
     id: 'e6',
@@ -1265,7 +1265,7 @@ export const EVENTS: EventItem[] = [
     description: 'A practitioner seminar on institutional-grade valuation, capital structuring, and M&A modeling.',
     price: '$650',
     seatsLeft: 60,
-    image: '/scenes/finance-documents.jpg'
+    image: '/scenes/graduation-diploma.jpg'
   },
   {
     id: 'global-growth-conference-2027-01',
@@ -1349,7 +1349,7 @@ export const EVENTS: EventItem[] = [
     description: 'Programme highlights: Graduation of all programme tiers; induction of new cohorts across all programme tiers; Growth Foundation; Growth Accelerator; Executive Circle; Elite Council; leadership development; business and strategic growth sessions; recognition of graduates; global networking and community engagement. Event type: Virtual Conference, Induction & Graduation.',
     price: 'Registration details to be announced',
     seatsLeft: 0,
-    image: '/people/john-akpan.png'
+    image: '/scenes/graduation-diploma.jpg'
   },
   {
     id: 'global-growth-conference-2028-07',
@@ -1363,7 +1363,7 @@ export const EVENTS: EventItem[] = [
     description: 'Programme highlights: Graduation of all programme tiers; induction of new cohorts across all programme tiers; Growth Foundation; Growth Accelerator; Executive Circle; Elite Council; leadership development; business and career growth; strategic transformation sessions; recognition and awards; Global Growth Community networking. Event type: Virtual Conference, Induction & Graduation.',
     price: 'Registration details to be announced',
     seatsLeft: 0,
-    image: '/people/bright-john.png'
+    image: '/scenes/graduation-ceremony-stage.jpg'
   },
   {
     id: 'global-growth-conference-2028-10',
@@ -1391,7 +1391,7 @@ export const EVENTS: EventItem[] = [
     description: 'Programme highlights: Graduation across all programme tiers; induction of new cohorts across all programme tiers; Growth Foundation; Growth Accelerator; Executive Circle; Elite Council; leadership and growth sessions; recognition and awards; Global Growth Community engagement. Event type: Virtual Conference, Induction & Graduation.',
     price: 'Registration details to be announced',
     seatsLeft: 0,
-    image: '/scenes/events-hero-graduation.jpg'
+    image: '/scenes/graduation-auditorium.jpg'
   },
   {
     id: 'global-growth-conference-2029-04',
@@ -1405,7 +1405,7 @@ export const EVENTS: EventItem[] = [
     description: 'Programme highlights: Graduation across all programme tiers; induction of new cohorts across all programme tiers; Growth Foundation; Growth Accelerator; Executive Circle; Elite Council; leadership development; business and strategic growth; global networking; recognition and celebration. Event type: Virtual Conference, Induction & Graduation.',
     price: 'Registration details to be announced',
     seatsLeft: 0,
-    image: '/scenes/wealth-planning.jpg'
+    image: '/scenes/graduation-blue-stage.jpg'
   },
   {
     id: 'global-growth-conference-2029-07',
@@ -1419,7 +1419,7 @@ export const EVENTS: EventItem[] = [
     description: 'Programme highlights: Graduation and induction across Growth Foundation, Growth Accelerator, Executive Circle and Elite Council Cohorts; leadership and strategic growth sessions; recognition and awards; global networking; Global Growth Community engagement. Event type: Virtual Conference, Induction & Graduation.',
     price: 'Registration details to be announced',
     seatsLeft: 0,
-    image: '/people/w2-adeyemi.jpg'
+    image: '/scenes/graduation-auditorium-blue.jpg'
   },
   {
     id: 'global-growth-conference-2029-10',
@@ -1433,7 +1433,7 @@ export const EVENTS: EventItem[] = [
     description: 'Programme highlights: Graduation and induction across Growth Foundation, Growth Accelerator, Executive Circle and Elite Council Cohorts; leadership development; strategic growth sessions; recognition and awards; networking; Global Growth Community engagement. Event type: Physical Conference, Induction & Graduation.',
     price: 'Registration details to be announced',
     seatsLeft: 0,
-    image: '/people/w4-eze.jpg'
+    image: '/scenes/events-hero-graduation.jpg'
   }
 ];
 
