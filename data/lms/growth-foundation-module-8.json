@@ -1,0 +1,874 @@
+{
+  "id": "module-8",
+  "title": "Module 8 — Digital & AI Literacy",
+  "level": "Level 1 — Growth Foundation",
+  "programme": "Growth Foundation",
+  "coreQuestion": "How can I use digital technology and artificial intelligence to learn, work, solve problems, and create value safely and effectively?",
+  "transformation": "Digital Awareness → Digital Capability",
+  "institutionalPhilosophy": "Leadership. Strategy. Transformation.",
+  "sourceMetadata": [
+    "SCHOOL OF GROWTH GLOBAL",
+    "LEVEL 1 — GROWTH FOUNDATION",
+    "MODULE 8 — Digital & AI Literacy",
+    "Core Question: How can I use digital technology and artificial intelligence to learn, work, solve problems, and create value safely and effectively?",
+    "Transformation: Digital Awareness → Digital Capability",
+    "Programme: Growth Foundation",
+    "Institutional Philosophy: Leadership. Strategy. Transformation."
+  ],
+  "sourceFile": "MODULE 8- DIGITAL & AI LITERACY - Growth Foundation.docx",
+  "lessons": [
+    {
+      "id": "module-8-lesson-0",
+      "title": "8.0 MODULE INTRODUCTION",
+      "blocks": [
+        {
+          "id": "module-8-lesson-0-block",
+          "type": "reading",
+          "content": "Module Theme: Understand Technology. Work Smarter. Create Value Responsibly.\n\nCore Question: How can I use digital technology and artificial intelligence to learn, work, solve problems, and create value safely and effectively?\n\nTransformation: Digital Awareness → Digital Capability\n\nInstitutional Principle: Digital and AI literacy is a foundational capability for participation in the modern economy, education, professional life, entrepreneurship, and public service.\n\nRecommended Learning Format: Video lessons, written lessons, guided demonstrations, practical digital exercises, AI-assisted assignments, cybersecurity scenarios, knowledge assessments, and a digital productivity project.\n\n---"
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-1",
+      "title": "8.1 MODULE OVERVIEW",
+      "blocks": [
+        {
+          "id": "module-8-lesson-1-block",
+          "type": "reading",
+          "content": "Digital technology influences how people communicate, learn, work, manage organizations, deliver public services, conduct business, and access information.\n\nA person may own a smartphone and use social media every day without possessing the digital skills required for professional work.\n\nDigital literacy involves knowing how to use technology to accomplish meaningful tasks, find and evaluate information, communicate effectively, protect digital information, and solve problems.\n\nArtificial intelligence adds another layer of capability. AI systems can help users summarize information, generate ideas, explain concepts, organize tasks, draft documents, analyze suitable data, and support learning.\n\nHowever, digital tools and AI systems can also produce inaccurate information, expose private data, reinforce bias, create security risks, and encourage overdependence.\n\nSchool of Growth Global therefore teaches digital and AI literacy as a combination of practical capability, critical thinking, security awareness, ethical responsibility, and value creation.\n\nThe goal is not simply to use technology. The goal is to use technology intelligently to produce better outcomes."
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-2",
+      "title": "8.2 MODULE LEARNING OUTCOMES",
+      "blocks": [
+        {
+          "id": "module-8-lesson-2-block",
+          "type": "reading",
+          "content": "By the end of this module, students should be able to:\n\n1. Explain digital literacy and its importance.\n\n2. Use common digital tools for communication, learning, documentation, and organization.\n\n3. Conduct structured internet research.\n\n4. Evaluate the credibility of online information.\n\n5. Explain basic cybersecurity principles.\n\n6. Recognize common online scams and social-engineering attempts.\n\n7. Build and manage a professional digital identity.\n\n8. Explain artificial intelligence and generative AI in accessible terms.\n\n9. Write structured prompts for AI tools.\n\n10. Use AI to support learning, productivity, research, and work.\n\n11. Verify AI-generated information before relying on it.\n\n12. Identify privacy, bias, copyright, and ethical concerns.\n\n13. Select digital tools according to their purpose and constraints.\n\n14. Develop a practical digital productivity workflow.\n\n15. Produce a responsible digital and AI usage plan.\n\n---"
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-3",
+      "title": "8.3 LESSON ONE: UNDERSTANDING DIGITAL LITERACY",
+      "blocks": []
+    },
+    {
+      "id": "module-8-lesson-3-1",
+      "title": "8.3.1 What Is Digital Literacy?",
+      "blocks": [
+        {
+          "id": "module-8-lesson-3-1-block",
+          "type": "reading",
+          "content": "Digital literacy is the ability to access, understand, evaluate, create, communicate, and work with information through digital technologies.\n\nIt includes technical skills, information evaluation, communication, online safety, and responsible technology use.\n\nDigital literacy is not limited to knowing how to operate a smartphone or computer.\n\nIt also involves knowing how to:\n\n- Create and format a document.\n\n- Organize digital files.\n\n- Send professional emails.\n\n- Use online learning platforms.\n\n- Conduct effective internet searches.\n\n- Collaborate with other people online.\n\n- Protect personal information.\n\n- Recognize suspicious links and messages.\n\n- Evaluate digital content.\n\n- Use AI tools appropriately.\n\n- Troubleshoot common technical problems."
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-3-2",
+      "title": "8.3.2 Digital Literacy Versus Device Ownership",
+      "blocks": [
+        {
+          "id": "module-8-lesson-3-2-block",
+          "type": "reading",
+          "content": "Owning a smartphone does not automatically mean that someone can use it effectively for professional purposes.\n\nFor example, two people may own similar smartphones.\n\nOne person uses the device mainly for entertainment.\n\nThe other uses it to:\n\n- Complete online courses.\n\n- Create documents.\n\n- Communicate professionally.\n\n- Research career opportunities.\n\n- Organize work.\n\n- Build a portfolio.\n\n- Participate in remote meetings.\n\n- Develop useful skills.\n\nThe difference is not the device alone. It is how effectively the user applies the available technology."
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-3-3",
+      "title": "8.3.3 The Five Dimensions of Digital Literacy",
+      "blocks": [
+        {
+          "id": "module-8-lesson-3-3-block",
+          "type": "reading",
+          "content": "1. Technical capability\n\nKnowing how to operate devices, applications, accounts, files, and common digital tools.\n\n2. Information literacy\n\nFinding, evaluating, organizing, and using information responsibly.\n\n3. Communication and collaboration\n\nUsing digital platforms to communicate, work with others, and contribute to shared tasks.\n\n4. Safety and responsibility\n\nProtecting information, respecting privacy, recognizing risks, and behaving appropriately online.\n\n5. Digital creation and problem-solving\n\nUsing technology to create documents, presentations, designs, reports, systems, and other useful outputs."
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-3-4",
+      "title": "8.3.4 Digital Literacy Across Different Environments",
+      "blocks": [
+        {
+          "id": "module-8-lesson-3-4-block",
+          "type": "reading",
+          "content": "For an employee, digital literacy may involve creating reports, managing spreadsheets, communicating with colleagues, and organizing files.\n\nFor an entrepreneur, it may involve customer communication, digital marketing, inventory tracking, online payments, and business recordkeeping.\n\nFor a student, it may involve research, online classes, assignments, collaboration, and responsible use of AI.\n\nFor a public servant, it may involve digital records, information management, citizen communication, and secure handling of official data.\n\nFor a community leader, it may involve organizing programmes, sharing reliable information, and coordinating volunteers.\n\nPractical Exercise: Digital Skills Audit\n\nRate your current capability in each area from 1 to 5.\n\n1 = Beginner; 2 = Basic; 3 = Developing; 4 = Competent; 5 = Highly capable.\n\nSkill| Current Rating| Evidence| Improvement Needed\n\nEmail communication| ___| ___| ___\n\nDocument creation| ___| ___| ___\n\nSpreadsheet use| ___| ___| ___\n\nInternet research| ___| ___| ___\n\nOnline collaboration| ___| ___| ___\n\nCybersecurity awareness| ___| ___| ___\n\nAI-assisted work| ___| ___| ___\n\nDigital file management| ___| ___| ___\n\nIdentify three skills that would most improve your current education, career, business, or personal productivity.\n\n---"
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-4",
+      "title": "8.4 LESSON TWO: ESSENTIAL DIGITAL TOOLS FOR WORK AND LEARNING",
+      "blocks": [
+        {
+          "id": "module-8-lesson-4-block",
+          "type": "reading",
+          "content": "Digital tools help people perform tasks more efficiently, communicate with others, store information, and produce useful outputs.\n\nThe appropriate tool depends on the task, available devices, internet access, cost, privacy requirements, and user capability."
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-4-1",
+      "title": "8.4.1 Document and Writing Tools",
+      "blocks": [
+        {
+          "id": "module-8-lesson-4-1-block",
+          "type": "reading",
+          "content": "Document tools help users create:\n\n- Letters.\n\n- Reports.\n\n- Proposals.\n\n- Assignments.\n\n- Meeting notes.\n\n- Policies.\n\n- Business documents.\n\n- Professional profiles.\n\nStudents should learn how to:\n\n- Create and name a document.\n\n- Use headings and paragraphs.\n\n- Format text consistently.\n\n- Insert tables where necessary.\n\n- Check spelling and grammar.\n\n- Save and export files.\n\n- Review and correct a document before sharing it."
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-4-2",
+      "title": "8.4.2 Spreadsheet Tools",
+      "blocks": [
+        {
+          "id": "module-8-lesson-4-2-block",
+          "type": "reading",
+          "content": "Spreadsheets help organize information in rows and columns.\n\nThey can be used for:\n\n- Budgets.\n\n- Expense tracking.\n\n- Inventory.\n\n- Attendance.\n\n- Project tracking.\n\n- Application tracking.\n\n- Sales records.\n\n- Simple calculations.\n\nStudents should learn basic operations such as entering data, using simple formulas, sorting information, and checking totals.\n\nFor example, if cell B2 contains income and cell C2 contains expenses, a spreadsheet formula can calculate the difference:\n\n\"=B2-C2\"\n\nThe formula should be used only when the cells contain the intended numerical values."
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-4-3",
+      "title": "8.4.3 Presentation Tools",
+      "blocks": [
+        {
+          "id": "module-8-lesson-4-3-block",
+          "type": "reading",
+          "content": "Presentation software helps users communicate information visually.\n\nCommon uses include:\n\n- Classroom presentations.\n\n- Business pitches.\n\n- Training materials.\n\n- Project reports.\n\n- Public education.\n\n- Organizational briefings.\n\nAn effective presentation should have:\n\n- A clear objective.\n\n- Logical structure.\n\n- Readable text.\n\n- Appropriate visuals.\n\n- Accurate information.\n\n- A concise conclusion.\n\nMore slides do not necessarily produce a better presentation."
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-4-4",
+      "title": "8.4.4 Communication and Collaboration Tools",
+      "blocks": [
+        {
+          "id": "module-8-lesson-4-4-block",
+          "type": "reading",
+          "content": "Digital communication tools may include:\n\n- Email.\n\n- Messaging platforms.\n\n- Video conferencing.\n\n- Shared documents.\n\n- Team workspaces.\n\n- Project-management applications.\n\nProfessional users should understand the purpose of each communication channel.\n\nFor example, a formal decision may need to be documented in email or an approved organizational system even if it was initially discussed through instant messaging."
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-4-5",
+      "title": "8.4.5 Cloud Storage and File Management",
+      "blocks": [
+        {
+          "id": "module-8-lesson-4-5-block",
+          "type": "reading",
+          "content": "Cloud storage allows users to store files on remote systems and access them through supported devices and accounts.\n\nStudents should learn to:\n\n- Use clear file names.\n\n- Create logical folders.\n\n- Maintain version control.\n\n- Avoid unnecessary duplicate files.\n\n- Set appropriate sharing permissions.\n\n- Back up important work.\n\n- Remove access when it is no longer needed.\n\nA well-organized folder structure might look like:\n\n\"School of Growth Global / Growth Foundation / Module 8 / Student Project\"\n\nAvoid storing confidential information in public folders or sharing unrestricted links when a more limited permission is appropriate."
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-4-6",
+      "title": "8.4.6 Digital Tool Selection",
+      "blocks": [
+        {
+          "id": "module-8-lesson-4-6-block",
+          "type": "reading",
+          "content": "Before choosing a tool, ask:\n\n1. What task must I complete?\n\n2. What features do I actually need?\n\n3. Can I use the tool on my device?\n\n4. Does it work with my internet access?\n\n5. Is it affordable?\n\n6. What information will I need to provide?\n\n7. Does it have suitable security and privacy controls?\n\n8. Can I export or retrieve my work?\n\n9. Will other people need to collaborate with me?\n\n10. What happens if the service becomes unavailable?\n\nStudents should not assume that every tool is free, that every free plan has the same features, or that every application is appropriate for confidential work.\n\nPractical Exercise: My Digital Toolkit\n\nSelect one tool for each task:\n\n- Writing.\n\n- Spreadsheets.\n\n- Presentations.\n\n- File storage.\n\n- Communication.\n\n- Task management.\n\n- Research.\n\n- AI-assisted work.\n\nFor each tool, state its purpose, cost or access requirements, main benefit, and one potential limitation.\n\n---"
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-5",
+      "title": "8.5 LESSON THREE: INTERNET RESEARCH AND INFORMATION LITERACY",
+      "blocks": []
+    },
+    {
+      "id": "module-8-lesson-5-1",
+      "title": "8.5.1 What Is Internet Research?",
+      "blocks": [
+        {
+          "id": "module-8-lesson-5-1-block",
+          "type": "reading",
+          "content": "Internet research is the process of finding, evaluating, comparing, and using information from online sources to answer a question or solve a problem.\n\nSearching the internet is easy. Determining whether the information is accurate, relevant, current, and trustworthy requires judgment."
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-5-2",
+      "title": "8.5.2 The SGG Research Process",
+      "blocks": [
+        {
+          "id": "module-8-lesson-5-2-block",
+          "type": "reading",
+          "content": "Use the following process:\n\nQUESTION → SEARCH → SOURCE EVALUATION → CROSS-CHECK → SYNTHESIS → CITATION → APPLICATION\n\nStep 1: Define the question\n\nState exactly what you need to understand.\n\nWeak question: \"Tell me about business.\"\n\nBetter question: \"What are the major operating costs of a small food business in my locality, and how can I estimate its break-even point?\"\n\nStep 2: Choose search terms\n\nUse specific terms related to the question.\n\nInclude the relevant country, industry, time period, or population where needed.\n\nStep 3: Identify suitable sources\n\nDepending on the topic, useful sources may include:\n\n- Official government publications.\n\n- University research.\n\n- Professional standards bodies.\n\n- Peer-reviewed research.\n\n- Official company documentation.\n\n- Recognized industry reports.\n\n- Credible news organizations.\n\n- Original documents and datasets.\n\nStep 4: Evaluate the source\n\nAsk who produced the information, why it was published, what evidence supports it, and whether the source has relevant expertise.\n\nStep 5: Cross-check important claims\n\nCompare important information with independent sources.\n\nWhere possible, trace claims to original documents rather than repeating claims from websites that cite one another.\n\nStep 6: Synthesize\n\nSummarize what the evidence means in your own words.\n\nDistinguish facts from opinions, estimates, and assumptions.\n\nStep 7: Cite sources\n\nRecord where the information came from so readers can verify it.\n\nStep 8: Apply the findings\n\nExplain how the information answers the original question or supports a decision."
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-5-3",
+      "title": "8.5.3 The Five-Point Source Evaluation Test",
+      "blocks": [
+        {
+          "id": "module-8-lesson-5-3-block",
+          "type": "reading",
+          "content": "Evaluate a source using these questions:\n\nA. Authority\n\nWho produced it? Do they have relevant expertise or responsibility?\n\nB. Evidence\n\nDoes it provide supporting data, documents, methods, or references?\n\nC. Currency\n\nWhen was it published or updated? Does the date matter for the topic?\n\nD. Purpose\n\nIs it intended to inform, educate, sell, persuade, entertain, or influence?\n\nE. Corroboration\n\nDo independent, credible sources support the key claims?\n\nA source can be useful without satisfying every criterion equally. The appropriate level of scrutiny depends on the topic and the consequences of getting it wrong."
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-5-4",
+      "title": "8.5.4 Primary and Secondary Sources",
+      "blocks": [
+        {
+          "id": "module-8-lesson-5-4-block",
+          "type": "reading",
+          "content": "A primary source provides direct evidence or original material.\n\nExamples may include:\n\n- An official law.\n\n- A government dataset.\n\n- An original research paper.\n\n- A company's official policy.\n\n- An original interview.\n\n- An official statistical release.\n\nA secondary source interprets, analyzes, or summarizes primary material.\n\nExamples may include:\n\n- A textbook explaining a theory.\n\n- A news article analyzing an economic report.\n\n- A research review.\n\n- A professional commentary.\n\nBoth can be useful, but the distinction matters when verifying important claims."
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-5-5",
+      "title": "8.5.5 Misinformation and Disinformation",
+      "blocks": [
+        {
+          "id": "module-8-lesson-5-5-block",
+          "type": "reading",
+          "content": "Misinformation is false or misleading information shared regardless of whether the person sharing it intends to deceive.\n\nDisinformation is false or misleading information deliberately spread to deceive or manipulate.\n\nBoth can influence public decisions, business activity, personal reputations, and community relationships."
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-5-6",
+      "title": "8.5.6 Responsible Research Habits",
+      "blocks": [
+        {
+          "id": "module-8-lesson-5-6-block",
+          "type": "reading",
+          "content": "- Read beyond the headline.\n\n- Check publication dates.\n\n- Examine the original source.\n\n- Distinguish fact from interpretation.\n\n- Avoid relying on one source for consequential claims.\n\n- Check numerical claims and units.\n\n- Be cautious with screenshots and unattributed quotations.\n\n- Do not assume a popular post is accurate.\n\n- Do not assume a search-engine ranking proves credibility.\n\n- Preserve source links and relevant publication details.\n\nPractical Exercise: Research Verification\n\nChoose a factual claim related to education, employment, business, technology, or your locality.\n\nFind three relevant sources.\n\nRecord:\n\n- The claim.\n\n- The source and publication date.\n\n- The evidence provided.\n\n- Any limitations.\n\n- Whether other sources support the claim.\n\n- Your final conclusion.\n\nDo not select a sensitive personal claim about another individual.\n\n---"
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-6",
+      "title": "8.6 LESSON FOUR: CYBERSECURITY AWARENESS",
+      "blocks": []
+    },
+    {
+      "id": "module-8-lesson-6-1",
+      "title": "8.6.1 What Is Cybersecurity?",
+      "blocks": [
+        {
+          "id": "module-8-lesson-6-1-block",
+          "type": "reading",
+          "content": "Cybersecurity involves protecting devices, networks, accounts, systems, and information against unauthorized access, misuse, disruption, or damage.\n\nEvery digital user has a role in cybersecurity.\n\nA small business, school, household, or individual may be exposed to digital risks even without operating sophisticated technology."
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-6-2",
+      "title": "8.6.2 Common Cybersecurity Threats",
+      "blocks": [
+        {
+          "id": "module-8-lesson-6-2-block",
+          "type": "reading",
+          "content": "1. Phishing\n\nA deceptive message designed to persuade a person to reveal information, open a harmful attachment, or visit a fraudulent website.\n\n2. Social engineering\n\nManipulating people into revealing information or taking unsafe actions.\n\n3. Malware\n\nSoftware designed to perform unauthorized or harmful activities on a device or system.\n\n4. Account takeover\n\nUnauthorized access to an account, often following credential theft or other security failures.\n\n5. Identity theft\n\nUsing another person's identity information without authorization, often for fraud or other harmful purposes.\n\n6. Financial scams\n\nFraudulent attempts to obtain money, account access, payment details, or other valuable information.\n\n7. Unsafe downloads\n\nFiles or applications that may contain harmful software or misuse user permissions.\n\n8. Data exposure\n\nAccidentally or improperly making private, confidential, or sensitive information accessible to unauthorized people."
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-6-3",
+      "title": "8.6.3 Recognizing Suspicious Messages",
+      "blocks": [
+        {
+          "id": "module-8-lesson-6-3-block",
+          "type": "reading",
+          "content": "Warning signs include:\n\n- Unexpected requests for passwords or verification codes.\n\n- Pressure to act immediately.\n\n- Unusual payment instructions.\n\n- Unexpected attachments.\n\n- Links that do not match the claimed organization.\n\n- Requests to bypass normal approval procedures.\n\n- Offers that appear too good to be true.\n\n- Messages claiming that an account will be closed unless the user responds immediately.\n\nHowever, professional-looking messages can also be fraudulent. Grammar, logos, and design alone do not establish legitimacy."
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-6-4",
+      "title": "8.6.4 Essential Account Security Practices",
+      "blocks": [
+        {
+          "id": "module-8-lesson-6-4-block",
+          "type": "reading",
+          "content": "A. Use strong, unique passwords\n\nAvoid reusing the same password across important accounts.\n\nWhere available, use a reputable password manager to generate and store unique passwords.\n\nB. Enable multifactor authentication\n\nMultifactor authentication adds a second verification step or another factor beyond the password.\n\nUse the strongest practical option supported by the service. Authentication applications or security keys may provide stronger protection than SMS in some situations.\n\nC. Secure recovery methods\n\nKeep account recovery email addresses and phone numbers current and protected.\n\nD. Update devices and applications\n\nInstall legitimate updates to receive security fixes.\n\nE. Use official sources\n\nDownload applications from trusted, official sources and verify the identity of services before submitting sensitive information.\n\nF. Lock devices\n\nUse an appropriate screen lock and avoid leaving unlocked devices unattended.\n\nG. Back up important files\n\nMaintain appropriate backups of important documents and work.\n\nH. Limit access\n\nShare documents and system permissions only with people who need them."
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-6-5",
+      "title": "8.6.5 Public Wi-Fi and Device Safety",
+      "blocks": [
+        {
+          "id": "module-8-lesson-6-5-block",
+          "type": "reading",
+          "content": "Public networks can introduce additional risks, especially when users cannot verify how the network is managed.\n\nPractical precautions include:\n\n- Confirming the correct network name.\n\n- Avoiding sensitive transactions on untrusted networks where possible.\n\n- Using secure, up-to-date applications and websites.\n\n- Disabling unnecessary sharing.\n\n- Keeping device software updated.\n\n- Avoiding unknown charging accessories or untrusted data connections when appropriate.\n\nA public network is not automatically unsafe, and a private network is not automatically secure. Good device and account practices remain important."
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-6-6",
+      "title": "8.6.6 What to Do If You Suspect a Security Incident",
+      "blocks": [
+        {
+          "id": "module-8-lesson-6-6-block",
+          "type": "reading",
+          "content": "1. Stop interacting with the suspicious message or website.\n\n2. Do not send additional money or verification codes.\n\n3. Use a trusted device and official service channels to secure affected accounts.\n\n4. Change compromised passwords and review other accounts if the same password was reused.\n\n5. Revoke unfamiliar sessions or connected applications where possible.\n\n6. Contact the relevant bank, platform, or service provider if financial or account access is involved.\n\n7. Preserve relevant evidence without spreading harmful files.\n\n8. Report the incident through appropriate official channels.\n\n9. Seek qualified technical assistance if the device or system may be compromised.\n\nIf a work or school account is involved, follow the organization's incident-reporting process.\n\nPractical Exercise: Cybersecurity Risk Audit\n\nReview your digital practices without disclosing your actual passwords or confidential credentials.\n\nAnswer:\n\n- Do I reuse passwords?\n\n- Is multifactor authentication enabled on important accounts where available?\n\n- Do I verify unexpected payment requests?\n\n- Do I install updates?\n\n- Do I back up important files?\n\n- Do I review sharing permissions?\n\n- Do I know how to report a suspicious message?\n\nCreate three security improvements to implement within seven days.\n\n---"
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-7",
+      "title": "8.7 LESSON FIVE: DIGITAL IDENTITY AND PROFESSIONAL REPUTATION",
+      "blocks": []
+    },
+    {
+      "id": "module-8-lesson-7-1",
+      "title": "8.7.1 What Is Digital Identity?",
+      "blocks": [
+        {
+          "id": "module-8-lesson-7-1-block",
+          "type": "reading",
+          "content": "Digital identity is the information, accounts, activities, and representations associated with a person or organization in digital environments.\n\nIt may include:\n\n- Professional profiles.\n\n- Public social media posts.\n\n- Published work.\n\n- Online portfolios.\n\n- Business pages.\n\n- Public comments.\n\n- Educational achievements.\n\n- Websites.\n\n- Digital communications.\n\nDigital identity can influence how others perceive a person's professionalism, reliability, interests, and expertise."
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-7-2",
+      "title": "8.7.2 Personal and Professional Identity",
+      "blocks": [
+        {
+          "id": "module-8-lesson-7-2-block",
+          "type": "reading",
+          "content": "Your personal online activity and professional identity may overlap, but they do not need to be identical.\n\nStudents should understand the audience, purpose, and privacy settings of the platforms they use.\n\nA professional profile should accurately represent a person's experience and capabilities.\n\nDo not fabricate qualifications, employment history, client testimonials, awards, or professional achievements."
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-7-3",
+      "title": "8.7.3 Building a Credible Professional Profile",
+      "blocks": [
+        {
+          "id": "module-8-lesson-7-3-block",
+          "type": "reading",
+          "content": "A credible profile should communicate:\n\n1. Identity\n\nWho are you?\n\n2. Capability\n\nWhat can you do?\n\n3. Evidence\n\nWhat work, projects, qualifications, or achievements demonstrate your capability?\n\n4. Value\n\nWhat problems can you help solve?\n\n5. Direction\n\nWhat opportunities, roles, or professional areas are you pursuing?"
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-7-4",
+      "title": "8.7.4 A Simple Professional Introduction",
+      "blocks": [
+        {
+          "id": "module-8-lesson-7-4-block",
+          "type": "reading",
+          "content": "Use this structure:\n\n\"My name is [Name]. I am developing my capability in [Field]. I have experience or training in [Relevant Areas]. I am particularly interested in helping [Audience] achieve [Useful Outcome]. I am currently working on [Project, Skill, or Goal].\"\n\nStudents should only include statements that accurately represent their current position."
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-7-5",
+      "title": "8.7.5 Building a Digital Portfolio",
+      "blocks": [
+        {
+          "id": "module-8-lesson-7-5-block",
+          "type": "reading",
+          "content": "A portfolio is a collection of work that demonstrates capability.\n\nIt may include:\n\n- Writing samples.\n\n- Design work.\n\n- Projects.\n\n- Presentations.\n\n- Research summaries.\n\n- Code or technical work.\n\n- Business case studies.\n\n- Certificates, where relevant.\n\n- Testimonials used with permission.\n\nA portfolio should distinguish between individual work and collaborative work. Students must respect confidentiality and obtain permission before publishing client materials or other people's work."
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-7-6",
+      "title": "8.7.6 Protecting Your Reputation",
+      "blocks": [
+        {
+          "id": "module-8-lesson-7-6-block",
+          "type": "reading",
+          "content": "Before publishing content, ask:\n\n- Is it accurate?\n\n- Is it respectful?\n\n- Does it reveal private information?\n\n- Do I have permission to share the material?\n\n- Could it mislead the audience?\n\n- Does it represent my actual views and capabilities?\n\n- Could it harm another person unfairly?\n\nMistakes can happen. When an error occurs, correct it responsibly rather than spreading further misinformation.\n\nPractical Exercise: Digital Identity Audit\n\nReview your public-facing digital presence.\n\nPrepare:\n\n1. A short professional introduction.\n\n2. Three skills you can demonstrate.\n\n3. One project or sample of work.\n\n4. One area you want to develop.\n\n5. Three changes that would improve your professional presentation.\n\nStudents who do not use public social media can complete the exercise using a mock professional profile.\n\n---"
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-8",
+      "title": "8.8 LESSON SIX: UNDERSTANDING ARTIFICIAL INTELLIGENCE",
+      "blocks": []
+    },
+    {
+      "id": "module-8-lesson-8-1",
+      "title": "8.8.1 What Is Artificial Intelligence?",
+      "blocks": [
+        {
+          "id": "module-8-lesson-8-1-block",
+          "type": "reading",
+          "content": "Artificial intelligence, or AI, is a broad field involving the development of computer systems that perform tasks associated with capabilities such as language processing, pattern recognition, prediction, planning, classification, and content generation.\n\nDifferent AI systems are designed for different purposes. Not every AI system works in the same way."
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-8-2",
+      "title": "8.8.2 What Is Generative AI?",
+      "blocks": [
+        {
+          "id": "module-8-lesson-8-2-block",
+          "type": "reading",
+          "content": "Generative AI refers to systems that generate content such as text, images, audio, video, or code based on patterns learned during development and the instructions or inputs they receive.\n\nExamples of possible uses include:\n\n- Drafting a document.\n\n- Summarizing a report.\n\n- Generating ideas.\n\n- Explaining a difficult concept.\n\n- Producing practice questions.\n\n- Helping structure a presentation.\n\n- Supporting coding tasks.\n\n- Creating a first draft of a communication.\n\n- Organizing information.\n\nThe capabilities and limitations vary across tools and versions."
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-8-3",
+      "title": "8.8.3 How Language-Based AI Works at a High Level",
+      "blocks": [
+        {
+          "id": "module-8-lesson-8-3-block",
+          "type": "reading",
+          "content": "Many generative AI language systems produce text by processing the input and generating likely continuations according to patterns learned during training and other system design choices.\n\nSome systems can also use tools, retrieve information, analyze files, or process images.\n\nHowever, a fluent answer is not proof that the answer is accurate.\n\nAI systems can generate false statements, invent sources, misunderstand context, or omit important details."
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-8-4",
+      "title": "8.8.4 What AI Can and Cannot Do Reliably",
+      "blocks": [
+        {
+          "id": "module-8-lesson-8-4-block",
+          "type": "reading",
+          "content": "AI may help with:\n\n- Drafting and rewriting.\n\n- Summarizing suitable materials.\n\n- Brainstorming.\n\n- Structuring plans.\n\n- Generating examples.\n\n- Explaining concepts.\n\n- Organizing information.\n\n- Supporting research.\n\n- Assisting with suitable data analysis.\n\nAI should not automatically be treated as a final authority for:\n\n- Medical diagnosis.\n\n- Legal conclusions.\n\n- Investment decisions.\n\n- Financial commitments.\n\n- Safety-critical engineering.\n\n- High-stakes hiring or education decisions.\n\n- Current facts that have not been verified.\n\n- Decisions requiring professional accountability.\n\nThese activities may require qualified human judgment, authoritative sources, appropriate tools, and formal review."
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-8-5",
+      "title": "8.8.5 AI Is Not a Replacement for Human Responsibility",
+      "blocks": [
+        {
+          "id": "module-8-lesson-8-5-block",
+          "type": "reading",
+          "content": "A person using AI remains responsible for how the output is applied.\n\nIf AI produces an incorrect business calculation, the user must check it.\n\nIf AI drafts a misleading public statement, the person publishing it must take responsibility for correcting the problem.\n\nIf AI generates a document containing confidential information, the user must consider whether the information should have been entered into that system in the first place.\n\nAI can assist judgment. It does not remove the need for judgment.\n\nPractical Exercise: AI Capability Assessment\n\nIdentify five tasks in your education, career, business, or personal life.\n\nFor each task, state:\n\n- Whether AI could assist.\n\n- What input would be required.\n\n- What could go wrong.\n\n- How the output would be verified.\n\n- Which parts must remain under human control.\n\n---"
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-9",
+      "title": "8.9 LESSON SEVEN: PROMPTING — HOW TO GIVE AI EFFECTIVE INSTRUCTIONS",
+      "blocks": []
+    },
+    {
+      "id": "module-8-lesson-9-1",
+      "title": "8.9.1 What Is a Prompt?",
+      "blocks": [
+        {
+          "id": "module-8-lesson-9-1-block",
+          "type": "reading",
+          "content": "A prompt is an instruction, question, or set of information provided to an AI system to guide its response.\n\nThe quality of a prompt can affect the usefulness of the result.\n\nA vague instruction often produces a broad answer. A clear instruction provides the context, desired outcome, relevant constraints, and expected format.\n\nHowever, even a well-written prompt cannot guarantee factual accuracy."
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-9-2",
+      "title": "8.9.2 The SGG CLEAR Prompt Framework",
+      "blocks": [
+        {
+          "id": "module-8-lesson-9-2-block",
+          "type": "reading",
+          "content": "Use the CLEAR framework:\n\nC — Context\n\nExplain the situation and relevant background.\n\nL — Limitations\n\nState constraints, exclusions, available resources, and requirements.\n\nE — Expected outcome\n\nExplain what you want the AI to produce.\n\nA — Audience\n\nIdentify who will use or read the result.\n\nR — Response format\n\nSpecify the desired structure, length, tone, or presentation."
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-9-3",
+      "title": "8.9.3 Example of a Weak Prompt",
+      "blocks": [
+        {
+          "id": "module-8-lesson-9-3-block",
+          "type": "reading",
+          "content": "\"Help me with my business.\"\n\nThis does not identify the business, its problem, its audience, its resources, or the desired outcome."
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-9-4",
+      "title": "8.9.4 Example of a Stronger Prompt",
+      "blocks": [
+        {
+          "id": "module-8-lesson-9-4-block",
+          "type": "reading",
+          "content": "\"Act as a small-business planning assistant. I am preparing to offer a basic graphic-design service to local small businesses. I have a smartphone, internet access, and beginner-level design skills. Help me create a 30-day learning and customer-validation plan. Keep the plan realistic for someone with limited starting capital. Separate learning activities from business activities, identify likely costs and risks, and present the result as a weekly table. Do not assume that customers or revenue are guaranteed.\"\n\nThe stronger prompt gives the system useful context and clearly defines the expected result."
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-9-5",
+      "title": "8.9.5 An Improved Prompting Process",
+      "blocks": [
+        {
+          "id": "module-8-lesson-9-5-block",
+          "type": "reading",
+          "content": "Step 1: Define the task\n\nWhat needs to be accomplished?\n\nStep 2: Supply relevant context\n\nWhat does the AI need to understand?\n\nStep 3: State constraints\n\nWhat must be included or avoided?\n\nStep 4: Specify the output\n\nDo you need a table, checklist, report, draft, explanation, or plan?\n\nStep 5: Review the response\n\nCheck whether the output meets the original requirement.\n\nStep 6: Refine\n\nAsk for a correction, clarification, or improvement where necessary."
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-9-6",
+      "title": "8.9.6 Prompting for Different Tasks",
+      "blocks": [
+        {
+          "id": "module-8-lesson-9-6-block",
+          "type": "reading",
+          "content": "For learning\n\n\"Explain [topic] to a beginner. Define key terms, use a realistic example, identify common misunderstandings, and give me five practice questions.\"\n\nFor business\n\n\"Help me evaluate [business idea]. Identify the target customer, problem, proposed solution, likely costs, assumptions, risks, and a low-cost way to test demand. Separate known facts from estimates.\"\n\nFor career development\n\n\"Help me identify skills required for [role]. Organize the skills into beginner, intermediate, and advanced levels. Suggest practical projects that could demonstrate competence. Do not invent qualifications or job openings.\"\n\nFor writing\n\n\"Help me draft [document] for [audience]. Use a [tone] tone, include [required points], and present the result in [format]. Flag any missing information rather than inventing it.\"\n\nFor research\n\n\"Help me investigate [question]. Suggest appropriate primary and secondary sources, explain what evidence would answer the question, and identify claims that require current verification. Do not invent citations.\""
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-9-7",
+      "title": "8.9.7 Prompting Is an Iterative Process",
+      "blocks": [
+        {
+          "id": "module-8-lesson-9-7-block",
+          "type": "reading",
+          "content": "An effective workflow is:\n\nINSTRUCT → REVIEW → QUESTION → REFINE → VERIFY → APPLY\n\nDo not assume that the first answer is the best answer.\n\nYou can ask:\n\n- What assumptions did you make?\n\n- Which parts require verification?\n\n- What information is missing?\n\n- What are the limitations of this approach?\n\n- Can you provide an alternative?\n\n- Can you check the calculations?\n\n- Can you reorganize this into a practical implementation plan?\n\nThe final output must still be evaluated by the user.\n\nPractical Exercise: Prompt Improvement\n\nWrite a vague prompt related to your career, education, business, or personal development.\n\nRewrite it using CLEAR.\n\nCompare the two outputs and explain which information improved the second response.\n\n---"
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-10",
+      "title": "8.10 LESSON EIGHT: AI-ASSISTED PRODUCTIVITY",
+      "blocks": []
+    },
+    {
+      "id": "module-8-lesson-10-1",
+      "title": "8.10.1 What Is AI-Assisted Productivity?",
+      "blocks": [
+        {
+          "id": "module-8-lesson-10-1-block",
+          "type": "reading",
+          "content": "AI-assisted productivity means using AI to support tasks so that people can work more effectively, organize information, reduce avoidable effort, or improve the quality of their outputs.\n\nIt does not mean that every task should be delegated to AI.\n\nThe appropriate question is:\n\nCan AI help me complete this task more effectively without creating unacceptable risks or reducing the quality of the result?"
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-10-2",
+      "title": "8.10.2 Applications in Personal Development",
+      "blocks": [
+        {
+          "id": "module-8-lesson-10-2-block",
+          "type": "reading",
+          "content": "AI can assist users to:\n\n- Break large goals into smaller actions.\n\n- Create study plans.\n\n- Generate practice questions.\n\n- Reflect on completed work.\n\n- Structure weekly reviews.\n\n- Compare possible approaches.\n\n- Identify skills to develop.\n\nUsers should avoid entering sensitive personal information unnecessarily."
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-10-3",
+      "title": "8.10.3 Applications in Education",
+      "blocks": [
+        {
+          "id": "module-8-lesson-10-3-block",
+          "type": "reading",
+          "content": "Students can use AI to:\n\n- Explain difficult concepts.\n\n- Generate practice exercises.\n\n- Organize revision plans.\n\n- Receive feedback on drafts.\n\n- Compare alternative explanations.\n\n- Develop questions for further research.\n\nStudents should follow their institution's academic-integrity rules.\n\nSubmitting AI-generated work as one's own may violate academic rules where the use is prohibited or not properly disclosed.\n\nStudents must understand the material they submit and be able to explain their reasoning."
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-10-4",
+      "title": "8.10.4 Applications in Career Development",
+      "blocks": [
+        {
+          "id": "module-8-lesson-10-4-block",
+          "type": "reading",
+          "content": "AI may help users:\n\n- Improve the clarity of a CV.\n\n- Prepare interview practice questions.\n\n- Identify possible skills gaps.\n\n- Draft professional communications.\n\n- Structure a portfolio.\n\n- Compare role requirements.\n\n- Plan networking activities.\n\nAI must not be used to fabricate employment history, qualifications, professional licenses, references, or achievements."
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-10-5",
+      "title": "8.10.5 Applications in Business",
+      "blocks": [
+        {
+          "id": "module-8-lesson-10-5-block",
+          "type": "reading",
+          "content": "AI may assist with:\n\n- Brainstorming product ideas.\n\n- Drafting customer communications.\n\n- Creating first drafts of marketing material.\n\n- Structuring a business plan.\n\n- Summarizing non-confidential customer feedback.\n\n- Developing standard operating procedure drafts.\n\n- Preparing meeting agendas.\n\n- Organizing business research.\n\nHuman review remains essential, particularly for prices, legal claims, financial calculations, product specifications, customer commitments, and public communications."
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-10-6",
+      "title": "8.10.6 Applications in Public Service and Institutions",
+      "blocks": [
+        {
+          "id": "module-8-lesson-10-6-block",
+          "type": "reading",
+          "content": "Depending on policy, capability, and risk, AI may support:\n\n- Drafting administrative documents.\n\n- Organizing non-sensitive information.\n\n- Preparing public education materials.\n\n- Summarizing suitable reports.\n\n- Developing training materials.\n\n- Generating preliminary project plans.\n\nSensitive government information, personal records, classified material, and confidential institutional data must not be entered into unapproved systems.\n\nPublic institutions should consider fairness, transparency, accountability, data protection, accessibility, and human oversight before deploying AI in consequential processes."
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-10-7",
+      "title": "8.10.7 The Human-in-the-Loop Workflow",
+      "blocks": [
+        {
+          "id": "module-8-lesson-10-7-block",
+          "type": "reading",
+          "content": "SGG recommends:\n\nDEFINE → PREPARE → PROMPT → GENERATE → VERIFY → EDIT → APPROVE → RECORD\n\nDefine: Identify the intended result.\n\nPrepare: Gather relevant, authorized information.\n\nPrompt: Give the AI clear instructions.\n\nGenerate: Obtain the initial output.\n\nVerify: Check facts, calculations, assumptions, sources, and completeness.\n\nEdit: Improve clarity, accuracy, and suitability.\n\nApprove: Have an authorized human make the final decision where required.\n\nRecord: Document the result and relevant approvals when the task requires it."
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-10-8",
+      "title": "8.10.8 Measure Productivity, Not Just Speed",
+      "blocks": [
+        {
+          "id": "module-8-lesson-10-8-block",
+          "type": "reading",
+          "content": "A faster output is not necessarily a better result.\n\nEvaluate AI-assisted work using:\n\n- Time required.\n\n- Accuracy.\n\n- Completeness.\n\n- Rework required.\n\n- Cost.\n\n- User satisfaction.\n\n- Risk.\n\n- Final usefulness.\n\nIf a tool produces a draft quickly but requires extensive correction, it may not improve productivity.\n\nPractical Exercise: AI Productivity Experiment\n\nChoose one suitable, low-risk task.\n\nComplete it once without AI and once with AI assistance.\n\nRecord:\n\n- Time spent.\n\n- Quality of the result.\n\n- Errors identified.\n\n- Corrections required.\n\n- Whether sensitive information was used.\n\n- Which approach produced the better final result.\n\nDo not use confidential employer, customer, student, or government data in an unapproved tool.\n\n---"
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-11",
+      "title": "8.11 LESSON NINE: AI ETHICS, PRIVACY, BIAS, AND ACCOUNTABILITY",
+      "blocks": []
+    },
+    {
+      "id": "module-8-lesson-11-1",
+      "title": "8.11.1 What Is AI Ethics?",
+      "blocks": [
+        {
+          "id": "module-8-lesson-11-1-block",
+          "type": "reading",
+          "content": "AI ethics concerns the principles and practices used to develop and apply AI responsibly.\n\nImportant considerations include:\n\n- Accuracy.\n\n- Fairness.\n\n- Privacy.\n\n- Transparency.\n\n- Accountability.\n\n- Human oversight.\n\n- Accessibility.\n\n- Security.\n\n- Respect for rights.\n\n- Appropriate use."
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-11-2",
+      "title": "8.11.2 Accuracy and Hallucinations",
+      "blocks": [
+        {
+          "id": "module-8-lesson-11-2-block",
+          "type": "reading",
+          "content": "An AI hallucination occurs when a system produces information that appears credible but is false, unsupported, or fabricated.\n\nExamples may include:\n\n- Invented research citations.\n\n- Incorrect statistics.\n\n- Misstated laws.\n\n- Fictional company policies.\n\n- Incorrect calculations.\n\n- Nonexistent job openings.\n\n- Fabricated quotations.\n\nA polished response should never be treated as proof.\n\nVerify important information using appropriate original or authoritative sources."
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-11-3",
+      "title": "8.11.3 Bias and Fairness",
+      "blocks": [
+        {
+          "id": "module-8-lesson-11-3-block",
+          "type": "reading",
+          "content": "AI systems may produce biased outputs because of training data, system design, user instructions, incomplete context, or other factors.\n\nBias can affect how systems describe people, recommend opportunities, summarize events, or classify information.\n\nWhen AI is used in hiring, education, lending, public services, or other consequential activities, organizations should evaluate the risks carefully and follow applicable laws and policies."
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-11-4",
+      "title": "8.11.4 Privacy and Confidentiality",
+      "blocks": [
+        {
+          "id": "module-8-lesson-11-4-block",
+          "type": "reading",
+          "content": "Before entering information into an AI tool, ask:\n\n1. Is this information public?\n\n2. Does it identify a person?\n\n3. Do I have permission to use it?\n\n4. Does the task require this information?\n\n5. Is the tool approved for this type of information?\n\n6. How does the service handle submitted data?\n\n7. Could the information be exposed or retained in an unsuitable way?\n\nAvoid entering passwords, authentication codes, financial credentials, confidential client documents, private personnel records, or other sensitive information into unapproved systems.\n\nRemoving names does not always make data anonymous. Other details may still identify someone."
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-11-5",
+      "title": "8.11.5 Copyright and Intellectual Property",
+      "blocks": [
+        {
+          "id": "module-8-lesson-11-5-block",
+          "type": "reading",
+          "content": "AI-generated content may raise questions involving copyright, licensing, ownership, attribution, and the use of protected material.\n\nStudents should:\n\n- Follow the rules of the platform and their institution.\n\n- Respect licenses and usage conditions.\n\n- Avoid presenting another person's work as their own.\n\n- Verify permissions before reusing protected material.\n\n- Disclose AI assistance when required.\n\n- Check the originality and accuracy of generated outputs.\n\nThe legal treatment of AI-generated work varies by jurisdiction and circumstance."
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-11-6",
+      "title": "8.11.6 Human Accountability",
+      "blocks": [
+        {
+          "id": "module-8-lesson-11-6-block",
+          "type": "reading",
+          "content": "AI should not be used as an excuse for irresponsible decisions.\n\nAn organization remains responsible for decisions made through its systems and processes.\n\nA manager should not approve a consequential decision solely because an AI tool recommended it.\n\nA student should not submit fabricated information because AI generated it.\n\nA business should not publish an unverified claim because it appeared in an AI-generated marketing draft."
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-11-7",
+      "title": "8.11.7 Responsible AI Checklist",
+      "blocks": [
+        {
+          "id": "module-8-lesson-11-7-block",
+          "type": "reading",
+          "content": "Before using AI output, ask:\n\n- Is it accurate?\n\n- Is it relevant?\n\n- Is it complete?\n\n- Are the assumptions reasonable?\n\n- Can important claims be verified?\n\n- Does it expose private information?\n\n- Does it unfairly represent anyone?\n\n- Does it respect applicable rules and permissions?\n\n- Is human review required?\n\n- Am I willing to take responsibility for using it?\n\nPractical Exercise: AI Ethics Case Study\n\nA business owner asks an AI system to screen job applicants automatically.\n\nThe system rejects several applicants, but the owner does not know why. No human reviews the results.\n\nDiscuss:\n\n1. What could go wrong?\n\n2. What evidence would be needed to assess the system?\n\n3. How could bias affect applicants?\n\n4. What role should human review play?\n\n5. What information should be protected?\n\n6. What safeguards should the business establish before using such a system?\n\nYour answer should identify risks and propose practical safeguards rather than assuming that all automated decisions are necessarily wrong or necessarily fair.\n\n---"
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-12",
+      "title": "8.12 LESSON TEN: DIGITAL COMMUNICATION AND PROFESSIONAL CONDUCT",
+      "blocks": []
+    },
+    {
+      "id": "module-8-lesson-12-1",
+      "title": "8.12.1 Digital Professionalism",
+      "blocks": [
+        {
+          "id": "module-8-lesson-12-1-block",
+          "type": "reading",
+          "content": "Digital professionalism is the ability to communicate and collaborate appropriately through digital channels.\n\nA professional digital message should have a clear purpose, suitable tone, accurate information, and an appropriate level of formality."
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-12-2",
+      "title": "8.12.2 Email Fundamentals",
+      "blocks": [
+        {
+          "id": "module-8-lesson-12-2-block",
+          "type": "reading",
+          "content": "A professional email generally includes:\n\n- A meaningful subject line.\n\n- An appropriate greeting.\n\n- A clear opening.\n\n- The main message.\n\n- Any required action or deadline.\n\n- An appropriate closing.\n\n- Relevant attachments.\n\nBefore sending:\n\n1. Check the recipient.\n\n2. Check the message.\n\n3. Verify attachments.\n\n4. Remove unnecessary recipients.\n\n5. Confirm that the information is appropriate to share.\n\n6. Use the correct communication channel."
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-12-3",
+      "title": "8.12.3 Messaging and Meetings",
+      "blocks": [
+        {
+          "id": "module-8-lesson-12-3-block",
+          "type": "reading",
+          "content": "Professional messaging should be clear, respectful, and relevant.\n\nIn online meetings:\n\n- Join using the correct account or meeting link.\n\n- Test audio and video where needed.\n\n- Mute the microphone when appropriate.\n\n- Avoid interrupting others.\n\n- Respect confidentiality.\n\n- Record decisions and assigned actions when necessary.\n\n- Obtain permission before recording where required."
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-12-4",
+      "title": "8.12.4 Collaboration and Accountability",
+      "blocks": [
+        {
+          "id": "module-8-lesson-12-4-block",
+          "type": "reading",
+          "content": "When working in a digital team:\n\n- Clarify responsibilities.\n\n- Agree on deadlines.\n\n- Use shared files appropriately.\n\n- Track assigned actions.\n\n- Communicate delays early.\n\n- Avoid deleting or altering shared work without authorization.\n\n- Document important decisions.\n\n- Respect differences in time zones, accessibility needs, and communication styles.\n\nPractical Exercise: Digital Communication\n\nDraft a professional message requesting information or support from an organization.\n\nReview it for:\n\n- Clarity.\n\n- Tone.\n\n- Accuracy.\n\n- Privacy.\n\n- Appropriate length.\n\n- A specific request or next step.\n\n---"
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-13",
+      "title": "8.13 LESSON ELEVEN: DIGITAL TOOLS FOR CAREER, BUSINESS, AND ORGANIZATIONAL GROWTH",
+      "blocks": []
+    },
+    {
+      "id": "module-8-lesson-13-1",
+      "title": "8.13.1 Digital Tools for Career Development",
+      "blocks": [
+        {
+          "id": "module-8-lesson-13-1-block",
+          "type": "reading",
+          "content": "A job seeker may use digital tools to:\n\n- Research employers.\n\n- Identify required skills.\n\n- Maintain an application tracker.\n\n- Create a CV.\n\n- Develop a portfolio.\n\n- Practise interview questions.\n\n- Organize networking activities.\n\n- Participate in remote interviews.\n\nApplications should be genuine and tailored to the opportunity.\n\nAutomated tools should not be allowed to fabricate qualifications or submit misleading information."
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-13-2",
+      "title": "8.13.2 Digital Tools for Business Development",
+      "blocks": [
+        {
+          "id": "module-8-lesson-13-2-block",
+          "type": "reading",
+          "content": "A small business may use digital tools to:\n\n- Communicate with customers.\n\n- Maintain product information.\n\n- Organize orders.\n\n- Track sales.\n\n- Prepare marketing material.\n\n- Manage appointments.\n\n- Record customer feedback.\n\n- Monitor expenses.\n\n- Coordinate staff.\n\nThe business should choose tools that match its size, resources, security requirements, and operational needs."
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-13-3",
+      "title": "8.13.3 Digital Tools for Productivity",
+      "blocks": [
+        {
+          "id": "module-8-lesson-13-3-block",
+          "type": "reading",
+          "content": "A simple productivity system can connect:\n\nGOALS → PROJECTS → TASKS → CALENDAR → EXECUTION → REVIEW\n\nA digital task list is useful only if it helps the user execute important work.\n\nDo not create so many dashboards and applications that managing the system becomes more work than completing the tasks."
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-13-4",
+      "title": "8.13.4 Digital Inclusion",
+      "blocks": [
+        {
+          "id": "module-8-lesson-13-4-block",
+          "type": "reading",
+          "content": "Not everyone has access to a powerful computer, unlimited data, reliable electricity, or high-speed internet.\n\nA responsible digital learning system should consider:\n\n- Mobile-friendly access.\n\n- Low-bandwidth alternatives.\n\n- Downloadable learning materials where appropriate.\n\n- Clear text and captions.\n\n- Accessible layouts.\n\n- Reasonable file sizes.\n\n- Offline preparation where possible.\n\n- Alternative ways to complete tasks.\n\nA student's capability should be assessed against the learning outcomes, not simply against ownership of an expensive device.\n\nPractical Exercise: Digital Workflow\n\nChoose one recurring activity in your life, such as study planning, customer follow-up, job applications, or household budgeting.\n\nDesign a digital workflow that explains:\n\n1. The objective.\n\n2. The tool used.\n\n3. The information required.\n\n4. The steps followed.\n\n5. The expected output.\n\n6. The privacy or security precautions.\n\n7. The way success will be measured.\n\n---"
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-14",
+      "title": "8.14 LESSON TWELVE: DEVELOPING YOUR PERSONAL DIGITAL AND AI OPERATING SYSTEM",
+      "blocks": [
+        {
+          "id": "module-8-lesson-14-block",
+          "type": "reading",
+          "content": "The purpose of this module is not to encourage students to use every available application. It is to help them create a manageable system that supports their objectives.\n\nThe SGG Digital Capability System\n\nASSESS → SELECT → LEARN → APPLY → VERIFY → SECURE → IMPROVE\n\nAssess: Identify the tasks and capabilities you need.\n\nSelect: Choose suitable tools.\n\nLearn: Develop the skills required to use them.\n\nApply: Use the tools to complete real tasks.\n\nVerify: Check the quality of the output.\n\nSecure: Protect information, accounts, and devices.\n\nImprove: Review the results and update your process.\n\nExample: A Student's Digital Learning System\n\nA student might:\n\n1. Define a learning goal.\n\n2. Organize the module materials.\n\n3. Use a calendar to schedule study periods.\n\n4. Use a document tool to take notes.\n\n5. Use AI to explain difficult concepts.\n\n6. Check important claims against the learning materials and authoritative sources.\n\n7. Complete practice questions independently.\n\n8. Store assignments securely.\n\n9. Review progress weekly.\n\nThis creates a learning workflow rather than a collection of disconnected tools.\n\nExample: A Small Business's Digital System\n\nA small business might:\n\n1. Record customer enquiries.\n\n2. Track orders.\n\n3. Record sales and expenses.\n\n4. Use approved tools to prepare marketing drafts.\n\n5. Review all public claims before publication.\n\n6. Protect customer information.\n\n7. Monitor delivery quality.\n\n8. Review sales and costs regularly.\n\nThe system should be adapted to the business rather than adopted without considering its actual needs.\n\n---"
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-15",
+      "title": "8.15 HOW DIGITAL AND AI LITERACY APPLIES ACROSS THE FOUR SGG TIERS",
+      "blocks": [
+        {
+          "id": "module-8-lesson-15-block",
+          "type": "reading",
+          "content": "LEVEL 1: GROWTH FOUNDATION\n\nCore Question: How do I become digitally capable?\n\nStudents should be able to:\n\n- Use essential digital tools.\n\n- Conduct basic internet research.\n\n- Evaluate information.\n\n- Protect important accounts.\n\n- Manage digital files.\n\n- Explain AI fundamentals.\n\n- Write structured prompts.\n\n- Verify AI-generated outputs.\n\n- Demonstrate responsible digital conduct.\n\nRequired Output: A personal digital and AI productivity system.\n\nLEVEL 2: GROWTH ACCELERATOR\n\nCore Question: How do I use technology to create value and produce results?\n\nStudents apply digital tools to:\n\n- Test business ideas.\n\n- Create professional content.\n\n- Conduct market research.\n\n- Organize customer information appropriately.\n\n- Improve task management.\n\n- Build digital portfolios.\n\n- Automate suitable repetitive tasks.\n\n- Measure productivity improvements.\n\nRequired Output: A digital workflow or AI-assisted solution addressing a defined problem.\n\nLEVEL 3: EXECUTIVE CIRCLE\n\nCore Question: How do I lead teams and improve organizational performance through technology?\n\nStudents develop capability in:\n\n- Digital team collaboration.\n\n- Workflow design.\n\n- Responsible automation.\n\n- Digital performance monitoring.\n\n- Data-informed management.\n\n- Staff digital development.\n\n- Access control.\n\n- Operational cybersecurity awareness.\n\n- Technology adoption planning.\n\nRequired Output: A digital improvement plan for a team, department, or business.\n\nLEVEL 4: ELITE COUNCIL\n\nCore Question: How do I build institutions that use technology responsibly and sustainably?\n\nStudents examine:\n\n- Digital governance.\n\n- Institutional AI policy.\n\n- Technology investment decisions.\n\n- Data governance.\n\n- Cybersecurity oversight.\n\n- Organizational risk.\n\n- Responsible AI procurement.\n\n- Human accountability.\n\n- Digital inclusion.\n\n- Long-term institutional capability.\n\nRequired Output: An institutional digital transformation and AI governance framework.\n\nHigher-tier applications require additional learning and assessments. Growth Foundation completion does not certify a student as a cybersecurity professional, software engineer, data scientist, or AI specialist.\n\n---"
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-16",
+      "title": "8.16 MODULE 8 — FIVE OBJECTIVE TEST QUESTIONS",
+      "blocks": [
+        {
+          "id": "module-8-lesson-16-block",
+          "type": "reading",
+          "content": "Instruction: Select the ONE best answer for each question.\n\nQuestion 1\n\nWhich statement best describes digital literacy?\n\nA. Owning an expensive smartphone.\n\nB. Spending several hours each day on social media.\n\nC. Using digital technologies effectively, evaluating information, communicating responsibly, and protecting information.\n\nD. Knowing how to install one mobile application.\n\nQuestion 2\n\nYou receive an unexpected message claiming that your bank account will be suspended unless you click a link and provide your password and verification code. What is the safest response?\n\nA. Click immediately because the message may be urgent.\n\nB. Reply with your password but not your account number.\n\nC. Forward the message to friends so they can test the link.\n\nD. Avoid the link, do not share credentials, and verify the message through the bank's official channel.\n\nQuestion 3\n\nWhat is the main purpose of the CLEAR prompt framework?\n\nA. To help users provide context, limitations, expected outcomes, audience, and response format.\n\nB. To guarantee that every AI-generated answer is correct.\n\nC. To eliminate the need for human judgment.\n\nD. To ensure that AI always produces the shortest possible answer.\n\nQuestion 4\n\nAn AI tool produces a convincing statement about a new regulation but provides no verifiable evidence. What should the user do before relying on the statement?\n\nA. Publish it because the language sounds professional.\n\nB. Verify the claim using appropriate authoritative sources and correct any errors.\n\nC. Assume that all AI-generated legal information is accurate.\n\nD. Ask the AI to repeat the same statement several times and accept it if the answers match.\n\nQuestion 5\n\nWhich is an example of responsible AI use in education?\n\nA. Submitting fabricated references because an AI tool generated them.\n\nB. Entering confidential student records into any available AI service.\n\nC. Using AI to explain a concept, checking the information, and completing the assignment according to the institution's academic-integrity rules.\n\nD. Accepting every AI-generated answer without reviewing it.\n\nANSWER KEY — MODULE 8\n\n1. C\n\n2. D\n\n3. A\n\n4. B\n\n5. C\n\nAssessment Rule: Each correct answer earns 1 mark. Total: 5 marks.\n\nRecommended pass mark: 4/5 (80%).\n\nStudents who score below 4/5 should review the relevant lessons and retake the assessment before progressing to the next stage of the learning journey.\n\nThe objective test checks foundational understanding. It does not replace the practical project assessment.\n\n---"
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-17",
+      "title": "8.17 MODULE 8 — STUDENT PROJECT GUIDE",
+      "blocks": [
+        {
+          "id": "module-8-lesson-17-block",
+          "type": "reading",
+          "content": "Project Title\n\nMy Digital & AI Productivity System\n\nProject Objective\n\nTo demonstrate the ability to select suitable digital tools, use them to complete a practical task, apply AI responsibly where appropriate, verify information, and protect digital information.\n\nRequired Deliverables\n\nPART A: DIGITAL SKILLS ASSESSMENT\n\nIdentify:\n\n- Your current digital strengths.\n\n- Three digital skills you need to improve.\n\n- The devices and connectivity available to you.\n\n- Your principal digital learning or productivity challenge.\n\nDo not submit passwords, private account details, or other sensitive credentials.\n\nPART B: DIGITAL TOOLKIT\n\nChoose at least four tools or tool categories relevant to your needs.\n\nExamples:\n\n- Document creation.\n\n- Spreadsheets.\n\n- File storage.\n\n- Research.\n\n- Communication.\n\n- Task management.\n\n- AI assistance.\n\nFor each, explain:\n\n- Its purpose.\n\n- Why you selected it.\n\n- How you will use it.\n\n- Any important limitations.\n\n- Relevant security or privacy considerations.\n\nIf you cannot access a particular tool, you may describe the proposed workflow and use a suitable alternative.\n\nPART C: INTERNET RESEARCH TASK\n\nInvestigate a question relevant to your education, career, business, or community.\n\nProvide:\n\n1. The research question.\n\n2. At least three relevant sources.\n\n3. The source evaluation.\n\n4. A summary of the findings.\n\n5. Any important uncertainties.\n\n6. Your conclusion.\n\n7. Appropriate source references.\n\nFor current or consequential claims, prioritize reliable and authoritative sources.\n\nPART D: AI-ASSISTED TASK\n\nChoose one suitable, low-risk task.\n\nExamples:\n\n- Explaining a learning concept.\n\n- Creating a study plan.\n\n- Improving a non-confidential draft.\n\n- Developing practice questions.\n\n- Structuring a project plan.\n\n- Drafting a sample customer communication.\n\nSubmit:\n\n- The task objective.\n\n- The prompt you used.\n\n- The AI-generated output.\n\n- Your verification process.\n\n- Corrections you made.\n\n- The final output.\n\n- A short explanation of the limitations you identified.\n\nDo not include confidential personal, customer, employer, school, or government information in an unapproved AI tool.\n\nIf AI access is unavailable, students may complete this part using a simulated prompt-and-review exercise or a teacher-provided example.\n\nPART E: CYBERSECURITY PLAN\n\nIdentify at least five digital security practices relevant to your circumstances.\n\nExplain how you will implement them.\n\nInclude:\n\n- Account protection.\n\n- Password practices.\n\n- Multifactor authentication where available.\n\n- Device and software updates.\n\n- Phishing awareness.\n\n- File backups.\n\n- Information-sharing precautions.\n\nPART F: DIGITAL PRODUCTIVITY WORKFLOW\n\nDesign one repeatable digital workflow.\n\nExamples:\n\n- Weekly study planning.\n\n- Job application tracking.\n\n- Customer enquiry management.\n\n- Personal budgeting.\n\n- Project task management.\n\nShow the steps, tools, expected output, and success measures.\n\nPART G: 30-DAY DIGITAL DEVELOPMENT PLAN\n\nPrepare a 30-day action plan.\n\nPeriod| Action| Expected Output| Measurement\n\nDays 1–7| Assess skills and select tools| Digital skills baseline| Completed assessment\n\nDays 8–14| Practise essential tools| One practical digital output| Output reviewed\n\nDays 15–21| Complete a research or AI-assisted task| Verified work sample| Verification checklist\n\nDays 22–30| Build and test a repeatable workflow| Digital productivity system| Completed demonstration\n\nAdapt the plan to your available devices, time, and connectivity.\n\nPROJECT SUBMISSION FORMAT\n\nStudents should submit:\n\n1. A digital skills assessment.\n\n2. A digital toolkit table.\n\n3. A research task with references.\n\n4. An AI-assisted task or approved alternative.\n\n5. A cybersecurity action plan.\n\n6. A digital workflow.\n\n7. A 30-day development plan.\n\n8. A short reflection.\n\nSuggested length: 5–10 pages, excluding supporting materials.\n\nPROJECT ASSESSMENT RUBRIC — 100 MARKS\n\nAssessment Area| Marks\n\nDigital skills assessment| 10\n\nSelection and explanation of digital tools| 10\n\nResearch quality and source evaluation| 20\n\nPrompt quality and appropriate AI use| 15\n\nVerification and correction of AI output| 15\n\nCybersecurity and privacy practices| 10\n\nDigital productivity workflow| 10\n\n30-day development plan and reflection| 10\n\nTotal| 100\n\nRecommended project pass mark: 70/100.\n\nA student should complete both the objective assessment and the project requirements before being marked as having completed Module 8.\n\nSTUDENT PRIVACY AND ACADEMIC INTEGRITY\n\nStudents must not submit passwords, authentication codes, confidential records, or unnecessary sensitive information.\n\nAll AI-assisted work must comply with applicable institutional rules. Students should be able to explain their submissions and distinguish their own contributions from AI assistance where disclosure is required.\n\n---"
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-18",
+      "title": "8.18 MODULE 8 — FINAL LESSON",
+      "blocks": [
+        {
+          "id": "module-8-lesson-18-block",
+          "type": "reading",
+          "content": "Digital technology and artificial intelligence create opportunities, but opportunities become useful only when people can apply technology intelligently.\n\nDigital competence requires more than access to devices. It requires research skills, sound judgment, responsible communication, cybersecurity awareness, and the ability to produce useful work.\n\nAI can improve learning and productivity, but it can also produce inaccurate information and introduce risks. Users must verify important claims, protect private information, and remain accountable for their decisions.\n\nRemember: Use technology with purpose. Verify information. Protect data. Apply AI responsibly. Measure the value you create."
+        }
+      ]
+    },
+    {
+      "id": "module-8-lesson-module-completion-standard",
+      "title": "8.completion MODULE COMPLETION STANDARD",
+      "blocks": [
+        {
+          "id": "module-8-lesson-module-completion-standard-block",
+          "type": "reading",
+          "content": "A student should leave Module 8 with:\n\n- A working understanding of digital literacy.\n\n- A practical internet research method.\n\n- Basic cybersecurity awareness.\n\n- An improved professional digital identity.\n\n- The ability to write structured AI prompts.\n\n- A process for verifying AI-generated information.\n\n- An understanding of responsible AI use.\n\n- A completed digital productivity project.\n\nThe intended outcome is practical digital capability—not merely familiarity with applications or the ability to generate AI content."
+        }
+      ]
+    }
+  ]
+}

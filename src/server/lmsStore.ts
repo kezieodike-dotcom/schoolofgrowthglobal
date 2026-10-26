@@ -31,6 +31,10 @@ export function getLmsCourse(id: string): LmsCourse | null {
       mergeUploadedModule('growth-foundation-module-2.json');
       mergeUploadedModule('growth-foundation-module-3.json');
       mergeUploadedModule('growth-foundation-module-4.json');
+      mergeUploadedModule('growth-foundation-module-5.json');
+      mergeUploadedModule('growth-foundation-module-6.json');
+      mergeUploadedModule('growth-foundation-module-7.json');
+      mergeUploadedModule('growth-foundation-module-8.json');
     }
     return course;
   } catch {
