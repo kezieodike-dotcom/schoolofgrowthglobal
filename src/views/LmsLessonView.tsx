@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, Navigate } from 'react-router-dom';
-import { useLmsCourse, useLmsProgress, useLmsSubmission } from '../lib/useLms';
+import { useLmsAssessment, useLmsCourse, useLmsProgress, useLmsSubmission } from '../lib/useLms';
 import { useEnrollment } from '../lib/useEnrollment';
 import { ReadingBlock, KeyInsightBlock, FrameworkBlock, QuestionBlock, ReflectionBlock } from '../components/lms/LmsBlocks';
 import { ValueDiscoveryExercise } from '../components/lms/ValueDiscoveryExercise';
 import { SelfAwarenessAudit } from '../components/lms/SelfAwarenessAudit';
 import { PersonalGrowthProject } from '../components/lms/PersonalGrowthProject';
 import { ImplementationChallenge } from '../components/lms/ImplementationChallenge';
+import { ObjectiveTestBlock } from '../components/lms/ObjectiveTestBlock';
 import { LmsBlock } from '../types';
 import {
-  ChevronLeft, ChevronRight, CheckCircle2, Circle, Menu, X, BookOpen, Award
+  ChevronLeft, ChevronRight, CheckCircle2, Circle, Menu, X, BookOpen, Award, LockKeyhole
 } from 'lucide-react';
 
 // ─── Assessment Table ─────────────────────────────────────────────────────────
@@ -140,6 +141,16 @@ export const LmsLessonView: React.FC = () => {
   const prev = lessons[effectiveIndex - 1];
   const next = lessons[effectiveIndex + 1];
 
+  const isModule8ObjectiveTest = courseId === 'growth-foundation'
+    && moduleId === 'module-8'
+    && lesson?.id === 'module-8-lesson-16';
+  const assessment = useLmsAssessment(courseId, moduleId, lesson?.id ?? '', isModule8ObjectiveTest);
+  const module8AssessmentIndex = lessons.findIndex((item) => item.id === 'module-8-lesson-16');
+  const module8ProgressLocked = moduleId === 'module-8'
+    && module8AssessmentIndex >= 0
+    && effectiveIndex > module8AssessmentIndex
+    && !assessment.result?.passed;
+
   const isProjectAssessment = lesson?.title?.includes('PROJECT ASSESSMENT');
   const isCompletionStandard = lesson?.title?.toUpperCase()?.includes('COMPLETION STANDARD');
 
@@ -156,6 +167,10 @@ export const LmsLessonView: React.FC = () => {
 
   if (!enrollment.canAccessLevel('Emerging Leaders')) {
     return <Navigate to="/portal" replace />;
+  }
+
+  if (module8ProgressLocked && !assessment.loading) {
+    return <Navigate to={`/lms/${courseId}/${moduleId}/module-8-lesson-16`} replace />;
   }
 
   if (!lesson) {
@@ -281,14 +296,29 @@ export const LmsLessonView: React.FC = () => {
             ) : isProjectAssessment ? (
               <AssessmentTable />
             ) : (
-              lesson.blocks.map(block => (
+              lesson.blocks.map(block => block.type === 'objective_test' ? (
+                <ObjectiveTestBlock
+                  key={block.id}
+                  questions={assessment.questions}
+                  passMark={assessment.passMark}
+                  result={assessment.result}
+                  loading={assessment.loading}
+                  submitting={assessment.submitting}
+                  error={assessment.error}
+                  onSubmit={async (answers) => {
+                    const result = await assessment.submit(answers);
+                    if (result.passed) markLessonComplete(lesson.id);
+                    return result;
+                  }}
+                />
+              ) : (
                 <BlockRenderer key={block.id} block={block} courseId={courseId} moduleId={moduleId} />
               ))
             )}
 
             {/* Mark Complete + Navigation */}
             <div className="mt-10 pt-6 border-t border-slate-200">
-              {!isLessonComplete(lesson.id) && (
+              {!isModule8ObjectiveTest && !isLessonComplete(lesson.id) && (
                 <button
                   onClick={() => markLessonComplete(lesson.id)}
                   className="w-full sm:w-auto mb-6 flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-600 text-white font-bold px-8 py-3 rounded-xl transition-colors"
@@ -314,7 +344,7 @@ export const LmsLessonView: React.FC = () => {
                     Previous
                   </Link>
                 ) : <div />}
-                {next ? (
+                {next && (!isModule8ObjectiveTest || assessment.result?.passed) ? (
                   <Link
                     to={`/lms/${courseId}/${moduleId}/${next.id}`}
                     className="flex items-center gap-2 bg-slate-800 hover:bg-amber-500 text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-colors"
@@ -322,6 +352,11 @@ export const LmsLessonView: React.FC = () => {
                     Next Lesson
                     <ChevronRight size={18} />
                   </Link>
+                ) : isModule8ObjectiveTest && !assessment.result?.passed ? (
+                  <div className="flex items-center gap-2 text-sm font-semibold text-amber-700">
+                    <LockKeyhole size={16} />
+                    Pass the assessment to continue
+                  </div>
                 ) : (
                   <Link
                     to="/lms"

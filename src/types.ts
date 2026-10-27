@@ -239,7 +239,8 @@ export type LmsBlockType =
   | 'value_discovery'
   | 'self_awareness_audit'
   | 'growth_project'
-  | 'implementation_challenge';
+  | 'implementation_challenge'
+  | 'objective_test';
 
 export interface LmsBlock {
   id: string;

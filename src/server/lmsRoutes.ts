@@ -8,6 +8,12 @@ import {
   saveStudentSubmission,
 } from './lmsStore.js';
 import { LmsProgress, LmsSubmission } from '../types.js';
+import {
+  MODULE_8_ASSESSMENT,
+  getAssessmentResult,
+  gradeModule8Assessment,
+  isModule8Assessment,
+} from './lmsAssessment.js';
 
 export function createLmsRouter() {
   const router = express.Router();
@@ -17,6 +23,42 @@ export function createLmsRouter() {
     const course = getLmsCourse(req.params.id);
     if (!course) return res.status(404).json({ error: 'Course not found' });
     res.json(course);
+  });
+
+  router.get('/lms/assessment/:userId/:courseId/:moduleId/:lessonId', (req: Request, res: Response) => {
+    const { userId, courseId, moduleId, lessonId } = req.params;
+    if (!isModule8Assessment(courseId, moduleId, lessonId)) {
+      return res.status(404).json({ error: 'Assessment not found' });
+    }
+    res.json({
+      courseId,
+      moduleId,
+      lessonId,
+      passMark: MODULE_8_ASSESSMENT.passMark,
+      questions: MODULE_8_ASSESSMENT.questions.map(({ id, prompt, options }) => ({ id, prompt, options })),
+      result: getAssessmentResult(userId, courseId, moduleId, lessonId),
+    });
+  });
+
+  router.post('/lms/assessment/submit', (req: Request, res: Response) => {
+    const { userId, courseId, moduleId, lessonId, answers } = req.body ?? {};
+    if (!userId || !courseId || !moduleId || !lessonId || !answers || typeof answers !== 'object') {
+      return res.status(400).json({ error: 'Assessment submission is incomplete.' });
+    }
+    if (!isModule8Assessment(courseId, moduleId, lessonId)) {
+      return res.status(404).json({ error: 'Assessment not found' });
+    }
+    const questionIds = new Set<string>(MODULE_8_ASSESSMENT.questions.map((question) => question.id));
+    const submittedIds = Object.keys(answers);
+    if (submittedIds.length !== questionIds.size || submittedIds.some((id) => !questionIds.has(id))) {
+      return res.status(400).json({ error: 'Answer every question before submitting.' });
+    }
+    const validChoices = new Set(['A', 'B', 'C', 'D']);
+    if (Object.values(answers).some((answer) => typeof answer !== 'string' || !validChoices.has(answer))) {
+      return res.status(400).json({ error: 'One or more answers are invalid.' });
+    }
+    const result = gradeModule8Assessment(userId, courseId, moduleId, lessonId, answers as Record<string, string>);
+    res.json({ result });
   });
 
   // Get student progress for a course

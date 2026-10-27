@@ -48,12 +48,32 @@ export function getStudentProgress(userId: string, courseId: string): LmsProgres
 }
 
 export function saveStudentProgress(progress: LmsProgress): void {
+  const safeProgress = { ...progress, completedLessons: [...progress.completedLessons] };
+  if (safeProgress.courseId === 'growth-foundation') {
+    const assessment = getStudentSubmission(safeProgress.userId, safeProgress.courseId, 'module-8-objective-test');
+    const passedModule8Assessment = assessment?.data?.kind === 'objective_test_result'
+      && assessment.data.result?.passed === true;
+    if (!passedModule8Assessment) {
+      safeProgress.completedLessons = safeProgress.completedLessons.filter((lessonId) => {
+        if (!lessonId.startsWith('module-8-lesson-')) return true;
+        if (lessonId === 'module-8-lesson-16') return false;
+        if (lessonId === 'module-8-lesson-module-completion-standard') return false;
+        const lessonNumber = Number(lessonId.replace('module-8-lesson-', ''));
+        return !Number.isFinite(lessonNumber) || lessonNumber < 16;
+      });
+    }
+    const course = getLmsCourse(safeProgress.courseId);
+    const totalLessons = course?.modules.reduce((count, module) => count + module.lessons.length, 0) ?? 0;
+    safeProgress.progressPercentage = totalLessons > 0
+      ? Math.round((safeProgress.completedLessons.length / totalLessons) * 100)
+      : 0;
+  }
   const all = progressStore.read();
-  const idx = all.findIndex(p => p.userId === progress.userId && p.courseId === progress.courseId);
+  const idx = all.findIndex(p => p.userId === safeProgress.userId && p.courseId === safeProgress.courseId);
   if (idx >= 0) {
-    all[idx] = progress;
+    all[idx] = safeProgress;
   } else {
-    all.push(progress);
+    all.push(safeProgress);
   }
   progressStore.write(all);
 }

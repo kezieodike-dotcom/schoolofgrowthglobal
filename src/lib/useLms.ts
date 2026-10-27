@@ -3,6 +3,22 @@ import { LmsCourse, LmsProgress, LmsSubmission } from '../types';
 
 const DEFAULT_USER_ID = 'student-demo';
 
+export interface LmsAssessmentQuestion {
+  id: string;
+  prompt: string;
+  options: { id: string; label: string }[];
+}
+
+export interface LmsAssessmentResult {
+  score: number;
+  total: number;
+  percentage: number;
+  passMark: number;
+  passed: boolean;
+  attempt: number;
+  submittedAt: string;
+}
+
 // ─── Course Fetching ────────────────────────────────────────────────────────
 
 export function useLmsCourse(courseId: string) {
@@ -104,4 +120,69 @@ export function useLmsSubmission(courseId: string, blockId: string, moduleId = '
   }, [courseId, blockId]);
 
   return { data, save, saving, savedAt };
+}
+
+export function useLmsAssessment(
+  courseId: string,
+  moduleId: string,
+  lessonId: string,
+  enabled: boolean
+) {
+  const [questions, setQuestions] = useState<LmsAssessmentQuestion[]>([]);
+  const [passMark, setPassMark] = useState(70);
+  const [result, setResult] = useState<LmsAssessmentResult | null>(null);
+  const [loading, setLoading] = useState(enabled);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!enabled) {
+      setLoading(false);
+      return;
+    }
+    setLoading(true);
+    setError(null);
+    fetch(`/api/lms/assessment/${DEFAULT_USER_ID}/${courseId}/${moduleId}/${lessonId}`)
+      .then(async (response) => {
+        const body = await response.json().catch(() => null);
+        if (!response.ok) throw new Error(body?.error ?? 'Could not load the assessment.');
+        return body;
+      })
+      .then((body) => {
+        setQuestions(body.questions ?? []);
+        setPassMark(body.passMark ?? 70);
+        setResult(body.result ?? null);
+      })
+      .catch((err) => setError(err instanceof Error ? err.message : 'Could not load the assessment.'))
+      .finally(() => setLoading(false));
+  }, [courseId, moduleId, lessonId, enabled]);
+
+  const submit = useCallback(async (answers: Record<string, string>) => {
+    setSubmitting(true);
+    setError(null);
+    try {
+      const response = await fetch('/api/lms/assessment/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId: DEFAULT_USER_ID,
+          courseId,
+          moduleId,
+          lessonId,
+          answers,
+        }),
+      });
+      const body = await response.json().catch(() => null);
+      if (!response.ok) throw new Error(body?.error ?? 'Could not submit the assessment.');
+      setResult(body.result);
+      return body.result as LmsAssessmentResult;
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Could not submit the assessment.');
+      throw err;
+    } finally {
+      setSubmitting(false);
+    }
+  }, [courseId, moduleId, lessonId]);
+
+  return { questions, passMark, result, loading, submitting, error, submit };
 }
