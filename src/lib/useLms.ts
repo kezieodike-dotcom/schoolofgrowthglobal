@@ -142,7 +142,9 @@ export function useLmsAssessment(
     }
     setLoading(true);
     setError(null);
-    fetch(`/api/lms/assessment/${DEFAULT_USER_ID}/${courseId}/${moduleId}/${lessonId}`)
+    fetch(`/api/lms/assessment/${DEFAULT_USER_ID}/${courseId}/${moduleId}/${lessonId}`, {
+      cache: 'no-store',
+    })
       .then(async (response) => {
         const body = await response.json().catch(() => null);
         if (!response.ok) throw new Error(body?.error ?? 'Could not load the assessment.');
@@ -164,6 +166,7 @@ export function useLmsAssessment(
       const response = await fetch('/api/lms/assessment/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        cache: 'no-store',
         body: JSON.stringify({
           userId: DEFAULT_USER_ID,
           courseId,
