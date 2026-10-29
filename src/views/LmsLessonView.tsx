@@ -8,6 +8,7 @@ import { SelfAwarenessAudit } from '../components/lms/SelfAwarenessAudit';
 import { PersonalGrowthProject } from '../components/lms/PersonalGrowthProject';
 import { ImplementationChallenge } from '../components/lms/ImplementationChallenge';
 import { ObjectiveTestBlock } from '../components/lms/ObjectiveTestBlock';
+import { LessonHero } from '../components/lms/LessonHero';
 import { LmsBlock } from '../types';
 import {
   ChevronLeft, ChevronRight, CheckCircle2, Circle, Menu, X, BookOpen, Award, LockKeyhole
@@ -289,6 +290,8 @@ export const LmsLessonView: React.FC = () => {
                 </p>
               )}
             </div>
+
+            <LessonHero lessonId={lesson.id} title={lesson.title} />
 
             {/* Lesson Blocks */}
             {isCompletionStandard ? (
