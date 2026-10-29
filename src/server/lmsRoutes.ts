@@ -59,8 +59,13 @@ export function createLmsRouter() {
     if (Object.values(answers).some((answer) => typeof answer !== 'string' || !validChoices.has(answer))) {
       return res.status(400).json({ error: 'One or more answers are invalid.' });
     }
-    const result = gradeModule8Assessment(userId, courseId, moduleId, lessonId, answers as Record<string, string>);
-    res.json({ result });
+    try {
+      const result = gradeModule8Assessment(userId, courseId, moduleId, lessonId, answers as Record<string, string>);
+      res.json({ result });
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Assessment submission failed.';
+      res.status(500).json({ error: message });
+    }
   });
 
   // Get student progress for a course

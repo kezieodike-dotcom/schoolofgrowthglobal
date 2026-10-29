@@ -185,7 +185,12 @@ export function useLmsAssessment(
         if (!response) throw firstError;
       }
       const responseText = await response.text();
-      const body = responseText ? JSON.parse(responseText) : null;
+      let body: { result?: LmsAssessmentResult; error?: string } | null = null;
+      try {
+        body = responseText ? JSON.parse(responseText) : null;
+      } catch {
+        throw new Error(`Assessment service returned an invalid response (${response.status}). Please try again.`);
+      }
       if (!response.ok) throw new Error(body?.error ?? `Assessment submission failed (${response.status}).`);
       if (!body?.result) throw new Error('The assessment server returned no result. Please try again.');
       setResult(body.result);

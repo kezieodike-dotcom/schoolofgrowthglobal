@@ -75,6 +75,14 @@ export type AssessmentResult = {
   submittedAt: string;
 };
 
+// Keeps a just-submitted result available for the current server instance
+// when a serverless filesystem cannot persist the JSON store.
+const transientResults = new Map<string, AssessmentResult>();
+
+function resultKey(userId: string, courseId: string): string {
+  return `${userId}:${courseId}:${MODULE_8_ASSESSMENT.blockId}`;
+}
+
 export function isModule8Assessment(courseId: string, moduleId: string, lessonId: string): boolean {
   return courseId === MODULE_8_ASSESSMENT.courseId
     && moduleId === MODULE_8_ASSESSMENT.moduleId
@@ -83,6 +91,8 @@ export function isModule8Assessment(courseId: string, moduleId: string, lessonId
 
 export function getAssessmentResult(userId: string, courseId: string, moduleId: string, lessonId: string): AssessmentResult | null {
   if (!isModule8Assessment(courseId, moduleId, lessonId)) return null;
+  const transient = transientResults.get(resultKey(userId, courseId));
+  if (transient) return transient;
   const submission = getStudentSubmission(userId, courseId, MODULE_8_ASSESSMENT.blockId);
   if (!submission || submission.data?.kind !== 'objective_test_result') return null;
   return submission.data.result as AssessmentResult;
@@ -116,14 +126,19 @@ export function gradeModule8Assessment(
     submittedAt: new Date().toISOString(),
   };
 
-  saveStudentSubmission({
-    userId,
-    courseId,
-    moduleId,
-    lessonId,
-    blockId: MODULE_8_ASSESSMENT.blockId,
-    data: { kind: 'objective_test_result', result },
-  });
+  transientResults.set(resultKey(userId, courseId), result);
+  try {
+    saveStudentSubmission({
+      userId,
+      courseId,
+      moduleId,
+      lessonId,
+      blockId: MODULE_8_ASSESSMENT.blockId,
+      data: { kind: 'objective_test_result', result },
+    });
+  } catch {
+    // The result is still returned and held in memory for read-only hosts.
+  }
 
   return result;
 }
