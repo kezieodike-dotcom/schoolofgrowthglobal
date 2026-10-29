@@ -30,6 +30,7 @@ export function createLmsRouter() {
     if (!isModule8Assessment(courseId, moduleId, lessonId)) {
       return res.status(404).json({ error: 'Assessment not found' });
     }
+    res.set('Cache-Control', 'no-store');
     res.json({
       courseId,
       moduleId,
@@ -41,6 +42,7 @@ export function createLmsRouter() {
   });
 
   router.post('/lms/assessment/submit', (req: Request, res: Response) => {
+    res.set('Cache-Control', 'no-store');
     const { userId, courseId, moduleId, lessonId, answers } = req.body ?? {};
     if (!userId || !courseId || !moduleId || !lessonId || !answers || typeof answers !== 'object') {
       return res.status(400).json({ error: 'Assessment submission is incomplete.' });

@@ -163,10 +163,11 @@ export function useLmsAssessment(
     setSubmitting(true);
     setError(null);
     try {
-      const response = await fetch('/api/lms/assessment/submit', {
+      const request = () => fetch('/api/lms/assessment/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         cache: 'no-store',
+        credentials: 'same-origin',
         body: JSON.stringify({
           userId: DEFAULT_USER_ID,
           courseId,
@@ -175,8 +176,18 @@ export function useLmsAssessment(
           answers,
         }),
       });
-      const body = await response.json().catch(() => null);
-      if (!response.ok) throw new Error(body?.error ?? 'Could not submit the assessment.');
+      let response: Response;
+      try {
+        response = await request();
+      } catch (firstError) {
+        // A transient connection drop should not discard a completed test.
+        response = await request();
+        if (!response) throw firstError;
+      }
+      const responseText = await response.text();
+      const body = responseText ? JSON.parse(responseText) : null;
+      if (!response.ok) throw new Error(body?.error ?? `Assessment submission failed (${response.status}).`);
+      if (!body?.result) throw new Error('The assessment server returned no result. Please try again.');
       setResult(body.result);
       return body.result as LmsAssessmentResult;
     } catch (err) {
