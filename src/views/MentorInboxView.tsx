@@ -3,6 +3,10 @@ import { Link } from 'react-router-dom';
 import { MENTORS } from '../data/mockData';
 import type { BookItem, Mentor } from '../types';
 import { ReferralShareCard } from '../components/ReferralShareCard';
+import { MentorVoiceNoteComposer } from '../components/MentorVoiceNoteComposer';
+import { MentorVoiceNotePlayer } from '../components/MentorVoiceNotePlayer';
+import { MentorCallControls } from '../components/MentorCallControls';
+import { uploadVoiceNote, type VoiceNote } from '../lib/mentorCommunications';
 import type { ContentRecord } from '../lib/content';
 import { formatNaira } from '../lib/pricing';
 import {
@@ -30,6 +34,7 @@ interface Message {
   body: string;
   sentAt: string;
   readAt: string | null;
+  audio?: VoiceNote;
 }
 
 interface Thread {
@@ -349,6 +354,7 @@ const MentorInbox: React.FC<{ mentor: Mentor; token: string; onSwitch: () => voi
     try {
       const res = await fetch(`/api/mentor-inbox/${mentor.id}/threads`, {
         headers: { Authorization: `Bearer ${token}` },
+        cache: 'no-store',
       });
       const body = await res.json().catch(() => null);
       if (res.status === 401) {
@@ -371,7 +377,9 @@ const MentorInbox: React.FC<{ mentor: Mentor; token: string; onSwitch: () => voi
     setSelectedThread(null);
     setLoading(true);
     loadInbox();
-    const timer = window.setInterval(loadInbox, 30_000);
+    const timer = window.setInterval(() => {
+      if (document.visibilityState === 'visible') void loadInbox();
+    }, 10_000);
     return () => window.clearInterval(timer);
   }, [mentor.id, token]);
 
@@ -383,31 +391,36 @@ const MentorInbox: React.FC<{ mentor: Mentor; token: string; onSwitch: () => voi
 
     let live = true;
     setLoadingThread(true);
+    setSelectedThread(null);
 
-    fetch(`/api/mentor-inbox/${mentor.id}/threads/${selectedId}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-      .then(async (res) => {
+    const refreshThread = async (initial = false) => {
+      try {
+        const res = await fetch(`/api/mentor-inbox/${mentor.id}/threads/${selectedId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+          cache: 'no-store',
+        });
         const body = await res.json().catch(() => null);
         if (res.status === 401) {
           onSwitch();
-          return null;
+          return;
         }
         if (!res.ok) throw new Error(body?.error ?? 'Could not open the thread.');
-        return body.thread as Thread;
-      })
-      .then((thread) => {
-        if (live && thread) setSelectedThread(thread);
-      })
-      .catch((err) => {
-        if (live) setError(err instanceof Error ? err.message : 'Could not open the thread.');
-      })
-      .finally(() => {
-        if (live) setLoadingThread(false);
-      });
+        if (live) setSelectedThread((current) => current && current.messages.length > body.thread.messages.length ? current : body.thread as Thread);
+      } catch (err) {
+        if (live && initial) setError(err instanceof Error ? err.message : 'Could not open the thread.');
+      } finally {
+        if (live && initial) setLoadingThread(false);
+      }
+    };
+
+    void refreshThread(true);
+    const timer = window.setInterval(() => {
+      if (document.visibilityState === 'visible') void refreshThread();
+    }, 10_000);
 
     return () => {
       live = false;
+      window.clearInterval(timer);
     };
   }, [mentor.id, selectedId, token]);
 
@@ -530,12 +543,13 @@ const MentorInbox: React.FC<{ mentor: Mentor; token: string; onSwitch: () => voi
           </section>
 
           <ConversationPanel
+            key={selectedId || 'empty'}
             mentor={mentor}
             thread={selectedThread}
             loading={loadingThread}
             writable={data?.writable ?? false}
             onReplied={(thread) => {
-              setSelectedThread(thread);
+              setSelectedThread((current) => current?.id === thread.id ? thread : current);
               loadInbox();
             }}
             token={token}
@@ -908,7 +922,7 @@ const ConversationPanel: React.FC<{
   }
 
   return (
-    <section className="bg-white border border-slate-200 rounded-lg overflow-hidden min-h-[calc(100dvh-48px)] flex flex-col">
+    <section className="bg-white border border-slate-200 rounded-lg overflow-hidden h-[760px] min-h-[480px] max-h-[calc(100dvh-32px)] flex flex-col">
       <header className="px-5 py-4 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div className="min-w-0">
           <p className="text-sm font-black text-slate-950 truncate">
@@ -919,6 +933,7 @@ const ConversationPanel: React.FC<{
           </p>
         </div>
         <div className="flex items-center gap-2">
+          {thread && !loading && <MentorCallControls threadId={thread.id} token={token} role="mentor" peerName={thread.studentName || thread.studentEmail} />}
           <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 text-[10px] font-bold text-slate-600">
             <Sparkles className="w-3.5 h-3.5 text-amber-600" />
             Reply as {lastName(mentor.name)}
@@ -926,7 +941,7 @@ const ConversationPanel: React.FC<{
         </div>
       </header>
 
-      <div className="flex-1 overflow-y-auto p-4 sm:p-5 space-y-3 bg-slate-50/70">
+      <div className="min-h-0 flex-1 overflow-y-auto p-4 sm:p-5 space-y-3 bg-slate-50/70">
         {loading && (
           <div className="space-y-3">
             <div className="w-2/3 h-16 rounded-lg bg-slate-200" />
@@ -945,13 +960,13 @@ const ConversationPanel: React.FC<{
               >
                 <div className="max-w-[82%] space-y-1">
                   <div
-                    className={`rounded-lg px-3.5 py-2.5 text-xs leading-relaxed whitespace-pre-line ${
+                    className={`rounded-lg px-3.5 py-2.5 text-xs leading-relaxed whitespace-pre-line break-words [overflow-wrap:anywhere] ${
                       fromMentor
                         ? 'bg-amber-500 text-slate-950'
                         : 'bg-white text-slate-700 border border-slate-200'
                     }`}
                   >
-                    {message.body}
+                    {message.audio ? <MentorVoiceNotePlayer threadId={thread!.id} messageId={message.id} token={token} /> : message.body}
                   </div>
                   <p
                     className={`text-[10px] font-mono text-slate-400 ${
@@ -968,7 +983,10 @@ const ConversationPanel: React.FC<{
       </div>
 
       {thread && (
-        <form onSubmit={reply} className="p-4 border-t border-slate-100 space-y-3">
+        <form onSubmit={reply} className="shrink-0 p-4 border-t border-slate-100 space-y-3">
+          <MentorVoiceNoteComposer key={thread.id} disabled={!writable || sending || loading} onSend={async (audio, durationMs) => {
+            onReplied(await uploadVoiceNote(thread.id, token, audio, durationMs));
+          }} />
           <div className="flex gap-2 overflow-x-auto pb-1">
             {QUICK_REPLIES.map((template) => (
               <button
@@ -1007,6 +1025,7 @@ const ConversationPanel: React.FC<{
                 }
               }}
               rows={4}
+              maxLength={4000}
               disabled={!writable || sending}
               placeholder={`Message ${thread.studentName || 'your mentee'}...`}
               className="w-full resize-none bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs leading-relaxed focus:outline-none focus:border-amber-500 disabled:opacity-50"

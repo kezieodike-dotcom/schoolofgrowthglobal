@@ -291,7 +291,7 @@ export const LmsLessonView: React.FC = () => {
               )}
             </div>
 
-            <LessonHero lessonId={lesson.id} title={lesson.title} />
+            <LessonHero courseId={courseId} lesson={lesson} />
 
             {/* Lesson Blocks */}
             {isCompletionStandard ? (

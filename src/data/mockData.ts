@@ -758,8 +758,64 @@ export const FEATURED_COURSE: Course = {
   ]
 };
 
+const LEADERSHIP_FOUNDATION_MODULES: Course['modules'] = [
+  ['Foundations of Leadership', 'The core responsibilities, mindset and practice of leading people with clarity and purpose.'],
+  ['Self-Leadership and Personal Mastery', 'Build the self-awareness, discipline and personal standards required for dependable leadership.'],
+  ['Leadership Character, Ethics and Integrity', 'Develop the character and ethical judgment that make leadership trustworthy.'],
+  ['Visionary Leadership and Direction', 'Translate purpose into a clear direction that people can understand and follow.'],
+  ['Strategic Leadership and Thinking', 'See systems, choices and long-term consequences before setting a course of action.'],
+  ['Decision-Making and Critical Thinking', 'Make sound, evidence-informed decisions under pressure and uncertainty.'],
+  ['Problem-Solving and Innovative Thinking', 'Frame difficult problems, generate options and turn insight into practical solutions.'],
+  ['People Management and Performance Development', 'Support people to perform, grow and contribute at a higher level.'],
+  ['Team Building and Collaborative Leadership', 'Create trust, alignment and shared ownership across teams.'],
+  ['Delegation, Empowerment and Accountability', 'Distribute responsibility well while maintaining standards and follow-through.'],
+  ['Influence, Persuasion and Negotiation', 'Build alignment and reach fair, effective outcomes with different stakeholders.'],
+  ['Leadership Communication and Emotional Intelligence', 'Communicate with clarity while reading and managing the human dynamics around you.'],
+  ['Conflict Management and Resolution', 'Address tension early and guide difficult conversations toward constructive resolution.'],
+  ['Organisational Leadership and Institution Building', 'Build structures, systems and cultures that can perform beyond one individual.'],
+  ['Change Leadership and Organisational Transformation', 'Lead people through change with a practical plan, honest communication and resilience.'],
+  ['Crisis Leadership and Risk Management', 'Prepare for disruption, make decisions in a crisis and protect people and mission.'],
+  ['Leadership Accountability and Performance Excellence', 'Create measurable standards, review progress and improve the quality of execution.'],
+  ['Servant Leadership, Mentorship and People Development', 'Multiply leadership capacity by serving, coaching and developing others.'],
+  ['Leadership Legacy and Sustainable Impact', 'Design a legacy of enduring value, responsible stewardship and sustainable impact.'],
+].map(([title, description]) => ({
+  week: 'Leadership pathway',
+  title,
+  description,
+  topics: [title],
+}));
+
+export const LEADERSHIP_FOUNDATION_COURSE: Course = {
+  id: 'school-of-leadership-foundation',
+  title: 'School of Leadership',
+  schoolId: 'leadership',
+  schoolName: 'School of Leadership',
+  duration: '19-Part Leadership Pathway',
+  level: 'Emerging Leaders',
+  format: 'Self-Paced Course + Leadership Development Pathway',
+  instructorName: 'School of Growth Global Leadership Faculty',
+  instructorRole: 'School of Leadership',
+  instructorAvatar: '/people/m3-okonkwo.jpg',
+  rating: 5,
+  reviewCount: 0,
+  status: 'Leadership pathway available',
+  heroImage: '/scenes/leadership-meeting.jpg',
+  description: 'A complete leadership foundation for people who want to lead themselves, lead others, strengthen organisations and create sustainable impact.',
+  price: 'Available through School of Leadership',
+  featured: true,
+  outcomes: [
+    'Build the character, self-leadership and strategic thinking required for responsible leadership.',
+    'Lead people, teams and organisations with clearer communication, accountability and emotional intelligence.',
+    'Make better decisions, solve problems and guide change through uncertainty.',
+    'Develop others through mentorship, delegation and performance development.',
+    'Create a leadership legacy that produces measurable and sustainable impact.',
+  ],
+  modules: LEADERSHIP_FOUNDATION_MODULES,
+};
+
 export const COURSES: Course[] = [
   FOUNDATION_COURSE,
+  LEADERSHIP_FOUNDATION_COURSE,
   ACCELERATOR_COURSE,
   EXECUTIVE_CIRCLE_COURSE,
   ELITE_COUNCIL_COURSE,

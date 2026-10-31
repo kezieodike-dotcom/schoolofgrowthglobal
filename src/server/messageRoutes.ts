@@ -7,80 +7,22 @@ import {
   markRead,
   listThreads,
   listThreadsForMentor,
-  countAwaitingReply,
-  countAwaitingReplyForMentor,
   isWritable,
 } from "./messageStore.js";
 import { slugify } from "../lib/content.js";
 import { isContentWritable, listContent, upsertContent } from "./contentStore.js";
 import { sanitizeBook } from "./contentRoutes.js";
+import { issueMentorToken, verifyMentorToken, verifyMentorshipPurchase, issueStudentConversationToken,
+  authorizedConversation, MentorApiError } from './mentorAccess.js';
+import { createMentorMediaRouter } from './mentorMediaRoutes.js';
+import { createMentorCallRouter } from './mentorCallRoutes.js';
+export { issueMentorToken } from './mentorAccess.js';
 
-/**
- * Student-to-mentor messaging.
- *
- * Two sides, at two different levels of maturity:
- *
- *   Students  - open a thread with the email and Paystack reference from
- *               their entitlement, then read and write using the returned
- *               thread id.
- *
- *   Mentors   - use a mentor-scoped inbox. There is no account system yet, so
- *               the frontend chooses a mentor profile and these routes filter
- *               by mentorId. That is not authentication; it is the smallest
- *               useful workflow until mentor accounts exist.
- *
- * When mentor accounts arrive, the mentor endpoints below get a real session
- * check. Nothing else about the storage shape needs to change.
- */
+// Paid student conversation tokens and scoped mentor sessions authorize both chat and media.
 
 const MAX_BODY = 4000;
-const SESSION_HOURS = 8;
 
 const mentorPassword = () => process.env.MENTOR_INBOX_PASSWORD;
-
-function mentorSigningKey(): string {
-  return (
-    process.env.MENTOR_INBOX_SESSION_SECRET ??
-    process.env.ADMIN_SESSION_SECRET ??
-    process.env.ADMIN_PASSWORD ??
-    process.env.DEMO_REVIEWER_PASSWORD ??
-    ""
-  );
-}
-
-export function issueMentorToken(mentorId: string): { token: string; expiresAt: string } {
-  const expiresAt = new Date(Date.now() + SESSION_HOURS * 3600_000);
-  const payload = Buffer.from(
-    JSON.stringify({ sub: "mentor", mentorId, exp: expiresAt.getTime() })
-  ).toString("base64url");
-  const signature = crypto
-    .createHmac("sha256", mentorSigningKey())
-    .update(payload)
-    .digest("base64url");
-
-  return { token: `${payload}.${signature}`, expiresAt: expiresAt.toISOString() };
-}
-
-function verifyMentorToken(token: string | undefined, mentorId: string): boolean {
-  if (!token || !mentorSigningKey()) return false;
-  const [payload, signature] = token.split(".");
-  if (!payload || !signature) return false;
-
-  const expected = crypto
-    .createHmac("sha256", mentorSigningKey())
-    .update(payload)
-    .digest("base64url");
-  const a = Buffer.from(signature);
-  const b = Buffer.from(expected);
-  if (a.length !== b.length || !crypto.timingSafeEqual(a, b)) return false;
-
-  try {
-    const body = JSON.parse(Buffer.from(payload, "base64url").toString());
-    return body.sub === "mentor" && body.mentorId === mentorId && body.exp > Date.now();
-  } catch {
-    return false;
-  }
-}
 
 function requireMentor(req: any, res: any, mentorId: string): boolean {
   const header = req.get("authorization") ?? "";
@@ -97,11 +39,13 @@ export function createMessageRouter(
 ): Router {
   const router = Router();
 
-  const unavailable = (res: any) =>
-    res.status(503).json({
-      error:
-        "Messaging is unavailable on this host: it needs somewhere to store conversations.",
+  const unavailable = (res: any, error?: unknown) =>
+    res.status(error instanceof MentorApiError ? error.status : 503).json({
+      error: error instanceof MentorApiError ? error.message :
+        "Messaging is temporarily unavailable. Please try again shortly.",
     });
+
+  router.use(['/messages', '/mentor-inbox'], (_req, res, next) => { res.set('Cache-Control', 'no-store'); next(); });
 
   router.get("/mentor-inbox/status", (_req, res) => {
     res.json({ enabled: Boolean(mentorPassword()) });
@@ -117,7 +61,7 @@ export function createMessageRouter(
           "The mentor inbox is switched off. Set MENTOR_INBOX_PASSWORD in the environment to enable it.",
       });
     }
-    if (typeof mentorId !== "string" || !mentorId.trim()) {
+    if (typeof mentorId !== "string" || !/^[a-zA-Z0-9_-]{1,80}$/.test(mentorId.trim())) {
       return res.status(400).json({ error: "A mentor is required." });
     }
 
@@ -151,19 +95,15 @@ export function createMessageRouter(
   /**
    * Opens (or reopens) a thread with a mentor.
    *
-   * The Paystack reference is required so that knowing a student's email is
-   * not enough to reach their messages. It is not verified against Paystack
-   * on every call - that would be a network round trip per open - but it is
-   * required to be present and non-trivial, and it is what the student
-   * received from a real verified payment.
+   * Verify paid mentorship before issuing a token bound to this conversation.
    */
-  router.post("/messages/thread", (req, res) => {
+  router.post("/messages/thread", async (req, res) => {
     const { email, name, mentorId, reference } = req.body ?? {};
 
     if (typeof email !== "string" || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return res.status(400).json({ error: "A valid email is required." });
     }
-    if (typeof mentorId !== "string" || !mentorId.trim()) {
+    if (typeof mentorId !== "string" || !/^[a-zA-Z0-9_-]{1,80}$/.test(mentorId.trim())) {
       return res.status(400).json({ error: "A mentor is required." });
     }
     if (typeof reference !== "string" || reference.trim().length < 6) {
@@ -173,27 +113,37 @@ export function createMessageRouter(
     }
     if (!isWritable()) return unavailable(res);
 
-    const thread = openThread({
-      studentEmail: email,
-      studentName: typeof name === "string" ? name : "",
-      mentorId: mentorId.trim(),
-    });
-
-    markRead(thread.id, "student");
-    res.json({ thread: getThread(thread.id) });
+    try {
+      const access = await verifyMentorshipPurchase(reference.trim(), email, mentorId.trim());
+      const thread = await openThread({
+        studentEmail: email,
+        studentName: typeof name === "string" ? name : "",
+        mentorId: mentorId.trim(),
+      });
+      await markRead(thread.id, "student");
+      const accessToken = issueStudentConversationToken({ threadId: thread.id, email, mentorId: thread.mentorId,
+        expiresAt: Date.parse(access.expiresAt) });
+      res.json({ thread: await getThread(thread.id), accessToken });
+    } catch (error) {
+      if (!(error instanceof MentorApiError)) console.error("Could not open mentor conversation:", error);
+      unavailable(res, error);
+    }
   });
 
-  /** Reads a thread. The id is the capability, so no other proof is needed. */
-  router.get("/messages/:threadId", (req, res) => {
-    const thread = getThread(req.params.threadId);
-    if (!thread) return res.status(404).json({ error: "No such conversation." });
-
-    markRead(thread.id, "student");
-    res.json({ thread: getThread(thread.id) });
+  /** Student reads require a signed paid-mentorship conversation token. */
+  router.get("/messages/:threadId", async (req, res) => {
+    try {
+      const { thread } = await authorizedConversation(req, 'student');
+      await markRead(thread.id, "student");
+      res.json({ thread: await getThread(thread.id) });
+    } catch (error) {
+      if (!(error instanceof MentorApiError)) console.error("Could not load mentor conversation:", error);
+      unavailable(res, error);
+    }
   });
 
   /** Sends a message as the student. */
-  router.post("/messages/:threadId", (req, res) => {
+  router.post("/messages/:threadId", async (req, res) => {
     const body = String(req.body?.body ?? "").trim();
     if (!body) return res.status(400).json({ error: "Write a message first." });
     if (body.length > MAX_BODY) {
@@ -201,24 +151,35 @@ export function createMessageRouter(
     }
     if (!isWritable()) return unavailable(res);
 
-    const thread = appendMessage(req.params.threadId, "student", body);
-    if (!thread) return res.status(404).json({ error: "No such conversation." });
-
-    res.json({ thread });
+    try {
+      await authorizedConversation(req, 'student');
+      const thread = await appendMessage(req.params.threadId, "student", body);
+      if (!thread) return res.status(404).json({ error: "No such conversation." });
+      res.json({ thread });
+    } catch (error) {
+      if (!(error instanceof MentorApiError)) console.error("Could not send mentor message:", error);
+      unavailable(res, error);
+    }
   });
 
   // ── Admin, standing in for the mentor ──────────────────────────────
 
-  router.get("/mentor-inbox/:mentorId/threads", (req, res) => {
+  router.get("/mentor-inbox/:mentorId/threads", async (req, res) => {
     const mentorId = req.params.mentorId?.trim();
     if (!mentorId) return res.status(400).json({ error: "A mentor is required." });
     if (!requireMentor(req, res, mentorId)) return;
 
-    res.json({
-      writable: isWritable(),
-      awaitingReply: countAwaitingReplyForMentor(mentorId),
-      threads: listThreadsForMentor(mentorId),
-    });
+    try {
+      const threads = await listThreadsForMentor(mentorId);
+      res.json({
+        writable: isWritable(),
+        awaitingReply: threads.filter((thread) => thread.messages.some((message) => message.from === 'student' && !message.readAt)).length,
+        threads,
+      });
+    } catch (error) {
+      console.error("Could not load mentor inbox:", error);
+      unavailable(res);
+    }
   });
 
   router.get("/mentor-inbox/:mentorId/books", async (req, res) => {
@@ -266,21 +227,25 @@ export function createMessageRouter(
     }
   });
 
-  router.get("/mentor-inbox/:mentorId/threads/:threadId", (req, res) => {
+  router.get("/mentor-inbox/:mentorId/threads/:threadId", async (req, res) => {
     const mentorId = req.params.mentorId?.trim();
     if (!mentorId) return res.status(400).json({ error: "A mentor is required." });
     if (!requireMentor(req, res, mentorId)) return;
 
-    const thread = getThread(req.params.threadId);
-    if (!thread || thread.mentorId !== mentorId) {
-      return res.status(404).json({ error: "No such conversation." });
+    try {
+      const thread = await getThread(req.params.threadId);
+      if (!thread || thread.mentorId !== mentorId) {
+        return res.status(404).json({ error: "No such conversation." });
+      }
+      await markRead(thread.id, "mentor");
+      res.json({ thread: await getThread(thread.id) });
+    } catch (error) {
+      console.error("Could not open mentor conversation:", error);
+      unavailable(res);
     }
-
-    markRead(thread.id, "mentor");
-    res.json({ thread: getThread(thread.id) });
   });
 
-  router.post("/mentor-inbox/:mentorId/threads/:threadId/reply", (req, res) => {
+  router.post("/mentor-inbox/:mentorId/threads/:threadId/reply", async (req, res) => {
     const mentorId = req.params.mentorId?.trim();
     const body = String(req.body?.body ?? "").trim();
 
@@ -292,27 +257,34 @@ export function createMessageRouter(
     }
     if (!isWritable()) return unavailable(res);
 
-    const existing = listThreadsForMentor(mentorId).find(
-      (t) => t.id === req.params.threadId
-    );
-    if (!existing) return res.status(404).json({ error: "No such conversation." });
-
-    const thread = appendMessage(req.params.threadId, "mentor", body);
-    if (!thread) return res.status(404).json({ error: "No such conversation." });
-
-    markRead(thread.id, "mentor");
-    res.json({ thread });
+    try {
+      const existing = await getThread(req.params.threadId);
+      if (!existing || existing.mentorId !== mentorId) return res.status(404).json({ error: "No such conversation." });
+      const thread = await appendMessage(req.params.threadId, "mentor", body);
+      if (!thread) return res.status(404).json({ error: "No such conversation." });
+      await markRead(thread.id, "mentor");
+      res.json({ thread: await getThread(thread.id) });
+    } catch (error) {
+      console.error("Could not send mentor reply:", error);
+      unavailable(res);
+    }
   });
 
-  router.get("/admin/threads", requireAdmin, (_req, res) => {
-    res.json({
-      writable: isWritable(),
-      awaitingReply: countAwaitingReply(),
-      threads: listThreads(),
-    });
+  router.get("/admin/threads", requireAdmin, async (_req, res) => {
+    try {
+      const threads = await listThreads();
+      res.json({
+        writable: isWritable(),
+        awaitingReply: threads.filter((thread) => thread.messages.some((message) => message.from === 'student' && !message.readAt)).length,
+        threads,
+      });
+    } catch (error) {
+      console.error("Could not load message administration:", error);
+      unavailable(res);
+    }
   });
 
-  router.post("/admin/threads/:threadId/reply", requireAdmin, (req, res) => {
+  router.post("/admin/threads/:threadId/reply", requireAdmin, async (req, res) => {
     const body = String(req.body?.body ?? "").trim();
     if (!body) return res.status(400).json({ error: "Write a reply first." });
     if (body.length > MAX_BODY) {
@@ -320,12 +292,18 @@ export function createMessageRouter(
     }
     if (!isWritable()) return unavailable(res);
 
-    const thread = appendMessage(req.params.threadId, "mentor", body);
-    if (!thread) return res.status(404).json({ error: "No such conversation." });
-
-    markRead(thread.id, "mentor");
-    res.json({ thread });
+    try {
+      const thread = await appendMessage(req.params.threadId, "mentor", body);
+      if (!thread) return res.status(404).json({ error: "No such conversation." });
+      await markRead(thread.id, "mentor");
+      res.json({ thread: await getThread(thread.id) });
+    } catch (error) {
+      console.error("Could not send admin reply:", error);
+      unavailable(res);
+    }
   });
 
+  router.use(createMentorMediaRouter());
+  router.use(createMentorCallRouter());
   return router;
 }

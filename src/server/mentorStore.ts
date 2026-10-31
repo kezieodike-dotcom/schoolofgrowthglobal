@@ -84,7 +84,7 @@ async function supabaseRequest<T>(path: string, init?: RequestInit): Promise<T> 
 
 async function remoteApplications(): Promise<MentorApplication[]> {
   const rows = await supabaseRequest<Array<{ payload: MentorApplication }>>(
-    `?select=payload&kind=eq.${MENTOR_KIND}&id=like.${MENTOR_ID_PREFIX}*&order=updated_at.desc`
+    `?select=payload&kind=eq.${MENTOR_KIND}&id=like.${MENTOR_ID_PREFIX}*&payload->>status=in.(pending,approved,rejected)&order=updated_at.desc`
   );
   return rows.map((row) => row.payload).filter(Boolean);
 }

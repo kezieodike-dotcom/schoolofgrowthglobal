@@ -2,34 +2,14 @@ import React, { useEffect, useRef, useState } from 'react';
 import type { Mentor } from '../types';
 import type { Entitlement } from '../lib/pricing';
 import { Send, Loader2, AlertCircle, MessageSquare, RefreshCw } from 'lucide-react';
+import { MentorVoiceNoteComposer } from './MentorVoiceNoteComposer';
+import { MentorVoiceNotePlayer } from './MentorVoiceNotePlayer';
+import { MentorCallControls } from './MentorCallControls';
+import { uploadVoiceNote, type ConversationThread as Thread } from '../lib/mentorCommunications';
 
-/**
- * A student's conversation with one mentor.
- *
- * Opens the thread on mount using the email and Paystack reference from the
- * student's entitlement - see src/server/messageStore.ts for why those two
- * are what stands in for a login here.
- *
- * Polls rather than holding a socket. Mentors reply through the admin panel
- * on a human timescale, so a thirty-second refresh is indistinguishable from
- * realtime to the person waiting, and it costs no infrastructure. When mentor
- * accounts and a realtime backend exist, this is the piece to replace.
- */
+// The server verifies paid mentorship and returns the token used for chat, audio and calls.
 
-interface Message {
-  id: string;
-  from: 'student' | 'mentor';
-  body: string;
-  sentAt: string;
-  readAt: string | null;
-}
-
-interface Thread {
-  id: string;
-  messages: Message[];
-}
-
-const POLL_MS = 30_000;
+const POLL_MS = 10_000;
 
 export const MentorConversation: React.FC<{
   mentor: Mentor;
@@ -41,14 +21,22 @@ export const MentorConversation: React.FC<{
   const [draft, setDraft] = useState('');
   const [sending, setSending] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [retryKey, setRetryKey] = useState(0);
+  const [accessToken, setAccessToken] = useState('');
 
   const endRef = useRef<HTMLDivElement>(null);
   const threadIdRef = useRef<string | null>(null);
+  const tokenRef = useRef('');
 
   // Open the thread once, then poll it. Splitting these means a poll cannot
   // accidentally re-create a thread if the open request is still in flight.
   useEffect(() => {
     let live = true;
+    threadIdRef.current = null;
+    tokenRef.current = ''; setAccessToken('');
+    setThread(null);
+    setError(null);
+    setLoading(true);
 
     const open = async () => {
       try {
@@ -65,11 +53,12 @@ export const MentorConversation: React.FC<{
         const body = await res.json().catch(() => null);
         if (!live) return;
 
-        if (!res.ok) {
+        if (!res.ok || !body?.thread || !body?.accessToken) {
           setError(body?.error ?? 'This conversation could not be opened.');
           return;
         }
         threadIdRef.current = body.thread.id;
+        tokenRef.current = body.accessToken; setAccessToken(body.accessToken);
         setThread(body.thread);
       } catch {
         if (live) setError('We could not reach the server. Check your connection.');
@@ -81,12 +70,17 @@ export const MentorConversation: React.FC<{
     open();
 
     const timer = setInterval(async () => {
-      if (!threadIdRef.current) return;
+      if (!threadIdRef.current || !tokenRef.current) return;
       try {
-        const res = await fetch(`/api/messages/${threadIdRef.current}`);
+        if (document.visibilityState !== 'visible') return;
+        const res = await fetch(`/api/messages/${threadIdRef.current}`, { cache: 'no-store', headers: { Authorization: `Bearer ${tokenRef.current}` } });
+        if (res.status === 401 && live) {
+          tokenRef.current = ''; setAccessToken('');
+          setError('Your conversation access has expired. Reopen the conversation to continue.'); return;
+        }
         if (!res.ok) return;
         const body = await res.json();
-        if (live) setThread(body.thread);
+        if (live) setThread((current) => current && current.messages.length > body.thread.messages.length ? current : body.thread);
       } catch {
         // A failed poll is not worth surfacing; the next one may succeed.
       }
@@ -96,7 +90,7 @@ export const MentorConversation: React.FC<{
       live = false;
       clearInterval(timer);
     };
-  }, [mentor.id, entitlement.email, entitlement.reference, studentName]);
+  }, [mentor.id, entitlement.email, entitlement.reference, studentName, retryKey]);
 
   // Only scroll when the count changes, so a poll that returns the same
   // messages does not yank the view while someone is reading back.
@@ -112,17 +106,17 @@ export const MentorConversation: React.FC<{
 
     setSending(true);
     setError(null);
+    const activeId = threadIdRef.current;
     try {
       const res = await fetch(`/api/messages/${threadIdRef.current}`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${tokenRef.current}` },
         body: JSON.stringify({ body }),
       });
       const payload = await res.json().catch(() => null);
       if (!res.ok) throw new Error(payload?.error ?? 'That message did not send.');
 
-      setThread(payload.thread);
-      setDraft('');
+      if (threadIdRef.current === activeId) { setThread(payload.thread); setDraft(''); }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'That message did not send.');
     } finally {
@@ -131,10 +125,10 @@ export const MentorConversation: React.FC<{
   };
 
   return (
-    <div className="bg-white border border-slate-200 rounded-lg shadow-sm flex flex-col h-[460px] overflow-hidden">
-      <header className="px-4 py-3 border-b border-slate-100 flex items-center gap-2.5">
+    <div className="bg-white border border-slate-200 rounded-lg shadow-sm flex flex-col h-[560px] overflow-hidden">
+      <header className="px-4 py-3 border-b border-slate-100 flex flex-wrap items-center gap-2.5">
         <MessageSquare className="w-4 h-4 text-amber-600 shrink-0" />
-        <div className="min-w-0">
+        <div className="min-w-0 flex-1">
           <p className="text-xs font-bold text-slate-900 truncate">
             Message {mentor.name.split(' ').slice(-1)[0]}
           </p>
@@ -142,9 +136,10 @@ export const MentorConversation: React.FC<{
             Replies usually within a working day
           </p>
         </div>
+        {thread && accessToken && <MentorCallControls key={thread.id} threadId={thread.id} token={accessToken} role="student" peerName={mentor.name} />}
       </header>
 
-      <div className="flex-1 overflow-y-auto p-4 space-y-3">
+      <div className="min-h-0 flex-1 overflow-y-auto p-4 space-y-3">
         {loading && (
           <div className="flex items-center justify-center gap-2 py-10 text-slate-400">
             <Loader2 className="w-4 h-4" />
@@ -169,13 +164,13 @@ export const MentorConversation: React.FC<{
             <div key={message.id} className={`flex ${mine ? 'justify-end' : 'justify-start'}`}>
               <div className="max-w-[85%] space-y-1">
                 <div
-                  className={`rounded-lg px-3.5 py-2.5 text-xs leading-relaxed whitespace-pre-line ${
+                  className={`rounded-lg px-3.5 py-2.5 text-xs leading-relaxed whitespace-pre-line break-words [overflow-wrap:anywhere] ${
                     mine
                       ? 'bg-amber-500 text-slate-950'
                       : 'bg-slate-50 text-slate-700 border border-slate-200'
                   }`}
                 >
-                  {message.body}
+                  {message.audio ? <MentorVoiceNotePlayer threadId={thread!.id} messageId={message.id} token={accessToken} /> : message.body}
                 </div>
                 <p
                   className={`text-[10px] font-mono text-slate-400 ${
@@ -206,7 +201,11 @@ export const MentorConversation: React.FC<{
           <AlertCircle className="w-3.5 h-3.5 shrink-0 mt-px" />
           <span className="flex-1">{error}</span>
           <button
-            onClick={() => window.location.reload()}
+            onClick={() => {
+              setError(null);
+              setLoading(true);
+              setRetryKey((key) => key + 1);
+            }}
             className="shrink-0 text-rose-700 hover:text-rose-900"
             aria-label="Retry"
           >
@@ -215,7 +214,15 @@ export const MentorConversation: React.FC<{
         </p>
       )}
 
-      <form onSubmit={send} className="p-3 border-t border-slate-100 flex items-end gap-2">
+      {thread && accessToken && <div className="shrink-0 border-t border-slate-100 px-3 py-2">
+        <MentorVoiceNoteComposer key={thread.id} disabled={loading || sending} onSend={async (audio, durationMs) => {
+          const id = thread.id;
+          const updated = await uploadVoiceNote(id, accessToken, audio, durationMs);
+          if (threadIdRef.current === id) setThread(updated);
+        }} />
+      </div>}
+
+      <form onSubmit={send} className="shrink-0 p-3 border-t border-slate-100 flex items-end gap-2">
         <textarea
           value={draft}
           onChange={(e) => setDraft(e.target.value)}
@@ -228,13 +235,14 @@ export const MentorConversation: React.FC<{
             }
           }}
           rows={2}
+          maxLength={4000}
           placeholder={`Message ${mentor.name.split(' ').slice(-1)[0]}...`}
-          disabled={loading || Boolean(error && !thread)}
+          disabled={loading || !threadIdRef.current || !accessToken}
           className="flex-1 resize-none bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs leading-relaxed focus:outline-none focus:border-amber-500 transition-colors disabled:opacity-50"
         />
         <button
           type="submit"
-          disabled={sending || !draft.trim() || loading}
+          disabled={sending || !draft.trim() || loading || !accessToken}
           className="p-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 disabled:opacity-40 disabled:cursor-not-allowed text-slate-950 transition-colors shrink-0"
           aria-label="Send message"
         >
