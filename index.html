@@ -8,9 +8,29 @@
       content="School of Growth Global is a digital institution for leadership, business transformation, mentorship, career growth, and lifelong learning."
     />
     <link rel="icon" type="image/jpeg" href="/logo.jpg" />
-    <link rel="apple-touch-icon" href="/logo.jpg" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/sgg-apple-touch-180-v1.png" />
     <link rel="manifest" href="/manifest.webmanifest" />
-    <meta name="theme-color" content="#f59e0b" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <link rel="preload" as="image" href="/icons/sgg-launch-512-v1.png" fetchpriority="high" />
+    <style id="app-launch-styles">
+      #app-launch-screen {
+        position: fixed;
+        inset: 0;
+        background: #000000;
+        display: grid;
+        place-items: center;
+      }
+      #app-launch-screen img {
+        display: block;
+        width: min(88vw, 320px);
+        height: auto;
+        max-height: 60vh;
+        max-height: 60dvh;
+        object-fit: contain;
+      }
+    </style>
     <link rel="canonical" href="https://schoolofgrowthglobal.vercel.app/" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="School of Growth Global" />
@@ -35,7 +55,11 @@
     <title>School of Growth Global</title>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <div id="app-launch-screen" role="status" aria-label="Loading School of Growth Global">
+        <img src="/icons/sgg-launch-512-v1.png" width="512" height="512" alt="" fetchpriority="high" />
+      </div>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

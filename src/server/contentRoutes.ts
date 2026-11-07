@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { toPublicTeamRecords } from './publicMentors.js';
 import type { BlogPost, BookItem, Course, EventItem, FacultyMember, GrowthJob } from '../types.js';
 import {
   CONTENT_LABEL,
@@ -262,7 +263,8 @@ export function createContentRouter(
     if (!isKind(kind)) return res.status(404).json({ error: 'Unknown content type.' });
 
     try {
-      res.json({ kind, records: await listContent(kind) });
+      const records = await listContent(kind);
+      res.json({ kind, records: kind === 'team' ? toPublicTeamRecords(records) : records });
     } catch (err) {
       res.status(500).json({
         error: err instanceof Error ? err.message : `Could not load ${CONTENT_LABEL[kind]}.`,

@@ -2,69 +2,20 @@ import React, { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, BookOpen, ChevronDown, Search, Sparkles } from 'lucide-react';
 import architecture from '../data/facultyArchitecture.json';
+import { FACULTIES, SCHOOL_CATALOGUE, SPECIALISED_COURSE_COUNT, searchFacultyCatalogue, type FacultySchool } from '../lib/facultyCatalogue';
 
-type School = {
-  number: number;
-  title: string;
-  notes?: string[];
-  subjects?: string[];
-  core_areas?: string[];
-  designed_for?: string[];
-  subjects_include?: string[];
-};
-
-type Faculty = {
-  number: number;
-  title: string;
-  notes?: string[];
-  schools: School[];
-};
-
-const faculties = architecture.faculties as Faculty[];
-
-function schoolMatches(school: School, query: string): boolean {
-  if (!query) return true;
-  const values = [
-    school.title,
-    ...(school.notes ?? []),
-    ...(school.subjects ?? []),
-    ...(school.core_areas ?? []),
-    ...(school.designed_for ?? []),
-    ...(school.subjects_include ?? []),
-  ];
-  return values.some((value) => value.toLowerCase().includes(query));
-}
-
-function SchoolDetails({ school }: { school: School }) {
-  const lists = [
-    ['Core areas', school.core_areas],
-    ['Subjects', school.subjects],
-    ['Designed for', school.designed_for],
-    ['Subjects include', school.subjects_include],
-  ].filter(([, values]) => values && values.length > 0) as [string, string[]][];
-
+function SchoolDetails({ school }: { school: FacultySchool }) {
   return (
     <div className="border-t border-slate-200 bg-slate-50/70 px-4 pb-5 pt-4 sm:px-6">
-      {(school.notes ?? []).map((note) => (
+      {school.notes.map((note) => (
         <p key={note} className="mb-4 text-sm italic leading-6 text-slate-600">
-          {note.replace(/^\*|\*$/g, '')}
+          {note}
         </p>
       ))}
-      <div className="grid gap-5 sm:grid-cols-2">
-        {lists.map(([label, values]) => (
-          <div key={label}>
-            <p className="mb-2 text-[10px] font-mono uppercase tracking-[0.16em] text-amber-700">{label}</p>
-            <ul className="grid gap-1.5">
-              {values.map((value) => (
-                <li key={value} className="flex items-start gap-2 text-xs leading-5 text-slate-600">
-                  <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-amber-500" />
-                  <span>{value}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
-      </div>
+      <p className="mb-3 text-xs font-semibold text-amber-800">Specialized courses</p>
+      <ol className="grid list-decimal gap-2 pl-5 text-sm leading-6 text-slate-600 marker:text-amber-700">
+        {school.courses.map(course => <li key={course} className="pl-1 [overflow-wrap:anywhere]">{course}</li>)}
+      </ol>
     </div>
   );
 }
@@ -76,12 +27,7 @@ export const SchoolsFacultiesView: React.FC = () => {
   const normalizedQuery = query.trim().toLowerCase();
 
   const visibleFaculties = useMemo(
-    () => faculties
-      .map((faculty) => ({
-        ...faculty,
-        schools: faculty.schools.filter((school) => schoolMatches(school, normalizedQuery)),
-      }))
-      .filter((faculty) => faculty.schools.length > 0),
+    () => searchFacultyCatalogue(normalizedQuery),
     [normalizedQuery]
   );
 
@@ -97,14 +43,15 @@ export const SchoolsFacultiesView: React.FC = () => {
               <span>Global Faculty &amp; School Architecture</span>
             </div>
             <h1 className="max-w-4xl text-4xl font-serif font-semibold leading-[1.04] tracking-tight text-white sm:text-6xl">
-              A global architecture for growth, leadership and transformation.
+              Faculties &amp; Schools
             </h1>
             <p className="mt-6 max-w-3xl text-base leading-8 text-slate-300 sm:text-lg">
               {architecture.institutionalPositioning}
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-3 text-xs font-mono uppercase tracking-[0.14em] text-amber-200">
-              <span>{architecture.architectureStatement}</span>
-              <span className="text-slate-500">62 specialized schools</span>
+              <span>{FACULTIES.length} faculties</span>
+              <span>{SCHOOL_CATALOGUE.length} specialized schools</span>
+              <span>{SPECIALISED_COURSE_COUNT} specialized course titles</span>
             </div>
           </div>
         </div>
@@ -122,7 +69,7 @@ export const SchoolsFacultiesView: React.FC = () => {
             <input
               value={query}
               onChange={(event) => setQuery(event.target.value)}
-              placeholder="Search schools or subjects"
+              placeholder="Search faculties, schools or courses"
               className="w-full border border-slate-300 bg-slate-50 py-3 pl-10 pr-4 text-sm text-slate-900 outline-none transition focus:border-amber-500 focus:bg-white"
             />
           </label>
@@ -133,7 +80,7 @@ export const SchoolsFacultiesView: React.FC = () => {
         {visibleFaculties.map((faculty) => {
           const isOpen = openFaculty === faculty.number || Boolean(normalizedQuery);
           return (
-            <section key={faculty.number} className="overflow-hidden border border-slate-200 bg-white shadow-[0_8px_26px_rgba(15,23,42,0.04)]">
+            <section key={faculty.number} data-faculty-number={faculty.number} className="overflow-hidden border border-slate-200 bg-white shadow-[0_8px_26px_rgba(15,23,42,0.04)]">
               <button
                 type="button"
                 onClick={() => setOpenFaculty(isOpen ? 0 : faculty.number)}
@@ -144,7 +91,7 @@ export const SchoolsFacultiesView: React.FC = () => {
                   <span className="flex h-9 w-9 shrink-0 items-center justify-center border border-amber-300 bg-amber-50 text-xs font-mono font-bold text-amber-800">
                     {String(faculty.number).padStart(2, '0')}
                   </span>
-                  <span>
+                  <span className="min-w-0 [overflow-wrap:anywhere]">
                     <span className="block text-[10px] font-mono uppercase tracking-[0.18em] text-[#ff9700]">Faculty {faculty.number}</span>
                     <span className="mt-1 block text-lg font-serif font-bold leading-tight text-slate-950 sm:text-xl">{faculty.title}</span>
                   </span>
@@ -154,26 +101,24 @@ export const SchoolsFacultiesView: React.FC = () => {
 
               {isOpen && (
                 <div className="border-t border-slate-200 px-3 py-3 sm:px-5 sm:py-5">
-                  {faculty.notes?.map((note) => (
-                    <p key={note} className="mb-4 text-sm italic leading-6 text-slate-600">{note.replace(/^\*|\*$/g, '')}</p>
-                  ))}
-                  <div className="grid gap-3 lg:grid-cols-2">
+                  <p className="mb-5 text-sm leading-6 text-slate-600"><strong className="font-semibold text-slate-800">Purpose: </strong>{faculty.purpose}</p>
+                  <div className="grid items-start gap-3 lg:grid-cols-2">
                     {faculty.schools.map((school) => {
                       const schoolOpen = openSchool === school.number || Boolean(normalizedQuery);
                       const hasDetails = Boolean(
-                        school.notes?.length || school.subjects?.length || school.core_areas?.length || school.designed_for?.length || school.subjects_include?.length
+                        school.notes.length || school.courses.length
                       );
                       return (
-                        <div key={school.number} className="overflow-hidden border border-slate-200 bg-white">
+                        <div key={school.number} data-school-id={school.id} className="min-w-0 overflow-hidden border border-slate-200 bg-white">
                           <button
                             type="button"
                             onClick={() => setOpenSchool(schoolOpen ? null : school.number)}
                             aria-expanded={schoolOpen}
                             className="flex w-full items-center justify-between gap-4 px-4 py-4 text-left transition hover:bg-slate-50"
                           >
-                            <span className="flex items-start gap-3">
+                            <span className="flex min-w-0 items-start gap-3">
                               <span className="font-mono text-[11px] text-amber-700">{String(school.number).padStart(2, '0')}</span>
-                              <span className="text-sm font-semibold leading-6 text-slate-800">{school.title}</span>
+                              <span className="min-w-0 text-sm font-semibold leading-6 text-slate-800 [overflow-wrap:anywhere]">{school.title}</span>
                             </span>
                             {hasDetails && <ChevronDown className={`h-4 w-4 shrink-0 text-slate-400 transition-transform ${schoolOpen ? 'rotate-180' : ''}`} />}
                           </button>
@@ -190,7 +135,7 @@ export const SchoolsFacultiesView: React.FC = () => {
 
         {visibleFaculties.length === 0 && (
           <div className="border border-slate-200 bg-white px-6 py-14 text-center">
-            <p className="text-sm font-semibold text-slate-900">No school matches that search.</p>
+            <p className="text-sm font-semibold text-slate-900">No faculty, school or course matches that search.</p>
             <button type="button" onClick={() => setQuery('')} className="mt-3 text-xs font-bold text-amber-700 hover:text-amber-800">Clear search</button>
           </div>
         )}

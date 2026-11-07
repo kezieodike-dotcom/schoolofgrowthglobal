@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { ViewType } from '../types';
 import { STUDENT_DATA, COURSES, MENTORS } from '../data/mockData';
+import { getCourseCover } from '../data/courseIntroductions';
 import { askGrowthAI, describeError, type ChatMessage } from '../lib/growthAI';
 import { useVoiceInput } from '../lib/useVoiceInput';
 import { useChatAutoScroll } from '../lib/useChatAutoScroll';
@@ -979,13 +980,14 @@ const CoursesTab: React.FC<{
               to={`/courses/${course.id}`}
               className="text-left bg-white border border-slate-200 hover:border-amber-300 rounded-lg overflow-hidden shadow-sm transition-all group"
             >
-              <div className="h-24 overflow-hidden relative">
+              <div className="aspect-[3/2] overflow-hidden relative">
                 <img
-                  src={course.heroImage}
-                  alt={`${course.title} course cover`}
-                  className="w-full h-full object-cover opacity-80 transition-transform duration-500"
+                  src={getCourseCover(course).src}
+                  alt={getCourseCover(course).alt}
+                  loading="lazy"
+                  decoding="async"
+                  className="w-full h-full object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/70 to-transparent" />
               </div>
               <div className="p-4 space-y-2">
                 <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200">

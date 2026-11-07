@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import { ViewType, type Course } from '../types';
 import { FEATURED_COURSE, COURSES, CORPORATE_PARTNERS } from '../data/mockData';
 import { useContentCollection } from '../lib/useContent';
+import { getCourseCover } from '../data/courseIntroductions';
 import {
   Clock,
   CheckCircle2,
@@ -144,8 +145,8 @@ export const CourseDetailView: React.FC<CourseDetailViewProps> = ({ onNavigate }
             <div className="lg:col-span-4 bg-white border border-slate-200 rounded-3xl p-6 shadow-2xl space-y-6 sticky top-28">
 
               <img
-                src={course.heroImage}
-                alt="Executive Boardroom"
+                src={getCourseCover(course).src}
+                alt={getCourseCover(course).alt}
                 className="w-full h-44 object-cover rounded-2xl border border-slate-200"
               />
 
@@ -522,15 +523,12 @@ const LockedCourseAccess: React.FC<{ course: Course; unlockedBy: Plan }> = ({
             <div className="bg-white border border-slate-200 rounded-3xl p-5 sm:p-6 shadow-xl space-y-5">
               <div className="relative overflow-hidden rounded-2xl border border-slate-200">
                 <img
-                  src={course.heroImage}
-                  alt={course.title}
-                  className="w-full h-48 sm:h-56 object-cover opacity-55 grayscale"
+                  src={getCourseCover(course).src}
+                  alt={getCourseCover(course).alt}
+                  width={1200}
+                  height={800}
+                  className="w-full aspect-[3/2] object-cover"
                 />
-                <div className="absolute inset-0 bg-slate-950/35 flex items-center justify-center">
-                  <div className="w-14 h-14 rounded-full bg-white/95 text-amber-700 flex items-center justify-center shadow-lg">
-                    <Lock className="w-7 h-7" />
-                  </div>
-                </div>
               </div>
 
               <div className="space-y-2">

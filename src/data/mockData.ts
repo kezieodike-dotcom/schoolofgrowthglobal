@@ -1,4 +1,4 @@
-﻿import { Course, FacultyMember, Testimonial, StudentProgress, School, Mentor, EventItem, BlogPost } from '../types';
+﻿import { Course, FacultyMember, Testimonial, StudentProgress, Mentor, EventItem, BlogPost } from '../types';
 
 import type { BookItem, GrowthJob } from '../types';
 import { formatNaira, PLANS } from '../lib/pricing';
@@ -152,8 +152,8 @@ export const FOUNDATION_MODULES: Course['modules'] = [
 export const FOUNDATION_COURSE: Course = {
   id: 'growth-foundation-cohort',
   title: 'Growth Foundation Cohort',
-  schoolId: 'personal',
-  schoolName: 'Personal Development School',
+  schoolId: 'personal-growth-and-development',
+  schoolName: 'School of Personal Growth and Development',
   duration: '8 Modules',
   level: 'Emerging Leaders',
   format: 'Self-Paced Practical Programme',
@@ -607,8 +607,8 @@ export const ELITE_COUNCIL_MODULES: Course['modules'] = [
 export const ACCELERATOR_COURSE: Course = {
   id: 'growth-accelerator',
   title: 'Growth Accelerator',
-  schoolId: 'business',
-  schoolName: 'School of Business',
+  schoolId: 'business-management-and-administration',
+  schoolName: 'School of Business Management and Administration',
   duration: '8 Modules + Capstone',
   level: 'Executive',
   format: 'Live Strategy Sessions + Implementation Assignments',
@@ -636,7 +636,7 @@ export const EXECUTIVE_CIRCLE_COURSE: Course = {
   id: 'executive-circle',
   title: 'Executive Circle',
   schoolId: 'leadership',
-  schoolName: 'Leadership School',
+  schoolName: 'School of Leadership',
   duration: '8 Modules + Executive Capstone',
   level: 'Senior Directorate',
   format: 'Executive Sessions + Strategic Blueprint',
@@ -664,7 +664,7 @@ export const ELITE_COUNCIL_COURSE: Course = {
   id: 'elite-council',
   title: 'Elite Council',
   schoolId: 'leadership',
-  schoolName: 'Elite Strategic Transformation',
+  schoolName: 'School of Leadership',
   duration: '6 Pillars + Legacy Project',
   level: 'Elite',
   format: 'Private Mentorship + Strategic Advisory + Executive Development',
@@ -830,7 +830,7 @@ export const COURSES: Course[] = [
     format: 'Cohort-based',
     instructorName: 'Dr. Ngozi Okafor',
     instructorRole: 'Harvard Business School Fellow & Leadership Strategist',
-    instructorAvatar: '/people/w1-okafor.jpg',
+    instructorAvatar: '/people/ngozi-okafor-generated-v1.jpg',
     rating: 4.92,
     reviewCount: 218,
     status: 'Enrolling for November Cohort',
@@ -847,8 +847,8 @@ export const COURSES: Course[] = [
   {
     id: 'algorithmic-strategy',
     title: 'Algorithmic Strategy & AI Governance',
-    schoolId: 'tech',
-    schoolName: 'School of Tech & AI',
+    schoolId: 'artificial-intelligence',
+    schoolName: 'School of Artificial Intelligence',
     duration: '10 Weeks',
     level: 'Senior Directorate',
     format: 'Self-Paced + Live Labs',
@@ -871,8 +871,8 @@ export const COURSES: Course[] = [
   {
     id: 'global-growth-masters',
     title: 'The Global Growth Masters Fellowship',
-    schoolId: 'coaching',
-    schoolName: 'Executive Coaching',
+    schoolId: 'consulting-and-professional-services',
+    schoolName: 'School of Consulting and Professional Services',
     duration: '24 Weeks',
     level: 'Executive',
     format: '1-on-1 Mentorship + C-Suite Boardroom',
@@ -895,8 +895,8 @@ export const COURSES: Course[] = [
   {
     id: 'global-corporate-finance',
     title: 'Global Corporate Finance & Valuation',
-    schoolId: 'finance',
-    schoolName: 'School of Finance',
+    schoolId: 'accounting-and-financial-management',
+    schoolName: 'School of Accounting and Financial Management',
     duration: '10 Weeks',
     level: 'Senior Directorate',
     format: 'Live Cohort + Case Labs',
@@ -919,8 +919,8 @@ export const COURSES: Course[] = [
   {
     id: 'venture-scaling-mastery',
     title: 'Venture Scaling & Market Disruption',
-    schoolId: 'business',
-    schoolName: 'School of Business',
+    schoolId: 'business-management-and-administration',
+    schoolName: 'School of Business Management and Administration',
     duration: '8 Weeks',
     level: 'Emerging Leaders',
     format: 'Self-Paced + Live Labs',
@@ -943,14 +943,14 @@ export const COURSES: Course[] = [
   {
     id: 'personal-mastery-systems',
     title: 'Personal Mastery & Peak Performance Systems',
-    schoolId: 'personal',
-    schoolName: 'Personal Development School',
+    schoolId: 'personal-growth-and-development',
+    schoolName: 'School of Personal Growth and Development',
     duration: '6 Weeks',
     level: 'Emerging Leaders',
     format: 'Self-Paced + Weekly Coaching',
     instructorName: 'Dr. Ngozi Okafor',
     instructorRole: 'Executive Coach & Organizational Psychologist',
-    instructorAvatar: '/people/w1-okafor.jpg',
+    instructorAvatar: '/people/ngozi-okafor-generated-v1.jpg',
     rating: 4.97,
     reviewCount: 431,
     status: 'Instant Access Available',
@@ -966,191 +966,8 @@ export const COURSES: Course[] = [
   }
 ];
 
-// -- Schools & Faculties (14) ----------------------------------------------
-export const SCHOOLS: School[] = [
-  {
-    id: 'leadership',
-    name: 'Leadership School',
-    code: 'SOL',
-    iconName: 'Crown',
-    tagline: 'Transformational C-Suite Governance',
-    overview: 'The flagship faculty raising transformational leaders through adaptive decision-making, crisis resilience, and high-stakes organizational alignment.',
-    programCount: 12,
-    keyTopics: ['Executive Foresight', 'High-Stakes Governance', 'Adaptive Crisis Management', 'Board Leadership'],
-    careerPaths: ['C-Suite Executive', 'Managing Director', 'Board Director', 'Chief of Staff'],
-    certifications: ['Certified Executive Leader (CEL)', 'Board Governance Fellow'],
-    accentColor: 'blue'
-  },
-  {
-    id: 'business',
-    name: 'Business School',
-    code: 'SOB',
-    iconName: 'TrendingUp',
-    tagline: 'Venture Scaling & Global Strategy',
-    overview: 'Equip executives with global capital allocation frameworks, M&A strategy, and market disruption tactics for hyper-scale growth.',
-    programCount: 18,
-    keyTopics: ['Capital Allocation', 'M&A & Restructuring', 'Go-To-Market', 'Venture Expansion'],
-    careerPaths: ['Founder / CEO', 'Chief Strategy Officer', 'Business Unit Director', 'Growth Lead'],
-    certifications: ['Certified Growth Strategist', 'Venture Scaling Professional'],
-    accentColor: 'emerald'
-  },
-  {
-    id: 'finance',
-    name: 'Finance School',
-    code: 'SOF',
-    iconName: 'Landmark',
-    tagline: 'Capital Markets & Institutional Finance',
-    overview: 'Master corporate finance, valuation, risk, and capital structuring used by global investment committees and CFOs.',
-    programCount: 14,
-    keyTopics: ['Corporate Valuation', 'Capital Structuring', 'Risk Management', 'Investment Strategy'],
-    careerPaths: ['Chief Financial Officer', 'Investment Director', 'Portfolio Manager', 'Treasury Lead'],
-    certifications: ['Certified Corporate Finance Professional', 'Institutional Valuation Fellow'],
-    accentColor: 'amber'
-  },
-  {
-    id: 'tech',
-    name: 'Technology School',
-    code: 'SOT',
-    iconName: 'Cpu',
-    tagline: 'Institutional AI & Frontier Systems',
-    overview: 'Lead enterprise AI deployment, algorithmic governance, cloud transformation, and frontier system architecture.',
-    programCount: 24,
-    keyTopics: ['Enterprise AI Strategy', 'Algorithmic Risk', 'Cloud Transformation', 'Web3 & Quantum'],
-    careerPaths: ['Chief Technology Officer', 'Chief AI Officer', 'Head of Engineering', 'Digital Transformation Lead'],
-    certifications: ['Certified AI Governance Officer', 'Enterprise Architecture Fellow'],
-    accentColor: 'indigo'
-  },
-  {
-    id: 'engineering',
-    name: 'Engineering School',
-    code: 'SOE',
-    iconName: 'Cog',
-    tagline: 'Systems, Infrastructure & Reliability',
-    overview: 'Advanced engineering leadership across infrastructure, manufacturing systems, and large-scale program delivery.',
-    programCount: 11,
-    keyTopics: ['Systems Engineering', 'Reliability & Safety', 'Program Delivery', 'Industrial Automation'],
-    careerPaths: ['VP of Engineering', 'Program Director', 'Principal Engineer', 'Operations Head'],
-    certifications: ['Certified Engineering Leader', 'Systems Reliability Fellow'],
-    accentColor: 'slate'
-  },
-  {
-    id: 'agriculture',
-    name: 'Agriculture School',
-    code: 'SOA',
-    iconName: 'Sprout',
-    tagline: 'Agribusiness & Food Systems',
-    overview: 'Modern agribusiness leadership, agri-tech adoption, and resilient food-system supply chains for global markets.',
-    programCount: 8,
-    keyTopics: ['Agri-Tech', 'Food Security', 'Sustainable Farming', 'Agribusiness Finance'],
-    careerPaths: ['Agribusiness Executive', 'Food Systems Director', 'Agri-Tech Founder', 'Supply Chain Lead'],
-    certifications: ['Certified Agribusiness Leader', 'Sustainable Food Systems Fellow'],
-    accentColor: 'emerald'
-  },
-  {
-    id: 'health',
-    name: 'Health School',
-    code: 'SOH',
-    iconName: 'HeartPulse',
-    tagline: 'Healthcare Leadership & Systems',
-    overview: 'Executive leadership for healthcare systems, digital health, and public-health policy and administration.',
-    programCount: 10,
-    keyTopics: ['Health Systems', 'Digital Health', 'Clinical Governance', 'Public Health Policy'],
-    careerPaths: ['Hospital CEO', 'Chief Medical Officer', 'Health Policy Director', 'Digital Health Lead'],
-    certifications: ['Certified Health Systems Leader', 'Digital Health Fellow'],
-    accentColor: 'rose'
-  },
-  {
-    id: 'creative',
-    name: 'Creative Arts School',
-    code: 'SCA',
-    iconName: 'Palette',
-    tagline: 'Design, Media & Creative Enterprise',
-    overview: 'Build and scale creative enterprises across design, media, brand, and the modern content economy.',
-    programCount: 9,
-    keyTopics: ['Brand & Design Strategy', 'Media Production', 'Creative Direction', 'Content Economy'],
-    careerPaths: ['Creative Director', 'Chief Brand Officer', 'Studio Founder', 'Media Executive'],
-    certifications: ['Certified Creative Enterprise Leader', 'Brand Strategy Fellow'],
-    accentColor: 'purple'
-  },
-  {
-    id: 'education',
-    name: 'Education School',
-    code: 'SED',
-    iconName: 'GraduationCap',
-    tagline: 'Learning Design & Institutional Leadership',
-    overview: 'Lead educational institutions and design transformative learning experiences at scale.',
-    programCount: 7,
-    keyTopics: ['Curriculum Design', 'EdTech', 'Institutional Leadership', 'Learning Science'],
-    careerPaths: ['Institution Director', 'Head of Learning', 'EdTech Founder', 'Academic Dean'],
-    certifications: ['Certified Learning Leader', 'Institutional Governance Fellow'],
-    accentColor: 'teal'
-  },
-  {
-    id: 'law',
-    name: 'Law & Governance School',
-    code: 'SLG',
-    iconName: 'Scale',
-    tagline: 'Regulation, Compliance & Public Policy',
-    overview: 'Corporate governance, regulatory strategy, compliance, and public-policy leadership for complex jurisdictions.',
-    programCount: 9,
-    keyTopics: ['Corporate Governance', 'Regulatory Strategy', 'Compliance', 'Public Policy'],
-    careerPaths: ['General Counsel', 'Chief Compliance Officer', 'Policy Director', 'Governance Advisor'],
-    certifications: ['Certified Governance Professional', 'Regulatory Strategy Fellow'],
-    accentColor: 'amber'
-  },
-  {
-    id: 'construction',
-    name: 'Construction School',
-    code: 'SOC',
-    iconName: 'HardHat',
-    tagline: 'Built Environment & Project Leadership',
-    overview: 'Leadership for large-scale construction, real estate development, and capital project delivery.',
-    programCount: 8,
-    keyTopics: ['Project Delivery', 'Real Estate Development', 'Cost & Risk Control', 'Sustainable Building'],
-    careerPaths: ['Development Director', 'Project Executive', 'Real Estate Principal', 'Construction Head'],
-    certifications: ['Certified Construction Leader', 'Capital Projects Fellow'],
-    accentColor: 'orange'
-  },
-  {
-    id: 'oilgas',
-    name: 'Oil & Gas School',
-    code: 'SOG',
-    iconName: 'Flame',
-    tagline: 'Energy, Resources & Transition',
-    overview: 'Executive leadership across upstream, downstream, and the strategic energy transition to sustainable resources.',
-    programCount: 8,
-    keyTopics: ['Energy Strategy', 'Resource Economics', 'HSE Governance', 'Energy Transition'],
-    careerPaths: ['Energy Executive', 'Operations Director', 'Resource Strategy Lead', 'Sustainability Head'],
-    certifications: ['Certified Energy Leader', 'Energy Transition Fellow'],
-    accentColor: 'red'
-  },
-  {
-    id: 'career',
-    name: 'Career Development School',
-    code: 'SCD',
-    iconName: 'Briefcase',
-    tagline: 'Career Acceleration & Professional Growth',
-    overview: 'Accelerate professional trajectories with career strategy, executive presence, and job-market positioning.',
-    programCount: 12,
-    keyTopics: ['Career Strategy', 'Executive Presence', 'Personal Branding', 'Interview Mastery'],
-    careerPaths: ['Any Function', 'Career Switchers', 'Rising Managers', 'Consultants'],
-    certifications: ['Certified Career Strategist', 'Professional Growth Fellow'],
-    accentColor: 'blue'
-  },
-  {
-    id: 'personal',
-    name: 'Personal Development School',
-    code: 'SPD',
-    iconName: 'Sparkles',
-    tagline: 'Mindset, Habits & Peak Performance',
-    overview: 'Build the mindset, habits, and performance systems that sustain lifelong growth and impact.',
-    programCount: 15,
-    keyTopics: ['Peak Performance', 'Habit Design', 'Emotional Intelligence', 'Wealth Mindset'],
-    careerPaths: ['All Professionals', 'Entrepreneurs', 'Leaders', 'Lifelong Learners'],
-    certifications: ['Certified Personal Mastery Practitioner', 'Peak Performance Fellow'],
-    accentColor: 'teal'
-  }
-];
+// The public directory and course filters share the approved academic structure.
+export { SCHOOL_CATALOGUE as SCHOOLS } from '../lib/facultyCatalogue';
 
 // -- Mentor Marketplace ----------------------------------------------------
 export const MENTORS: Mentor[] = [
@@ -1179,7 +996,7 @@ export const MENTORS: Mentor[] = [
     sessions: 812,
     rate: '$380 / session',
     availability: 'Available',
-    avatar: '/people/w1-okafor.jpg',
+    avatar: '/people/ngozi-okafor-generated-v1.jpg',
     featured: true
   },
   {
@@ -2073,7 +1890,7 @@ export const FACULTY_MEMBERS: FacultyMember[] = [
   {
     id: 'john-akpan',
     name: 'John Akpan',
-    role: 'Senior Strategic Adviser to the Founder',
+    role: 'Senior Strategic Advisor',
     institution: 'School of Growth Global',
     bio: 'Civil Engineering Professional | Business Leader | Development & Infrastructure Consultant',
     credentials: [
@@ -2090,7 +1907,7 @@ export const FACULTY_MEMBERS: FacultyMember[] = [
     institution: 'Harvard Business School Fellow',
     bio: 'Pioneered adaptive leadership models used by multinational technology conglomerates.',
     credentials: ['DBA Harvard Business School', 'Executive Coach to Fortune 100 CEOs'],
-    avatar: '/people/w1-okafor.jpg'
+    avatar: '/people/ngozi-okafor-generated-v1.jpg'
   },
   {
     id: 'f4',
@@ -2148,7 +1965,7 @@ export const STUDENT_DATA: StudentProgress = {
     {
       id: 'track-1',
       title: 'High-Stakes Decision Making & Boardroom Strategy',
-      schoolName: 'Leadership School',
+      schoolName: 'School of Leadership',
       progressPercentage: 68,
       nextModule: 'Module 4: Boardroom Simulation & Defense',
       dueDate: 'Oct 24, 2024',
@@ -2160,7 +1977,7 @@ export const STUDENT_DATA: StudentProgress = {
     {
       id: 'track-2',
       title: 'Algorithmic Strategy Design & Enterprise AI',
-      schoolName: 'Technology School',
+      schoolName: 'School of Artificial Intelligence',
       progressPercentage: 22,
       nextModule: 'Module 2: Neural Architecture Audit',
       dueDate: 'Nov 02, 2024',
