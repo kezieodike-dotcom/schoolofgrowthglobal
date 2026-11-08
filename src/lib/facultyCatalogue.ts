@@ -1,4 +1,4 @@
-import architecture from '../data/facultyArchitecture.json';
+import architecture from '../data/facultyArchitecture.json' with { type: 'json' };
 import type { Course } from '../types';
 
 export const FACULTIES = architecture.faculties;

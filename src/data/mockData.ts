@@ -1,7 +1,7 @@
 ﻿import { Course, FacultyMember, Testimonial, StudentProgress, Mentor, EventItem, BlogPost } from '../types';
 
 import type { BookItem, GrowthJob } from '../types';
-import { formatNaira, PLANS } from '../lib/pricing';
+import { formatNaira, PLANS } from '../lib/pricing.js';
 
 export const FOUNDATION_MODULES: Course['modules'] = [
   {
@@ -967,7 +967,7 @@ export const COURSES: Course[] = [
 ];
 
 // The public directory and course filters share the approved academic structure.
-export { SCHOOL_CATALOGUE as SCHOOLS } from '../lib/facultyCatalogue';
+export { SCHOOL_CATALOGUE as SCHOOLS } from '../lib/facultyCatalogue.js';
 
 // -- Mentor Marketplace ----------------------------------------------------
 export const MENTORS: Mentor[] = [

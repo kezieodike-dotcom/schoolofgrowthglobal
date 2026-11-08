@@ -1,5 +1,5 @@
 import type { BlogPost, BookItem, Course, EventItem, FacultyMember, GrowthJob } from '../types';
-import { isSuspendedPublicProfile, publicFacultyProfile } from './publicProfiles';
+import { isSuspendedPublicProfile, publicFacultyProfile } from './publicProfiles.js';
 
 export type ContentKind = 'course' | 'event' | 'team' | 'job' | 'insight' | 'book';
 

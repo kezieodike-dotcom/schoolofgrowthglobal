@@ -1,4 +1,4 @@
-import { KOBO_PER_NAIRA } from './pricing';
+import { KOBO_PER_NAIRA } from './pricing.js';
 
 export type DonationFundId =
   | 'community-growth-fund'
