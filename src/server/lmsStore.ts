@@ -9,6 +9,7 @@ const progressStore = createJsonStore<LmsProgress>('lms_progress.json');
 const submissionStore = createJsonStore<LmsSubmission>('lms_submissions.json');
 
 export function getLmsCourse(id: string): LmsCourse | null {
+  if (!/^[a-z0-9][a-z0-9-]{0,79}$/.test(id)) return null;
   const filePath = path.join(lmsDir, `${id}.json`);
   try {
     const raw = fs.readFileSync(filePath, 'utf8');

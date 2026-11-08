@@ -1,4 +1,5 @@
 import { useSyncExternalStore } from "react";
+import type { LeadershipCourseId } from '../data/leadershipPricing';
 import {
   hasCourseAccess,
   hasMentorshipAccess,
@@ -90,8 +91,24 @@ function subscribe(fn: () => void) {
 /** Records a verified purchase. Re-verifying the same reference is a no-op. */
 export function grantEntitlement(entitlement: Entitlement) {
   const current = read();
-  if (current.some((e) => e.reference === entitlement.reference)) return;
+  const previous = current.find(e => e.reference === entitlement.reference);
+  if (previous) {
+    if (entitlement.leadershipAccess && previous.plan === entitlement.plan) {
+      write(current.map(e => e.reference === entitlement.reference ? entitlement : e));
+    }
+    return;
+  }
   write([...current, entitlement]);
+}
+
+export function leadershipPurchaseFor(entitlements: Entitlement[], id: LeadershipCourseId) {
+  const purchases = entitlements.filter(entry => entry?.plan === id && entry.leadershipAccess && typeof entry.reference === 'string');
+  return purchases.find(entry => Date.parse(entry.leadershipAccess!.expiresAt) > Date.now()) ?? purchases.at(-1);
+}
+
+export function leadershipAccessToken(id: LeadershipCourseId): string | undefined {
+  const access = leadershipPurchaseFor(read(), id)?.leadershipAccess;
+  return access && Date.parse(access.expiresAt) > Date.now() ? access.token : undefined;
 }
 
 /** Clears every purchase on this browser. Used by the demo reset control. */

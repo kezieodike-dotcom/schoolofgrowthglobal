@@ -481,7 +481,7 @@ export const StudentDashboardView: React.FC<StudentDashboardViewProps> = ({
         )}
 
         {activeTab === 'courses' && (
-          <CoursesTab canAccess={enrollment.canAccessLevel} packages={enrollment.packages} />
+          <CoursesTab canAccess={enrollment.canAccessLevel} packages={enrollment.packages} hasLeadershipPurchase={enrollment.entitlements.some(item => Boolean(item.leadershipAccess))} />
         )}
 
         {activeTab === 'schedule' &&
@@ -805,7 +805,8 @@ const OverviewTab: React.FC<{
 const CoursesTab: React.FC<{
   canAccess: (level: CourseLevel) => boolean;
   packages: Entitlement['plan'][];
-}> = ({ canAccess, packages }) => {
+  hasLeadershipPurchase: boolean;
+}> = ({ canAccess, packages, hasLeadershipPurchase }) => {
   const open = COURSES.filter((c) => canAccess(c.level as CourseLevel));
   const locked = COURSES.filter((c) => !canAccess(c.level as CourseLevel));
   const foundation = open.find((course) => course.id === 'growth-foundation-cohort');
@@ -813,6 +814,7 @@ const CoursesTab: React.FC<{
 
   return (
     <div className="space-y-8">
+      {hasLeadershipPurchase && <Link to="/courses/leadership" className="inline-flex min-h-11 items-center gap-2 text-sm font-bold text-amber-800 hover:underline">My leadership courses <ArrowRight className="h-4 w-4 shrink-0" /></Link>}
       <section className="bg-white border border-slate-200 rounded-lg p-5 sm:p-6 shadow-sm space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
           <div>

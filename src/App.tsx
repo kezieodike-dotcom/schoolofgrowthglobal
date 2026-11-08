@@ -44,6 +44,7 @@ import { AdminCatalogueView } from './views/admin/AdminCatalogueView';
 import { AdminIntegrationsView } from './views/admin/AdminIntegrationsView';
 import { LmsStudentDashboardView } from './views/LmsStudentDashboardView';
 import { LmsLessonView } from './views/LmsLessonView';
+import { LeadershipPricingView } from './views/LeadershipPricingView';
 import { PrivacyView } from './views/PrivacyView';
 import { ThankYouView } from './views/ThankYouView';
 import { NotFoundView } from './views/NotFoundView';
@@ -167,6 +168,7 @@ const AppRoutes: React.FC = () => {
         <Route path="schools" element={<SchoolsFacultiesView />} />
 
         <Route path="courses" element={<CoursesView />} />
+        <Route path="courses/leadership" element={<LeadershipPricingView />} />
         <Route path="courses/:courseId" element={<CourseDetailRoute />} />
 
         <Route path="mentorship" element={<MentorsView />} />

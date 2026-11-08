@@ -21,6 +21,9 @@ import {
 import { mergeContent } from "../lib/content.js";
 import { listContent } from "./contentStore.js";
 import type { BookItem } from "../types.js";
+import { isLeadershipCourseId } from '../data/leadershipPricing.js';
+import { getPublishedLeadershipCourse } from './leadershipCourseStore.js';
+import { isLeadershipPayment, issueLeadershipAccess } from './leadershipAccess.js';
 
 /**
  * Paystack checkout for course packages and mentorship subscriptions.
@@ -87,6 +90,7 @@ interface PaystackTransaction {
   amount: number;
   currency: string;
   reference: string;
+  domain?: string;
   customer?: { email?: string };
   metadata?: {
     plan?: string;
@@ -224,6 +228,13 @@ export function createPaymentRouter(): Router {
     }
 
     try {
+      const individual = isLeadershipCourseId(planCode);
+      if (individual && (bookId || donationFund || donationAmount)) {
+        return res.status(400).json({ error: 'Choose one item for checkout.' });
+      }
+      if (individual && !getPublishedLeadershipCourse(planCode)) {
+        return res.status(409).json({ error: 'This leadership course is not open for enrolment yet.' });
+      }
       const donationAmountKobo =
         donationFund || donationAmount
           ? parseDonationAmount(donationAmount)
@@ -280,10 +291,10 @@ export function createPaymentRouter(): Router {
               phone: typeof phone === "string" ? phone : undefined,
               referral: typeof referral === "string" ? referral : undefined,
               deliveryMode:
-                plan && typeof deliveryMode === "string" ? deliveryMode : undefined,
+                individual ? 'Self-paced learning' : plan && typeof deliveryMode === "string" ? deliveryMode : undefined,
               // Carried through so the confirmation email and the student's
               // first session can name the mentor they chose at checkout.
-              mentorId: plan && typeof mentorId === "string" ? mentorId : undefined,
+              mentorId: plan && !individual && typeof mentorId === "string" ? mentorId : undefined,
               custom_fields: [
                 {
                   display_name: donation ? "Donation fund" : book ? "Book" : "Plan",
@@ -318,6 +329,7 @@ export function createPaymentRouter(): Router {
    */
   router.get("/payments/verify/:reference", async (req, res) => {
     const { reference } = req.params;
+    res.set('Cache-Control', 'no-store');
 
     if (!isPaystackConfigured()) {
       return res.status(503).json({ error: NOT_CONFIGURED });
@@ -411,6 +423,13 @@ export function createPaymentRouter(): Router {
         reference: tx.reference,
         email: tx.customer?.email ?? "",
       });
+
+      if (isLeadershipCourseId(planCode)) {
+        if (!isLeadershipPayment(planCode, reference, tx, process.env.NODE_ENV === 'production')) {
+          return res.status(422).json({ error: 'We could not verify a payment for this individual course. Contact admissions with your reference.' });
+        }
+        entitlement.leadershipAccess = issueLeadershipAccess(planCode, entitlement.email, paystackSecretKey() ?? '');
+      }
 
       res.json({ paid: true, entitlement });
     } catch (error) {

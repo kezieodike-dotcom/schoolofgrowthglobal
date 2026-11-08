@@ -240,7 +240,11 @@ export type LmsBlockType =
   | 'self_awareness_audit'
   | 'growth_project'
   | 'implementation_challenge'
-  | 'objective_test';
+  | 'objective_test'
+  | 'heading'
+  | 'list'
+  | 'table'
+  | 'leadership_quiz';
 
 export interface LmsBlock {
   id: string;

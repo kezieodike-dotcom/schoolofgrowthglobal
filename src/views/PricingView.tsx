@@ -471,6 +471,9 @@ export const PricingView: React.FC = () => {
 
       {/* Packages */}
       <section className="pt-12 sm:pt-16 pb-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <Link to="/courses/leadership" className="mb-6 flex min-h-11 flex-wrap items-center justify-between gap-3 border-y border-slate-200 py-3 text-sm font-bold text-amber-800 hover:text-slate-950">
+          <span>School of Leadership: individual course prices</span><ArrowRight className="h-4 w-4 shrink-0" aria-hidden="true" />
+        </Link>
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 lg:gap-7 items-start">
           {PACKAGES.map((plan) => (
             <PackageCard

@@ -16,6 +16,7 @@ function SchoolDetails({ school }: { school: FacultySchool }) {
       <ol className="grid list-decimal gap-2 pl-5 text-sm leading-6 text-slate-600 marker:text-amber-700">
         {school.courses.map(course => <li key={course} className="pl-1 [overflow-wrap:anywhere]">{course}</li>)}
       </ol>
+      {school.id === 'leadership' && <Link to="/courses/leadership" className="mt-4 inline-flex min-h-11 items-center gap-2 text-sm font-bold text-amber-800 hover:underline">Individual leadership course prices <ArrowRight className="h-4 w-4 shrink-0" aria-hidden="true" /></Link>}
     </div>
   );
 }

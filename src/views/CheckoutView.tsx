@@ -3,6 +3,8 @@ import { Link, Navigate, useParams, useSearchParams } from 'react-router-dom';
 import { MENTORS } from '../data/mockData';
 import { CountryPhoneField } from '../components/CountryPhoneField';
 import { PLANS, isPlanCode, formatNaira } from '../lib/pricing';
+import { isLeadershipCourseId } from '../data/leadershipPricing';
+import { useLeadershipAvailability } from '../lib/useLeadershipAvailability';
 import {
   FAST_TRACK_SUMMARY,
   certificateRequirementsFor,
@@ -46,6 +48,8 @@ interface PaymentConfig {
 export const CheckoutView: React.FC = () => {
   const { plan: planParam } = useParams();
   const [searchParams] = useSearchParams();
+  const leadershipId = isLeadershipCourseId(planParam) ? planParam : null;
+  const leadership = useLeadershipAvailability(Boolean(leadershipId));
 
   const [config, setConfig] = useState<PaymentConfig | null>(null);
   const [name, setName] = useState('');
@@ -76,6 +80,14 @@ export const CheckoutView: React.FC = () => {
 
   if (!isPlanCode(planParam)) return <Navigate to="/pricing" replace />;
   const plan = PLANS[planParam];
+
+  if (leadershipId && (leadership.loading || leadership.error || !leadership.available[leadershipId])) {
+    return <div className="mx-auto min-h-[50vh] max-w-2xl px-4 py-12">
+      <h1 className="text-2xl font-serif font-bold">{plan.name}</h1>
+      <p className="mt-3 text-sm text-slate-600" role="status">{leadership.loading ? 'Checking enrolment availability...' : leadership.error ? 'Enrolment availability could not be checked.' : 'This course is not open for enrolment yet.'}</p>
+      <Link to="/courses/leadership" className="mt-4 inline-flex min-h-11 items-center gap-2 text-sm font-bold text-amber-800"><ArrowLeft className="h-4 w-4" /> Back to leadership courses</Link>
+    </div>;
+  }
 
   // Carried from the mentor directory when checkout was started by picking a
   // specific mentor, so the summary confirms who the subscription is for.
@@ -166,11 +178,11 @@ export const CheckoutView: React.FC = () => {
     <div className="min-h-screen bg-slate-50 text-slate-900">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
         <Link
-          to="/pricing"
+          to={leadershipId ? '/courses/leadership' : '/pricing'}
           className="inline-flex items-center gap-2 text-xs text-slate-500 hover:text-slate-900 mb-8 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
-          Back to packages
+          {leadershipId ? 'Back to leadership courses' : 'Back to packages'}
         </Link>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
@@ -545,7 +557,7 @@ export const CheckoutView: React.FC = () => {
                   <>
                     <li>Paystack's secure page opens for payment.</li>
                     <li>We confirm the payment with Paystack directly.</li>
-                    <li>Your access opens straight away and a receipt is emailed.</li>
+                    <li>{leadershipId ? 'Your verified payment opens this course.' : 'Your access opens straight away and a receipt is emailed.'}</li>
                   </>
                 )}
               </ol>
