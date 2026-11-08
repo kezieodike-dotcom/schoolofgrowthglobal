@@ -5,7 +5,7 @@
   "functions": {
     "api/index.ts": {
       "maxDuration": 60,
-      "includeFiles": "data/lms/**"
+      "includeFiles": "data/lms/growth-foundation*.json"
     }
   },
   "rewrites": [

@@ -22,7 +22,7 @@ import { mergeContent } from "../lib/content.js";
 import { listContent } from "./contentStore.js";
 import type { BookItem } from "../types.js";
 import { isLeadershipCourseId } from '../data/leadershipPricing.js';
-import { getPublishedLeadershipCourse } from './leadershipCourseStore.js';
+import { getPublishedLeadershipCourse, LEADERSHIP_STORAGE_UNAVAILABLE } from './leadershipCourseStore.js';
 import { isLeadershipPayment, issueLeadershipAccess } from './leadershipAccess.js';
 
 /**
@@ -232,8 +232,10 @@ export function createPaymentRouter(): Router {
       if (individual && (bookId || donationFund || donationAmount)) {
         return res.status(400).json({ error: 'Choose one item for checkout.' });
       }
-      if (individual && !getPublishedLeadershipCourse(planCode)) {
-        return res.status(409).json({ error: 'This leadership course is not open for enrolment yet.' });
+      if (individual) {
+        const course = await getPublishedLeadershipCourse(planCode).catch(() => undefined);
+        if (course === undefined) return res.status(503).json({ error: LEADERSHIP_STORAGE_UNAVAILABLE });
+        if (!course) return res.status(409).json({ error: 'This leadership course is not open for enrolment yet.' });
       }
       const donationAmountKobo =
         donationFund || donationAmount

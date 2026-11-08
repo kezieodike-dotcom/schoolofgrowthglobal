@@ -9,7 +9,7 @@ import {
 } from './lmsStore.js';
 import { LmsProgress, LmsSubmission } from '../types.js';
 import { isLeadershipCourseId } from '../data/leadershipPricing.js';
-import { getPublishedLeadershipCourse, leadershipAvailability } from './leadershipCourseStore.js';
+import { getPublishedLeadershipCourse, leadershipAvailability, LEADERSHIP_STORAGE_UNAVAILABLE } from './leadershipCourseStore.js';
 import { requireLeadershipAccess } from './leadershipAccess.js';
 import {
   MODULE_8_ASSESSMENT,
@@ -21,23 +21,34 @@ import {
 export function createLmsRouter() {
   const router = express.Router();
 
-  router.get('/lms/leadership/availability', (_req, res) => {
-    res.set('Cache-Control', 'no-store').json(leadershipAvailability());
+  router.get('/lms/leadership/availability', async (_req, res) => {
+    res.set('Cache-Control', 'no-store');
+    try {
+      res.json(await leadershipAvailability());
+    } catch (error) {
+      console.error('Leadership catalogue could not be loaded:', error);
+      res.status(503).json({ error: LEADERSHIP_STORAGE_UNAVAILABLE });
+    }
   });
 
   // Get full course data (content)
-  router.get('/lms/courses/:id', requireLeadershipAccess, (req: Request, res: Response) => {
+  router.get('/lms/courses/:id', requireLeadershipAccess, async (req: Request, res: Response) => {
     const id = req.params.id;
-    const course = isLeadershipCourseId(id) ? getPublishedLeadershipCourse(id) : getLmsCourse(id);
-    if (!course) return res.status(404).json({ error: 'Course not found' });
     if (isLeadershipCourseId(id)) {
+      const course = await getPublishedLeadershipCourse(id).catch(() => undefined);
+      if (course === undefined) return res.status(503).json({ error: LEADERSHIP_STORAGE_UNAVAILABLE });
+      if (!course) return res.status(404).json({ error: 'Course not found' });
       return res.json({ id: course.id, title: course.title, modules: course.modules });
     }
+    const course = getLmsCourse(id);
+    if (!course) return res.status(404).json({ error: 'Course not found' });
     res.json(course);
   });
 
-  router.post('/lms/leadership/:courseId/quiz', requireLeadershipAccess, (req: Request, res: Response) => {
-    const key = getPublishedLeadershipCourse(req.params.courseId)?.answerKey;
+  router.post('/lms/leadership/:courseId/quiz', requireLeadershipAccess, async (req: Request, res: Response) => {
+    const course = await getPublishedLeadershipCourse(req.params.courseId).catch(() => undefined);
+    if (course === undefined) return res.status(503).json({ error: LEADERSHIP_STORAGE_UNAVAILABLE });
+    const key = course?.answerKey;
     if (!key) return res.status(404).json({ error: 'Assessment not found.' });
     const answers = req.body?.answers;
     const questions = Object.entries(key);
@@ -108,13 +119,14 @@ export function createLmsRouter() {
   });
 
   // Save student progress
-  router.post('/lms/progress', requireLeadershipAccess, (req: Request, res: Response) => {
+  router.post('/lms/progress', requireLeadershipAccess, async (req: Request, res: Response, next) => {
     const progress: LmsProgress = req.body;
     if (!progress?.userId || !progress.courseId) {
       return res.status(400).json({ error: 'userId and courseId are required' });
     }
     if (res.locals.leadershipStudent) {
-      const course = getPublishedLeadershipCourse(progress.courseId);
+      const course = await getPublishedLeadershipCourse(progress.courseId).catch(() => undefined);
+      if (course === undefined) return res.status(503).json({ error: LEADERSHIP_STORAGE_UNAVAILABLE });
       if (!course) return res.status(404).json({ error: 'Course not found' });
       if (!Array.isArray(progress.completedLessons)) return res.status(400).json({ error: 'Invalid lesson progress' });
       const lessons = new Set(course.modules.flatMap(module => module.lessons.map(lesson => lesson.id)));
@@ -122,8 +134,12 @@ export function createLmsRouter() {
       progress.completedLessons = [...new Set(progress.completedLessons.filter(id => lessons.has(id)))];
       progress.progressPercentage = Math.round(progress.completedLessons.length / lessons.size * 100);
     }
-    saveStudentProgress(progress);
-    res.json({ success: true });
+    try {
+      saveStudentProgress(progress);
+      res.json({ success: true });
+    } catch (error) {
+      next(error);
+    }
   });
 
   // Get a single submission

@@ -1,47 +1,52 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { mkdtempSync, mkdirSync, rmSync, rmdirSync, writeFileSync } from 'node:fs';
+import { mkdtempSync, rmSync, rmdirSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import type { AddressInfo } from 'node:net';
 import express from 'express';
 
-test('individual checkout, verification and protected lessons work through the actual routers', async t => {
-  const previousDir = process.cwd();
+test('individual checkout, verification and protected lessons work with private course storage', async t => {
   const previousData = process.env.DATA_DIR;
   const previousKey = process.env.PAYSTACK_SECRET_KEY;
+  const previousSupabaseUrl = process.env.SUPABASE_URL;
+  const previousSupabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
   const root = mkdtempSync(join(tmpdir(), 'sgg-leadership-'));
-  const lmsDir = join(root, 'data', 'lms');
-  const progressDir = join(root, 'progress');
-  mkdirSync(lmsDir, { recursive: true });
-  process.chdir(root);
-  process.env.DATA_DIR = progressDir;
+  process.env.DATA_DIR = root;
   process.env.PAYSTACK_SECRET_KEY = 'test-fixture-key';
+  process.env.SUPABASE_URL = 'https://private-course-fixture.example.test';
+  process.env.SUPABASE_SERVICE_ROLE_KEY = 'fixture-storage-key';
   t.after(() => {
-    process.chdir(previousDir);
     if (previousData === undefined) delete process.env.DATA_DIR; else process.env.DATA_DIR = previousData;
     if (previousKey === undefined) delete process.env.PAYSTACK_SECRET_KEY; else process.env.PAYSTACK_SECRET_KEY = previousKey;
-    rmSync(join(lmsDir, 'leadership-001.json'), { force: true });
-    rmSync(join(progressDir, 'lms_progress.json'), { force: true });
-    rmdirSync(lmsDir);
-    rmdirSync(join(root, 'data'));
-    if (existsProgress) rmdirSync(progressDir);
+    if (previousSupabaseUrl === undefined) delete process.env.SUPABASE_URL; else process.env.SUPABASE_URL = previousSupabaseUrl;
+    if (previousSupabaseKey === undefined) delete process.env.SUPABASE_SERVICE_ROLE_KEY; else process.env.SUPABASE_SERVICE_ROLE_KEY = previousSupabaseKey;
+    rmSync(join(root, 'lms_progress.json'), { force: true });
     rmdirSync(root);
   });
-  let existsProgress = false;
-  writeFileSync(join(lmsDir, 'leadership-001.json'), JSON.stringify({
+  const storedCourse = {
     id: 'leadership-001', title: 'Foundations of Leadership', published: true,
     answerKey: { 'question-1': 'B', 'question-2': 'C' },
     modules: [{ id: 'module-1', title: 'One', lessons: [{ id: 'lesson-1', title: 'First lesson', blocks: [{ id: 'reading-1', type: 'reading', content: 'Private fixture lesson.' }] }] }],
-  }));
+  };
 
   const { createPaymentRouter } = await import('./paymentRoutes.js');
   const { createLmsRouter } = await import('./lmsRoutes.js');
   const { issueLeadershipAccess } = await import('./leadershipAccess.js');
   const originalFetch = globalThis.fetch;
   let charge: { amount: number; currency: string; metadata: Record<string, string> } | null = null;
+  let storageUnavailable = false;
   t.mock.method(globalThis, 'fetch', async (input: string | URL | Request, init?: RequestInit) => {
     const url = new URL(String(input));
+    if (url.hostname === 'private-course-fixture.example.test') {
+      assert.equal(new Headers(init?.headers).get('Authorization'), 'Bearer fixture-storage-key');
+      if (storageUnavailable) return Response.json({ error: 'Temporary outage' }, { status: 503 });
+      if (url.pathname === '/storage/v1/object/list/leadership-courses') {
+        return Response.json([{ name: 'leadership-001.json' }, { name: 'leadership-002.json' }]);
+      }
+      if (url.pathname.endsWith('/leadership-001.json')) return Response.json(storedCourse);
+      return Response.json({ statusCode: '404', error: 'not_found' }, { status: 400 });
+    }
     if (url.hostname !== 'api.paystack.co') return originalFetch(input, init);
     if (url.pathname === '/transaction/initialize') {
       charge = JSON.parse(String(init?.body));
@@ -65,6 +70,11 @@ test('individual checkout, verification and protected lessons work through the a
   });
   const get = (path: string, token?: string) => fetch(base + path, token ? { headers: { Authorization: `Bearer ${token}` } } : undefined);
 
+  storageUnavailable = true;
+  assert.equal((await get('/lms/leadership/availability')).status, 503);
+  assert.equal((await post('/payments/initialize', { plan: 'leadership-001', email: 'buyer@example.com' })).status, 503);
+  assert.equal(charge, null);
+  storageUnavailable = false;
   const catalogue = await (await get('/lms/leadership/availability')).json();
   assert.deepEqual(catalogue.available, { 'leadership-001': '/lms/leadership-001/module-1/lesson-1' });
   assert.deepEqual(catalogue.outlines, { 'leadership-001': ['One'] });
@@ -108,7 +118,6 @@ test('individual checkout, verification and protected lessons work through the a
   const update = { userId: 'forged-user', courseId: 'leadership-001', completedLessons: ['lesson-1', 'invented-lesson'], progressPercentage: 200 };
   assert.equal((await post('/lms/progress', update)).status, 401);
   const saved = await post('/lms/progress', update, token);
-  existsProgress = saved.ok;
   assert.equal(saved.status, 200);
   const progress = await (await get('/lms/progress/forged-user/leadership-001', token)).json();
   assert.notEqual(progress.userId, 'forged-user');
