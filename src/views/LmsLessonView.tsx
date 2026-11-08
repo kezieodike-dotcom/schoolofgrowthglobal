@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, Navigate } from 'react-router-dom';
 import { useLmsAssessment, useLmsCourse, useLmsProgress, useLmsSubmission } from '../lib/useLms';
-import { leadershipPurchaseFor, useEnrollment } from '../lib/useEnrollment';
-import { isLeadershipCourseId } from '../data/leadershipPricing';
+import { useEnrollment } from '../lib/useEnrollment';
 import { ReadingBlock, KeyInsightBlock, FrameworkBlock, QuestionBlock, ReflectionBlock } from '../components/lms/LmsBlocks';
 import { ValueDiscoveryExercise } from '../components/lms/ValueDiscoveryExercise';
 import { SelfAwarenessAudit } from '../components/lms/SelfAwarenessAudit';
@@ -10,7 +9,6 @@ import { PersonalGrowthProject } from '../components/lms/PersonalGrowthProject';
 import { ImplementationChallenge } from '../components/lms/ImplementationChallenge';
 import { ObjectiveTestBlock } from '../components/lms/ObjectiveTestBlock';
 import { LessonHero } from '../components/lms/LessonHero';
-import { LeadershipQuiz, LessonList, LessonTable } from '../components/lms/LeadershipLessonBlocks';
 import { LmsBlock } from '../types';
 import {
   ChevronLeft, ChevronRight, CheckCircle2, Circle, Menu, X, BookOpen, Award, LockKeyhole
@@ -86,28 +84,12 @@ const CompletionStandard: React.FC = () => (
 );
 
 // ─── Block Renderer ───────────────────────────────────────────────────────────
-const SavedReflection: React.FC<{ block: LmsBlock; courseId: string; moduleId: string }> = ({ block, courseId, moduleId }) => {
-  const { data, save, saving, savedAt } = useLmsSubmission(courseId, block.id, moduleId);
-  return <ReflectionBlock blockId={block.id} content={block.content ?? ''} savedData={data} onSave={save} saving={saving} savedAt={savedAt} />;
-};
-
 const BlockRenderer: React.FC<{ block: LmsBlock; courseId: string; moduleId: string }> = ({ block, courseId, moduleId }) => {
+  const { data, save, saving, savedAt } = useLmsSubmission(courseId, block.id, moduleId);
+
   switch (block.type) {
     case 'reading':
       return <ReadingBlock content={block.content ?? ''} />;
-    case 'heading':
-      return <h2 className="mb-3 mt-7 break-words text-lg font-bold text-slate-900">{block.content}</h2>;
-    case 'list':
-      return <LessonList content={block.content ?? ''} />;
-    case 'table':
-      return <LessonTable content={block.content ?? ''} />;
-    case 'leadership_quiz':
-      return isLeadershipCourseId(courseId) && (
-        <>
-          {block.content && <ReadingBlock content={block.content} />}
-          <LeadershipQuiz courseId={courseId} questions={block.metadata.questions} />
-        </>
-      );
     case 'key_insight':
       return <KeyInsightBlock content={block.content ?? ''} />;
     case 'framework':
@@ -115,7 +97,16 @@ const BlockRenderer: React.FC<{ block: LmsBlock; courseId: string; moduleId: str
     case 'question':
       return <QuestionBlock content={block.content ?? ''} />;
     case 'reflection':
-      return <SavedReflection block={block} courseId={courseId} moduleId={moduleId} />;
+      return (
+        <ReflectionBlock
+          blockId={block.id}
+          content={block.content ?? ''}
+          savedData={data}
+          onSave={save}
+          saving={saving}
+          savedAt={savedAt}
+        />
+      );
     case 'value_discovery':
       return <ValueDiscoveryExercise courseId={courseId} />;
     case 'self_awareness_audit':
@@ -137,25 +128,17 @@ export const LmsLessonView: React.FC = () => {
     lessonId: string;
   }>();
 
-  const { course, loading, error } = useLmsCourse(courseId);
+  const { course, loading } = useLmsCourse(courseId);
   const enrollment = useEnrollment();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const leadershipId = isLeadershipCourseId(courseId) ? courseId : null;
-  const purchase = leadershipId ? leadershipPurchaseFor(enrollment.entitlements, leadershipId) : null;
-  const courseHome = leadershipId ? '/courses/leadership' : '/lms';
-
-  useEffect(() => {
-    if (leadershipId) window.scrollTo(0, 0);
-  }, [leadershipId, lessonId]);
 
   const module = course?.modules.find(m => m.id === moduleId);
-  const lessons = (leadershipId ? course?.modules ?? [] : module ? [module] : [])
-    .flatMap(entry => entry.lessons.map(item => ({ ...item, moduleId: entry.id })));
+  const lessons = module?.lessons ?? [];
   const { progress, markLessonComplete, isLessonComplete } = useLmsProgress(courseId, lessons.length);
 
-  const currentIndex = lessons.findIndex(l => l.id === lessonId && l.moduleId === moduleId);
+  const currentIndex = lessons.findIndex(l => l.id === lessonId) ?? 0;
   const effectiveIndex = currentIndex >= 0 ? currentIndex : 0;
-  const lesson = leadershipId && currentIndex < 0 ? undefined : lessons[effectiveIndex];
+  const lesson = lessons[effectiveIndex];
   const prev = lessons[effectiveIndex - 1];
   const next = lessons[effectiveIndex + 1];
 
@@ -164,13 +147,13 @@ export const LmsLessonView: React.FC = () => {
     && lesson?.id === 'module-8-lesson-16';
   const assessment = useLmsAssessment(courseId, moduleId, lesson?.id ?? '', isModule8ObjectiveTest);
   const module8AssessmentIndex = lessons.findIndex((item) => item.id === 'module-8-lesson-16');
-  const module8ProgressLocked = courseId === 'growth-foundation' && moduleId === 'module-8'
+  const module8ProgressLocked = moduleId === 'module-8'
     && module8AssessmentIndex >= 0
     && effectiveIndex > module8AssessmentIndex
     && !assessment.result?.passed;
 
-  const isProjectAssessment = courseId === 'growth-foundation' && lesson?.title?.includes('PROJECT ASSESSMENT');
-  const isCompletionStandard = courseId === 'growth-foundation' && lesson?.title?.toUpperCase()?.includes('COMPLETION STANDARD');
+  const isProjectAssessment = lesson?.title?.includes('PROJECT ASSESSMENT');
+  const isCompletionStandard = lesson?.title?.toUpperCase()?.includes('COMPLETION STANDARD');
 
   if (loading) {
     return (
@@ -183,20 +166,8 @@ export const LmsLessonView: React.FC = () => {
     );
   }
 
-  if (leadershipId && !purchase) return <Navigate to={courseHome} replace />;
-  if (!leadershipId && !enrollment.canAccessLevel('Emerging Leaders')) {
+  if (!enrollment.canAccessLevel('Emerging Leaders')) {
     return <Navigate to="/portal" replace />;
-  }
-
-  if (leadershipId && error) {
-    return <main className="mx-auto max-w-xl px-4 py-12">
-      <h1 className="text-2xl font-bold">Course access</h1>
-      <p className="mt-3 text-sm text-slate-600" role="status">{error}</p>
-      <div className="mt-4 flex flex-wrap gap-4 text-sm font-bold text-amber-800">
-        {purchase && <Link to={`/payment/callback?reference=${encodeURIComponent(purchase.reference)}`}>Restore access</Link>}
-        <Link to={courseHome}>Leadership courses</Link>
-      </div>
-    </main>;
   }
 
   if (module8ProgressLocked && !assessment.loading) {
@@ -234,14 +205,12 @@ export const LmsLessonView: React.FC = () => {
             onClick={() => setSidebarOpen(o => !o)}
             className="p-2 rounded-lg hover:bg-slate-100 text-slate-600"
             aria-label="Toggle sidebar"
-            aria-expanded={sidebarOpen}
-            aria-controls="lesson-course-outline"
           >
             <Menu size={20} />
           </button>
-          <Link to={courseHome} className="flex items-center gap-2 text-slate-600 hover:text-amber-600 text-sm font-medium">
+          <Link to="/lms" className="flex items-center gap-2 text-slate-600 hover:text-amber-600 text-sm font-medium">
             <BookOpen size={16} />
-            <span className="hidden sm:inline">{leadershipId ? 'School of Leadership' : 'Growth Foundation'}</span>
+            <span className="hidden sm:inline">Growth Foundation</span>
           </Link>
           <div className="flex-1 hidden md:block">{progressBar}</div>
           <div className="text-xs text-slate-500 whitespace-nowrap">
@@ -254,12 +223,11 @@ export const LmsLessonView: React.FC = () => {
       <div className="flex flex-1 max-w-7xl mx-auto w-full">
         {/* Sidebar */}
         <aside
-          id="lesson-course-outline"
           className={`
-            fixed inset-y-0 left-0 z-50 w-72 max-w-[85vw] bg-white border-r border-slate-200 overflow-y-auto
+            fixed inset-y-0 left-0 z-30 w-72 bg-white border-r border-slate-200 overflow-y-auto
             transition-transform duration-300
-            ${sidebarOpen ? 'visible translate-x-0' : 'invisible -translate-x-full'}
-            md:visible md:static md:translate-x-0 md:z-auto md:shrink-0
+            ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
+            md:static md:translate-x-0 md:z-auto
           `}
         >
           <div className="p-4 border-b border-slate-200 flex items-center justify-between">
@@ -267,36 +235,18 @@ export const LmsLessonView: React.FC = () => {
               <p className="text-xs text-amber-600 font-semibold uppercase tracking-wide">{course?.title}</p>
               <p className="text-sm font-bold text-slate-800">{module?.title}</p>
             </div>
-            <button onClick={() => setSidebarOpen(false)} aria-label="Close course outline" className="md:hidden p-1 hover:bg-slate-100 rounded">
+            <button onClick={() => setSidebarOpen(false)} className="md:hidden p-1 hover:bg-slate-100 rounded">
               <X size={18} />
             </button>
           </div>
-          <nav className="p-2" aria-label="Course lessons">
-            {leadershipId ? course?.modules.map(group => (
-              <details key={`${moduleId}:${group.id}`} open={group.id === moduleId} className="border-b border-slate-100 pb-1">
-                <summary className="cursor-pointer rounded-lg px-3 py-3 text-sm font-semibold leading-relaxed text-slate-800 hover:bg-slate-50">{group.title}</summary>
-                <ul className="space-y-1 pb-2">
-                  {group.lessons.map(item => (
-                    <li key={item.id}>
-                      <Link to={`/lms/${courseId}/${group.id}/${item.id}`} onClick={() => setSidebarOpen(false)}
-                        aria-current={item.id === lesson.id ? 'page' : undefined}
-                        className={`flex items-start gap-2 rounded-lg px-3 py-2 text-sm leading-relaxed ${item.id === lesson.id ? 'bg-amber-50 font-semibold text-amber-900' : 'text-slate-600 hover:bg-slate-50'}`}>
-                        {isLessonComplete(item.id)
-                          ? <CheckCircle2 className="mt-0.5 shrink-0 text-emerald-600" size={15} aria-label="Complete" />
-                          : <Circle className="mt-0.5 shrink-0 text-slate-300" size={15} aria-hidden="true" />}
-                        <span>{item.title}</span>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </details>
-            )) : lessons.map(l => {
+          <nav className="p-2">
+            {lessons.map((l, i) => {
               const done = isLessonComplete(l.id);
               const active = l.id === lesson.id;
               return (
                 <Link
                   key={l.id}
-                  to={`/lms/${courseId}/${l.moduleId}/${l.id}`}
+                  to={`/lms/${courseId}/${moduleId}/${l.id}`}
                   onClick={() => setSidebarOpen(false)}
                   className={`flex items-center gap-3 px-3 py-2.5 rounded-lg mb-0.5 text-sm transition-colors ${
                     active
@@ -321,7 +271,7 @@ export const LmsLessonView: React.FC = () => {
         {/* Overlay for mobile sidebar */}
         {sidebarOpen && (
           <div
-            className="fixed inset-0 z-40 bg-black/40 md:hidden"
+            className="fixed inset-0 z-20 bg-black/40 md:hidden"
             onClick={() => setSidebarOpen(false)}
           />
         )}
@@ -341,12 +291,7 @@ export const LmsLessonView: React.FC = () => {
               )}
             </div>
 
-            <LessonHero courseId={courseId} lesson={lesson} />
-            {leadershipId && moduleId === 'orientation' && (
-              <p className="mb-6 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm leading-relaxed text-amber-950">
-                This enrolment is self-paced. The objective assessment gives instant feedback. Practical work, instructor review and certification follow the School's separate assessment procedures.
-              </p>
-            )}
+            <LessonHero lessonId={lesson.id} title={lesson.title} />
 
             {/* Lesson Blocks */}
             {isCompletionStandard ? (
@@ -395,7 +340,7 @@ export const LmsLessonView: React.FC = () => {
               <div className="flex items-center justify-between gap-4">
                 {prev ? (
                   <Link
-                    to={`/lms/${courseId}/${prev.moduleId}/${prev.id}`}
+                    to={`/lms/${courseId}/${moduleId}/${prev.id}`}
                     className="flex items-center gap-2 text-slate-600 hover:text-amber-600 text-sm font-medium"
                   >
                     <ChevronLeft size={18} />
@@ -404,7 +349,7 @@ export const LmsLessonView: React.FC = () => {
                 ) : <div />}
                 {next && (!isModule8ObjectiveTest || assessment.result?.passed) ? (
                   <Link
-                    to={`/lms/${courseId}/${next.moduleId}/${next.id}`}
+                    to={`/lms/${courseId}/${moduleId}/${next.id}`}
                     className="flex items-center gap-2 bg-slate-800 hover:bg-amber-500 text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-colors"
                   >
                     Next Lesson
@@ -417,11 +362,11 @@ export const LmsLessonView: React.FC = () => {
                   </div>
                 ) : (
                   <Link
-                    to={courseHome}
+                    to="/lms"
                     className="flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-white text-sm font-semibold px-5 py-2.5 rounded-xl"
                   >
                     <Award size={16} />
-                    {leadershipId ? 'Leadership courses' : 'Back to Dashboard'}
+                    Back to Dashboard
                   </Link>
                 )}
               </div>

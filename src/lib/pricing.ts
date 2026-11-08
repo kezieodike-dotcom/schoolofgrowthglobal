@@ -1,5 +1,3 @@
-import { LEADERSHIP_COURSES, type LeadershipCourseId } from '../data/leadershipPricing.js';
-
 /**
  * What School of Growth sells, and what each purchase unlocks.
  *
@@ -53,14 +51,12 @@ export type PlanCode =
   | CourseFastTrackPlanId
   | CourseBundlePlanId
   | MentorshipPlanId
-  | ConsultationPlanId
-  | LeadershipCourseId;
+  | ConsultationPlanId;
 
 export type PlanKind =
   | "package"
   | "course-intensive"
   | "course-bundle"
-  | "individual-course"
   | "mentorship"
   | "consultation";
 
@@ -100,17 +96,7 @@ const ALL_LEVELS: CourseLevel[] = [...EXECUTIVE_CIRCLE_LEVELS, "Elite"];
 
 const naira = (amount: number) => amount * KOBO_PER_NAIRA;
 
-const leadershipPlans = Object.fromEntries(LEADERSHIP_COURSES.map(course => [course.id, {
-  code: course.id, kind: 'individual-course', name: course.title, position: course.category,
-  tagline: 'A self-paced individual course from the School of Leadership.',
-  amountKobo: naira(course.feeNaira), durationDays: 0, billing: 'One-time course fee',
-  features: ['Access to this individual course', 'Self-paced lesson materials'],
-  excludes: ['Live classes, mentoring and coaching are separate.'],
-  includedLevels: [], mentorshipDays: 0, mentorSlots: 0,
-} satisfies Plan])) as Record<LeadershipCourseId, Plan>;
-
 export const PLANS: Record<PlanCode, Plan> = {
-  ...leadershipPlans,
   mini: {
     code: "mini",
     kind: "package",
@@ -691,7 +677,7 @@ export const CONSULTATION_PLANS: Plan[] = [
 ];
 
 export function isPlanCode(value: unknown): value is PlanCode {
-  return typeof value === "string" && Object.prototype.hasOwnProperty.call(PLANS, value);
+  return typeof value === "string" && value in PLANS;
 }
 
 export const MENTORSHIP_ANNUAL_SAVING_KOBO =
@@ -705,7 +691,6 @@ export interface Entitlement {
   coursesExpireAt: string;
   mentorshipExpiresAt: string;
   levels: CourseLevel[];
-  leadershipAccess?: { token: string; expiresAt: string };
 }
 
 export function entitlementFor(

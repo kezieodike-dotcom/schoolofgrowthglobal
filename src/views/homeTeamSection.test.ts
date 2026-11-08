@@ -1,7 +1,6 @@
 import { readFileSync } from 'node:fs';
 
 const source = readFileSync(new URL('./HomeView.tsx', import.meta.url), 'utf8');
-const visibleCopy = source.replace(/&amp;/g, '&');
 
 const testimonialsIndex = source.indexOf('<TestimonialsSection />');
 const donationIndex = source.indexOf('Donation hero bridge');
@@ -27,10 +26,6 @@ if (!source.includes('FACULTY_MEMBERS')) {
   throw new Error('Meet Our Team should be driven by the existing faculty data.');
 }
 
-if (!source.includes('useApprovedExperts') || !source.includes('buildLeadershipBoard')) {
-  throw new Error('The homepage team preview should use the approved leadership board roster.');
-}
-
 for (const phrase of [
   'Learn with structure',
   'Courses & cohorts',
@@ -46,7 +41,7 @@ for (const phrase of [
   '/scenes/coaching-collab.jpg',
   'to="/about"'
 ]) {
-  if (!visibleCopy.includes(phrase)) {
+  if (!source.includes(phrase)) {
     throw new Error(`Home page should include the ${phrase} pathway.`);
   }
 }

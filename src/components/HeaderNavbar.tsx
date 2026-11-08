@@ -44,13 +44,13 @@ export const HeaderNavbar: React.FC = () => {
   return (
     <header className="sticky top-0 z-[80] border-b border-orange-500 bg-[#ff9700] text-white shadow-[0_8px_24px_-18px_rgba(234,88,12,0.85)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex h-[4.5rem] items-center justify-between gap-3 sm:gap-6">
+        <div className="flex h-[4.5rem] items-center justify-between gap-6">
           {/* Logo Brand */}
-          <Link to="/" className="flex min-w-0 lg:shrink-0 items-center gap-2.5 cursor-pointer group select-none">
+          <Link to="/" className="flex shrink-0 items-center gap-2.5 cursor-pointer group select-none">
             <img
               src="/logo.jpg"
               alt="School of Growth Global crest"
-              className="h-9 w-9 shrink-0 rounded-lg object-cover ring-1 ring-white/60 shadow-sm transition-transform duration-200 group-hover:scale-105"
+              className="h-9 w-9 rounded-lg object-cover ring-1 ring-white/60 shadow-sm transition-transform duration-200 group-hover:scale-105"
             />
             <span className="max-w-[10rem] font-serif text-sm font-bold leading-tight tracking-tight text-white transition-colors sm:max-w-none sm:text-base">SCHOOL OF GROWTH GLOBAL</span>
           </Link>
@@ -99,7 +99,7 @@ export const HeaderNavbar: React.FC = () => {
           </div>
 
           {/* Mobile Menu Button */}
-          <div className="flex shrink-0 lg:hidden items-center gap-2">
+          <div className="flex lg:hidden items-center gap-2">
             <ContentNotificationCenter />
             <button
               type="button"

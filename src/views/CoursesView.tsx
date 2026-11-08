@@ -2,9 +2,6 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { COURSES, SCHOOLS } from '../data/mockData';
 import { PageHero } from '../components/PageHero';
-import { CourseIntroductionCard } from '../components/CourseIntroductionCard';
-import { getCourseCover, INTENSIVE_COURSES } from '../data/courseIntroductions';
-import { FACULTIES, getCourseSchool } from '../lib/facultyCatalogue';
 import { useEnrollment } from '../lib/useEnrollment';
 import { useContentCollection } from '../lib/useContent';
 import { cheapestPackageFor, formatNaira, type CourseLevel } from '../lib/pricing';
@@ -35,6 +32,21 @@ const COHORT_COURSE_IDS = [
 
 const isCohortCourse = (course: { id: string }) =>
   COHORT_COURSE_IDS.includes(course.id as (typeof COHORT_COURSE_IDS)[number]);
+
+const FOUNDATION_SPECIALIZED_COURSES = [
+  {
+    id: 'self-discovery-productivity',
+    title: 'SELF DISCOVERY & PRODUCTIVITY COURSE',
+    description: 'A focused two-week pathway for understanding yourself, clarifying your direction and building practical productivity systems.',
+    moduleTitles: ['Understanding Yourself', 'Purpose, Vision & Direction', 'Personal Productivity'],
+  },
+  {
+    id: 'mindset-career-development',
+    title: 'MINDSET & CAREER DEVELOPMENT',
+    description: 'A focused two-week pathway for strengthening your growth mindset, people skills and practical career direction.',
+    moduleTitles: ['Growth Mindset', 'Communication & People Skills', 'Career Development'],
+  },
+] as const;
 
 const COHORT_CARD_STYLES: Record<
   (typeof COHORT_COURSE_IDS)[number],
@@ -85,7 +97,7 @@ export const CoursesView: React.FC = () => {
 
   const courses = managedCourses.items.filter((c) => {
     const matchLevel = level === 'All' || c.level === level;
-    const matchSchool = school === 'All' || getCourseSchool(c)?.id === school;
+    const matchSchool = school === 'All' || c.schoolId === school;
     const matchQuery =
       c.title.toLowerCase().includes(query.toLowerCase()) ||
       c.description.toLowerCase().includes(query.toLowerCase());
@@ -96,11 +108,6 @@ export const CoursesView: React.FC = () => {
   const specializedCourses = courses.filter((course) => !isCohortCourse(course));
   const foundationCourse = managedCourses.items.find((course) => course.id === 'growth-foundation-cohort');
   const foundationIntensivePlan = fastTrackPlanFor('mini');
-  const intensiveCourses = INTENSIVE_COURSES.filter((course) =>
-    (level === 'All' || level === foundationCourse?.level) &&
-    (school === 'All' || (foundationCourse && school === getCourseSchool(foundationCourse)?.id)) &&
-    `${course.title} ${course.description}`.toLowerCase().includes(query.trim().toLowerCase())
-  );
 
   const renderCourseCard = (course: (typeof courses)[number]) => {
     const unlocked = canAccessLevel(course.level as CourseLevel);
@@ -137,8 +144,8 @@ export const CoursesView: React.FC = () => {
             }`}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent" />
-          <span className="reference-card-pill absolute left-4 top-4 max-w-[55%] whitespace-normal leading-snug">
-            {getCourseSchool(course)?.title ?? course.schoolName}
+          <span className="reference-card-pill absolute left-4 top-4">
+            {course.schoolName}
           </span>
 
           {unlocked ? (
@@ -249,14 +256,11 @@ export const CoursesView: React.FC = () => {
         eyebrow="Curriculum Catalog"
         icon={<BookOpen className="w-4 h-4" />}
         title={<>Executive Programs & Courses</>}
-        subtitle={`Explore learning pathways across ${FACULTIES.length} faculties and ${SCHOOLS.length} specialized schools - from live cohorts to self-paced courses.`}
+        subtitle="Accredited, practitioner-led programs across all 14 schools - from live executive cohorts to self-paced mastery tracks."
         imageSrc="/scenes/bootcamp-team.jpg"
       />
 
       <section className="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <Link to="/courses/leadership" className="mb-6 flex min-h-11 flex-wrap items-center justify-between gap-3 border-y border-slate-200 py-3 text-sm font-bold text-amber-800 hover:text-slate-950">
-          <span>School of Leadership: individual course prices</span><ArrowRight className="h-4 w-4 shrink-0" aria-hidden="true" />
-        </Link>
         {/*
           Enrolment banner. Stated up front rather than discovered one locked
           card at a time, so nobody browses the catalogue believing it is open.
@@ -324,27 +328,23 @@ export const CoursesView: React.FC = () => {
             ))}
           </div>
 
-          <div className="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-center">
+          <div className="flex items-center gap-3">
             <select
-              aria-label="Filter by school"
               value={school}
               onChange={(e) => setSchool(e.target.value)}
-              className="min-w-0 w-full sm:max-w-56 bg-white border border-slate-200 rounded-lg px-3 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-amber-500"
+              className="bg-white border border-slate-200 rounded-lg px-3 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-amber-500"
             >
               <option value="All">All Schools</option>
-              {FACULTIES.map((faculty) => (
-                <optgroup key={faculty.number} label={faculty.title}>
-                  {faculty.schools.map(school => <option key={school.id} value={school.id}>{school.title}</option>)}
-                </optgroup>
+              {SCHOOLS.map((s) => (
+                <option key={s.id} value={s.id}>{s.name}</option>
               ))}
             </select>
             <input
-              aria-label="Search courses"
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search programs..."
-              className="motion-search min-w-0 w-full sm:w-44 bg-white border border-slate-200 rounded-lg px-3 py-2.5 text-xs text-slate-900 placeholder:text-slate-500 focus:outline-none focus:border-amber-500"
+              className="motion-search bg-white border border-slate-200 rounded-lg px-3 py-2.5 text-xs text-slate-900 placeholder:text-slate-500 focus:outline-none focus:border-amber-500 w-44"
             />
           </div>
         </div>
@@ -398,7 +398,7 @@ export const CoursesView: React.FC = () => {
           </section>
         )}
 
-        {(specializedCourses.length > 0 || intensiveCourses.length > 0) && (
+        {specializedCourses.length > 0 && (
           <section>
             <div className="mb-5 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2">
               <div>
@@ -413,67 +413,90 @@ export const CoursesView: React.FC = () => {
                 Focused courses that deepen skills across leadership, finance, AI, career growth and business execution. The two-week pathways below are selected-module extracts from Growth Foundation.
               </p>
             </div>
-            {intensiveCourses.length > 0 && <div className="mb-10 border-y border-emerald-200 bg-emerald-50/60 px-4 py-6 sm:px-6">
+            <div className="mb-8 rounded-3xl border border-amber-200 bg-amber-50/70 p-5 sm:p-6">
               <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
                 <div>
                   <p className="text-[11px] font-mono font-bold uppercase tracking-widest text-amber-800">
                     Two-week fast-track intensives
                   </p>
-                  <h3 className="mt-1 text-xl sm:text-2xl font-serif font-bold text-slate-950">Two weeks. A focused next step.</h3>
+                  <h3 className="mt-1 text-xl sm:text-2xl font-serif font-bold text-slate-950">
+                    Focused capability, extracted from the full ladder.
+                  </h3>
                 </div>
                 <p className="max-w-xl text-sm leading-relaxed text-slate-600">
                   Choose a specific pathway when you need a concentrated outcome. Each intensive covers selected modules from its source cohort and awards an Intensive Completion Certificate.
                 </p>
               </div>
               <div className="mt-5 grid grid-cols-1 md:grid-cols-2 gap-4">
-                {intensiveCourses.map((specializedCourse) => {
+                {FOUNDATION_SPECIALIZED_COURSES.map((specializedCourse) => {
                   const modules = specializedCourse.moduleTitles
                     .map((title) => foundationCourse?.modules.find((module) => module.title === title))
                     .filter((module): module is NonNullable<typeof module> => Boolean(module));
 
                   return (
-                    <CourseIntroductionCard
+                    <article
                       key={specializedCourse.id}
-                      id={specializedCourse.id}
-                      title={specializedCourse.title}
-                      description={specializedCourse.description}
-                      cover={specializedCourse.cover}
-                      eyebrow="Two-week intensive"
-                      duration="2 weeks"
-                      detail={formatNaira(foundationIntensivePlan.amountKobo)}
-                      accessNote="From Growth Foundation. Intensive Completion Certificate."
-                      secondaryAction={{ label: 'Self-paced', to: `/checkout/${foundationIntensivePlan.code}?delivery=self-paced` }}
-                      primaryAction={{ label: 'Live class', to: `/checkout/${foundationIntensivePlan.code}?delivery=live-class` }}
+                      className="rounded-2xl border border-amber-200 bg-white p-5 shadow-sm"
                     >
-                      <ul className="mt-4 space-y-2 text-xs text-slate-600">
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <p className="text-[10px] font-mono font-bold uppercase tracking-wider text-amber-700">
+                            Selected-module intensive
+                          </p>
+                          <h4 className="mt-1 text-lg font-serif font-bold text-slate-950">
+                            {specializedCourse.title}
+                          </h4>
+                        </div>
+                        <span className="shrink-0 rounded-full bg-amber-100 px-2.5 py-1 text-[11px] font-mono font-bold text-amber-900">
+                          {formatNaira(foundationIntensivePlan.amountKobo)}
+                        </span>
+                      </div>
+                      <p className="mt-3 text-sm leading-relaxed text-slate-600">
+                        {specializedCourse.description}
+                      </p>
+                      <div className="mt-4 flex flex-wrap gap-2">
                         {modules.map((module) => (
-                          <li key={module.title} className="flex items-start gap-2"><CircleCheck className="h-4 w-4 shrink-0 text-emerald-700" aria-hidden="true" />{module.title}</li>
+                          <span
+                            key={module.title}
+                            className="rounded-full border border-amber-100 bg-amber-50 px-2.5 py-1.5 text-[11px] text-amber-900"
+                          >
+                            {module.title}
+                          </span>
                         ))}
-                      </ul>
-                    </CourseIntroductionCard>
+                      </div>
+                      <div className="mt-4 flex flex-wrap items-center justify-between gap-2 border-t border-amber-100 pt-3">
+                        <span className="text-[11px] font-mono text-slate-500">
+                          2 weeks · From Growth Foundation · Intensive Completion Certificate
+                        </span>
+                        <div className="flex gap-2">
+                          <Link
+                            to={`/checkout/${foundationIntensivePlan.code}?delivery=self-paced`}
+                            className="motion-pressable inline-flex items-center gap-1.5 rounded-xl bg-white px-3 py-2 text-[11px] font-bold text-slate-800 ring-1 ring-amber-200 transition hover:ring-amber-300"
+                          >
+                            Self-paced
+                            <ArrowRight className="h-3.5 w-3.5" />
+                          </Link>
+                          <Link
+                            to={`/checkout/${foundationIntensivePlan.code}?delivery=live-class`}
+                            className="motion-pressable inline-flex items-center gap-1.5 rounded-xl bg-slate-950 px-3 py-2 text-[11px] font-bold text-white transition hover:bg-slate-800"
+                          >
+                            Live class
+                            <ArrowRight className="h-3.5 w-3.5" />
+                          </Link>
+                        </div>
+                      </div>
+                    </article>
                   );
                 })}
               </div>
-            </div>}
-            {specializedCourses.length > 0 && <h3 className="mb-5 text-xl font-serif font-bold text-slate-950">Single courses & specialized tracks</h3>}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {specializedCourses.map((course) => {
-                const unlocked = canAccessLevel(course.level as CourseLevel);
-                const unlockedBy = cheapestPackageFor(course.level as CourseLevel);
-                return <CourseIntroductionCard key={course.id}
-                  id={course.id} title={course.title} description={course.description}
-                  cover={getCourseCover(course)} eyebrow={getCourseSchool(course)?.title ?? course.schoolName}
-                  duration={course.duration} detail={course.format}
-                  accessNote={unlocked ? `Included in your ${currentPackageName} package.` : `${unlockedBy.name} package required.`}
-                  secondaryAction={{ label: 'More info', to: `/courses/${course.id}` }}
-                  primaryAction={{ label: unlocked ? 'Open course' : 'Enrol now', to: unlocked ? `/courses/${course.id}` : `/checkout/${unlockedBy.code}` }}
-                />;
-              })}
+            </div>
+            <div className="scroll-card-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {specializedCourses.map(renderCourseCard)}
             </div>
           </section>
         )}
 
-        {courses.length === 0 && intensiveCourses.length === 0 && (
+        {courses.length === 0 && (
           <div className="text-center py-16 text-slate-500 text-sm">
             {managedCourses.error ?? 'No programs match your filters.'}
           </div>

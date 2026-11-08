@@ -2,7 +2,6 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { ViewType } from '../types';
 import { STUDENT_DATA, COURSES, MENTORS } from '../data/mockData';
-import { getCourseCover } from '../data/courseIntroductions';
 import { askGrowthAI, describeError, type ChatMessage } from '../lib/growthAI';
 import { useVoiceInput } from '../lib/useVoiceInput';
 import { useChatAutoScroll } from '../lib/useChatAutoScroll';
@@ -481,7 +480,7 @@ export const StudentDashboardView: React.FC<StudentDashboardViewProps> = ({
         )}
 
         {activeTab === 'courses' && (
-          <CoursesTab canAccess={enrollment.canAccessLevel} packages={enrollment.packages} hasLeadershipPurchase={enrollment.entitlements.some(item => Boolean(item.leadershipAccess))} />
+          <CoursesTab canAccess={enrollment.canAccessLevel} packages={enrollment.packages} />
         )}
 
         {activeTab === 'schedule' &&
@@ -805,8 +804,7 @@ const OverviewTab: React.FC<{
 const CoursesTab: React.FC<{
   canAccess: (level: CourseLevel) => boolean;
   packages: Entitlement['plan'][];
-  hasLeadershipPurchase: boolean;
-}> = ({ canAccess, packages, hasLeadershipPurchase }) => {
+}> = ({ canAccess, packages }) => {
   const open = COURSES.filter((c) => canAccess(c.level as CourseLevel));
   const locked = COURSES.filter((c) => !canAccess(c.level as CourseLevel));
   const foundation = open.find((course) => course.id === 'growth-foundation-cohort');
@@ -814,7 +812,6 @@ const CoursesTab: React.FC<{
 
   return (
     <div className="space-y-8">
-      {hasLeadershipPurchase && <Link to="/courses/leadership" className="inline-flex min-h-11 items-center gap-2 text-sm font-bold text-amber-800 hover:underline">My leadership courses <ArrowRight className="h-4 w-4 shrink-0" /></Link>}
       <section className="bg-white border border-slate-200 rounded-lg p-5 sm:p-6 shadow-sm space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
           <div>
@@ -982,14 +979,13 @@ const CoursesTab: React.FC<{
               to={`/courses/${course.id}`}
               className="text-left bg-white border border-slate-200 hover:border-amber-300 rounded-lg overflow-hidden shadow-sm transition-all group"
             >
-              <div className="aspect-[3/2] overflow-hidden relative">
+              <div className="h-24 overflow-hidden relative">
                 <img
-                  src={getCourseCover(course).src}
-                  alt={getCourseCover(course).alt}
-                  loading="lazy"
-                  decoding="async"
-                  className="w-full h-full object-cover"
+                  src={course.heroImage}
+                  alt={`${course.title} course cover`}
+                  className="w-full h-full object-cover opacity-80 transition-transform duration-500"
                 />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/70 to-transparent" />
               </div>
               <div className="p-4 space-y-2">
                 <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200">

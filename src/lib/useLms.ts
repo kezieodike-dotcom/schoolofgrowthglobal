@@ -1,17 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { LmsCourse, LmsProgress, LmsSubmission } from '../types';
-import { isLeadershipCourseId } from '../data/leadershipPricing';
-import { leadershipAccessToken } from './useEnrollment';
 
 const DEFAULT_USER_ID = 'student-demo';
-
-function courseHeaders(courseId: string, json = false): HeadersInit {
-  const token = isLeadershipCourseId(courseId) ? leadershipAccessToken(courseId) : undefined;
-  const headers: Record<string, string> = {};
-  if (json) headers['Content-Type'] = 'application/json';
-  if (token) headers.Authorization = `Bearer ${token}`;
-  return headers;
-}
 
 export interface LmsAssessmentQuestion {
   id: string;
@@ -37,19 +27,11 @@ export function useLmsCourse(courseId: string) {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const controller = new AbortController();
     setLoading(true);
-    setCourse(null);
-    setError(null);
-    fetch(`/api/lms/courses/${encodeURIComponent(courseId)}`, { headers: courseHeaders(courseId), signal: controller.signal })
-      .then(async response => {
-        const body = await response.json().catch(() => null);
-        if (!response.ok || body?.id !== courseId || !Array.isArray(body.modules)) throw new Error(body?.error ?? 'Could not load this course.');
-        if (!controller.signal.aborted) setCourse(body);
-      })
-      .catch(err => { if (!controller.signal.aborted) setError(err instanceof Error ? err.message : 'Could not load this course.'); })
-      .finally(() => { if (!controller.signal.aborted) setLoading(false); });
-    return () => controller.abort();
+    fetch(`/api/lms/courses/${courseId}`)
+      .then(r => r.json())
+      .then(data => { setCourse(data); setLoading(false); })
+      .catch(err => { setError(String(err)); setLoading(false); });
   }, [courseId]);
 
   return { course, loading, error };
@@ -66,13 +48,10 @@ export function useLmsProgress(courseId: string, totalLessons: number) {
   });
 
   useEffect(() => {
-    const controller = new AbortController();
-    setProgress({ userId: DEFAULT_USER_ID, courseId, completedLessons: [], progressPercentage: 0 });
-    fetch(`/api/lms/progress/${DEFAULT_USER_ID}/${courseId}`, { headers: courseHeaders(courseId), signal: controller.signal })
-      .then(r => r.ok ? r.json() : Promise.reject(new Error('Progress unavailable')))
+    fetch(`/api/lms/progress/${DEFAULT_USER_ID}/${courseId}`)
+      .then(r => r.json())
       .then((data: LmsProgress) => setProgress(data))
       .catch(() => {});
-    return () => controller.abort();
   }, [courseId]);
 
   const markLessonComplete = useCallback((lessonId: string) => {
@@ -87,7 +66,7 @@ export function useLmsProgress(courseId: string, totalLessons: number) {
       };
       fetch('/api/lms/progress', {
         method: 'POST',
-        headers: courseHeaders(courseId, true),
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updated),
       }).catch(() => {});
       return updated;
@@ -109,14 +88,12 @@ export function useLmsSubmission(courseId: string, blockId: string, moduleId = '
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    const controller = new AbortController();
-    fetch(`/api/lms/submission/${DEFAULT_USER_ID}/${courseId}/${blockId}`, { headers: courseHeaders(courseId), signal: controller.signal })
-      .then(r => r.ok ? r.json() : null)
+    fetch(`/api/lms/submission/${DEFAULT_USER_ID}/${courseId}/${blockId}`)
+      .then(r => r.json())
       .then((sub: LmsSubmission | null) => {
         if (sub) setData(sub.data);
       })
       .catch(() => {});
-    return () => controller.abort();
   }, [courseId, blockId]);
 
   const save = useCallback((newData: any) => {
@@ -134,13 +111,13 @@ export function useLmsSubmission(courseId: string, blockId: string, moduleId = '
       };
       fetch('/api/lms/submission', {
         method: 'POST',
-        headers: courseHeaders(courseId, true),
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(submission),
       })
-        .then(response => { setSaving(false); if (response.ok) setSavedAt(new Date()); })
+        .then(() => { setSaving(false); setSavedAt(new Date()); })
         .catch(() => setSaving(false));
     }, 1500);
-  }, [courseId, blockId, moduleId]);
+  }, [courseId, blockId]);
 
   return { data, save, saving, savedAt };
 }

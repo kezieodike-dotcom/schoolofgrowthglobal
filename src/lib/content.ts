@@ -1,5 +1,4 @@
 import type { BlogPost, BookItem, Course, EventItem, FacultyMember, GrowthJob } from '../types';
-import { isSuspendedPublicProfile, publicFacultyProfile } from './publicProfiles';
 
 export type ContentKind = 'course' | 'event' | 'team' | 'job' | 'insight' | 'book';
 
@@ -53,8 +52,7 @@ export function cryptoFallbackId(): string {
 
 export function mergeContent<T extends { id: string }>(
   seed: T[],
-  records: ContentRecord[],
-  kind?: ContentKind
+  records: ContentRecord[]
 ): T[] {
   const merged = new Map(seed.map((item) => [item.id, item]));
 
@@ -69,12 +67,5 @@ export function mergeContent<T extends { id: string }>(
     merged.set(record.id, record.payload as unknown as T);
   }
 
-  const items = Array.from(merged.values());
-  if (kind === 'team') {
-    return items.flatMap(item => {
-      const member = publicFacultyProfile(item);
-      return member && !RETIRED_TEAM_IDS.has(member.id) && !isSuspendedPublicProfile(member) ? [member] : [];
-    }) as unknown as T[];
-  }
-  return items;
+  return Array.from(merged.values());
 }

@@ -19,7 +19,6 @@ import {
   X,
 } from 'lucide-react';
 import { MENTORS } from '../data/mockData';
-import { isSuspendedPublicProfile, normalizePublicProfile } from '../lib/publicProfiles';
 import { PageHero } from '../components/PageHero';
 import { CountryPhoneField } from '../components/CountryPhoneField';
 import { useEnrollment } from '../lib/useEnrollment';
@@ -227,7 +226,7 @@ function useDirectory(): { mentors: Mentor[]; loading: boolean } {
     };
   }, []);
 
-  return { mentors: useMemo(() => [...approved, ...MENTORS].filter(mentor => !isSuspendedPublicProfile(mentor)).map(normalizePublicProfile), [approved]), loading };
+  return { mentors: useMemo(() => [...approved, ...MENTORS], [approved]), loading };
 }
 
 export const MentorsView: React.FC = () => {

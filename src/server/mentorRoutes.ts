@@ -10,7 +10,6 @@ import {
   type MentorStatus,
 } from "./mentorStore.js";
 import { uploadImage } from "./imageUpload.js";
-import { toPublicMentorDirectory } from './publicMentors.js';
 
 /**
  * Mentor applications: submission, review, and the public approved list.
@@ -66,7 +65,20 @@ export function createMentorRouter(
    */
   router.get("/mentors/directory", (_req, res) => {
     listApprovedAsync().then((approved) => res.json({
-      mentors: toPublicMentorDirectory(approved),
+      mentors: approved.map((m) => ({
+        id: m.id,
+        name: m.name,
+        role: m.organization ? `${m.title}, ${m.organization}` : m.title,
+        location: m.location,
+        expertise: m.specialisms,
+        bio: m.answers["Professional background"] ?? "",
+        area: m.area,
+        experience: m.experience,
+        avatar: m.answers["Profile photo"] ?? "",
+        languages: m.answers["Languages you mentor in"]?.split(",").map((value) => value.trim()).filter(Boolean) ?? [],
+        formats: m.answers["Session formats you offer"]?.split(",").map((value) => value.trim()).filter(Boolean) ?? [],
+        applicationType: m.applicationType ?? "mentor",
+      })),
     })).catch((error) => res.status(500).json({ error: error instanceof Error ? error.message : "Could not load mentors." }));
   });
 

@@ -5,26 +5,20 @@
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
-  "background_color": "#000000",
-  "theme_color": "#000000",
+  "background_color": "#f4f7fb",
+  "theme_color": "#f59e0b",
   "icons": [
     {
-      "src": "/icons/sgg-launch-192-v1.png",
+      "src": "/logo.jpg",
       "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any"
+      "type": "image/jpeg",
+      "purpose": "any maskable"
     },
     {
-      "src": "/icons/sgg-launch-512-v1.png",
+      "src": "/logo.jpg",
       "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/icons/sgg-maskable-512-v1.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
+      "type": "image/jpeg",
+      "purpose": "any maskable"
     }
   ]
 }

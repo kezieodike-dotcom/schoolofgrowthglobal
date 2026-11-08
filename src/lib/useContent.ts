@@ -50,8 +50,8 @@ export function useContentCollection<K extends ContentKind>(
   }, [kind]);
 
   const items = useMemo(
-    () => mergeContent(seed, records as ContentRecord[], kind),
-    [records, seed, kind]
+    () => mergeContent(seed, records as ContentRecord[]),
+    [records, seed]
   ) as ContentPayloadMap[K][];
 
   return { items, records, loading, error };
