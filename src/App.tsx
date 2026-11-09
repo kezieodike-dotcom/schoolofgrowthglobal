@@ -136,7 +136,7 @@ const AppRoutes: React.FC = () => {
   return (
     <>
       <Seo />
-      <InstallPrompt enabled={!pathname.startsWith('/admin') && !pathname.startsWith('/lms') && !pathname.startsWith('/mentor')} />
+      <InstallPrompt enabled={!/^\/(?:admin|lms|mentor|checkout|payment)(?:\/|$)/.test(pathname)} />
       <Routes>
       {/*
         The admin panel is deliberately outside <Layout>: it has its own

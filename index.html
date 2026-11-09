@@ -10,10 +10,19 @@
     <link rel="icon" type="image/jpeg" href="/logo.jpg" />
     <link rel="apple-touch-icon" sizes="180x180" href="/icons/sgg-apple-touch-180-v1.png" />
     <link rel="manifest" href="/manifest.webmanifest" />
-    <meta name="theme-color" content="#000000" />
+    <meta name="theme-color" content="#f4f7fb" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-    <link rel="preload" as="image" href="/icons/sgg-launch-512-v1.png" fetchpriority="high" />
+    <script id="pwa-install-bootstrap">
+      window.addEventListener('beforeinstallprompt', (event) => {
+        event.preventDefault();
+        window.sggInstallPrompt = event;
+      });
+      window.addEventListener('appinstalled', () => {
+        window.sggInstallPrompt = null;
+        window.sggAppInstalled = true;
+      });
+    </script>
     <style id="app-launch-styles">
       #app-launch-screen {
         position: fixed;
@@ -55,11 +64,18 @@
     <title>School of Growth Global</title>
   </head>
   <body>
-    <div id="root">
+    <div id="root"></div>
+    <template id="app-launch-template">
       <div id="app-launch-screen" role="status" aria-label="Loading School of Growth Global">
         <img src="/icons/sgg-launch-512-v1.png" width="512" height="512" alt="" fetchpriority="high" />
       </div>
-    </div>
+    </template>
+    <script id="app-launch-check">
+      if (window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true) {
+        document.querySelector('meta[name="theme-color"]').content = '#000000';
+        document.getElementById('root').append(document.getElementById('app-launch-template').content.cloneNode(true));
+      }
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
