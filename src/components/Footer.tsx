@@ -1,10 +1,13 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Globe, ShieldCheck, Mail, ArrowRight, Loader2, CheckCircle2 } from 'lucide-react';
 import { useFormSubmit, HONEYPOT_PROPS } from '../lib/useFormSubmit';
+import { InstallPrompt } from './InstallPrompt';
 
 export const Footer: React.FC = () => {
   const newsletter = useFormSubmit('newsletter');
+  const { pathname } = useLocation();
+  const showInstall = !/^\/(?:checkout|payment)(?:\/|$)/.test(pathname);
 
   return (
     <footer className="bg-slate-100 text-slate-600 border-t border-slate-200 font-sans text-sm">
@@ -136,6 +139,7 @@ export const Footer: React.FC = () => {
             <Link to="/privacy" className="hover:text-slate-900">Privacy Policy</Link>
             <Link to="/contact" className="hover:text-slate-900">Department Contacts</Link>
             <Link to="/contact" className="hover:text-slate-900">Security &amp; Compliance</Link>
+            {showInstall && <InstallPrompt />}
             {/*
               Plain text among the legal links rather than a button. The panel
               is password-gated server-side, so this is a convenience for the
