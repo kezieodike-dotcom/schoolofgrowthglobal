@@ -24,6 +24,9 @@ import type { BookItem } from "../types.js";
 import { isLeadershipCourseId } from '../data/leadershipPricing.js';
 import { getPublishedLeadershipCourse, LEADERSHIP_STORAGE_UNAVAILABLE } from './leadershipCourseStore.js';
 import { isLeadershipPayment, issueLeadershipAccess } from './leadershipAccess.js';
+import { grantPaidIntensive, validIntensivePayment } from './intensiveAccess.js';
+import { getIntensiveCourse } from './intensiveCourses.js';
+import { isIntensiveCourseId } from '../data/intensiveCourses.js';
 
 /**
  * Paystack checkout for course packages and mentorship subscriptions.
@@ -104,6 +107,7 @@ interface PaystackTransaction {
     phone?: string;
     mentorId?: string;
     deliveryMode?: string;
+    intensiveCourseId?: string;
   } | null;
 }
 
@@ -210,6 +214,7 @@ export function createPaymentRouter(): Router {
       referral,
       mentorId,
       deliveryMode,
+      intensiveCourseId,
       donorNote,
     } = req.body ?? {};
 
@@ -228,6 +233,12 @@ export function createPaymentRouter(): Router {
     }
 
     try {
+      if (isPlanCode(planCode) && PLANS[planCode].kind === 'course-intensive') {
+        if (bookId || donationFund || donationAmount) return res.status(400).json({ error: 'Choose one item for checkout.' });
+        if (planCode !== 'foundation-intensive') return res.status(409).json({ error: 'This intensive is not ready for enrolment. Choose an available Growth Foundation intensive.' });
+        if (!isIntensiveCourseId(intensiveCourseId)) return res.status(400).json({ error: 'Choose a valid intensive pathway.' });
+        if (!getIntensiveCourse(intensiveCourseId)) return res.status(503).json({ error: 'The intensive classroom is temporarily unavailable. Please try again shortly.' });
+      }
       const individual = isLeadershipCourseId(planCode);
       if (individual && (bookId || donationFund || donationAmount)) {
         return res.status(400).json({ error: 'Choose one item for checkout.' });
@@ -277,6 +288,7 @@ export function createPaymentRouter(): Router {
             callback_url: callbackUrl(req),
             metadata: {
               plan: plan?.code,
+              intensiveCourseId: plan?.code === 'foundation-intensive' && isIntensiveCourseId(intensiveCourseId) ? intensiveCourseId : undefined,
               // itemKind: donation is the discriminator used by verification.
               itemKind: donation ? "donation" : book ? "book" : "plan",
               bookId: book?.id,
@@ -325,9 +337,8 @@ export function createPaymentRouter(): Router {
   /**
    * Confirms a payment and returns the entitlement it grants.
    *
-   * This is the only place access is ever granted. Called when the student
-   * returns from Paystack, and safe to call repeatedly - verification is a
-   * read, so a refresh re-confirms rather than double-charging.
+   * Called by the callback and receipt recovery. Intensive enrolments share
+   * the webhook's durable, idempotent grant: refreshing never extends access.
    */
   router.get("/payments/verify/:reference", async (req, res) => {
     const { reference } = req.params;
@@ -407,6 +418,16 @@ export function createPaymentRouter(): Router {
 
       const plan = PLANS[planCode];
 
+      if (planCode === 'foundation-intensive') {
+        if (!validIntensivePayment(tx, reference)) return res.status(422).json({ error: 'We could not match this payment to the intensive. Contact support with your reference.' });
+        try {
+          return res.json({ paid: true, entitlement: await grantPaidIntensive(tx, reference) });
+        } catch (error) {
+          console.error('Could not save the paid intensive enrolment:', error);
+          return res.status(503).json({ error: 'Your payment is confirmed. Access could not be saved yet; please retry this page. Do not pay again.' });
+        }
+      }
+
       // The charged amount is checked against the catalogue rather than
       // trusted. Without this, a transaction initialised at an old, lower
       // price would still unlock today's package.
@@ -447,15 +468,10 @@ export function createPaymentRouter(): Router {
    * Paystack's server-to-server notification.
    *
    * The browser can close mid-redirect, so this is the only delivery of a
-   * successful charge we are guaranteed to receive. Today it logs the payment
-   * - enough to reconcile enrolments by hand against the Paystack dashboard.
-   * When accounts exist, this is where the entitlement gets written to the
-   * database, and /verify becomes a read of that record.
-   *
-   * Answers 200 quickly and unconditionally once the signature checks out:
-   * Paystack retries anything else, and a slow handler gets duplicate events.
+   * successful charge when checkout redirects are interrupted. Persist paid
+   * intensive access before acknowledging delivery; failures invite a retry.
    */
-  router.post("/payments/webhook", (req: Request & { rawBody?: Buffer }, res) => {
+  router.post("/payments/webhook", async (req: Request & { rawBody?: Buffer }, res) => {
     const signature = req.get("x-paystack-signature");
     const raw = req.rawBody;
 
@@ -483,6 +499,16 @@ export function createPaymentRouter(): Router {
     const event = req.body;
     if (event?.event === "charge.success") {
       const tx = event.data ?? {};
+      if (tx.metadata?.plan === 'foundation-intensive') {
+        if (!validIntensivePayment(tx)) return res.status(422).json({ error: 'Payment details do not match an intensive.' });
+        try {
+          await grantPaidIntensive(tx);
+        } catch (error) {
+          console.error('Paid intensive enrolment could not be saved:', error);
+          // Let Paystack retry: a 200 here would permanently lose the grant.
+          return res.status(503).json({ error: 'Enrolment storage unavailable. Retry delivery.' });
+        }
+      }
       console.log(
         `[paystack] charge.success ${tx.reference} - ${tx.customer?.email} ` +
           `paid ${tx.amount} ${tx.currency} for ${tx.metadata?.itemKind ?? "plan"} ` +

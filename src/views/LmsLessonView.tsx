@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, Navigate } from 'react-router-dom';
 import { useLmsAssessment, useLmsCourse, useLmsProgress, useLmsSubmission } from '../lib/useLms';
-import { leadershipPurchaseFor, useEnrollment } from '../lib/useEnrollment';
+import { intensivePurchaseFor, leadershipPurchaseFor, useEnrollment } from '../lib/useEnrollment';
+import { isIntensiveCourseId } from '../data/intensiveCourses';
 import { isLeadershipCourseId } from '../data/leadershipPricing';
 import { ReadingBlock, KeyInsightBlock, FrameworkBlock, QuestionBlock, ReflectionBlock } from '../components/lms/LmsBlocks';
 import { ValueDiscoveryExercise } from '../components/lms/ValueDiscoveryExercise';
@@ -141,21 +142,22 @@ export const LmsLessonView: React.FC = () => {
   const enrollment = useEnrollment();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const leadershipId = isLeadershipCourseId(courseId) ? courseId : null;
-  const purchase = leadershipId ? leadershipPurchaseFor(enrollment.entitlements, leadershipId) : null;
-  const courseHome = leadershipId ? '/courses/leadership' : '/lms';
+  const intensiveId = isIntensiveCourseId(courseId) ? courseId : null;
+  const purchase = leadershipId ? leadershipPurchaseFor(enrollment.entitlements, leadershipId) : intensiveId ? intensivePurchaseFor(enrollment.entitlements, intensiveId) : null;
+  const courseHome = intensiveId ? `/lms/${intensiveId}` : leadershipId ? '/courses/leadership' : '/lms';
 
   useEffect(() => {
-    if (leadershipId) window.scrollTo(0, 0);
-  }, [leadershipId, lessonId]);
+    if (leadershipId || intensiveId) window.scrollTo(0, 0);
+  }, [leadershipId, intensiveId, lessonId]);
 
   const module = course?.modules.find(m => m.id === moduleId);
-  const lessons = (leadershipId ? course?.modules ?? [] : module ? [module] : [])
+  const lessons = (leadershipId || intensiveId ? course?.modules ?? [] : module ? [module] : [])
     .flatMap(entry => entry.lessons.map(item => ({ ...item, moduleId: entry.id })));
-  const { progress, markLessonComplete, isLessonComplete } = useLmsProgress(courseId, lessons.length);
+  const { progress, markLessonComplete, isLessonComplete, saveError } = useLmsProgress(courseId, lessons.length);
 
   const currentIndex = lessons.findIndex(l => l.id === lessonId && l.moduleId === moduleId);
   const effectiveIndex = currentIndex >= 0 ? currentIndex : 0;
-  const lesson = leadershipId && currentIndex < 0 ? undefined : lessons[effectiveIndex];
+  const lesson = (leadershipId || intensiveId) && currentIndex < 0 ? undefined : lessons[effectiveIndex];
   const prev = lessons[effectiveIndex - 1];
   const next = lessons[effectiveIndex + 1];
 
@@ -183,18 +185,18 @@ export const LmsLessonView: React.FC = () => {
     );
   }
 
-  if (leadershipId && !purchase) return <Navigate to={courseHome} replace />;
-  if (!leadershipId && !enrollment.canAccessLevel('Emerging Leaders')) {
+  if ((leadershipId || intensiveId) && !purchase) return <Navigate to={intensiveId ? '/intensives' : courseHome} replace />;
+  if (!leadershipId && !intensiveId && !enrollment.canAccessLevel('Emerging Leaders')) {
     return <Navigate to="/portal" replace />;
   }
 
-  if (leadershipId && error) {
+  if ((leadershipId || intensiveId) && error) {
     return <main className="mx-auto max-w-xl px-4 py-12">
       <h1 className="text-2xl font-bold">Course access</h1>
       <p className="mt-3 text-sm text-slate-600" role="status">{error}</p>
       <div className="mt-4 flex flex-wrap gap-4 text-sm font-bold text-amber-800">
         {purchase && <Link to={`/payment/callback?reference=${encodeURIComponent(purchase.reference)}`}>Restore access</Link>}
-        <Link to={courseHome}>Leadership courses</Link>
+        <Link to={courseHome}>{intensiveId ? 'My intensive' : 'Leadership courses'}</Link>
       </div>
     </main>;
   }
@@ -241,7 +243,7 @@ export const LmsLessonView: React.FC = () => {
           </button>
           <Link to={courseHome} className="flex items-center gap-2 text-slate-600 hover:text-amber-600 text-sm font-medium">
             <BookOpen size={16} />
-            <span className="hidden sm:inline">{leadershipId ? 'School of Leadership' : 'Growth Foundation'}</span>
+            <span className="hidden sm:inline">{intensiveId ? course?.title : leadershipId ? 'School of Leadership' : 'Growth Foundation'}</span>
           </Link>
           <div className="flex-1 hidden md:block">{progressBar}</div>
           <div className="text-xs text-slate-500 whitespace-nowrap">
@@ -272,7 +274,7 @@ export const LmsLessonView: React.FC = () => {
             </button>
           </div>
           <nav className="p-2" aria-label="Course lessons">
-            {leadershipId ? course?.modules.map(group => (
+            {leadershipId || intensiveId ? course?.modules.map(group => (
               <details key={`${moduleId}:${group.id}`} open={group.id === moduleId} className="border-b border-slate-100 pb-1">
                 <summary className="cursor-pointer rounded-lg px-3 py-3 text-sm font-semibold leading-relaxed text-slate-800 hover:bg-slate-50">{group.title}</summary>
                 <ul className="space-y-1 pb-2">
@@ -376,6 +378,7 @@ export const LmsLessonView: React.FC = () => {
 
             {/* Mark Complete + Navigation */}
             <div className="mt-10 pt-6 border-t border-slate-200">
+              {saveError && <p role="alert" className="mb-4 rounded-lg border border-rose-200 bg-rose-50 p-3 text-sm text-rose-800">{saveError}</p>}
               {!isModule8ObjectiveTest && !isLessonComplete(lesson.id) && (
                 <button
                   onClick={() => markLessonComplete(lesson.id)}

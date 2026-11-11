@@ -4,6 +4,7 @@ import { grantEntitlement } from '../lib/useEnrollment';
 import { PLANS, formatNaira, type Entitlement } from '../lib/pricing';
 import { isLeadershipCourseId } from '../data/leadershipPricing';
 import { useLeadershipAvailability } from '../lib/useLeadershipAvailability';
+import { forgetPendingPayment } from '../lib/pendingPayment';
 import type { BookPurchase } from '../lib/bookRevenue';
 import type { DonationPayment } from '../lib/donations';
 import {
@@ -97,6 +98,7 @@ export const PaymentCallbackView: React.FC = () => {
 
         // The single point where course and mentorship access is granted anywhere in the app.
         grantEntitlement(body.entitlement);
+        forgetPendingPayment(body.entitlement.reference);
         setState({ phase: 'paid', entitlement: body.entitlement });
       } catch {
         setState({
@@ -196,6 +198,8 @@ const PaidPanel: React.FC<{ entitlement: Entitlement }> = ({ entitlement }) => {
   const plan = PLANS[entitlement.plan];
   const isMentorship = plan.kind === 'mentorship';
   const leadershipId = isLeadershipCourseId(entitlement.plan) ? entitlement.plan : null;
+  const intensive = entitlement.intensiveAccess;
+  const intensiveExpired = intensive && Date.parse(intensive.expiresAt) <= Date.now();
   const { available } = useLeadershipAvailability(Boolean(leadershipId));
 
   return (
@@ -206,11 +210,11 @@ const PaidPanel: React.FC<{ entitlement: Entitlement }> = ({ entitlement }) => {
         </div>
         <div className="space-y-1.5">
           <h1 className="text-2xl font-serif font-bold text-slate-900">
-            You're in.
+            {intensiveExpired ? 'Your intensive access has ended.' : "You're in."}
           </h1>
           <p className="text-sm text-slate-500 leading-relaxed">
             Your <strong className="text-slate-900">{plan.name}</strong>{' '}
-            {leadershipId ? 'course payment is confirmed.' : `${isMentorship ? 'subscription' : 'package'} is active and everything it unlocks is open now.`}
+            {intensiveExpired ? 'payment is verified. Your original 14-day access window has ended.' : intensive ? 'classroom is ready. Your 14-day access is active.' : leadershipId ? 'course payment is confirmed.' : `${isMentorship ? 'subscription' : 'package'} is active and everything it unlocks is open now.`}
           </p>
         </div>
       </div>
@@ -248,7 +252,7 @@ const PaidPanel: React.FC<{ entitlement: Entitlement }> = ({ entitlement }) => {
 
       <div className="flex flex-col sm:flex-row gap-3">
         <Link
-          to={leadershipId ? available[leadershipId] ?? '/courses/leadership' : isMentorship ? '/mentors' : '/courses'}
+          to={intensive ? intensive.courseIds.length === 1 ? `/lms/${intensive.courseIds[0]}` : '/intensives' : leadershipId ? available[leadershipId] ?? '/courses/leadership' : isMentorship ? '/mentors' : '/courses'}
           className="flex-1 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs flex items-center justify-center gap-2 transition-colors"
         >
           {isMentorship ? (
@@ -263,7 +267,7 @@ const PaidPanel: React.FC<{ entitlement: Entitlement }> = ({ entitlement }) => {
           <ArrowRight className="w-4 h-4" />
         </Link>
         <Link
-          to={leadershipId ? '/courses/leadership' : '/portal'}
+          to={intensive ? '/intensives' : leadershipId ? '/courses/leadership' : '/portal'}
           className="flex-1 py-3.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs flex items-center justify-center gap-2 transition-colors"
         >
           <Receipt className="w-4 h-4" />

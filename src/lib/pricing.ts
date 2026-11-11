@@ -706,6 +706,7 @@ export interface Entitlement {
   mentorshipExpiresAt: string;
   levels: CourseLevel[];
   leadershipAccess?: { token: string; expiresAt: string };
+  intensiveAccess?: { token: string; expiresAt: string; courseIds: import('../data/intensiveCourses').IntensiveCourseId[] };
 }
 
 export function entitlementFor(
@@ -737,7 +738,7 @@ export function hasCourseAccess(
   now: Date = new Date()
 ): boolean {
   return entitlements.some(
-    (e) => isLive(e.coursesExpireAt, now) && e.levels.includes(level)
+    (e) => PLANS[e.plan]?.kind !== 'course-intensive' && isLive(e.coursesExpireAt, now) && e.levels.includes(level)
   );
 }
 

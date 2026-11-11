@@ -32,6 +32,8 @@ import { PricingView } from './views/PricingView';
 import { CheckoutView } from './views/CheckoutView';
 import { BookCheckoutView } from './views/BookCheckoutView';
 import { PaymentCallbackView } from './views/PaymentCallbackView';
+import { PaymentAccessSync } from './components/PaymentAccessSync';
+import { IntensiveLibraryView } from './views/IntensiveLibraryView';
 
 // Admin panel - its own chrome, so it sits outside <Layout>
 import { AdminLayout } from './views/admin/AdminLayout';
@@ -135,6 +137,7 @@ const AppRoutes: React.FC = () => {
   return (
     <>
       <Seo />
+      <PaymentAccessSync />
       <Routes>
       {/*
         The admin panel is deliberately outside <Layout>: it has its own
@@ -156,6 +159,7 @@ const AppRoutes: React.FC = () => {
 
       {/* LMS - outside <Layout> so it has its own full-screen chrome */}
       <Route path="lms" element={<LmsStudentDashboardView />} />
+      <Route path="lms/:courseId" element={<LmsStudentDashboardView />} />
       <Route path="lms/:courseId/:moduleId/:lessonId" element={<LmsLessonView />} />
 
       <Route path="mentor/inbox" element={<MentorInboxView />} />
@@ -206,6 +210,7 @@ const AppRoutes: React.FC = () => {
         <Route path="payment/callback" element={<PaymentCallbackView />} />
 
         <Route path="portal" element={<PortalRoute />} />
+        <Route path="intensives" element={<IntensiveLibraryView />} />
         <Route path="command-center" element={<CommandCenterRoute />} />
 
         <Route path="*" element={<NotFoundView />} />

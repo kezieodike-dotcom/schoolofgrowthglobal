@@ -5,6 +5,8 @@ import { CountryPhoneField } from '../components/CountryPhoneField';
 import { PLANS, isPlanCode, formatNaira } from '../lib/pricing';
 import { isLeadershipCourseId } from '../data/leadershipPricing';
 import { useLeadershipAvailability } from '../lib/useLeadershipAvailability';
+import { INTENSIVE_PATHWAYS } from '../data/intensiveCourses';
+import { rememberPendingPayment } from '../lib/pendingPayment';
 import {
   FAST_TRACK_SUMMARY,
   certificateRequirementsFor,
@@ -47,7 +49,8 @@ interface PaymentConfig {
 
 export const CheckoutView: React.FC = () => {
   const { plan: planParam } = useParams();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const intensive = INTENSIVE_PATHWAYS.find(course => course.id === searchParams.get('intensive'));
   const leadershipId = isLeadershipCourseId(planParam) ? planParam : null;
   const leadership = useLeadershipAvailability(Boolean(leadershipId));
 
@@ -80,6 +83,12 @@ export const CheckoutView: React.FC = () => {
 
   if (!isPlanCode(planParam)) return <Navigate to="/pricing" replace />;
   const plan = PLANS[planParam];
+
+  if (plan.kind === 'course-intensive' && plan.code !== 'foundation-intensive') return <main className="mx-auto min-h-[50vh] max-w-2xl space-y-4 px-4 py-12">
+    <h1 className="text-2xl font-bold">{plan.name}</h1>
+    <p className="text-sm text-slate-600">This intensive is not open for enrolment yet. Our two Growth Foundation intensive pathways are ready to start.</p>
+    <Link to="/courses" className="inline-block font-bold text-amber-800">Choose an available intensive</Link>
+  </main>;
 
   if (leadershipId && (leadership.loading || leadership.error || !leadership.available[leadershipId])) {
     return <div className="mx-auto min-h-[50vh] max-w-2xl px-4 py-12">
@@ -142,6 +151,7 @@ export const CheckoutView: React.FC = () => {
     setSubmitting(true);
 
     try {
+      if (plan.code === 'foundation-intensive' && !intensive) throw new Error('Choose your intensive pathway before paying.');
       const res = await fetch('/api/payments/initialize', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -153,6 +163,7 @@ export const CheckoutView: React.FC = () => {
           referral,
           mentorId: mentor?.id,
           deliveryMode,
+          intensiveCourseId: intensive?.id,
         }),
       });
 
@@ -165,6 +176,7 @@ export const CheckoutView: React.FC = () => {
 
       // Leaves the SPA entirely: Paystack's checkout is their page, not a
       // route of ours, so this is a full navigation rather than a router push.
+      if (typeof body.reference === 'string') rememberPendingPayment(body.reference);
       window.location.href = body.authorizationUrl;
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong.');
@@ -372,7 +384,17 @@ export const CheckoutView: React.FC = () => {
                   </Link>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} className="space-y-4">
+              <form onSubmit={handleSubmit} className="space-y-4">
+                {plan.code === 'foundation-intensive' && <div>
+                  <label htmlFor="checkout-intensive" className="mb-1.5 block text-xs text-slate-600">Your two-week intensive pathway</label>
+                  <select id="checkout-intensive" required value={intensive?.id ?? ''} className="min-h-11 w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm text-slate-900" onChange={event => {
+                    const next = new URLSearchParams(searchParams); next.set('intensive', event.target.value); setSearchParams(next, { replace: true });
+                  }}>
+                    <option value="">Choose a pathway</option>
+                    {INTENSIVE_PATHWAYS.map(course => <option key={course.id} value={course.id}>{course.title}</option>)}
+                  </select>
+                  {intensive && <p className="mt-2 text-xs leading-relaxed text-slate-600">Original Growth Foundation modules. Your classroom opens automatically after payment, with 14 days of access.</p>}
+                </div>}
                   <div>
                     <label
                       htmlFor="checkout-name"

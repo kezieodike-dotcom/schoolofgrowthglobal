@@ -1,5 +1,6 @@
 import { useSyncExternalStore } from "react";
 import type { LeadershipCourseId } from '../data/leadershipPricing';
+import type { IntensiveCourseId } from '../data/intensiveCourses';
 import {
   hasCourseAccess,
   hasMentorshipAccess,
@@ -9,30 +10,9 @@ import {
   type PlanCode,
 } from "./pricing";
 
-/**
- * What the person at this browser has paid for.
- *
- * Entitlements only ever enter this store from /api/payments/verify, which
- * confirms the charge with Paystack directly. Nothing here can mint access on
- * its own - grant() takes an entitlement the server built, and the UI has no
- * path to construct one.
- *
- * IMPORTANT, and worth being plain about: this is a client-side record, so it
- * gates the *interface*, not the content. Anyone willing to edit localStorage
- * can flip the locks open, and the course material is in the bundle either
- * way. That is the honest ceiling of a site with no accounts and no database.
- *
- * Closing it needs three things, in this order:
- *   1. Student accounts (sign-up, login, session).
- *   2. Entitlements written server-side by the Paystack webhook, keyed to the
- *      account rather than to a browser.
- *   3. Course content served from an API that checks the entitlement per
- *      request, instead of shipping in the bundle.
- *
- * The payment half of that is already real - only the storage is local. So
- * this file is the seam to replace, and the shape it exposes (an array of
- * entitlements plus access questions) is the same shape an API would return.
- */
+/** Browser copies of verified purchases drive navigation. Intensive and individual
+ * Leadership content additionally require server-signed, course-scoped access.
+ * Intensive purchases are persisted by the webhook and restored by receipt. */
 
 const STORAGE_KEY = "sog.entitlements.v1";
 
@@ -93,7 +73,7 @@ export function grantEntitlement(entitlement: Entitlement) {
   const current = read();
   const previous = current.find(e => e.reference === entitlement.reference);
   if (previous) {
-    if (entitlement.leadershipAccess && previous.plan === entitlement.plan) {
+    if ((entitlement.leadershipAccess || entitlement.intensiveAccess) && previous.plan === entitlement.plan) {
       write(current.map(e => e.reference === entitlement.reference ? entitlement : e));
     }
     return;
@@ -108,6 +88,16 @@ export function leadershipPurchaseFor(entitlements: Entitlement[], id: Leadershi
 
 export function leadershipAccessToken(id: LeadershipCourseId): string | undefined {
   const access = leadershipPurchaseFor(read(), id)?.leadershipAccess;
+  return access && Date.parse(access.expiresAt) > Date.now() ? access.token : undefined;
+}
+
+export function intensivePurchaseFor(entitlements: Entitlement[], id: IntensiveCourseId) {
+  const purchases = entitlements.filter(entry => entry.intensiveAccess?.courseIds.includes(id));
+  return purchases.find(entry => Date.parse(entry.intensiveAccess!.expiresAt) > Date.now()) ?? purchases.at(-1);
+}
+
+export function intensiveAccessToken(id: IntensiveCourseId): string | undefined {
+  const access = intensivePurchaseFor(read(), id)?.intensiveAccess;
   return access && Date.parse(access.expiresAt) > Date.now() ? access.token : undefined;
 }
 

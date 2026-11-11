@@ -1,12 +1,13 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { LmsCourse, LmsProgress, LmsSubmission } from '../types';
 import { isLeadershipCourseId } from '../data/leadershipPricing';
-import { leadershipAccessToken } from './useEnrollment';
+import { intensiveAccessToken, leadershipAccessToken } from './useEnrollment';
+import { isIntensiveCourseId } from '../data/intensiveCourses';
 
 const DEFAULT_USER_ID = 'student-demo';
 
 function courseHeaders(courseId: string, json = false): HeadersInit {
-  const token = isLeadershipCourseId(courseId) ? leadershipAccessToken(courseId) : undefined;
+  const token = isLeadershipCourseId(courseId) ? leadershipAccessToken(courseId) : isIntensiveCourseId(courseId) ? intensiveAccessToken(courseId) : undefined;
   const headers: Record<string, string> = {};
   if (json) headers['Content-Type'] = 'application/json';
   if (token) headers.Authorization = `Bearer ${token}`;
@@ -58,6 +59,7 @@ export function useLmsCourse(courseId: string) {
 // ─── Progress Tracking ──────────────────────────────────────────────────────
 
 export function useLmsProgress(courseId: string, totalLessons: number) {
+  const [saveError, setSaveError] = useState<string | null>(null);
   const [progress, setProgress] = useState<LmsProgress>({
     userId: DEFAULT_USER_ID,
     courseId,
@@ -76,6 +78,7 @@ export function useLmsProgress(courseId: string, totalLessons: number) {
   }, [courseId]);
 
   const markLessonComplete = useCallback((lessonId: string) => {
+    setSaveError(null);
     setProgress(prev => {
       if (prev.completedLessons.includes(lessonId)) return prev;
       const updated = {
@@ -89,7 +92,15 @@ export function useLmsProgress(courseId: string, totalLessons: number) {
         method: 'POST',
         headers: courseHeaders(courseId, true),
         body: JSON.stringify(updated),
-      }).catch(() => {});
+      }).then(response => {
+        if (!response.ok) throw new Error('Your progress could not be saved. Please try marking this lesson complete again.');
+      }).catch(() => {
+        setSaveError('Your progress could not be saved. Check your connection and try marking this lesson complete again.');
+        setProgress(current => {
+          const completedLessons = current.completedLessons.filter(id => id !== lessonId);
+          return { ...current, completedLessons, progressPercentage: totalLessons ? Math.round(completedLessons.length / totalLessons * 100) : 0 };
+        });
+      });
       return updated;
     });
   }, [courseId, totalLessons]);
@@ -97,7 +108,7 @@ export function useLmsProgress(courseId: string, totalLessons: number) {
   const isLessonComplete = (lessonId: string) =>
     progress.completedLessons.includes(lessonId);
 
-  return { progress, markLessonComplete, isLessonComplete };
+  return { progress, markLessonComplete, isLessonComplete, saveError };
 }
 
 // ─── Submission (Auto-Save) ─────────────────────────────────────────────────

@@ -1,14 +1,18 @@
 import React, { useState } from 'react';
-import { Link, Navigate } from 'react-router-dom';
+import { Link, Navigate, useParams } from 'react-router-dom';
 import { useLmsCourse, useLmsProgress } from '../lib/useLms';
-import { useEnrollment } from '../lib/useEnrollment';
+import { intensivePurchaseFor, useEnrollment } from '../lib/useEnrollment';
+import { isIntensiveCourseId } from '../data/intensiveCourses';
 import { BookOpen, ChevronDown, ChevronRight, CheckCircle2, Clock, Award, ArrowRight } from 'lucide-react';
 
 export const LmsStudentDashboardView: React.FC = () => {
-  const courseId = 'growth-foundation';
+  const { courseId: requestedCourse } = useParams();
+  const courseId = requestedCourse ?? 'growth-foundation';
+  const intensiveId = isIntensiveCourseId(courseId) ? courseId : null;
   const [openModuleId, setOpenModuleId] = useState<string | null>(null);
   const enrollment = useEnrollment();
-  const { course, loading } = useLmsCourse(courseId);
+  const purchase = intensiveId ? intensivePurchaseFor(enrollment.entitlements, intensiveId) : null;
+  const { course, loading, error } = useLmsCourse(courseId);
 
   const modules = course?.modules ?? [];
   const lessons = modules.flatMap((courseModule) => courseModule.lessons);
@@ -23,7 +27,8 @@ export const LmsStudentDashboardView: React.FC = () => {
     .find(({ lesson }) => !isLessonComplete(lesson.id));
   const firstLesson = modules[0]?.lessons[0];
 
-  if (!enrollment.canAccessLevel('Emerging Leaders')) {
+  if (intensiveId && !purchase) return <Navigate to="/intensives" replace />;
+  if (!intensiveId && !enrollment.canAccessLevel('Emerging Leaders')) {
     return <Navigate to="/portal" replace />;
   }
 
@@ -35,12 +40,19 @@ export const LmsStudentDashboardView: React.FC = () => {
     );
   }
 
+  if (error || !course) return <main className="mx-auto max-w-xl space-y-4 px-4 py-12">
+    <h1 className="text-2xl font-bold">Course access</h1><p role="status">{error ?? 'Course unavailable.'}</p>
+    {purchase && <Link className="block font-bold text-amber-800" to={`/payment/callback?reference=${encodeURIComponent(purchase.reference)}`}>Restore paid access</Link>}
+    <Link className="block text-sm text-slate-600" to={intensiveId ? '/intensives' : '/portal'}>Back to my learning</Link>
+  </main>;
+
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Header */}
       <div className="bg-slate-900 text-white">
         <div className="max-w-5xl mx-auto px-4 py-12">
           <p className="text-amber-400 text-sm font-semibold uppercase tracking-wider mb-2">Student Dashboard</p>
+          {intensiveId && <Link to="/intensives" className="mb-4 inline-block text-sm text-amber-300">← My intensives</Link>}
           <h1 className="text-3xl md:text-4xl font-bold mb-2">{course?.title ?? 'Growth Foundation'}</h1>
           <p className="text-slate-300">{modules.length} learning modules available</p>
           <p className="text-slate-400 text-sm mt-2 font-mono">Leadership · Strategy · Transformation</p>
@@ -117,7 +129,7 @@ export const LmsStudentDashboardView: React.FC = () => {
                 className="flex w-full items-center justify-between gap-4 bg-slate-900 px-6 py-5 text-left transition-colors hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-amber-400"
               >
                 <span>
-                  <span className="block text-amber-400 text-xs font-semibold uppercase tracking-wider">Module {moduleIndex + 1}</span>
+                  <span className="block text-amber-400 text-xs font-semibold uppercase tracking-wider">{intensiveId ? 'Selected Foundation module' : `Module ${moduleIndex + 1}`}</span>
                   <span className="mt-1 block text-white font-bold text-base">{courseModule.title}</span>
                 </span>
                 <ChevronDown
@@ -169,7 +181,7 @@ export const LmsStudentDashboardView: React.FC = () => {
           <Award size={32} className="text-amber-400 mx-auto mb-3" />
           <h3 className="font-bold text-lg mb-1">Module Completion Standard</h3>
           <p className="text-slate-400 text-sm max-w-lg mx-auto">
-            Complete all lessons, submit the Personal Growth Profile project, and demonstrate:
+            {intensiveId ? 'Complete the lessons and practical exercises in each of your selected modules. Follow each module’s original completion requirements.' : 'Complete all lessons, submit the Personal Growth Profile project, and demonstrate:'}
             <br />
             <em className="text-amber-400">Understand yourself → Identify your gaps → Define what must change → Create a development plan → Begin taking measurable action.</em>
           </p>

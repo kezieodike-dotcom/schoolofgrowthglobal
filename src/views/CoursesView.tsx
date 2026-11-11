@@ -5,7 +5,7 @@ import { PageHero } from '../components/PageHero';
 import { CourseIntroductionCard } from '../components/CourseIntroductionCard';
 import { getCourseCover, INTENSIVE_COURSES } from '../data/courseIntroductions';
 import { FACULTIES, getCourseSchool } from '../lib/facultyCatalogue';
-import { useEnrollment } from '../lib/useEnrollment';
+import { intensivePurchaseFor, useEnrollment } from '../lib/useEnrollment';
 import { useContentCollection } from '../lib/useContent';
 import { cheapestPackageFor, formatNaira, type CourseLevel } from '../lib/pricing';
 import {
@@ -80,7 +80,7 @@ export const CoursesView: React.FC = () => {
   const [level, setLevel] = useState<(typeof LEVELS)[number]>('All');
   const [school, setSchool] = useState('All');
   const [query, setQuery] = useState('');
-  const { canAccessLevel, currentPackageName, coursesExpireAt } = useEnrollment();
+  const { canAccessLevel, currentPackageName, coursesExpireAt, entitlements } = useEnrollment();
   const managedCourses = useContentCollection('course', COURSES);
 
   const courses = managedCourses.items.filter((c) => {
@@ -427,6 +427,8 @@ export const CoursesView: React.FC = () => {
               </div>
               <div className="mt-5 grid grid-cols-1 md:grid-cols-2 gap-4">
                 {intensiveCourses.map((specializedCourse) => {
+                  const purchase = intensivePurchaseFor(entitlements, specializedCourse.id);
+                  const active = Boolean(purchase?.intensiveAccess && Date.parse(purchase.intensiveAccess.expiresAt) > Date.now());
                   const modules = specializedCourse.moduleTitles
                     .map((title) => foundationCourse?.modules.find((module) => module.title === title))
                     .filter((module): module is NonNullable<typeof module> => Boolean(module));
@@ -441,9 +443,9 @@ export const CoursesView: React.FC = () => {
                       eyebrow="Two-week intensive"
                       duration="2 weeks"
                       detail={formatNaira(foundationIntensivePlan.amountKobo)}
-                      accessNote="From Growth Foundation. Intensive Completion Certificate."
-                      secondaryAction={{ label: 'Self-paced', to: `/checkout/${foundationIntensivePlan.code}?delivery=self-paced` }}
-                      primaryAction={{ label: 'Live class', to: `/checkout/${foundationIntensivePlan.code}?delivery=live-class` }}
+                      accessNote={active ? 'Your paid intensive is ready to open.' : 'From Growth Foundation. Intensive Completion Certificate.'}
+                      secondaryAction={{ label: active ? 'My intensives' : 'Self-paced', to: active ? '/intensives' : `/checkout/${foundationIntensivePlan.code}?intensive=${specializedCourse.id}&delivery=self-paced` }}
+                      primaryAction={{ label: active ? 'Open classroom' : 'Live class', to: active ? `/lms/${specializedCourse.id}` : `/checkout/${foundationIntensivePlan.code}?intensive=${specializedCourse.id}&delivery=live-class` }}
                     >
                       <ul className="mt-4 space-y-2 text-xs text-slate-600">
                         {modules.map((module) => (
