@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, BookOpen, ChevronDown, Search, Sparkles } from 'lucide-react';
 import architecture from '../data/facultyArchitecture.json';
 import { FACULTIES, SCHOOL_CATALOGUE, SPECIALISED_COURSE_COUNT, searchFacultyCatalogue, type FacultySchool } from '../lib/facultyCatalogue';
+import { getAcademicCourse } from '../lib/academicCatalogue';
 
 function SchoolDetails({ school }: { school: FacultySchool }) {
   return (
@@ -12,29 +13,38 @@ function SchoolDetails({ school }: { school: FacultySchool }) {
           {note}
         </p>
       ))}
-      <p className="mb-3 text-xs font-semibold text-amber-800">Specialized courses</p>
+      <p className="mb-3 text-xs font-semibold text-amber-800">Courses and subject areas</p>
       <ol className="grid list-decimal gap-2 pl-5 text-sm leading-6 text-slate-600 marker:text-amber-700">
-        {school.courses.map(course => <li key={course} className="pl-1 [overflow-wrap:anywhere]">{course}</li>)}
+        {school.courses.map(course => {
+          const entry = getAcademicCourse(course);
+          return <li key={entry?.key ?? course} data-academic-course={entry?.key} className="pl-1 [overflow-wrap:anywhere]">
+            {entry?.href ? <Link to={entry.href} className="font-semibold text-amber-900 underline decoration-amber-300 underline-offset-4 hover:text-amber-700">{course}</Link> : course}
+          </li>;
+        })}
       </ol>
       {school.id === 'leadership' && <Link to="/courses/leadership" className="mt-4 inline-flex min-h-11 items-center gap-2 text-sm font-bold text-amber-800 hover:underline">Individual leadership course prices <ArrowRight className="h-4 w-4 shrink-0" aria-hidden="true" /></Link>}
     </div>
   );
 }
 
-export const SchoolsFacultiesView: React.FC = () => {
-  const [query, setQuery] = useState('');
-  const [openFaculty, setOpenFaculty] = useState(1);
+export const SchoolsFacultiesView: React.FC<{ embedded?: boolean; searchQuery?: string; schoolId?: string; onSearchQueryChange?: (value: string) => void }> = ({ embedded = false, searchQuery, schoolId, onSearchQueryChange }) => {
+  const [localQuery, setLocalQuery] = useState('');
+  const query = searchQuery ?? localQuery;
+  const setQuery = onSearchQueryChange ?? setLocalQuery;
+  const [openFaculty, setOpenFaculty] = useState(embedded ? 0 : 1);
   const [openSchool, setOpenSchool] = useState<number | null>(null);
   const normalizedQuery = query.trim().toLowerCase();
 
   const visibleFaculties = useMemo(
-    () => searchFacultyCatalogue(normalizedQuery),
-    [normalizedQuery]
+    () => searchFacultyCatalogue(normalizedQuery).map(faculty => ({ ...faculty,
+      schools: faculty.schools.filter(school => !schoolId || school.id === schoolId),
+    })).filter(faculty => faculty.schools.length > 0),
+    [normalizedQuery, schoolId]
   );
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
-      <section className="relative isolate overflow-hidden border-b border-slate-800 bg-slate-950 py-20 sm:py-24 lg:py-28">
+      {!embedded && <section className="relative isolate overflow-hidden border-b border-slate-800 bg-slate-950 py-20 sm:py-24 lg:py-28">
         <img src="/scenes/leadership-meeting.jpg" alt="" aria-hidden="true" className="absolute inset-0 h-full w-full object-cover object-center opacity-25" />
         <div className="absolute inset-0 bg-slate-950/80" />
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -52,17 +62,18 @@ export const SchoolsFacultiesView: React.FC = () => {
             <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-3 text-xs font-mono uppercase tracking-[0.14em] text-amber-200">
               <span>{FACULTIES.length} faculties</span>
               <span>{SCHOOL_CATALOGUE.length} specialized schools</span>
-              <span>{SPECIALISED_COURSE_COUNT} specialized course titles</span>
+              <span>{SPECIALISED_COURSE_COUNT} courses and subject areas</span>
             </div>
           </div>
         </div>
-      </section>
+      </section>}
 
       <section className="border-b border-slate-200 bg-white py-10 sm:py-12">
-        <div className="mx-auto flex max-w-7xl flex-col gap-5 px-4 sm:px-6 lg:flex-row lg:items-end lg:justify-between lg:px-8">
+        <div className={`mx-auto flex max-w-7xl flex-col gap-5 lg:flex-row lg:items-end lg:justify-between ${embedded ? '' : 'px-4 sm:px-6 lg:px-8'}`}>
           <div>
             <p className="text-[11px] font-mono uppercase tracking-[0.18em] text-amber-700">Explore the institution</p>
-            <h2 className="mt-2 text-3xl font-serif font-bold text-slate-950">Faculties and specialized schools</h2>
+            <h2 className="mt-2 text-3xl font-serif font-bold text-slate-950">{embedded ? 'Complete course directory' : 'Faculties and specialized schools'}</h2>
+            {embedded && <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-600">Explore all {SPECIALISED_COURSE_COUNT} courses and subject areas across {FACULTIES.length} faculties. Linked courses have programme details and enrolment information.</p>}
           </div>
           <label className="relative block w-full max-w-sm">
             <span className="sr-only">Search faculties and schools</span>
@@ -77,9 +88,9 @@ export const SchoolsFacultiesView: React.FC = () => {
         </div>
       </section>
 
-      <main className="mx-auto max-w-7xl space-y-4 px-4 py-10 sm:px-6 sm:py-14 lg:px-8">
+      <div data-academic-directory className={`mx-auto max-w-7xl space-y-4 py-10 sm:py-14 ${embedded ? '' : 'px-4 sm:px-6 lg:px-8'}`}>
         {visibleFaculties.map((faculty) => {
-          const isOpen = openFaculty === faculty.number || Boolean(normalizedQuery);
+          const isOpen = openFaculty === faculty.number || Boolean(normalizedQuery) || Boolean(schoolId);
           return (
             <section key={faculty.number} data-faculty-number={faculty.number} className="overflow-hidden border border-slate-200 bg-white shadow-[0_8px_26px_rgba(15,23,42,0.04)]">
               <button
@@ -88,13 +99,13 @@ export const SchoolsFacultiesView: React.FC = () => {
                 aria-expanded={isOpen}
                 className="flex w-full items-center justify-between gap-5 px-4 py-5 text-left transition hover:bg-amber-50/40 sm:px-6 sm:py-6"
               >
-                <span className="flex min-w-0 items-start gap-4">
-                  <span className="flex h-9 w-9 shrink-0 items-center justify-center border border-amber-300 bg-amber-50 text-xs font-mono font-bold text-amber-800">
+                <span className="flex min-w-0 items-start gap-3 sm:gap-4">
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center border border-amber-300 bg-amber-50 text-xs font-mono font-bold text-amber-800 sm:h-9 sm:w-9">
                     {String(faculty.number).padStart(2, '0')}
                   </span>
                   <span className="min-w-0 [overflow-wrap:anywhere]">
                     <span className="block text-[10px] font-mono uppercase tracking-[0.18em] text-[#ff9700]">Faculty {faculty.number}</span>
-                    <span className="mt-1 block text-lg font-serif font-bold leading-tight text-slate-950 sm:text-xl">{faculty.title}</span>
+                    <span className="mt-1 block text-base font-serif font-bold leading-tight text-slate-950 sm:text-xl">{faculty.title}</span>
                   </span>
                 </span>
                 <ChevronDown className={`h-5 w-5 shrink-0 text-amber-700 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
@@ -105,7 +116,7 @@ export const SchoolsFacultiesView: React.FC = () => {
                   <p className="mb-5 text-sm leading-6 text-slate-600"><strong className="font-semibold text-slate-800">Purpose: </strong>{faculty.purpose}</p>
                   <div className="grid items-start gap-3 lg:grid-cols-2">
                     {faculty.schools.map((school) => {
-                      const schoolOpen = openSchool === school.number || Boolean(normalizedQuery);
+                      const schoolOpen = openSchool === school.number || Boolean(normalizedQuery) || schoolId === school.id;
                       const hasDetails = Boolean(
                         school.notes.length || school.courses.length
                       );
@@ -140,9 +151,9 @@ export const SchoolsFacultiesView: React.FC = () => {
             <button type="button" onClick={() => setQuery('')} className="mt-3 text-xs font-bold text-amber-700 hover:text-amber-800">Clear search</button>
           </div>
         )}
-      </main>
+      </div>
 
-      <section className="border-t border-slate-200 bg-amber-50 py-12">
+      {!embedded && <section className="border-t border-slate-200 bg-amber-50 py-12">
         <div className="mx-auto flex max-w-7xl flex-col gap-5 px-4 sm:px-6 md:flex-row md:items-center md:justify-between lg:px-8">
           <div className="flex items-start gap-3">
             <Sparkles className="mt-1 h-5 w-5 shrink-0 text-amber-700" />
@@ -156,7 +167,7 @@ export const SchoolsFacultiesView: React.FC = () => {
             <Link to="/contact" className="inline-flex items-center gap-2 border border-slate-300 bg-white px-4 py-2.5 text-xs font-semibold text-slate-700 hover:border-amber-400">Contact the institution <ArrowRight className="h-4 w-4" /></Link>
           </div>
         </div>
-      </section>
+      </section>}
     </div>
   );
 };

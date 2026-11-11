@@ -1,5 +1,6 @@
 import type { BlogPost, BookItem, Course, EventItem, FacultyMember, GrowthJob } from '../types';
 import { isSuspendedPublicProfile, publicFacultyProfile } from './publicProfiles.js';
+import { normalizeCourseTitle } from './courseIdentity.js';
 
 export type ContentKind = 'course' | 'event' | 'team' | 'job' | 'insight' | 'book';
 
@@ -70,6 +71,21 @@ export function mergeContent<T extends { id: string }>(
   }
 
   const items = Array.from(merged.values());
+  if (kind === 'course') {
+    const courses = new Map<string, T>();
+    const overrides = new Set(records.filter(record => record.published).map(record => record.id));
+    for (const item of items) {
+      const title = (item as T & { title?: string }).title;
+      const key = typeof title === 'string' ? normalizeCourseTitle(title) : item.id;
+      const existing = courses.get(key);
+      if (!existing) courses.set(key, item);
+      else if (overrides.has(item.id) && !overrides.has(existing.id)) {
+        // Use the updated published details while retaining the established URL.
+        courses.set(key, { ...existing, ...item, id: existing.id });
+      }
+    }
+    return [...courses.values()];
+  }
   if (kind === 'team') {
     return items.flatMap(item => {
       const member = publicFacultyProfile(item);
@@ -77,4 +93,11 @@ export function mergeContent<T extends { id: string }>(
     }) as unknown as T[];
   }
   return items;
+}
+
+export function findCourseById(courses: Course[], records: ContentRecord[], id: string | undefined): Course | undefined {
+  const exact = courses.find(course => course.id === id);
+  if (exact) return exact;
+  const alias = records.find(record => record.kind === 'course' && record.published && record.id === id)?.payload as Course | undefined;
+  return alias ? courses.find(course => normalizeCourseTitle(course.title) === normalizeCourseTitle(alias.title)) : undefined;
 }

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { ArrowLeft, ArrowRight, BookOpen, ChevronDown, Search } from 'lucide-react';
 import { LEADERSHIP_COURSES } from '../data/leadershipPricing';
 import { leadershipCoursePreviews } from '../data/leadershipCoursePreviews';
@@ -55,7 +55,8 @@ function ProgrammeOverview() {
 }
 
 export function LeadershipPricingView() {
-  const [query, setQuery] = useState('');
+  const [searchParams] = useSearchParams();
+  const [query, setQuery] = useState(() => LEADERSHIP_COURSES.find(course => course.id === searchParams.get('course'))?.title ?? '');
   const [category, setCategory] = useState('all');
   const { entitlements } = useEnrollment();
   const { available, outlines, loading, error } = useLeadershipAvailability();

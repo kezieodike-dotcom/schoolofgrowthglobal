@@ -4,6 +4,7 @@ import { ViewType, type Course } from '../types';
 import { FEATURED_COURSE, COURSES, CORPORATE_PARTNERS } from '../data/mockData';
 import { useContentCollection } from '../lib/useContent';
 import { getCourseCover } from '../data/courseIntroductions';
+import { findCourseById } from '../lib/content';
 import {
   Clock,
   CheckCircle2,
@@ -37,7 +38,7 @@ export const CourseDetailView: React.FC<CourseDetailViewProps> = ({ onNavigate }
   ];
   const managedCourses = useContentCollection('course', seedCourses);
   const course =
-    managedCourses.items.find((item) => item.id === courseId) ??
+    findCourseById(managedCourses.items, managedCourses.records, courseId) ??
     managedCourses.items.find((item) => item.featured) ??
     FEATURED_COURSE;
 

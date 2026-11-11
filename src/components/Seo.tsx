@@ -11,7 +11,7 @@ const PAGE_META: Record<string, { title: string; description: string }> = {
   },
   '/about': { title: 'About School of Growth Global', description: 'Learn about School of Growth Global, our mission, values, faculty and commitment to transformational leadership.' },
   '/courses': { title: 'Courses & Programs | School of Growth Global', description: 'Explore practical courses and growth pathways for individuals, professionals, leaders, organizations and institutions.' },
-  '/schools': { title: 'Faculties & Schools | School of Growth Global', description: 'Explore nine faculties, 28 specialized schools and their course areas at School of Growth Global.' },
+  '/schools': { title: 'Faculties & Schools | School of Growth Global', description: 'Explore the complete faculty, school and course directory at School of Growth Global.' },
   '/mentorship': { title: 'Mentorship & Consulting | School of Growth Global', description: 'Connect with vetted mentors and consultants for practical guidance, strategy and measurable growth.' },
   '/mentors': { title: 'Mentors & Consultants | School of Growth Global', description: 'Discover mentors and consultants who can support your personal, professional and organizational growth.' },
   '/enlist': { title: 'Enlist as a Mentor or Consultant | School of Growth Global', description: 'Apply to join the School of Growth Global mentor and consultant network.' },

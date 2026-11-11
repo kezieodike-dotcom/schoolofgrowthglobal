@@ -5,7 +5,8 @@ import { PageHero } from '../components/PageHero';
 import { CourseIntroductionCard } from '../components/CourseIntroductionCard';
 import { ProfessionalCoursesSection } from '../components/ProfessionalCoursesSection';
 import { getCourseCover, INTENSIVE_COURSES } from '../data/courseIntroductions';
-import { FACULTIES, getCourseSchool } from '../lib/facultyCatalogue';
+import { FACULTIES, getCourseSchool, searchFacultyCatalogue, SPECIALISED_COURSE_COUNT } from '../lib/facultyCatalogue';
+import { SchoolsFacultiesView } from './SchoolsFacultiesView';
 import { intensivePurchaseFor, useEnrollment } from '../lib/useEnrollment';
 import { useContentCollection } from '../lib/useContent';
 import { cheapestPackageFor, formatNaira, type CourseLevel } from '../lib/pricing';
@@ -102,6 +103,8 @@ export const CoursesView: React.FC = () => {
     (school === 'All' || (foundationCourse && school === getCourseSchool(foundationCourse)?.id)) &&
     `${course.title} ${course.description}`.toLowerCase().includes(query.trim().toLowerCase())
   );
+  const hasDirectoryMatches = (Boolean(query.trim()) || school !== 'All') && searchFacultyCatalogue(query)
+    .some(faculty => faculty.schools.some(entry => (school === 'All' || entry.id === school) && entry.courses.length > 0));
 
   const renderCourseCard = (course: (typeof courses)[number]) => {
     const unlocked = canAccessLevel(course.level as CourseLevel);
@@ -260,6 +263,9 @@ export const CoursesView: React.FC = () => {
         <Link to="/courses/leadership" className="mb-6 flex min-h-11 flex-wrap items-center justify-between gap-3 border-y border-slate-200 py-3 text-sm font-bold text-amber-800 hover:text-slate-950">
           <span>School of Leadership: individual course prices</span><ArrowRight className="h-4 w-4 shrink-0" aria-hidden="true" />
         </Link>
+        <a href="#complete-course-directory" className="mb-6 flex min-h-11 items-center justify-between gap-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-bold text-amber-900 hover:bg-amber-100">
+          <span>Browse all {SPECIALISED_COURSE_COUNT} courses and subject areas</span><ArrowRight className="h-4 w-4 shrink-0" aria-hidden="true" />
+        </a>
         {/*
           Enrolment banner. Stated up front rather than discovered one locked
           card at a time, so nobody browses the catalogue believing it is open.
@@ -478,11 +484,15 @@ export const CoursesView: React.FC = () => {
           </section>
         )}
 
-        {courses.length === 0 && intensiveCourses.length === 0 && (
+        {courses.length === 0 && intensiveCourses.length === 0 && !hasDirectoryMatches && (
           <div className="text-center py-16 text-slate-500 text-sm">
             {managedCourses.error ?? 'No programs match your filters.'}
           </div>
         )}
+
+        <div id="complete-course-directory" className="mt-12 scroll-mt-24">
+          <SchoolsFacultiesView embedded searchQuery={query} schoolId={school === 'All' ? undefined : school} onSearchQueryChange={setQuery} />
+        </div>
 
         {/* Tuition is published, not gated behind a sales call. */}
         {!currentPackageName && (
