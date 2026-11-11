@@ -2,7 +2,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { grantEntitlement } from '../lib/useEnrollment';
 import { PLANS, formatNaira, type Entitlement } from '../lib/pricing';
-import { isLeadershipCourseId } from '../data/leadershipPricing';
+import { isPaidCourseId } from '../data/paidCourseCatalogue';
+import { isProfessionalCourseId } from '../data/professionalCourses';
 import { useLeadershipAvailability } from '../lib/useLeadershipAvailability';
 import { forgetPendingPayment } from '../lib/pendingPayment';
 import type { BookPurchase } from '../lib/bookRevenue';
@@ -197,10 +198,12 @@ export const PaymentCallbackView: React.FC = () => {
 const PaidPanel: React.FC<{ entitlement: Entitlement }> = ({ entitlement }) => {
   const plan = PLANS[entitlement.plan];
   const isMentorship = plan.kind === 'mentorship';
-  const leadershipId = isLeadershipCourseId(entitlement.plan) ? entitlement.plan : null;
+  const leadershipId = isPaidCourseId(entitlement.plan) ? entitlement.plan : null;
+  const professional = isProfessionalCourseId(entitlement.plan);
+  const individualHome = professional ? `/courses/${entitlement.plan}` : '/courses/leadership';
   const intensive = entitlement.intensiveAccess;
   const intensiveExpired = intensive && Date.parse(intensive.expiresAt) <= Date.now();
-  const { available } = useLeadershipAvailability(Boolean(leadershipId));
+  const { available } = useLeadershipAvailability(Boolean(leadershipId), professional ? 'professional' : 'leadership');
 
   return (
     <div className="p-8 sm:p-10 rounded-3xl bg-white border border-emerald-200 shadow-lg space-y-6">
@@ -252,7 +255,7 @@ const PaidPanel: React.FC<{ entitlement: Entitlement }> = ({ entitlement }) => {
 
       <div className="flex flex-col sm:flex-row gap-3">
         <Link
-          to={intensive ? intensive.courseIds.length === 1 ? `/lms/${intensive.courseIds[0]}` : '/intensives' : leadershipId ? available[leadershipId] ?? '/courses/leadership' : isMentorship ? '/mentors' : '/courses'}
+          to={intensive ? intensive.courseIds.length === 1 ? `/lms/${intensive.courseIds[0]}` : '/intensives' : leadershipId ? available[leadershipId] ?? individualHome : isMentorship ? '/mentors' : '/courses'}
           className="flex-1 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs flex items-center justify-center gap-2 transition-colors"
         >
           {isMentorship ? (
@@ -267,11 +270,11 @@ const PaidPanel: React.FC<{ entitlement: Entitlement }> = ({ entitlement }) => {
           <ArrowRight className="w-4 h-4" />
         </Link>
         <Link
-          to={intensive ? '/intensives' : leadershipId ? '/courses/leadership' : '/portal'}
+          to={intensive ? '/intensives' : leadershipId ? professional ? '/portal' : '/courses/leadership' : '/portal'}
           className="flex-1 py-3.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs flex items-center justify-center gap-2 transition-colors"
         >
           <Receipt className="w-4 h-4" />
-          {leadershipId ? 'Leadership courses' : 'My dashboard'}
+          {leadershipId && !professional ? 'Leadership courses' : 'My dashboard'}
         </Link>
       </div>
 

@@ -1,13 +1,13 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { LmsCourse, LmsProgress, LmsSubmission } from '../types';
-import { isLeadershipCourseId } from '../data/leadershipPricing';
+import { isPaidCourseId } from '../data/paidCourseCatalogue';
 import { intensiveAccessToken, leadershipAccessToken } from './useEnrollment';
 import { isIntensiveCourseId } from '../data/intensiveCourses';
 
 const DEFAULT_USER_ID = 'student-demo';
 
 function courseHeaders(courseId: string, json = false): HeadersInit {
-  const token = isLeadershipCourseId(courseId) ? leadershipAccessToken(courseId) : isIntensiveCourseId(courseId) ? intensiveAccessToken(courseId) : undefined;
+  const token = isPaidCourseId(courseId) ? leadershipAccessToken(courseId) : isIntensiveCourseId(courseId) ? intensiveAccessToken(courseId) : undefined;
   const headers: Record<string, string> = {};
   if (json) headers['Content-Type'] = 'application/json';
   if (token) headers.Authorization = `Bearer ${token}`;

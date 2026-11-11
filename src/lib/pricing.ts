@@ -1,4 +1,5 @@
 import { LEADERSHIP_COURSES, type LeadershipCourseId } from '../data/leadershipPricing.js';
+import { PROFESSIONAL_COURSES, type ProfessionalCourseId } from '../data/professionalCourses.js';
 
 /**
  * What School of Growth sells, and what each purchase unlocks.
@@ -54,7 +55,8 @@ export type PlanCode =
   | CourseBundlePlanId
   | MentorshipPlanId
   | ConsultationPlanId
-  | LeadershipCourseId;
+  | LeadershipCourseId
+  | ProfessionalCourseId;
 
 export type PlanKind =
   | "package"
@@ -111,6 +113,13 @@ const leadershipPlans = Object.fromEntries(LEADERSHIP_COURSES.map(course => [cou
 
 export const PLANS: Record<PlanCode, Plan> = {
   ...leadershipPlans,
+  ...Object.fromEntries(PROFESSIONAL_COURSES.map(course => [course.id, {
+    code: course.id, kind: 'individual-course', name: course.title, position: course.category,
+    tagline: course.summary, amountKobo: naira(course.feeNaira), durationDays: 0, billing: 'One-time course fee',
+    features: [`${course.moduleCount} teaching modules`, 'Original practical tools and workplace activities', '15-question knowledge assessment', 'Workplace implementation project'],
+    excludes: ['Live facilitation and certificate assessment are arranged separately.'],
+    includedLevels: [], mentorshipDays: 0, mentorSlots: 0,
+  } satisfies Plan])) as Record<ProfessionalCourseId, Plan>,
   mini: {
     code: "mini",
     kind: "package",

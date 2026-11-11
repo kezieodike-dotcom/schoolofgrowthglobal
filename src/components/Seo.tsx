@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { PROFESSIONAL_COURSES } from '../data/professionalCourses';
 
 const SITE_URL = 'https://schoolofgrowthglobal.vercel.app';
 
@@ -22,6 +23,8 @@ const PAGE_META: Record<string, { title: string; description: string }> = {
 };
 
 function getMeta(pathname: string) {
+  const course = PROFESSIONAL_COURSES.find(course => pathname === `/courses/${course.id}`);
+  if (course) return { title: `${course.title} | School of Growth Global`, description: course.summary };
   const exact = PAGE_META[pathname];
   if (exact) return exact;
   if (pathname.startsWith('/blog/')) return { title: 'Insight | School of Growth Global', description: 'Practical insights and frameworks from School of Growth Global.' };

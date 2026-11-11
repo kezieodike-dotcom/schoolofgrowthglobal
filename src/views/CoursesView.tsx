@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { COURSES, SCHOOLS } from '../data/mockData';
 import { PageHero } from '../components/PageHero';
 import { CourseIntroductionCard } from '../components/CourseIntroductionCard';
+import { ProfessionalCoursesSection } from '../components/ProfessionalCoursesSection';
 import { getCourseCover, INTENSIVE_COURSES } from '../data/courseIntroductions';
 import { FACULTIES, getCourseSchool } from '../lib/facultyCatalogue';
 import { intensivePurchaseFor, useEnrollment } from '../lib/useEnrollment';
@@ -253,6 +254,8 @@ export const CoursesView: React.FC = () => {
         imageSrc="/scenes/bootcamp-team.jpg"
       />
 
+      <ProfessionalCoursesSection />
+
       <section className="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <Link to="/courses/leadership" className="mb-6 flex min-h-11 flex-wrap items-center justify-between gap-3 border-y border-slate-200 py-3 text-sm font-bold text-amber-800 hover:text-slate-950">
           <span>School of Leadership: individual course prices</span><ArrowRight className="h-4 w-4 shrink-0" aria-hidden="true" />
@@ -290,10 +293,10 @@ export const CoursesView: React.FC = () => {
               <Lock className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
               <div className="space-y-0.5">
                 <p className="text-sm font-serif font-bold">
-                  Courses unlock with a package
+                  Growth Ladder courses unlock with a package
                 </p>
                 <p className="text-xs text-slate-400 leading-relaxed">
-                  Browse the full catalogue freely. Choose a package from{' '}
+                  The individual courses above have their own enrolment fees. Choose a Growth Ladder package from{' '}
                   {formatNaira(cheapestPackageFor('Emerging Leaders').amountKobo)} to
                   start learning.
                 </p>

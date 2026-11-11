@@ -1,11 +1,13 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation, useParams } from 'react-router-dom';
 import { Layout } from './components/Layout';
 import { useLegacyNavigate } from './lib/legacyNav';
 
 // Existing views (kept intact, fed a legacy ViewType-based navigate adapter)
 import { HomeView } from './views/HomeView';
 import { CourseDetailView } from './views/CourseDetailView';
+import { ProfessionalCourseView } from './views/ProfessionalCourseView';
+import { isProfessionalCourseId } from './data/professionalCourses';
 import { StudentDashboardView } from './views/StudentDashboardView';
 import { CommandCenterView } from './views/CommandCenterView';
 
@@ -54,7 +56,11 @@ import { Seo } from './components/Seo';
 
 // ── Legacy route adapters ────────────────────────────────────────────────
 const HomeRoute: React.FC = () => <HomeView onNavigate={useLegacyNavigate()} />;
-const CourseDetailRoute: React.FC = () => <CourseDetailView onNavigate={useLegacyNavigate()} />;
+const CourseDetailRoute: React.FC = () => {
+  const { courseId } = useParams();
+  const navigate = useLegacyNavigate();
+  return isProfessionalCourseId(courseId) ? <ProfessionalCourseView /> : <CourseDetailView onNavigate={navigate} />;
+};
 const PortalRoute: React.FC = () => <StudentDashboardView onNavigate={useLegacyNavigate()} />;
 const CommandCenterRoute: React.FC = () => <CommandCenterView onNavigate={useLegacyNavigate()} />;
 

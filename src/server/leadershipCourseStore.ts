@@ -1,4 +1,6 @@
-import { isLeadershipCourseId, LEADERSHIP_COURSES, type LeadershipAvailability, type LeadershipOutlines } from '../data/leadershipPricing.js';
+import { LEADERSHIP_COURSES, type LeadershipAvailability, type LeadershipOutlines } from '../data/leadershipPricing.js';
+import { isPaidCourseId } from '../data/paidCourseCatalogue.js';
+import { PROFESSIONAL_COURSES } from '../data/professionalCourses.js';
 import type { LmsCourse } from '../types.js';
 import { getLmsCourse } from './lmsStore.js';
 import { normalizeSupabaseUrl, readSupabaseEnv } from './supabaseEnv.js';
@@ -9,7 +11,7 @@ const nonempty = (value: unknown) => typeof value === 'string' && value.trim().l
 type LeadershipCourse = LmsCourse & { published: boolean; answerKey?: Record<string, string> };
 
 export const LEADERSHIP_BUCKET = 'leadership-courses';
-export const LEADERSHIP_STORAGE_UNAVAILABLE = 'Leadership courses are temporarily unavailable. Please try again shortly.';
+export const LEADERSHIP_STORAGE_UNAVAILABLE = 'Course materials are temporarily unavailable. Please try again shortly.';
 
 export function leadershipStorage() {
   const url = readSupabaseEnv('SUPABASE_URL');
@@ -25,7 +27,7 @@ export function leadershipStorage() {
 }
 
 export function isReadyLeadershipCourse(id: string, value: unknown): value is LmsCourse {
-  if (!isLeadershipCourseId(id) || !value || typeof value !== 'object') return false;
+  if (!isPaidCourseId(id) || !value || typeof value !== 'object') return false;
   const course = value as LmsCourse & { published?: boolean };
   const moduleIds = new Set<string>();
   const lessonIds = new Set<string>();
@@ -47,7 +49,7 @@ export function isReadyLeadershipCourse(id: string, value: unknown): value is Lm
 }
 
 export async function getPublishedLeadershipCourse(id: string): Promise<LeadershipCourse | null> {
-  if (!isLeadershipCourseId(id)) return null;
+  if (!isPaidCourseId(id)) return null;
   const storage = leadershipStorage();
   if (!storage) {
     const course = getLmsCourse(id);
@@ -66,6 +68,18 @@ async function collectAvailability(files?: Set<string>) {
   const entries = await Promise.all(LEADERSHIP_COURSES.filter(({ id }) => !files || files.has(`${id}.json`))
     .map(async ({ id }) => ({ id, course: await getPublishedLeadershipCourse(id) })));
   for (const { id, course } of entries) {
+    if (!course) continue;
+    available[id] = `/lms/${id}/${course.modules[0].id}/${course.modules[0].lessons[0].id}`;
+    outlines[id] = course.modules.filter(module => /^module-\d+$/.test(module.id)).map(module => module.title);
+  }
+  return { available, outlines };
+}
+
+export async function professionalAvailability() {
+  const available: Record<string, string> = {};
+  const outlines: Record<string, string[]> = {};
+  const courses = await Promise.all(PROFESSIONAL_COURSES.map(async ({ id }) => ({ id, course: await getPublishedLeadershipCourse(id) })));
+  for (const { id, course } of courses) {
     if (!course) continue;
     available[id] = `/lms/${id}/${course.modules[0].id}/${course.modules[0].lessons[0].id}`;
     outlines[id] = course.modules.filter(module => /^module-\d+$/.test(module.id)).map(module => module.title);

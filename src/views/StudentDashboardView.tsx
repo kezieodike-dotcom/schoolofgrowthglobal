@@ -11,6 +11,8 @@ import { ReferralShareCard } from '../components/ReferralShareCard';
 import { useEnrollment } from '../lib/useEnrollment';
 import { IntensiveLibraryView } from './IntensiveLibraryView';
 import { PaymentAccessRestore } from '../components/PaymentAccessRestore';
+import { ProfessionalCoursesSection } from '../components/ProfessionalCoursesSection';
+import { isProfessionalCourseId } from '../data/professionalCourses';
 import { useMentorPairing } from '../lib/useMentorPairing';
 import { deriveExperience, aiQuota, type StudentFeature } from '../lib/studentExperience';
 import { PACKAGES, PLANS, cheapestPackageFor, formatNaira, type CourseLevel, type Entitlement } from '../lib/pricing';
@@ -343,7 +345,12 @@ export const StudentDashboardView: React.FC<StudentDashboardViewProps> = ({
     }
   };
 
-  if (!experience.packageId) return enrollment.entitlements.some(entry => entry.intensiveAccess) ? <IntensiveLibraryView /> : <LockedPortal />;
+  if (!experience.packageId) {
+    const hasProfessional = enrollment.entitlements.some(entry => isProfessionalCourseId(entry.plan));
+    if (enrollment.entitlements.some(entry => entry.intensiveAccess)) return <><ProfessionalCoursesSection ownedOnly /><IntensiveLibraryView /></>;
+    if (hasProfessional) return <div className="min-h-[60vh]"><ProfessionalCoursesSection ownedOnly /><div className="mx-auto max-w-3xl px-4 py-8"><PaymentAccessRestore /></div></div>;
+    return <LockedPortal />;
+  }
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 font-sans flex flex-col md:flex-row">
@@ -425,6 +432,7 @@ export const StudentDashboardView: React.FC<StudentDashboardViewProps> = ({
 
       {/* -- Workspace --------------------------------------------------- */}
       <main className="flex-1 p-4 sm:p-6 md:p-10 space-y-6 sm:space-y-8 min-w-0">
+        <ProfessionalCoursesSection ownedOnly />
         {enrollment.entitlements.some(entry => entry.intensiveAccess) && <Link to="/intensives" className="block rounded-xl border border-amber-200 bg-amber-50 p-4 font-bold text-amber-900">Open my two-week intensive courses →</Link>}
         <header className="bg-gradient-to-r from-white via-slate-50 to-slate-50 border border-slate-200 rounded-lg p-5 sm:p-8 space-y-4 shadow-sm">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">

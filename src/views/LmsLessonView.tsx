@@ -3,7 +3,8 @@ import { useParams, Link, Navigate } from 'react-router-dom';
 import { useLmsAssessment, useLmsCourse, useLmsProgress, useLmsSubmission } from '../lib/useLms';
 import { intensivePurchaseFor, leadershipPurchaseFor, useEnrollment } from '../lib/useEnrollment';
 import { isIntensiveCourseId } from '../data/intensiveCourses';
-import { isLeadershipCourseId } from '../data/leadershipPricing';
+import { isPaidCourseId } from '../data/paidCourseCatalogue';
+import { PROFESSIONAL_COURSES } from '../data/professionalCourses';
 import { ReadingBlock, KeyInsightBlock, FrameworkBlock, QuestionBlock, ReflectionBlock } from '../components/lms/LmsBlocks';
 import { ValueDiscoveryExercise } from '../components/lms/ValueDiscoveryExercise';
 import { SelfAwarenessAudit } from '../components/lms/SelfAwarenessAudit';
@@ -103,7 +104,7 @@ const BlockRenderer: React.FC<{ block: LmsBlock; courseId: string; moduleId: str
     case 'table':
       return <LessonTable content={block.content ?? ''} />;
     case 'leadership_quiz':
-      return isLeadershipCourseId(courseId) && (
+      return isPaidCourseId(courseId) && (
         <>
           {block.content && <ReadingBlock content={block.content} />}
           <LeadershipQuiz courseId={courseId} questions={block.metadata.questions} />
@@ -141,10 +142,11 @@ export const LmsLessonView: React.FC = () => {
   const { course, loading, error } = useLmsCourse(courseId);
   const enrollment = useEnrollment();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const leadershipId = isLeadershipCourseId(courseId) ? courseId : null;
+  const leadershipId = isPaidCourseId(courseId) ? courseId : null;
+  const professional = PROFESSIONAL_COURSES.find(course => course.id === courseId);
   const intensiveId = isIntensiveCourseId(courseId) ? courseId : null;
   const purchase = leadershipId ? leadershipPurchaseFor(enrollment.entitlements, leadershipId) : intensiveId ? intensivePurchaseFor(enrollment.entitlements, intensiveId) : null;
-  const courseHome = intensiveId ? `/lms/${intensiveId}` : leadershipId ? '/courses/leadership' : '/lms';
+  const courseHome = intensiveId ? `/lms/${intensiveId}` : professional ? `/courses/${professional.id}` : leadershipId ? '/courses/leadership' : '/lms';
 
   useEffect(() => {
     if (leadershipId || intensiveId) window.scrollTo(0, 0);
@@ -196,7 +198,7 @@ export const LmsLessonView: React.FC = () => {
       <p className="mt-3 text-sm text-slate-600" role="status">{error}</p>
       <div className="mt-4 flex flex-wrap gap-4 text-sm font-bold text-amber-800">
         {purchase && <Link to={`/payment/callback?reference=${encodeURIComponent(purchase.reference)}`}>Restore access</Link>}
-        <Link to={courseHome}>{intensiveId ? 'My intensive' : 'Leadership courses'}</Link>
+        <Link to={courseHome}>{intensiveId ? 'My intensive' : professional ? 'Course overview' : 'Leadership courses'}</Link>
       </div>
     </main>;
   }
@@ -243,7 +245,7 @@ export const LmsLessonView: React.FC = () => {
           </button>
           <Link to={courseHome} className="flex items-center gap-2 text-slate-600 hover:text-amber-600 text-sm font-medium">
             <BookOpen size={16} />
-            <span className="hidden sm:inline">{intensiveId ? course?.title : leadershipId ? 'School of Leadership' : 'Growth Foundation'}</span>
+            <span className="hidden sm:inline">{intensiveId ? course?.title : professional ? 'Professional short course' : leadershipId ? 'School of Leadership' : 'Growth Foundation'}</span>
           </Link>
           <div className="flex-1 hidden md:block">{progressBar}</div>
           <div className="text-xs text-slate-500 whitespace-nowrap">
@@ -331,11 +333,13 @@ export const LmsLessonView: React.FC = () => {
         {/* Main Content */}
         <main className="flex-1 p-4 md:p-8 min-w-0">
           <div className="max-w-3xl mx-auto">
+            {professional && moduleId === 'orientation' && <figure className="mb-7 overflow-hidden rounded-xl bg-slate-100"><img src={professional.image} alt={professional.alt} width={1200} height={800} fetchPriority="high" className="aspect-[3/2] w-full object-cover sm:aspect-[16/9]" /></figure>}
             <div className="mb-6">
               <div className="text-xs text-amber-600 font-semibold uppercase tracking-wider mb-1">
                 {module?.title} · Lesson {effectiveIndex + 1}
               </div>
-              <h1 className="text-2xl md:text-3xl font-bold text-slate-900">{lesson.title}</h1>
+              <h1 className="text-2xl md:text-3xl font-bold text-slate-900">{professional && moduleId === 'orientation' ? professional.title : lesson.title}</h1>
+              {professional && moduleId === 'orientation' && <p className="mt-3 text-sm font-semibold text-slate-600">{lesson.title}</p>}
               {module?.coreQuestion && effectiveIndex === 0 && (
                 <p className="text-slate-500 mt-2">
                   Core Question: <span className="font-semibold text-slate-700 italic">{module.coreQuestion}</span>

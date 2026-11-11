@@ -21,7 +21,7 @@ import {
 import { mergeContent } from "../lib/content.js";
 import { listContent } from "./contentStore.js";
 import type { BookItem } from "../types.js";
-import { isLeadershipCourseId } from '../data/leadershipPricing.js';
+import { isPaidCourseId } from '../data/paidCourseCatalogue.js';
 import { getPublishedLeadershipCourse, LEADERSHIP_STORAGE_UNAVAILABLE } from './leadershipCourseStore.js';
 import { isLeadershipPayment, issueLeadershipAccess } from './leadershipAccess.js';
 import { grantPaidIntensive, validIntensivePayment } from './intensiveAccess.js';
@@ -239,14 +239,14 @@ export function createPaymentRouter(): Router {
         if (!isIntensiveCourseId(intensiveCourseId)) return res.status(400).json({ error: 'Choose a valid intensive pathway.' });
         if (!getIntensiveCourse(intensiveCourseId)) return res.status(503).json({ error: 'The intensive classroom is temporarily unavailable. Please try again shortly.' });
       }
-      const individual = isLeadershipCourseId(planCode);
+      const individual = isPaidCourseId(planCode);
       if (individual && (bookId || donationFund || donationAmount)) {
         return res.status(400).json({ error: 'Choose one item for checkout.' });
       }
       if (individual) {
         const course = await getPublishedLeadershipCourse(planCode).catch(() => undefined);
         if (course === undefined) return res.status(503).json({ error: LEADERSHIP_STORAGE_UNAVAILABLE });
-        if (!course) return res.status(409).json({ error: 'This leadership course is not open for enrolment yet.' });
+        if (!course) return res.status(409).json({ error: 'This course is not open for enrolment yet.' });
       }
       const donationAmountKobo =
         donationFund || donationAmount
@@ -447,7 +447,7 @@ export function createPaymentRouter(): Router {
         email: tx.customer?.email ?? "",
       });
 
-      if (isLeadershipCourseId(planCode)) {
+      if (isPaidCourseId(planCode)) {
         if (!isLeadershipPayment(planCode, reference, tx, process.env.NODE_ENV === 'production')) {
           return res.status(422).json({ error: 'We could not verify a payment for this individual course. Contact admissions with your reference.' });
         }

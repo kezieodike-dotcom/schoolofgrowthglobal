@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import type { LeadershipAvailability, LeadershipOutlines } from '../data/leadershipPricing';
+import type { PaidCourseAvailability, PaidCourseOutlines } from '../data/paidCourseCatalogue';
 
-export function useLeadershipAvailability(enabled = true) {
-  const [available, setAvailable] = useState<LeadershipAvailability>({});
-  const [outlines, setOutlines] = useState<LeadershipOutlines>({});
+export function useLeadershipAvailability(enabled = true, catalogue: 'leadership' | 'professional' = 'leadership') {
+  const [available, setAvailable] = useState<PaidCourseAvailability>({});
+  const [outlines, setOutlines] = useState<PaidCourseOutlines>({});
   const [loading, setLoading] = useState(enabled);
   const [error, setError] = useState(false);
   useEffect(() => {
@@ -11,7 +11,7 @@ export function useLeadershipAvailability(enabled = true) {
     const controller = new AbortController();
     setLoading(true);
     setError(false);
-    fetch('/api/lms/leadership/availability', { signal: controller.signal, cache: 'no-store' })
+    fetch(`/api/lms/${catalogue}/availability`, { signal: controller.signal, cache: 'no-store' })
       .then(async response => {
         if (!response.ok) throw new Error('Availability unavailable');
         const body = await response.json();
@@ -24,6 +24,6 @@ export function useLeadershipAvailability(enabled = true) {
       .catch(() => { if (!controller.signal.aborted) { setError(true); setAvailable({}); setOutlines({}); } })
       .finally(() => { if (!controller.signal.aborted) setLoading(false); });
     return () => controller.abort();
-  }, [enabled]);
+  }, [enabled, catalogue]);
   return { available, outlines, loading, error };
 }

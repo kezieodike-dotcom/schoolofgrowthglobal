@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from 'react';
 import type { LmsAssessmentQuestion } from '../../lib/useLms';
 import { leadershipAccessToken } from '../../lib/useEnrollment';
-import type { LeadershipCourseId } from '../../data/leadershipPricing';
+import type { PaidCourseId } from '../../data/paidCourseCatalogue';
 
 export function LessonList({ content }: { content: string }) {
   const items = content.split('\n');
@@ -40,7 +40,7 @@ export function LessonTable({ content }: { content: string }) {
 type QuizScore = { score: number; total: number; percentage: number };
 
 export function LeadershipQuiz({ courseId, questions }: {
-  courseId: LeadershipCourseId;
+  courseId: PaidCourseId;
   questions: LmsAssessmentQuestion[];
 }) {
   const [result, setResult] = useState<QuizScore>();

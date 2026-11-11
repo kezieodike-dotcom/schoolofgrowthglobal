@@ -8,8 +8,8 @@ import {
   saveStudentSubmission,
 } from './lmsStore.js';
 import { LmsProgress, LmsSubmission } from '../types.js';
-import { isLeadershipCourseId } from '../data/leadershipPricing.js';
-import { getPublishedLeadershipCourse, leadershipAvailability, LEADERSHIP_STORAGE_UNAVAILABLE } from './leadershipCourseStore.js';
+import { isPaidCourseId } from '../data/paidCourseCatalogue.js';
+import { getPublishedLeadershipCourse, leadershipAvailability, professionalAvailability, LEADERSHIP_STORAGE_UNAVAILABLE } from './leadershipCourseStore.js';
 import { requireLeadershipAccess } from './leadershipAccess.js';
 import { isIntensiveCourseId } from '../data/intensiveCourses.js';
 import { getIntensiveCourse } from './intensiveCourses.js';
@@ -24,6 +24,12 @@ import {
 
 export function createLmsRouter() {
   const router = express.Router();
+
+  router.get('/lms/professional/availability', async (_req, res) => {
+    res.set('Cache-Control', 'no-store');
+    try { res.json(await professionalAvailability()); }
+    catch { res.status(503).json({ error: LEADERSHIP_STORAGE_UNAVAILABLE }); }
+  });
 
   router.get('/lms/leadership/availability', async (_req, res) => {
     res.set('Cache-Control', 'no-store');
@@ -42,7 +48,7 @@ export function createLmsRouter() {
       const course = getIntensiveCourse(id);
       return course ? res.json(course) : res.status(503).json({ error: 'The intensive classroom is temporarily unavailable.' });
     }
-    if (isLeadershipCourseId(id)) {
+    if (isPaidCourseId(id)) {
       const course = await getPublishedLeadershipCourse(id).catch(() => undefined);
       if (course === undefined) return res.status(503).json({ error: LEADERSHIP_STORAGE_UNAVAILABLE });
       if (!course) return res.status(404).json({ error: 'Course not found' });
@@ -114,9 +120,9 @@ export function createLmsRouter() {
 
   // Get student progress for a course
   router.get('/lms/progress/:userId/:courseId', requireIntensiveAccess, requireLeadershipAccess, async (req: Request, res: Response) => {
-    if (res.locals.intensiveStudent) {
+    if (res.locals.intensiveStudent || res.locals.professionalStudent) {
       try {
-        const userId = res.locals.intensiveStudent;
+        const userId = res.locals.intensiveStudent ?? res.locals.professionalStudent;
         const courseId = req.params.courseId;
         return res.json(await readLearningRecord<LmsProgress>(`progress/${learningKey(`${userId}:${courseId}`)}`) ??
           { userId, courseId, completedLessons: [], progressPercentage: 0 });
@@ -140,12 +146,12 @@ export function createLmsRouter() {
     if (!progress?.userId || !progress.courseId) {
       return res.status(400).json({ error: 'userId and courseId are required' });
     }
-    if (res.locals.intensiveStudent) {
-      const course = getIntensiveCourse(progress.courseId);
+    if (res.locals.intensiveStudent || res.locals.professionalStudent) {
+      const course = isIntensiveCourseId(progress.courseId) ? getIntensiveCourse(progress.courseId) : await getPublishedLeadershipCourse(progress.courseId).catch(() => null);
       if (!course || !Array.isArray(progress.completedLessons)) return res.status(400).json({ error: 'Invalid lesson progress.' });
       const lessons = new Set(course.modules.flatMap(module => module.lessons.map(lesson => lesson.id)));
       const completedLessons = [...new Set(progress.completedLessons.filter(id => lessons.has(id)))];
-      const userId = res.locals.intensiveStudent;
+      const userId = res.locals.intensiveStudent ?? res.locals.professionalStudent;
       try {
         await writeLearningRecord(`progress/${learningKey(`${userId}:${course.id}`)}`, {
           userId, courseId: course.id, completedLessons, progressPercentage: Math.round(completedLessons.length / lessons.size * 100),
@@ -173,9 +179,9 @@ export function createLmsRouter() {
 
   // Get a single submission
   router.get('/lms/submission/:userId/:courseId/:blockId', requireIntensiveAccess, requireLeadershipAccess, async (req: Request, res: Response) => {
-    if (res.locals.intensiveStudent) {
+    if (res.locals.intensiveStudent || res.locals.professionalStudent) {
       try {
-        const key = learningKey(`${res.locals.intensiveStudent}:${req.params.courseId}`);
+        const key = learningKey(`${res.locals.intensiveStudent ?? res.locals.professionalStudent}:${req.params.courseId}`);
         const submissions = await readLearningRecord<LmsSubmission[]>(`submissions/${key}`) ?? [];
         return res.json(submissions.find(item => item.blockId === req.params.blockId) ?? null);
       } catch { return res.status(503).json({ error: 'Your work is temporarily unavailable.' }); }
@@ -190,8 +196,8 @@ export function createLmsRouter() {
 
   // Get all submissions for a user+course
   router.get('/lms/submissions/:userId/:courseId', requireIntensiveAccess, requireLeadershipAccess, async (req: Request, res: Response) => {
-    if (res.locals.intensiveStudent) {
-      try { return res.json(await readLearningRecord<LmsSubmission[]>(`submissions/${learningKey(`${res.locals.intensiveStudent}:${req.params.courseId}`)}`) ?? []); }
+    if (res.locals.intensiveStudent || res.locals.professionalStudent) {
+      try { return res.json(await readLearningRecord<LmsSubmission[]>(`submissions/${learningKey(`${res.locals.intensiveStudent ?? res.locals.professionalStudent}:${req.params.courseId}`)}`) ?? []); }
       catch { return res.status(503).json({ error: 'Your work is temporarily unavailable.' }); }
     }
     const submissions = getAllStudentSubmissions(res.locals.leadershipStudent ?? req.params.userId, req.params.courseId);
@@ -204,11 +210,11 @@ export function createLmsRouter() {
     if (!submission?.userId || !submission.courseId || !submission.blockId) {
       return res.status(400).json({ error: 'userId, courseId, blockId are required' });
     }
-    if (res.locals.intensiveStudent) {
-      const course = getIntensiveCourse(submission.courseId);
+    if (res.locals.intensiveStudent || res.locals.professionalStudent) {
+      const course = isIntensiveCourseId(submission.courseId) ? getIntensiveCourse(submission.courseId) : await getPublishedLeadershipCourse(submission.courseId).catch(() => null);
       const module = course?.modules.find(module => module.id === submission.moduleId);
-      if (!module?.lessons.some(lesson => lesson.blocks.some(block => block.id === submission.blockId))) return res.status(400).json({ error: 'This exercise does not belong to the intensive.' });
-      const userId = res.locals.intensiveStudent;
+      if (!module?.lessons.some(lesson => lesson.blocks.some(block => block.id === submission.blockId))) return res.status(400).json({ error: 'This exercise does not belong to this course.' });
+      const userId = res.locals.intensiveStudent ?? res.locals.professionalStudent;
       const key = `submissions/${learningKey(`${userId}:${submission.courseId}`)}`;
       try {
         const all = await readLearningRecord<LmsSubmission[]>(key) ?? [];

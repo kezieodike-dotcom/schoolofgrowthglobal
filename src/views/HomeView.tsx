@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { ViewType } from '../types';
 import { TestimonialsSection } from '../components/TestimonialsSection';
 import { GlobalFlagMarquee } from '../components/GlobalFlagMarquee';
+import { ProfessionalCoursesSection } from '../components/ProfessionalCoursesSection';
 import { FACULTY_MEMBERS } from '../data/mockData';
 import { useContentCollection } from '../lib/useContent';
 import { useApprovedExperts } from '../lib/useApprovedExperts';
@@ -180,6 +181,8 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
           </div>
         </div>
       </section>
+
+      <ProfessionalCoursesSection />
 
       {/* Interactive Growth AI Teaser Section */}
       <section className="border-y border-slate-200 bg-slate-100 py-12 sm:py-16">

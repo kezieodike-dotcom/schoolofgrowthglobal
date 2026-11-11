@@ -1,5 +1,5 @@
 import { useSyncExternalStore } from "react";
-import type { LeadershipCourseId } from '../data/leadershipPricing';
+import type { PaidCourseId } from '../data/paidCourseCatalogue';
 import type { IntensiveCourseId } from '../data/intensiveCourses';
 import {
   hasCourseAccess,
@@ -81,12 +81,12 @@ export function grantEntitlement(entitlement: Entitlement) {
   write([...current, entitlement]);
 }
 
-export function leadershipPurchaseFor(entitlements: Entitlement[], id: LeadershipCourseId) {
+export function leadershipPurchaseFor(entitlements: Entitlement[], id: PaidCourseId) {
   const purchases = entitlements.filter(entry => entry?.plan === id && entry.leadershipAccess && typeof entry.reference === 'string');
   return purchases.find(entry => Date.parse(entry.leadershipAccess!.expiresAt) > Date.now()) ?? purchases.at(-1);
 }
 
-export function leadershipAccessToken(id: LeadershipCourseId): string | undefined {
+export function leadershipAccessToken(id: PaidCourseId): string | undefined {
   const access = leadershipPurchaseFor(read(), id)?.leadershipAccess;
   return access && Date.parse(access.expiresAt) > Date.now() ? access.token : undefined;
 }

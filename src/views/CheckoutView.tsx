@@ -3,7 +3,8 @@ import { Link, Navigate, useParams, useSearchParams } from 'react-router-dom';
 import { MENTORS } from '../data/mockData';
 import { CountryPhoneField } from '../components/CountryPhoneField';
 import { PLANS, isPlanCode, formatNaira } from '../lib/pricing';
-import { isLeadershipCourseId } from '../data/leadershipPricing';
+import { isPaidCourseId } from '../data/paidCourseCatalogue';
+import { isProfessionalCourseId } from '../data/professionalCourses';
 import { useLeadershipAvailability } from '../lib/useLeadershipAvailability';
 import { INTENSIVE_PATHWAYS } from '../data/intensiveCourses';
 import { rememberPendingPayment } from '../lib/pendingPayment';
@@ -51,8 +52,10 @@ export const CheckoutView: React.FC = () => {
   const { plan: planParam } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const intensive = INTENSIVE_PATHWAYS.find(course => course.id === searchParams.get('intensive'));
-  const leadershipId = isLeadershipCourseId(planParam) ? planParam : null;
-  const leadership = useLeadershipAvailability(Boolean(leadershipId));
+  const leadershipId = isPaidCourseId(planParam) ? planParam : null;
+  const professional = isProfessionalCourseId(planParam);
+  const individualHome = professional ? `/courses/${planParam}` : '/courses/leadership';
+  const leadership = useLeadershipAvailability(Boolean(leadershipId), professional ? 'professional' : 'leadership');
 
   const [config, setConfig] = useState<PaymentConfig | null>(null);
   const [name, setName] = useState('');
@@ -94,7 +97,7 @@ export const CheckoutView: React.FC = () => {
     return <div className="mx-auto min-h-[50vh] max-w-2xl px-4 py-12">
       <h1 className="text-2xl font-serif font-bold">{plan.name}</h1>
       <p className="mt-3 text-sm text-slate-600" role="status">{leadership.loading ? 'Checking enrolment availability...' : leadership.error ? 'Enrolment availability could not be checked.' : 'This course is not open for enrolment yet.'}</p>
-      <Link to="/courses/leadership" className="mt-4 inline-flex min-h-11 items-center gap-2 text-sm font-bold text-amber-800"><ArrowLeft className="h-4 w-4" /> Back to leadership courses</Link>
+      <Link to={individualHome} className="mt-4 inline-flex min-h-11 items-center gap-2 text-sm font-bold text-amber-800"><ArrowLeft className="h-4 w-4" /> Back to courses</Link>
     </div>;
   }
 
@@ -190,11 +193,11 @@ export const CheckoutView: React.FC = () => {
     <div className="min-h-screen bg-slate-50 text-slate-900">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
         <Link
-          to={leadershipId ? '/courses/leadership' : '/pricing'}
+          to={leadershipId ? individualHome : '/pricing'}
           className="inline-flex items-center gap-2 text-xs text-slate-500 hover:text-slate-900 mb-8 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
-          {leadershipId ? 'Back to leadership courses' : 'Back to packages'}
+          {leadershipId ? professional ? 'Back to course' : 'Back to leadership courses' : 'Back to packages'}
         </Link>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">

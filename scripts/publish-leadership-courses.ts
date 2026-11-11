@@ -1,5 +1,5 @@
 import { readFile } from 'node:fs/promises';
-import { isLeadershipCourseId } from '../src/data/leadershipPricing.js';
+import { isPaidCourseId } from '../src/data/paidCourseCatalogue.js';
 import { isReadyLeadershipCourse, LEADERSHIP_BUCKET, leadershipStorage } from '../src/server/leadershipCourseStore.js';
 import { loadServerEnv } from '../src/server/loadEnv.js';
 
@@ -7,13 +7,13 @@ const maxBytes = 2 * 1024 * 1024;
 
 async function publish() {
   const ids = [...new Set(process.argv.slice(2))];
-  if (!ids.length || !ids.every(isLeadershipCourseId)) {
-    throw new Error('Provide the catalogue IDs of the reviewed leadership courses to publish.');
+  if (!ids.length || !ids.every(isPaidCourseId)) {
+    throw new Error('Provide the catalogue IDs of the reviewed individual courses to publish.');
   }
   const files = await Promise.all(ids.map(async id => {
     const text = (await readFile(`data/lms/${id}.json`, 'utf8')).replace(/^\uFEFF/, '');
     if (Buffer.byteLength(text) > maxBytes || !isReadyLeadershipCourse(id, JSON.parse(text))) {
-      throw new Error(`${id} must be a valid, published leadership course smaller than 2 MB.`);
+      throw new Error(`${id} must be a valid, published individual course smaller than 2 MB.`);
     }
     return { id, text };
   }));
