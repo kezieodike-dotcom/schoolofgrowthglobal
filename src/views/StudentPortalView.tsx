@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type FormEvent, type ReactNode } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { ArrowRight, BookOpen, CheckCircle2, Clock3, GraduationCap, Loader2, LogOut, RefreshCw } from 'lucide-react';
 import { INTENSIVE_COURSES } from '../data/courseIntroductions';
 import { useEnrollment } from '../lib/useEnrollment';
@@ -10,6 +10,7 @@ import { ProfessionalCoursesSection } from '../components/ProfessionalCoursesSec
 export function StudentPortalView({ fallback }: { fallback?: ReactNode }) {
   const account = useStudentAccount();
   const enrollment = useEnrollment();
+  const navigate = useNavigate();
   const [params, setParams] = useSearchParams();
   const receipt = params.get('reference') ?? params.get('trxref');
   const opened = useRef<string | null>(null);
@@ -30,11 +31,11 @@ export function StudentPortalView({ fallback }: { fallback?: ReactNode }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [receipt]);
 
-  async function submit(event: FormEvent) {
+  function submit(event: FormEvent) {
     event.preventDefault(); setFormError(null);
-    if (movePaidAccessToMainSite(reference.trim())) return;
-    try { await openStudentDashboard(reference.trim()); setParams({}, { replace: true }); }
-    catch (error) { setFormError(error instanceof Error ? error.message : 'Please retry.'); }
+    if (!reference.trim()) { setFormError('Enter the payment reference from your receipt.'); return; }
+    // Preserve receipt recovery for individual courses and full programmes too.
+    navigate(`/payment/callback?reference=${encodeURIComponent(reference.trim())}`);
   }
 
   if (!receipt && !account.dashboard && account.phase !== 'loading' && enrollment.entitlements.some(entry => entry.plan !== 'foundation-intensive') && fallback) return <>{fallback}</>;
