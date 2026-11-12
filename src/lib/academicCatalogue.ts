@@ -8,7 +8,7 @@ export interface FacultySchool {
   number: number; id: string; title: string; notes: string[]; courses: string[]; aliases: string[];
 }
 export interface Faculty {
-  number: number; title: string; purpose: string; schools: FacultySchool[]; aliases: string[];
+  number: number; displayNumber?: number; title: string; purpose: string; schools: FacultySchool[]; aliases: string[];
 }
 export interface AcademicCourse {
   key: string; title: string; schoolId: string; aliases: string[]; courseId?: string; href?: string;
@@ -106,7 +106,11 @@ export function buildAcademicCatalogue() {
     schools.get(course.id === 'customer-relationship-service-excellence' ? 'marketing-sales-and-business-development' : 'human-resources-and-talent-management')!,
     course.title, course.id, `/courses/${course.id}`);
 
-  return { faculties, courses: [...courses.values()] };
+  // Leadership leads the public directory. Stable faculty identities keep the
+  // legacy mappings intact; school and course numbers are never reassigned.
+  const orderedFaculties = [...faculties.filter(faculty => faculty.number === 4), ...faculties.filter(faculty => faculty.number !== 4)]
+    .map((faculty, index) => ({ ...faculty, displayNumber: index + 1 }));
+  return { faculties: orderedFaculties, courses: [...courses.values()] };
 }
 
 const catalogue = buildAcademicCatalogue();

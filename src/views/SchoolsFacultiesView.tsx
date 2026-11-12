@@ -31,7 +31,7 @@ export const SchoolsFacultiesView: React.FC<{ embedded?: boolean; searchQuery?: 
   const [localQuery, setLocalQuery] = useState('');
   const query = searchQuery ?? localQuery;
   const setQuery = onSearchQueryChange ?? setLocalQuery;
-  const [openFaculty, setOpenFaculty] = useState(embedded ? 0 : 1);
+  const [openFaculty, setOpenFaculty] = useState(embedded ? 0 : FACULTIES[0].number);
   const [openSchool, setOpenSchool] = useState<number | null>(null);
   const normalizedQuery = query.trim().toLowerCase();
 
@@ -92,7 +92,7 @@ export const SchoolsFacultiesView: React.FC<{ embedded?: boolean; searchQuery?: 
         {visibleFaculties.map((faculty) => {
           const isOpen = openFaculty === faculty.number || Boolean(normalizedQuery) || Boolean(schoolId);
           return (
-            <section key={faculty.number} data-faculty-number={faculty.number} className="overflow-hidden border border-slate-200 bg-white shadow-[0_8px_26px_rgba(15,23,42,0.04)]">
+            <section key={faculty.number} data-faculty-number={faculty.number} data-faculty-display-number={faculty.displayNumber ?? faculty.number} className="overflow-hidden border border-slate-200 bg-white shadow-[0_8px_26px_rgba(15,23,42,0.04)]">
               <button
                 type="button"
                 onClick={() => setOpenFaculty(isOpen ? 0 : faculty.number)}
@@ -101,10 +101,10 @@ export const SchoolsFacultiesView: React.FC<{ embedded?: boolean; searchQuery?: 
               >
                 <span className="flex min-w-0 items-start gap-3 sm:gap-4">
                   <span className="flex h-8 w-8 shrink-0 items-center justify-center border border-amber-300 bg-amber-50 text-xs font-mono font-bold text-amber-800 sm:h-9 sm:w-9">
-                    {String(faculty.number).padStart(2, '0')}
+                    {String(faculty.displayNumber ?? faculty.number).padStart(2, '0')}
                   </span>
                   <span className="min-w-0 [overflow-wrap:anywhere]">
-                    <span className="block text-[10px] font-mono uppercase tracking-[0.18em] text-[#ff9700]">Faculty {faculty.number}</span>
+                    <span className="block text-[10px] font-mono uppercase tracking-[0.18em] text-[#ff9700]">Faculty {faculty.displayNumber ?? faculty.number}</span>
                     <span className="mt-1 block text-base font-serif font-bold leading-tight text-slate-950 sm:text-xl">{faculty.title}</span>
                   </span>
                 </span>

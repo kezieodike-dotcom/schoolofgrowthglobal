@@ -7,6 +7,11 @@ type CoursePreview = {
 };
 
 export const leadershipCoursePreviews: Partial<Record<LeadershipCourseId, CoursePreview>> = {
+  'leadership-001': {
+    summary: 'Build your understanding of leadership, personal responsibility and the principles that help you guide people with purpose.',
+    image: '/lessons/classrooms/module-1-01.jpg',
+    alt: 'African facilitator guiding adult learners through a classroom discussion',
+  },
   'leadership-004': {
     summary: 'Use strategic foresight to develop a clear vision, build commitment and turn that vision into an implementation plan.',
     image: '/lessons/classrooms/module-3-04.jpg',

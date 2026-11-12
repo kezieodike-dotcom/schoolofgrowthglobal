@@ -27,6 +27,16 @@ test('every updated school retains its published ID, number and title', () => {
   }
 });
 
+test('Leadership is displayed as Faculty 1 while school identities and numbers remain permanent', () => {
+  assert.equal(FACULTIES[0].number, 4);
+  assert.equal(FACULTIES[0].displayNumber, 1);
+  assert.match(FACULTIES[0].title, /LEADERSHIP/);
+  assert.ok(FACULTIES[0].schools.some(school => school.id === 'leadership'));
+  assert.deepEqual(FACULTIES.map(faculty => faculty.displayNumber), Array.from({ length: FACULTIES.length }, (_, index) => index + 1));
+  assert.equal(SCHOOL_CATALOGUE.find(school => school.id === 'leadership')?.number,
+    updated.faculties.flatMap(faculty => faculty.schools).find(school => school.id === 'leadership')?.number);
+});
+
 test('old school names and existing course links still resolve', () => {
   assert.ok(searchFacultyCatalogue('School of Purpose, Vision & Life Direction').length);
   assert.ok(searchFacultyCatalogue('School of Artificial Intelligence & Future Skills').length);

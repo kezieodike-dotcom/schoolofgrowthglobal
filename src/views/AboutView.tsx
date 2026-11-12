@@ -143,9 +143,9 @@ export const AboutView: React.FC = () => {
               <LeadershipPortrait key={member.avatar} member={member} />
               <div className="text-center space-y-1">
                 <h4 className="font-serif font-bold text-slate-900 text-base">{member.name}</h4>
+                {member.expertTypes.length > 0 && <p className="text-xs font-semibold text-emerald-700">{member.expertTypes.map(type => type === 'consultant' ? 'Approved Consultant' : 'Approved Mentor').join(' / ')}</p>}
                 <p className="text-xs text-amber-600 font-medium">{member.role}</p>
                 <p className="text-[11px] text-slate-500">{member.institution}</p>
-                {member.expertTypes.length > 0 && <p className="pt-1 text-xs font-semibold text-emerald-700">{member.expertTypes.map(type => type === 'consultant' ? 'Approved Consultant' : 'Approved Mentor').join(' / ')}</p>}
               </div>
               {member.credentials.length > 0 && <div className="pt-3 border-t border-slate-200 space-y-1 text-xs leading-relaxed text-slate-500">
                 {member.credentials.map((cred, i) => (

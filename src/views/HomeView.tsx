@@ -182,7 +182,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
         </div>
       </section>
 
-      <ProfessionalCoursesSection />
+      <ProfessionalCoursesSection includeLeadership />
 
       {/* Interactive Growth AI Teaser Section */}
       <section className="border-y border-slate-200 bg-slate-100 py-12 sm:py-16">
@@ -568,6 +568,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
                     <h3 className="text-base font-serif font-semibold text-slate-900 leading-snug">
                       {member.name}
                     </h3>
+                    {member.expertTypes.length > 0 && <p className="text-xs font-semibold text-emerald-700">{member.expertTypes.map(type => type === 'consultant' ? 'Approved Consultant' : 'Approved Mentor').join(' / ')}</p>}
                     <p className="text-xs font-semibold text-blue-700">{member.role}</p>
                     <p className="reference-card-meta leading-relaxed">{member.institution}</p>
                   </div>
