@@ -27,6 +27,10 @@ import { isLeadershipPayment, issueLeadershipAccess } from './leadershipAccess.j
 import { grantPaidIntensive, validIntensivePayment } from './intensiveAccess.js';
 import { getIntensiveCourse } from './intensiveCourses.js';
 import { isIntensiveCourseId } from '../data/intensiveCourses.js';
+import { paystack } from './paystackClient.js';
+import { intensiveStudentKey } from './learningIdentity.js';
+import { setStudentSession } from './studentAccounts.js';
+import { canonicalSiteOrigin } from '../lib/siteOrigin.js';
 
 /**
  * Paystack checkout for course packages and mentorship subscriptions.
@@ -53,7 +57,6 @@ import { isIntensiveCourseId } from '../data/intensiveCourses.js';
  * widget, which is what it is designed for.
  */
 
-const PAYSTACK_API = "https://api.paystack.co";
 
 /**
  * Where Paystack sends the payer after checkout. Must be an absolute URL, and
@@ -66,7 +69,7 @@ function callbackUrl(req: Request): string {
     configured && /^https?:\/\//.test(configured)
       ? configured.replace(/\/+$/, "")
       : `${req.protocol}://${req.get("host")}`;
-  return `${base}/payment/callback`;
+  return `${canonicalSiteOrigin(base)}/payment/callback`;
 }
 
 /**
@@ -109,36 +112,6 @@ interface PaystackTransaction {
     deliveryMode?: string;
     intensiveCourseId?: string;
   } | null;
-}
-
-/**
- * Calls Paystack and returns the parsed body, or throws with a message safe
- * to log. Paystack answers 4xx with a JSON `message`, which is far more
- * useful than the status code alone when a key is wrong or a plan is unknown.
- */
-async function paystack<T>(
-  path: string,
-  init?: { method?: string; body?: unknown }
-): Promise<T> {
-  const res = await fetch(`${PAYSTACK_API}${path}`, {
-    method: init?.method ?? "GET",
-    headers: {
-      Authorization: `Bearer ${paystackSecretKey()}`,
-      "Content-Type": "application/json",
-    },
-    body: init?.body ? JSON.stringify(init.body) : undefined,
-  });
-
-  const body = (await res.json().catch(() => null)) as
-    | { status?: boolean; message?: string; data?: T }
-    | null;
-
-  if (!res.ok || !body?.status) {
-    throw new Error(
-      `Paystack ${path} failed (${res.status}): ${body?.message ?? "no message"}`
-    );
-  }
-  return body.data as T;
 }
 
 const NOT_CONFIGURED =
@@ -421,7 +394,9 @@ export function createPaymentRouter(): Router {
       if (planCode === 'foundation-intensive') {
         if (!validIntensivePayment(tx, reference)) return res.status(422).json({ error: 'We could not match this payment to the intensive. Contact support with your reference.' });
         try {
-          return res.json({ paid: true, entitlement: await grantPaidIntensive(tx, reference) });
+          const entitlement = await grantPaidIntensive(tx, reference);
+          setStudentSession(req, res, intensiveStudentKey(entitlement.email));
+          return res.json({ paid: true, entitlement });
         } catch (error) {
           console.error('Could not save the paid intensive enrolment:', error);
           return res.status(503).json({ error: 'Your payment is confirmed. Access could not be saved yet; please retry this page. Do not pay again.' });

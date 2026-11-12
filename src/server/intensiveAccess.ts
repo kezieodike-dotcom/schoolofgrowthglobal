@@ -1,21 +1,23 @@
-import { createHash, createHmac, timingSafeEqual } from 'node:crypto';
+import { createHmac, timingSafeEqual } from 'node:crypto';
 import type { RequestHandler } from 'express';
 import { INTENSIVE_PATHWAYS, isIntensiveCourseId, type IntensiveCourseId } from '../data/intensiveCourses.js';
 import { CURRENCY, entitlementFor, PLANS, type Entitlement } from '../lib/pricing.js';
 import { paystackSecretKey } from './paystackEnv.js';
 import { readLearningRecord, writeLearningRecord } from './learningStorage.js';
+import { intensiveStudentKey, learningKey } from './learningIdentity.js';
+import { ensureStudentAccount } from './studentAccounts.js';
+export { learningKey } from './learningIdentity.js';
 
 export interface IntensivePayment {
   reference: string; status: string; amount: number; currency: string; domain?: string;
-  customer?: { email?: string };
-  metadata?: { plan?: string; itemKind?: string; intensiveCourseId?: string } | null;
+  customer?: { email?: string; first_name?: string; last_name?: string };
+  metadata?: { plan?: string; itemKind?: string; intensiveCourseId?: string; name?: string } | null;
 }
-interface PaidIntensive {
+export interface PaidIntensive {
   version: 1;
   entitlement: Entitlement;
   courseIds: IntensiveCourseId[];
 }
-export const learningKey = (value: string) => createHash('sha256').update(value).digest('hex');
 const signature = (payload: string, secret: string) => createHmac('sha256', secret).update(`intensive-access:${payload}`).digest('base64url');
 
 export function validIntensivePayment(tx: IntensivePayment, reference = tx.reference) {
@@ -42,10 +44,20 @@ export async function grantPaidIntensive(tx: IntensivePayment, reference = tx.re
   }
   if (!record || record.entitlement.reference !== reference || record.entitlement.plan !== 'foundation-intensive' ||
       record.entitlement.email !== tx.customer!.email!.trim().toLowerCase()) throw new Error('Paid enrolment could not be restored.');
+  const name = tx.metadata?.name || [tx.customer?.first_name, tx.customer?.last_name].filter(Boolean).join(' ');
+  await ensureStudentAccount(record.entitlement.email, reference, name);
+  return intensiveEntitlement(record);
+}
+
+export function readPaidIntensive(reference: string) {
+  return readLearningRecord<PaidIntensive>(`enrolments/${learningKey(reference)}`);
+}
+
+export function intensiveEntitlement(record: PaidIntensive): Entitlement {
   const exp = Date.parse(record.entitlement.coursesExpireAt);
   const secret = paystackSecretKey();
   if (!secret || !Number.isFinite(exp)) throw new Error('Student access is unavailable.');
-  const student = createHmac('sha256', secret).update(`intensive-student:${record.entitlement.email}`).digest('hex');
+  const student = intensiveStudentKey(record.entitlement.email);
   const payload = Buffer.from(JSON.stringify({ courseIds: record.courseIds, student, exp })).toString('base64url');
   return { ...record.entitlement, levels: [], intensiveAccess: {
     courseIds: record.courseIds, expiresAt: record.entitlement.coursesExpireAt,

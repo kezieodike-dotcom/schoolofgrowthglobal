@@ -27,7 +27,7 @@ export const LmsStudentDashboardView: React.FC = () => {
     .find(({ lesson }) => !isLessonComplete(lesson.id));
   const firstLesson = modules[0]?.lessons[0];
 
-  if (intensiveId && !purchase) return <Navigate to="/intensives" replace />;
+  if (intensiveId && !purchase && !loading) return <Navigate to="/portal" replace />;
   if (!intensiveId && !enrollment.canAccessLevel('Emerging Leaders')) {
     return <Navigate to="/portal" replace />;
   }

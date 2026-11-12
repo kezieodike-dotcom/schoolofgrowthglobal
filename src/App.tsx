@@ -35,7 +35,7 @@ import { CheckoutView } from './views/CheckoutView';
 import { BookCheckoutView } from './views/BookCheckoutView';
 import { PaymentCallbackView } from './views/PaymentCallbackView';
 import { PaymentAccessSync } from './components/PaymentAccessSync';
-import { IntensiveLibraryView } from './views/IntensiveLibraryView';
+import { StudentPortalView } from './views/StudentPortalView';
 
 // Admin panel - its own chrome, so it sits outside <Layout>
 import { AdminLayout } from './views/admin/AdminLayout';
@@ -61,7 +61,7 @@ const CourseDetailRoute: React.FC = () => {
   const navigate = useLegacyNavigate();
   return isProfessionalCourseId(courseId) ? <ProfessionalCourseView /> : <CourseDetailView onNavigate={navigate} />;
 };
-const PortalRoute: React.FC = () => <StudentDashboardView onNavigate={useLegacyNavigate()} />;
+const PortalRoute: React.FC = () => <StudentPortalView fallback={<StudentDashboardView onNavigate={useLegacyNavigate()} />} />;
 const CommandCenterRoute: React.FC = () => <CommandCenterView onNavigate={useLegacyNavigate()} />;
 
 const useScrollReveal = (pathname: string) => {
@@ -216,7 +216,7 @@ const AppRoutes: React.FC = () => {
         <Route path="payment/callback" element={<PaymentCallbackView />} />
 
         <Route path="portal" element={<PortalRoute />} />
-        <Route path="intensives" element={<IntensiveLibraryView />} />
+        <Route path="intensives" element={<Navigate to="/portal" replace />} />
         <Route path="command-center" element={<CommandCenterRoute />} />
 
         <Route path="*" element={<NotFoundView />} />

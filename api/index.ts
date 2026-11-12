@@ -6,6 +6,7 @@ import { createAIRouter } from "../src/server/aiRoutes.js";
 import { createLmsRouter } from "../src/server/lmsRoutes.js";
 import { createDemoReviewerRouter } from "../src/server/demoReviewerRoutes.js";
 import { createMentorRouter } from "../src/server/mentorRoutes.js";
+import { createStudentRouter } from '../src/server/studentRoutes.js';
 
 loadServerEnv();
 
@@ -78,6 +79,7 @@ const aiRouter = createAIRouter();
 const lmsRouter = createLmsRouter();
 const demoReviewerRouter = createDemoReviewerRouter();
 const mentorRouter = createMentorRouter(requireAdmin);
+const studentRouter = createStudentRouter();
 
 let apiRouterPromise: Promise<express.Router> | null = null;
 
@@ -132,6 +134,8 @@ app.use("/api", demoReviewerRouter);
 app.use(demoReviewerRouter);
 app.use("/api", mentorRouter);
 app.use(mentorRouter);
+app.use('/api', studentRouter);
+app.use(studentRouter);
 app.use("/api", lazyApi);
 app.use(lazyApi);
 

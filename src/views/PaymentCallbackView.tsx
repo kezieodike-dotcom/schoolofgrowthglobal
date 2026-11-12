@@ -6,6 +6,8 @@ import { isPaidCourseId } from '../data/paidCourseCatalogue';
 import { isProfessionalCourseId } from '../data/professionalCourses';
 import { useLeadershipAvailability } from '../lib/useLeadershipAvailability';
 import { forgetPendingPayment } from '../lib/pendingPayment';
+import { refreshStudentAccount } from '../lib/useStudentAccount';
+import { movePaidAccessToMainSite } from '../lib/siteOrigin';
 import type { BookPurchase } from '../lib/bookRevenue';
 import type { DonationPayment } from '../lib/donations';
 import {
@@ -57,6 +59,7 @@ export const PaymentCallbackView: React.FC = () => {
   const requested = useRef<string | null>(null);
 
   useEffect(() => {
+    if (movePaidAccessToMainSite()) return;
     if (!reference) {
       setState({
         phase: 'error',
@@ -100,6 +103,7 @@ export const PaymentCallbackView: React.FC = () => {
         // The single point where course and mentorship access is granted anywhere in the app.
         grantEntitlement(body.entitlement);
         forgetPendingPayment(body.entitlement.reference);
+        if (body.entitlement.intensiveAccess) await refreshStudentAccount();
         setState({ phase: 'paid', entitlement: body.entitlement });
       } catch {
         setState({
@@ -270,7 +274,7 @@ const PaidPanel: React.FC<{ entitlement: Entitlement }> = ({ entitlement }) => {
           <ArrowRight className="w-4 h-4" />
         </Link>
         <Link
-          to={intensive ? '/intensives' : leadershipId ? professional ? '/portal' : '/courses/leadership' : '/portal'}
+          to={intensive ? '/portal' : leadershipId ? professional ? '/portal' : '/courses/leadership' : '/portal'}
           className="flex-1 py-3.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs flex items-center justify-center gap-2 transition-colors"
         >
           <Receipt className="w-4 h-4" />

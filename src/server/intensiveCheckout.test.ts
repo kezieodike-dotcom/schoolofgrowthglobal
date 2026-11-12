@@ -12,13 +12,14 @@ test('paid intensives survive missed callbacks, restore securely, expire once, a
   t.after(() => { for (const [name, value] of Object.entries(env)) { if (value === undefined) delete process.env[name]; else process.env[name] = value; } });
   const { createPaymentRouter, captureRawBody } = await import('./paymentRoutes.js');
   const { createLmsRouter } = await import('./lmsRoutes.js');
+  const { createStudentRouter } = await import('./studentRoutes.js');
   const { readIntensiveAccess } = await import('./intensiveAccess.js');
   const records = new Map<string, unknown>();
   let unavailable = false;
   let charge: any = null;
   const transaction = (reference = 'paid-intensive') => ({
     reference, status: 'success', domain: 'live', amount: reference === 'underpaid' ? 1 : 500_000, currency: 'NGN',
-    customer: { email: reference === 'another-student' ? 'other@example.com' : 'buyer@example.com' },
+    customer: { email: reference === 'another-student' ? 'other@example.com' : 'buyer@example.com', first_name: 'Example', last_name: 'Learner' },
     metadata: { plan: 'foundation-intensive', itemKind: 'plan', ...(reference === 'legacy-intensive' ? {} : { intensiveCourseId: 'self-discovery-productivity' }) },
   });
   const originalFetch = globalThis.fetch;
@@ -27,6 +28,11 @@ test('paid intensives survive missed callbacks, restore securely, expire once, a
     if (url.hostname === 'intensive-storage.example.test') {
       assert.equal(new Headers(init?.headers).get('Authorization'), 'Bearer private-fixture-key');
       if (unavailable) return Response.json({ error: 'Unavailable' }, { status: 503 });
+      if (url.pathname.includes('/object/list/')) {
+        const { prefix, offset, limit } = JSON.parse(String(init?.body));
+        const names = [...records.keys()].filter(key => key.startsWith(`student-learning/${prefix}/`)).map(key => ({ name: key.split('/').at(-1) }));
+        return Response.json(names.slice(offset, offset + limit));
+      }
       const key = url.pathname.replace('/storage/v1/object/authenticated/', '').replace('/storage/v1/object/', '');
       if (init?.method === 'POST') {
         if (records.has(key) && new Headers(init.headers).get('x-upsert') === 'false') return Response.json({ statusCode: '409' }, { status: 400 });
@@ -46,7 +52,7 @@ test('paid intensives survive missed callbacks, restore securely, expire once, a
     return originalFetch(input, init);
   });
   const app = express();
-  app.use(express.json({ verify: captureRawBody }), createPaymentRouter(), createLmsRouter());
+  app.use(express.json({ verify: captureRawBody }), createPaymentRouter(), createStudentRouter(), createLmsRouter());
   const server = app.listen(0, '127.0.0.1');
   await new Promise<void>(resolve => server.once('listening', resolve));
   t.after(() => { server.close(); server.closeAllConnections(); });
@@ -70,6 +76,16 @@ test('paid intensives survive missed callbacks, restore securely, expire once, a
   assert.equal((await post('/payments/initialize', { plan: 'foundation-intensive', intensiveCourseId: 'self-discovery-productivity', email: 'buyer@example.com', amount: 1 })).status, 200);
   assert.equal(charge.amount, 500_000);
   assert.equal(charge.metadata.intensiveCourseId, 'self-discovery-productivity');
+  const previousAppUrl = process.env.APP_URL;
+  const previousCallback = process.env.PAYSTACK_CALLBACK_URL;
+  process.env.PAYSTACK_CALLBACK_URL = 'https://schoolofgrowthglobal.vercel.app';
+  try {
+    assert.equal((await post('/payments/initialize', { plan: 'foundation-intensive', intensiveCourseId: 'self-discovery-productivity', email: 'buyer@example.com' })).status, 200);
+    assert.equal(charge.callback_url, 'https://www.schoolofgrowthglobal.com/payment/callback');
+  } finally {
+    if (previousCallback === undefined) delete process.env.PAYSTACK_CALLBACK_URL; else process.env.PAYSTACK_CALLBACK_URL = previousCallback;
+    if (previousAppUrl === undefined) delete process.env.APP_URL; else process.env.APP_URL = previousAppUrl;
+  }
   assert.equal((await webhook(transaction(), 'forged')).status, 401);
   assert.equal((await webhook(transaction('underpaid'))).status, 422);
   assert.equal(records.size, 0);
@@ -78,9 +94,9 @@ test('paid intensives survive missed callbacks, restore securely, expire once, a
   unavailable = false;
   // No browser callback has occurred: the signed event alone persists access.
   assert.equal((await webhook(transaction())).status, 200);
-  assert.equal(records.size, 1);
+  assert.equal(records.size, 3);
   assert.equal((await webhook(transaction())).status, 200);
-  assert.equal(records.size, 1);
+  assert.equal(records.size, 3);
   const receipt = await get('/payments/verify/paid-intensive');
   assert.equal(receipt.status, 200);
   const { entitlement } = await receipt.json();
@@ -91,7 +107,7 @@ test('paid intensives survive missed callbacks, restore securely, expire once, a
   const token = entitlement.intensiveAccess.token;
   const restored = await (await get('/payments/verify/paid-intensive')).json();
   assert.equal(restored.entitlement.coursesExpireAt, entitlement.coursesExpireAt);
-  assert.equal(records.size, 1);
+  assert.equal(records.size, 3);
   assert.equal((await get('/payments/verify/underpaid')).status, 422);
   assert.equal((await (await get('/payments/verify/unpaid')).json()).paid, false);
   const course = await get('/lms/courses/self-discovery-productivity', token);
@@ -122,4 +138,44 @@ test('paid intensives survive missed callbacks, restore securely, expire once, a
   assert.deepEqual(work.data, submission.data);
   const legacy = (await (await get('/payments/verify/legacy-intensive')).json()).entitlement;
   assert.deepEqual(legacy.intensiveAccess.courseIds, ['self-discovery-productivity', 'mindset-career-development']);
+
+  // A real server session restores the dashboard even with no browser purchase store.
+  assert.equal((await get('/students/me')).status, 401);
+  assert.equal((await post('/students/open', { email: 'buyer@example.com' })).status, 400);
+  assert.equal((await post('/students/open', { reference: 'unpaid' })).status, 401);
+  assert.equal((await post('/students/open', { reference: 'paid-intensive', email: 'wrong@example.com' })).status, 401);
+  assert.equal((await fetch(base + '/students/open', { method: 'POST', headers: { 'Content-Type': 'application/json', Origin: 'https://attacker.example' }, body: JSON.stringify({ reference: 'paid-intensive' }) })).status, 403);
+  const opened = await post('/students/open', { reference: 'paid-intensive', email: 'buyer@example.com' });
+  assert.equal(opened.status, 200);
+  const cookieHeader = opened.headers.get('set-cookie')!;
+  assert.match(cookieHeader, /HttpOnly/i);
+  assert.match(cookieHeader, /SameSite=Lax/i);
+  const cookie = cookieHeader.split(';')[0];
+  const sessionGet = (path: string, value = cookie) => fetch(base + path, { headers: { Cookie: value } });
+  const dashboardResponse = await sessionGet('/students/me');
+  assert.equal(dashboardResponse.headers.get('cache-control'), 'no-store');
+  const dashboard = await dashboardResponse.json();
+  assert.equal(dashboard.profile.email, 'buyer@example.com');
+  assert.equal(dashboard.profile.name, 'Example Learner');
+  assert.deepEqual(dashboard.courses.map((course: any) => course.id).sort(), ['mindset-career-development', 'self-discovery-productivity']);
+  const pathway = dashboard.courses.find((course: any) => course.id === content.id);
+  assert.equal(pathway.completedLessons, 1);
+  assert.equal(pathway.totalLessons, content.modules.flatMap((module: any) => module.lessons).length);
+  assert.match(pathway.resumePath, /^\/lms\/self-discovery-productivity\//);
+  assert.equal(dashboard.entitlements.find((entry: any) => entry.reference === 'paid-intensive').coursesExpireAt, entitlement.coursesExpireAt);
+  assert.ok(!JSON.stringify(dashboard).includes('other@example.com'));
+  assert.equal((await sessionGet('/students/me', cookie + 'tampered')).status, 401);
+  const expiredPayload = Buffer.from(JSON.stringify({ student: 'a'.repeat(64), exp: Date.now() - 1 })).toString('base64url');
+  const expiredSignature = createHmac('sha256', 'intensive-test-secret').update(`student-session:${expiredPayload}`).digest('base64url');
+  assert.equal((await sessionGet('/students/me', `sgg_student=${expiredPayload}.${expiredSignature}`)).status, 401);
+  const nextDevice = await post('/students/open', { reference: 'another-student' });
+  const otherDashboard = await (await sessionGet('/students/me', nextDevice.headers.get('set-cookie')!.split(';')[0])).json();
+  assert.equal(otherDashboard.profile.email, 'other@example.com');
+  assert.equal(otherDashboard.courses.length, 1);
+  assert.equal(otherDashboard.courses[0].completedLessons, 0);
+  const logout = await fetch(base + '/students/logout', { method: 'POST', headers: { Cookie: cookie } });
+  assert.match(logout.headers.get('set-cookie')!, /Max-Age=0/i);
+  unavailable = true;
+  assert.equal((await sessionGet('/students/me')).status, 503);
+  unavailable = false;
 });

@@ -13,6 +13,7 @@ import { createContentRouter } from "./src/server/contentRoutes.js";
 import { createDemoReviewerRouter } from "./src/server/demoReviewerRoutes.js";
 import { createMentorReviewRouter } from "./src/server/mentorReviewRoutes.js";
 import { createLmsRouter } from "./src/server/lmsRoutes.js";
+import { createStudentRouter } from './src/server/studentRoutes.js';
 
 loadServerEnv();
 
@@ -82,6 +83,7 @@ async function startServer() {
   app.use("/api", createDemoReviewerRouter());
   app.use("/api", createMentorReviewRouter());
   app.use("/api", createLmsRouter());
+  app.use('/api', createStudentRouter());
 
   // Vite Middleware integration for Development
   if (process.env.NODE_ENV !== "production") {

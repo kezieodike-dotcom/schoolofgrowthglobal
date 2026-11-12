@@ -22,6 +22,7 @@ const NAV_ITEMS: { to: string; label: string }[] = [
   { to: '/about', label: 'About' },
   { to: '/schools', label: 'Schools' },
   { to: '/books', label: 'Books' },
+  { to: '/portal', label: 'My dashboard' },
 ];
 
 const PRIMARY_NAV_ITEMS = NAV_ITEMS.slice(0, 5);
@@ -32,7 +33,7 @@ export const HeaderNavbar: React.FC = () => {
   const [moreOpen, setMoreOpen] = useState(false);
   // An enrolled student has no use for a "Register" button; show them the way
   // into what they paid for instead.
-  const { currentPackageName } = useEnrollment();
+  const { isEnrolled } = useEnrollment();
 
   const linkClass = ({ isActive }: { isActive: boolean }) =>
     `px-3 py-2 rounded-lg text-[13px] font-medium transition-all duration-200 ${
@@ -77,13 +78,13 @@ export const HeaderNavbar: React.FC = () => {
           {/* Right Action Buttons */}
           <div className="hidden items-center gap-3 lg:flex">
             <ContentNotificationCenter />
-            {currentPackageName ? (
+            {isEnrolled ? (
               <Link
                 to="/portal"
                 className="flex items-center gap-2 rounded-full bg-slate-950 px-5 py-2.5 text-xs font-bold text-white shadow-sm transition-all hover:bg-slate-800"
               >
                 <GraduationCap className="w-3.5 h-3.5" />
-                <span>{currentPackageName} student</span>
+                <span>My dashboard</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             ) : (
@@ -136,14 +137,14 @@ export const HeaderNavbar: React.FC = () => {
           ))}
           <div className="pt-2">
             <Link
-              to={currentPackageName ? '/portal' : '/pricing'}
+              to={isEnrolled ? '/portal' : '/pricing'}
               onClick={() => setMobileMenuOpen(false)}
               className="flex w-full items-center justify-center gap-2 rounded-xl bg-amber-500 py-3 text-sm font-bold text-slate-950 shadow-sm transition-colors hover:bg-amber-400"
             >
-              {currentPackageName ? (
+              {isEnrolled ? (
                 <>
                   <GraduationCap className="w-4 h-4" />
-                  <span>{currentPackageName} student</span>
+                  <span>My dashboard</span>
                 </>
               ) : (
                 <>

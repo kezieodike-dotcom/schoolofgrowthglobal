@@ -1,10 +1,18 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { LmsCourse, LmsProgress, LmsSubmission } from '../types';
 import { isPaidCourseId } from '../data/paidCourseCatalogue';
-import { intensiveAccessToken, leadershipAccessToken } from './useEnrollment';
+import { intensiveAccessToken, leadershipAccessToken, useEnrollment } from './useEnrollment';
 import { isIntensiveCourseId } from '../data/intensiveCourses';
+import { useStudentAccount } from './useStudentAccount';
 
 const DEFAULT_USER_ID = 'student-demo';
+
+function useCourseAccess(courseId: string) {
+  useEnrollment(); // Re-fetch protected data when server-restored access changes.
+  const account = useStudentAccount();
+  const token = isPaidCourseId(courseId) ? leadershipAccessToken(courseId) : isIntensiveCourseId(courseId) ? intensiveAccessToken(courseId) : undefined;
+  return { token, waiting: isIntensiveCourseId(courseId) && !token && account.phase === 'loading' };
+}
 
 function courseHeaders(courseId: string, json = false): HeadersInit {
   const token = isPaidCourseId(courseId) ? leadershipAccessToken(courseId) : isIntensiveCourseId(courseId) ? intensiveAccessToken(courseId) : undefined;
@@ -33,6 +41,7 @@ export interface LmsAssessmentResult {
 // ─── Course Fetching ────────────────────────────────────────────────────────
 
 export function useLmsCourse(courseId: string) {
+  const { token, waiting } = useCourseAccess(courseId);
   const [course, setCourse] = useState<LmsCourse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -42,6 +51,7 @@ export function useLmsCourse(courseId: string) {
     setLoading(true);
     setCourse(null);
     setError(null);
+    if (waiting) return () => controller.abort();
     fetch(`/api/lms/courses/${encodeURIComponent(courseId)}`, { headers: courseHeaders(courseId), signal: controller.signal })
       .then(async response => {
         const body = await response.json().catch(() => null);
@@ -51,14 +61,15 @@ export function useLmsCourse(courseId: string) {
       .catch(err => { if (!controller.signal.aborted) setError(err instanceof Error ? err.message : 'Could not load this course.'); })
       .finally(() => { if (!controller.signal.aborted) setLoading(false); });
     return () => controller.abort();
-  }, [courseId]);
+  }, [courseId, token, waiting]);
 
-  return { course, loading, error };
+  return { course, loading: loading || waiting, error };
 }
 
 // ─── Progress Tracking ──────────────────────────────────────────────────────
 
 export function useLmsProgress(courseId: string, totalLessons: number) {
+  const { token, waiting } = useCourseAccess(courseId);
   const [saveError, setSaveError] = useState<string | null>(null);
   const [progress, setProgress] = useState<LmsProgress>({
     userId: DEFAULT_USER_ID,
@@ -70,12 +81,13 @@ export function useLmsProgress(courseId: string, totalLessons: number) {
   useEffect(() => {
     const controller = new AbortController();
     setProgress({ userId: DEFAULT_USER_ID, courseId, completedLessons: [], progressPercentage: 0 });
+    if (waiting || (isIntensiveCourseId(courseId) && !token)) return () => controller.abort();
     fetch(`/api/lms/progress/${DEFAULT_USER_ID}/${courseId}`, { headers: courseHeaders(courseId), signal: controller.signal })
       .then(r => r.ok ? r.json() : Promise.reject(new Error('Progress unavailable')))
-      .then((data: LmsProgress) => setProgress(data))
+      .then((data: LmsProgress) => { if (!controller.signal.aborted) setProgress(data); })
       .catch(() => {});
     return () => controller.abort();
-  }, [courseId]);
+  }, [courseId, token, waiting]);
 
   const markLessonComplete = useCallback((lessonId: string) => {
     setSaveError(null);
@@ -103,7 +115,7 @@ export function useLmsProgress(courseId: string, totalLessons: number) {
       });
       return updated;
     });
-  }, [courseId, totalLessons]);
+  }, [courseId, totalLessons, token]);
 
   const isLessonComplete = (lessonId: string) =>
     progress.completedLessons.includes(lessonId);
@@ -114,6 +126,7 @@ export function useLmsProgress(courseId: string, totalLessons: number) {
 // ─── Submission (Auto-Save) ─────────────────────────────────────────────────
 
 export function useLmsSubmission(courseId: string, blockId: string, moduleId = 'module-1') {
+  const { token, waiting } = useCourseAccess(courseId);
   const [data, setData] = useState<any>(null);
   const [saving, setSaving] = useState(false);
   const [savedAt, setSavedAt] = useState<Date | null>(null);
@@ -121,14 +134,17 @@ export function useLmsSubmission(courseId: string, blockId: string, moduleId = '
 
   useEffect(() => {
     const controller = new AbortController();
+    setData(null);
+    setSavedAt(null);
+    if (waiting || (isIntensiveCourseId(courseId) && !token)) return () => controller.abort();
     fetch(`/api/lms/submission/${DEFAULT_USER_ID}/${courseId}/${blockId}`, { headers: courseHeaders(courseId), signal: controller.signal })
       .then(r => r.ok ? r.json() : null)
       .then((sub: LmsSubmission | null) => {
-        if (sub) setData(sub.data);
+        if (sub && !controller.signal.aborted) setData(sub.data);
       })
       .catch(() => {});
-    return () => controller.abort();
-  }, [courseId, blockId]);
+    return () => { controller.abort(); if (timerRef.current) clearTimeout(timerRef.current); };
+  }, [courseId, blockId, token, waiting]);
 
   const save = useCallback((newData: any) => {
     setData(newData);
@@ -151,7 +167,7 @@ export function useLmsSubmission(courseId: string, blockId: string, moduleId = '
         .then(response => { setSaving(false); if (response.ok) setSavedAt(new Date()); })
         .catch(() => setSaving(false));
     }, 1500);
-  }, [courseId, blockId, moduleId]);
+  }, [courseId, blockId, moduleId, token]);
 
   return { data, save, saving, savedAt };
 }
