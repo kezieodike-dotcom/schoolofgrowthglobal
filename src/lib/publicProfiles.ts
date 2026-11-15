@@ -1,6 +1,7 @@
 import type { FacultyMember } from '../types';
 
 export const NGOZI_PORTRAIT = '/people/ngozi-okafor-generated-v1.jpg';
+export const BRIGHT_JOHN_PORTRAIT = '/people/bright-john-portrait-2026-11.png';
 
 interface ProfileIdentity { id: string; name: string }
 
@@ -10,19 +11,22 @@ export function normalizePublicName(name: string): string {
     .split(/\s+/).filter(part => !['dr', 'prof', 'mr', 'mrs', 'ms'].includes(part)).join(' ');
 }
 
-// Temporary public suspension only; applications and admin records are retained.
+// Bright John's temporary hold has been lifted. Keep any future suspensions
+// explicit by record ID, without hiding restored profiles by name.
+const SUSPENDED_PROFILE_IDS = new Set<string>();
 export function isSuspendedPublicProfile(profile: ProfileIdentity): boolean {
-  return ['f3', 'bright-john'].includes(profile.id) || normalizePublicName(profile.name) === 'bright john';
+  return SUSPENDED_PROFILE_IDS.has(profile.id);
 }
 
 export function normalizePublicProfile<T extends ProfileIdentity & { role: string; avatar: string }>(profile: T): T {
   const name = normalizePublicName(profile.name);
   const isAdvisor = profile.id === 'john-akpan' || name === 'john akpan';
   const isNgozi = name === 'ngozi okafor' || profile.id === 'f2';
+  const isBright = profile.id === 'f3' || profile.id === 'bright-john' || name === 'bright john';
   return {
     ...profile,
     role: isAdvisor ? profile.role.replace(/\s+to\s+the\s+founder\b/gi, '').replace(/\bAdviser\b/g, 'Advisor').trim() : profile.role,
-    avatar: isNgozi && profile.avatar.split('?')[0] === '/people/w1-okafor.jpg' ? NGOZI_PORTRAIT : profile.avatar,
+    avatar: isBright ? BRIGHT_JOHN_PORTRAIT : isNgozi && profile.avatar.split('?')[0] === '/people/w1-okafor.jpg' ? NGOZI_PORTRAIT : profile.avatar,
   };
 }
 

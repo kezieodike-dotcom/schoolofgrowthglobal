@@ -8,7 +8,7 @@ import { FACULTY_MEMBERS } from '../data/mockData';
 import { useContentCollection } from '../lib/useContent';
 import { useApprovedExperts } from '../lib/useApprovedExperts';
 import { buildLeadershipBoard } from '../lib/leadershipBoard';
-import { normalizePublicName } from '../lib/publicProfiles';
+import { ProfilePortrait } from '../components/ProfilePortrait';
 import { askGrowthAI, describeError } from '../lib/growthAI';
 import { FaqSection } from '../components/FaqSection';
 import {
@@ -40,7 +40,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
   const [aiLoading, setAiLoading] = useState(false);
   const managedTeam = useContentCollection('team', FACULTY_MEMBERS);
   const approvedExperts = useApprovedExperts();
-  const featuredTeam = useMemo(() => buildLeadershipBoard(managedTeam.items, approvedExperts.experts).slice(0, 4), [managedTeam.items, approvedExperts.experts]);
+  const featuredTeam = useMemo(() => buildLeadershipBoard(managedTeam.items, approvedExperts.experts), [managedTeam.items, approvedExperts.experts]);
 
   const handleAiQuestion = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -554,15 +554,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
                 data-team-preview-id={member.id}
                 className="scroll-card reference-card group overflow-hidden transition-all"
               >
-                <div className="aspect-[4/3] overflow-hidden bg-slate-100">
-                  {member.avatar ? <img
-                    src={member.avatar}
-                    alt={member.avatar.includes('generated') ? `AI-generated professional portrait for ${member.name}` : member.name}
-                    className={`scroll-card-image h-full w-full object-cover transition-transform duration-500 ${member.id === 'john-akpan' || member.id === 'f3' ? 'object-[center_18%]' : 'object-center'}`}
-                  /> : <div role="img" aria-label={`${member.name} profile`} className="flex h-full items-center justify-center bg-emerald-50 text-3xl font-bold text-emerald-800">
-                    {normalizePublicName(member.name).split(' ').slice(0, 2).map(part => part[0]?.toUpperCase()).join('')}
-                  </div>}
-                </div>
+                <ProfilePortrait name={member.name} src={member.avatar} />
                 <div className="reference-card-body space-y-3">
                   <div className="space-y-1">
                     <h3 className="text-base font-serif font-semibold text-slate-900 leading-snug">

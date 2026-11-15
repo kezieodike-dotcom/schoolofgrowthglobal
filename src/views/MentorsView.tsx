@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import { MENTORS } from '../data/mockData';
 import { isSuspendedPublicProfile, normalizePublicProfile } from '../lib/publicProfiles';
+import { ProfilePortrait } from '../components/ProfilePortrait';
 import { PageHero } from '../components/PageHero';
 import { CountryPhoneField } from '../components/CountryPhoneField';
 import { useEnrollment } from '../lib/useEnrollment';
@@ -604,17 +605,7 @@ export const MentorsView: React.FC = () => {
                     }`}
                   >
                     <div className="flex items-start gap-4">
-                      {mentor.avatar ? (
-                        <img
-                          src={mentor.avatar}
-                          alt={mentor.name}
-                          className="w-16 h-16 rounded-2xl object-cover border-2 border-amber-300"
-                        />
-                      ) : (
-                        <span className="w-16 h-16 shrink-0 rounded-2xl border-2 border-amber-300 bg-amber-50 text-amber-700 flex items-center justify-center font-serif font-bold text-lg">
-                          {initials(mentor.name)}
-                        </span>
-                      )}
+                      <ProfilePortrait name={mentor.name} src={mentor.avatar} className="w-20 shrink-0 rounded-xl border-2 border-amber-300" />
                       <div className="min-w-0 flex-1">
                         <div className="flex flex-wrap items-center gap-2">
                           <h3 className="font-serif font-bold text-lg text-slate-900 leading-tight">{mentor.name}</h3>

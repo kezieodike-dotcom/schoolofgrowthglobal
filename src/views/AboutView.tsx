@@ -1,11 +1,11 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { FACULTY_MEMBERS, CORPORATE_PARTNERS, IMPACT_STATS } from '../data/mockData';
 import { PageHero } from '../components/PageHero';
 import { useContentCollection } from '../lib/useContent';
 import { useApprovedExperts } from '../lib/useApprovedExperts';
-import { buildLeadershipBoard, type BoardMember } from '../lib/leadershipBoard';
-import { normalizePublicName } from '../lib/publicProfiles';
+import { buildLeadershipBoard } from '../lib/leadershipBoard';
+import { ProfilePortrait } from '../components/ProfilePortrait';
 import {
   Building2,
   Target,
@@ -31,22 +31,6 @@ const CORE_VALUES = [
   { icon: Leaf, label: 'Stewardship', desc: 'Responsible use of resources and influence.' },
   { icon: Heart, label: 'Impact', desc: 'Measurable transformation at scale.' },
 ];
-
-function LeadershipPortrait({ member }: { member: BoardMember }) {
-  const [failed, setFailed] = useState(false);
-  const initials = normalizePublicName(member.name).split(' ').slice(0, 2).map(part => part[0]?.toUpperCase()).join('');
-  const generated = member.avatar.includes('generated');
-  return (
-    <div className="mx-auto flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-full border-2 border-amber-300 bg-emerald-50 text-xl font-bold text-emerald-800">
-      {member.avatar && !failed ? <img src={member.avatar}
-        alt={generated ? `AI-generated professional portrait for ${member.name}` : member.name}
-        title={generated ? 'AI-generated professional portrait' : undefined}
-        width={80} height={80} loading="lazy" decoding="async" onError={() => setFailed(true)}
-        className={`h-full w-full object-cover ${member.id === 'john-akpan' ? 'object-[center_18%]' : 'object-center'}`} />
-        : <span role="img" aria-label={`${member.name} profile`}>{initials}</span>}
-    </div>
-  );
-}
 
 export const AboutView: React.FC = () => {
   const managedTeam = useContentCollection('team', FACULTY_MEMBERS);
@@ -140,7 +124,7 @@ export const AboutView: React.FC = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
           {board.map((member) => (
             <article key={member.id} data-board-member={member.id} className="min-w-0 bg-white shadow-sm border border-slate-200 rounded-lg p-6 space-y-4 [overflow-wrap:anywhere]">
-              <LeadershipPortrait key={member.avatar} member={member} />
+              <ProfilePortrait name={member.name} src={member.avatar} className="mx-auto w-32 shrink-0 rounded-xl border-2 border-amber-300" />
               <div className="text-center space-y-1">
                 <h4 className="font-serif font-bold text-slate-900 text-base">{member.name}</h4>
                 {member.expertTypes.length > 0 && <p className="text-xs font-semibold text-emerald-700">{member.expertTypes.map(type => type === 'consultant' ? 'Approved Consultant' : 'Approved Mentor').join(' / ')}</p>}
