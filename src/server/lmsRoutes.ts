@@ -15,6 +15,7 @@ import { isIntensiveCourseId } from '../data/intensiveCourses.js';
 import { getIntensiveCourse } from './intensiveCourses.js';
 import { requireIntensiveAccess, learningKey } from './intensiveAccess.js';
 import { readLearningRecord, writeLearningRecord } from './learningStorage.js';
+import { readPrivateProgress, readPrivateSubmission, readPrivateSubmissions, savePrivateSubmission } from './learningWork.js';
 import {
   MODULE_8_ASSESSMENT,
   getAssessmentResult,
@@ -120,11 +121,11 @@ export function createLmsRouter() {
 
   // Get student progress for a course
   router.get('/lms/progress/:userId/:courseId', requireIntensiveAccess, requireLeadershipAccess, async (req: Request, res: Response) => {
-    if (res.locals.intensiveStudent || res.locals.professionalStudent) {
+    if (res.locals.intensiveStudent || res.locals.leadershipStudent) {
       try {
-        const userId = res.locals.intensiveStudent ?? res.locals.professionalStudent;
+        const userId = res.locals.intensiveStudent ?? res.locals.leadershipStudent;
         const courseId = req.params.courseId;
-        return res.json(await readLearningRecord<LmsProgress>(`progress/${learningKey(`${userId}:${courseId}`)}`) ??
+        return res.json(await readPrivateProgress(userId, courseId) ??
           { userId, courseId, completedLessons: [], progressPercentage: 0 });
       } catch { return res.status(503).json({ error: 'Your progress is temporarily unavailable.' }); }
     }
@@ -146,12 +147,12 @@ export function createLmsRouter() {
     if (!progress?.userId || !progress.courseId) {
       return res.status(400).json({ error: 'userId and courseId are required' });
     }
-    if (res.locals.intensiveStudent || res.locals.professionalStudent) {
+    if (res.locals.intensiveStudent || res.locals.leadershipStudent) {
       const course = isIntensiveCourseId(progress.courseId) ? getIntensiveCourse(progress.courseId) : await getPublishedLeadershipCourse(progress.courseId).catch(() => null);
       if (!course || !Array.isArray(progress.completedLessons)) return res.status(400).json({ error: 'Invalid lesson progress.' });
       const lessons = new Set(course.modules.flatMap(module => module.lessons.map(lesson => lesson.id)));
       const completedLessons = [...new Set(progress.completedLessons.filter(id => lessons.has(id)))];
-      const userId = res.locals.intensiveStudent ?? res.locals.professionalStudent;
+      const userId = res.locals.intensiveStudent ?? res.locals.leadershipStudent;
       try {
         await writeLearningRecord(`progress/${learningKey(`${userId}:${course.id}`)}`, {
           userId, courseId: course.id, completedLessons, progressPercentage: Math.round(completedLessons.length / lessons.size * 100),
@@ -179,11 +180,9 @@ export function createLmsRouter() {
 
   // Get a single submission
   router.get('/lms/submission/:userId/:courseId/:blockId', requireIntensiveAccess, requireLeadershipAccess, async (req: Request, res: Response) => {
-    if (res.locals.intensiveStudent || res.locals.professionalStudent) {
+    if (res.locals.intensiveStudent || res.locals.leadershipStudent) {
       try {
-        const key = learningKey(`${res.locals.intensiveStudent ?? res.locals.professionalStudent}:${req.params.courseId}`);
-        const submissions = await readLearningRecord<LmsSubmission[]>(`submissions/${key}`) ?? [];
-        return res.json(submissions.find(item => item.blockId === req.params.blockId) ?? null);
+        return res.json(await readPrivateSubmission(res.locals.intensiveStudent ?? res.locals.leadershipStudent, req.params.courseId, req.params.blockId) ?? null);
       } catch { return res.status(503).json({ error: 'Your work is temporarily unavailable.' }); }
     }
     const submission = getStudentSubmission(
@@ -196,8 +195,8 @@ export function createLmsRouter() {
 
   // Get all submissions for a user+course
   router.get('/lms/submissions/:userId/:courseId', requireIntensiveAccess, requireLeadershipAccess, async (req: Request, res: Response) => {
-    if (res.locals.intensiveStudent || res.locals.professionalStudent) {
-      try { return res.json(await readLearningRecord<LmsSubmission[]>(`submissions/${learningKey(`${res.locals.intensiveStudent ?? res.locals.professionalStudent}:${req.params.courseId}`)}`) ?? []); }
+    if (res.locals.intensiveStudent || res.locals.leadershipStudent) {
+      try { return res.json(await readPrivateSubmissions(res.locals.intensiveStudent ?? res.locals.leadershipStudent, req.params.courseId)); }
       catch { return res.status(503).json({ error: 'Your work is temporarily unavailable.' }); }
     }
     const submissions = getAllStudentSubmissions(res.locals.leadershipStudent ?? req.params.userId, req.params.courseId);
@@ -210,15 +209,13 @@ export function createLmsRouter() {
     if (!submission?.userId || !submission.courseId || !submission.blockId) {
       return res.status(400).json({ error: 'userId, courseId, blockId are required' });
     }
-    if (res.locals.intensiveStudent || res.locals.professionalStudent) {
+    if (res.locals.intensiveStudent || res.locals.leadershipStudent) {
       const course = isIntensiveCourseId(submission.courseId) ? getIntensiveCourse(submission.courseId) : await getPublishedLeadershipCourse(submission.courseId).catch(() => null);
       const module = course?.modules.find(module => module.id === submission.moduleId);
       if (!module?.lessons.some(lesson => lesson.blocks.some(block => block.id === submission.blockId))) return res.status(400).json({ error: 'This exercise does not belong to this course.' });
-      const userId = res.locals.intensiveStudent ?? res.locals.professionalStudent;
-      const key = `submissions/${learningKey(`${userId}:${submission.courseId}`)}`;
+      const userId = res.locals.intensiveStudent ?? res.locals.leadershipStudent;
       try {
-        const all = await readLearningRecord<LmsSubmission[]>(key) ?? [];
-        await writeLearningRecord(key, [...all.filter(item => item.blockId !== submission.blockId), { ...submission, userId }]);
+        await savePrivateSubmission({ ...submission, userId });
         return res.json({ success: true });
       } catch { return res.status(503).json({ error: 'Your work could not be saved. Please retry.' }); }
     }

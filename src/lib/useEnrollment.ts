@@ -108,7 +108,7 @@ export function clearEntitlements() {
 
 /** Server-owned intensive purchases replace stale copies from another learner. */
 export function replaceIntensiveEntitlements(entitlements: Entitlement[], email?: string) {
-  const next = [...read().filter(entry => entry.plan !== 'foundation-intensive' && (!email || entry.email?.trim().toLowerCase() === email)), ...entitlements];
+  const next = [...read().filter(entry => entry.plan !== 'foundation-intensive' && entry.accessKind !== 'complimentary' && (!email || entry.email?.trim().toLowerCase() === email)), ...entitlements];
   if (JSON.stringify(next) !== JSON.stringify(read())) write(next);
 }
 

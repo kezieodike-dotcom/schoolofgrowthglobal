@@ -1,12 +1,13 @@
 import { useSyncExternalStore } from 'react';
 import type { IntensiveCourseId } from '../data/intensiveCourses';
+import type { PaidCourseId } from '../data/paidCourseCatalogue';
 import type { Entitlement } from './pricing';
 import { clearEntitlements, replaceIntensiveEntitlements } from './useEnrollment';
 
 export interface StudentDashboard {
   profile: { name: string; email: string };
   entitlements: Entitlement[];
-  courses: { id: IntensiveCourseId; title: string; totalLessons: number; completedLessons: number; progressPercentage: number; expiresAt: string; active: boolean; resumePath: string }[];
+  courses: { id: IntensiveCourseId | PaidCourseId; title: string; totalLessons: number; completedLessons: number; progressPercentage: number; expiresAt: string; active: boolean; resumePath: string; accessKind?: 'complimentary' }[];
 }
 type Snapshot = { phase: 'loading' | 'ready' | 'anonymous' | 'error'; dashboard: StudentDashboard | null; error: string | null };
 let snapshot: Snapshot = { phase: 'loading', dashboard: null, error: null };
@@ -15,6 +16,7 @@ const subscribe = (listener: () => void) => { listeners.add(listener); return ()
 const update = (next: Snapshot) => { snapshot = next; listeners.forEach(listener => listener()); };
 let generation = 0;
 let refreshing: Promise<void> | null = null;
+let activating = false;
 
 async function responseBody(response: Response) {
   const body = await response.json().catch(() => null);
@@ -27,6 +29,7 @@ const accept = (dashboard: StudentDashboard) => {
 };
 
 export function refreshStudentAccount(): Promise<void> {
+  if (activating) return Promise.resolve();
   if (refreshing) return refreshing;
   const current = ++generation;
   refreshing = (async () => {
@@ -65,6 +68,18 @@ export async function logoutStudent() {
   ++generation;
   clearEntitlements();
   update({ phase: 'anonymous', dashboard: null, error: null });
+}
+
+export async function activateCourseInvitation(code: string, email: string) {
+  const current = ++generation;
+  activating = true;
+  try {
+    const response = await fetch('/api/students/activate', { method: 'POST', credentials: 'same-origin', cache: 'no-store',
+      headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ code, email }) });
+    const dashboard = await responseBody(response);
+    if (current === generation) accept(dashboard);
+    return dashboard;
+  } finally { activating = false; }
 }
 
 export const useStudentAccount = () => useSyncExternalStore(subscribe, () => snapshot, () => snapshot);

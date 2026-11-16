@@ -22,6 +22,7 @@ test('individual checkout, verification and protected lessons work with private 
     if (previousSupabaseUrl === undefined) delete process.env.SUPABASE_URL; else process.env.SUPABASE_URL = previousSupabaseUrl;
     if (previousSupabaseKey === undefined) delete process.env.SUPABASE_SERVICE_ROLE_KEY; else process.env.SUPABASE_SERVICE_ROLE_KEY = previousSupabaseKey;
     rmSync(join(root, 'lms_progress.json'), { force: true });
+    rmSync(join(root, 'lms_submissions.json'), { force: true });
     rmdirSync(root);
   });
   const storedCourse = {
@@ -32,15 +33,22 @@ test('individual checkout, verification and protected lessons work with private 
 
   const { createPaymentRouter } = await import('./paymentRoutes.js');
   const { createLmsRouter } = await import('./lmsRoutes.js');
-  const { issueLeadershipAccess } = await import('./leadershipAccess.js');
+  const { issueLeadershipAccess, readLeadershipAccess } = await import('./leadershipAccess.js');
+  const { saveStudentProgress, saveStudentSubmission } = await import('./lmsStore.js');
   const originalFetch = globalThis.fetch;
   let charge: { amount: number; currency: string; metadata: Record<string, string> } | null = null;
   let storageUnavailable = false;
+  const learning = new Map<string, unknown>();
   t.mock.method(globalThis, 'fetch', async (input: string | URL | Request, init?: RequestInit) => {
     const url = new URL(String(input));
     if (url.hostname === 'private-course-fixture.example.test') {
       assert.equal(new Headers(init?.headers).get('Authorization'), 'Bearer fixture-storage-key');
       if (storageUnavailable) return Response.json({ error: 'Temporary outage' }, { status: 503 });
+      if (url.pathname.includes('/student-learning/')) {
+        const key = url.pathname.replace(/^.*\/student-learning\//, '');
+        if (init?.method === 'POST') { learning.set(key, JSON.parse(String(init.body))); return Response.json({ ok: true }); }
+        return learning.has(key) ? Response.json(learning.get(key)) : Response.json({ statusCode: '404' }, { status: 404 });
+      }
       if (url.pathname === '/storage/v1/object/list/leadership-courses') {
         return Response.json([{ name: 'leadership-001.json' }, { name: 'leadership-002.json' }]);
       }
@@ -104,6 +112,12 @@ test('individual checkout, verification and protected lessons work with private 
   assert.equal(lessonData.modules[0].lessons[0].blocks[0].content, 'Private fixture lesson.');
   assert.ok(!('answerKey' in lessonData));
   assert.equal((await get('/lms/courses/leadership-002', token)).status, 401);
+
+  const existingUser = readLeadershipAccess('leadership-001', token, 'test-fixture-key')!;
+  saveStudentProgress({ userId: existingUser, courseId: 'leadership-001', completedLessons: ['lesson-1'], progressPercentage: 100 });
+  saveStudentSubmission({ userId: existingUser, courseId: 'leadership-001', moduleId: 'module-1', lessonId: 'lesson-1', blockId: 'reading-1', data: { answer: 'Existing saved answer' } });
+  assert.deepEqual((await (await get('/lms/progress/ignored/leadership-001', token)).json()).completedLessons, ['lesson-1']);
+  assert.deepEqual((await (await get('/lms/submission/ignored/leadership-001/reading-1', token)).json()).data, { answer: 'Existing saved answer' });
 
   const quiz = '/lms/leadership/leadership-001/quiz';
   const answers = { 'question-1': 'B', 'question-2': 'A' };

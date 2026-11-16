@@ -31,3 +31,16 @@ export async function writeLearningRecord(key: string, value: unknown, overwrite
   if (!response.ok) throw new Error('Student learning storage could not be saved.');
   return true;
 }
+
+export async function learningRecordKeys(prefix: string): Promise<string[]> {
+  const keys: string[] = [];
+  for (let offset = 0; ; offset += 100) {
+    const response = await learningStorage(`/object/list/${LEARNING_BUCKET}`, {
+      method: 'POST', body: JSON.stringify({ prefix, limit: 100, offset, sortBy: { column: 'name', order: 'asc' } }),
+    });
+    const files = await response.json();
+    if (!response.ok || !Array.isArray(files)) throw new Error('Student records could not be listed.');
+    keys.push(...files.filter(file => /^[a-f0-9]{64}\.json$/.test(file.name)).map(file => file.name.slice(0, -5)));
+    if (files.length < 100) return keys;
+  }
+}

@@ -6,6 +6,8 @@ import { useEnrollment } from '../lib/useEnrollment';
 import { logoutStudent, openStudentDashboard, refreshStudentAccount, useStudentAccount } from '../lib/useStudentAccount';
 import { movePaidAccessToMainSite } from '../lib/siteOrigin';
 import { ProfessionalCoursesSection } from '../components/ProfessionalCoursesSection';
+import { leadershipCoursePreviews } from '../data/leadershipCoursePreviews';
+import { isLeadershipCourseId } from '../data/leadershipPricing';
 
 export function StudentPortalView({ fallback }: { fallback?: ReactNode }) {
   const account = useStudentAccount();
@@ -57,6 +59,7 @@ export function StudentPortalView({ fallback }: { fallback?: ReactNode }) {
         <button type="submit" className="flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-amber-500 px-5 text-sm font-bold text-slate-950">Open my dashboard <ArrowRight className="h-4 w-4" /></button>
       </form>
       <p className="mt-5 text-sm text-slate-600">Need help with your receipt? <a href="mailto:support@schoolofgrowthglobal.com" className="font-semibold text-amber-800 underline">Contact student support</a>. Please do not pay again.</p>
+      <p className="mt-4 text-sm text-slate-600">Have a complimentary course invitation? <Link to="/activate-course" className="font-semibold text-amber-800 underline">Open your invitation</Link> using your personal code and registered email.</p>
     </div>
   </main>;
 
@@ -68,10 +71,10 @@ export function StudentPortalView({ fallback }: { fallback?: ReactNode }) {
     <div className="mx-auto max-w-6xl space-y-8 px-4 py-8 sm:px-6 sm:py-12">
       <header className="flex flex-wrap items-start justify-between gap-5">
         <div className="min-w-0">
-          <p className="text-xs font-bold uppercase tracking-widest text-amber-700">Student dashboard · Growth Foundation</p>
+          <p className="text-xs font-bold uppercase tracking-widest text-amber-700">School of Growth Global · Student dashboard</p>
           <h1 className="mt-3 text-3xl font-serif font-bold sm:text-4xl">{profile.name ? `Welcome, ${profile.name}` : 'Your learning starts here'}</h1>
           <p className="mt-3 break-all text-sm text-slate-600">{profile.email}</p>
-          <p className="mt-2 flex items-center gap-2 text-sm text-emerald-800"><CheckCircle2 className="h-4 w-4 shrink-0" /> Verified enrolment · Two-week intensive</p>
+          <p className="mt-2 flex items-center gap-2 text-sm text-emerald-800"><CheckCircle2 className="h-4 w-4 shrink-0" /> Verified course enrolment</p>
         </div>
         <div className="flex flex-wrap gap-2">
           <button onClick={() => void refreshStudentAccount()} className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 text-sm font-semibold"><RefreshCw className="h-4 w-4" /> Refresh</button>
@@ -84,17 +87,19 @@ export function StudentPortalView({ fallback }: { fallback?: ReactNode }) {
       </dl>
       <section aria-labelledby="my-courses-heading">
         <h2 id="my-courses-heading" className="text-2xl font-bold">My courses</h2>
-        <p className="mt-2 text-sm text-slate-600">Your paid pathways are ready. Start a course or pick up from your next unfinished lesson.</p>
+        <p className="mt-2 text-sm text-slate-600">Start your course or pick up from your next unfinished lesson. Each course shows your access expiry date.</p>
         <div className="mt-6 grid gap-6 md:grid-cols-2">
           {courses.map(course => {
-            const details = INTENSIVE_COURSES.find(item => item.id === course.id)!;
+            const details = INTENSIVE_COURSES.find(item => item.id === course.id);
+            const preview = isLeadershipCourseId(course.id) ? leadershipCoursePreviews[course.id] : undefined;
+            const cover = details?.cover ?? (preview ? { src: preview.image, alt: preview.alt } : undefined);
             return <article key={course.id} className="flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white">
-              <img src={details.cover.src} alt={details.cover.alt} className="aspect-[16/9] w-full object-cover" />
+              {cover && <img src={cover.src} alt={cover.alt} className="aspect-[16/9] w-full object-cover" />}
               <div className="flex flex-1 flex-col gap-4 p-5 sm:p-6">
-                <div className="flex flex-wrap items-center gap-2 text-xs font-semibold"><span className={`rounded-full px-3 py-1 ${course.active ? 'bg-emerald-50 text-emerald-800' : 'bg-slate-100 text-slate-600'}`}>{course.active ? 'Access active' : 'Access ended'}</span><span className="text-slate-500">3 modules · {course.totalLessons} lessons</span></div>
+                <div className="flex flex-wrap items-center gap-2 text-xs font-semibold"><span className={`rounded-full px-3 py-1 ${course.active ? 'bg-emerald-50 text-emerald-800' : 'bg-slate-100 text-slate-600'}`}>{course.active ? 'Access active' : 'Access ended'}</span><span className="text-slate-500">{course.accessKind === 'complimentary' ? 'Complimentary enrolment' : 'Two-week intensive'} · {course.totalLessons} lessons</span></div>
                 <h3 className="text-xl font-bold">{course.title}</h3>
-                <p className="text-sm leading-relaxed text-slate-600">{details.description}</p>
-                <ul className="space-y-1.5 text-sm text-slate-700">{details.moduleTitles.map(title => <li key={title} className="flex gap-2"><BookOpen className="mt-0.5 h-4 w-4 shrink-0 text-amber-600" />{title}</li>)}</ul>
+                <p className="text-sm leading-relaxed text-slate-600">{details?.description ?? preview?.summary}</p>
+                {details && <ul className="space-y-1.5 text-sm text-slate-700">{details.moduleTitles.map(title => <li key={title} className="flex gap-2"><BookOpen className="mt-0.5 h-4 w-4 shrink-0 text-amber-600" />{title}</li>)}</ul>}
                 <div className="mt-auto pt-2"><div className="mb-2 flex justify-between gap-2 text-xs text-slate-600"><span>{course.completedLessons} of {course.totalLessons} lessons completed</span><span>{course.progressPercentage}%</span></div><progress aria-label={`${course.title} progress`} value={course.completedLessons} max={course.totalLessons} className="block h-2 w-full overflow-hidden rounded-full accent-amber-500" /></div>
                 <p className="flex items-start gap-2 text-xs leading-relaxed text-slate-600"><Clock3 className="h-4 w-4 shrink-0" />{course.active ? 'Access until' : 'Access ended'} {new Date(course.expiresAt).toLocaleDateString('en-NG', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
                 {course.active ? <Link to={course.resumePath} className="flex min-h-12 items-center justify-center gap-2 rounded-xl bg-amber-500 px-5 text-sm font-bold text-slate-950 hover:bg-amber-400">{course.progressPercentage === 100 ? 'Review course' : course.completedLessons ? 'Continue learning' : 'Start learning'}<ArrowRight className="h-4 w-4" /></Link> : <a href="mailto:support@schoolofgrowthglobal.com" className="inline-flex min-h-11 items-center text-sm font-semibold text-amber-800 underline">Contact support about access</a>}
@@ -102,7 +107,7 @@ export function StudentPortalView({ fallback }: { fallback?: ReactNode }) {
             </article>;
           })}
         </div>
-        {!courses.length && <p className="mt-5 rounded-xl border border-slate-200 bg-white p-5 text-sm">No intensive is linked to this account yet. <a href="mailto:support@schoolofgrowthglobal.com" className="underline">Contact student support</a> with your receipt.</p>}
+        {!courses.length && <p className="mt-5 rounded-xl border border-slate-200 bg-white p-5 text-sm">No course is linked to this account yet. <a href="mailto:support@schoolofgrowthglobal.com" className="underline">Contact student support</a> with your receipt or invitation details.</p>}
       </section>
       <ProfessionalCoursesSection ownedOnly />
       <p className="text-sm text-slate-600">Need help learning? <a href="mailto:support@schoolofgrowthglobal.com" className="font-semibold text-amber-800 underline">Contact student support</a></p>

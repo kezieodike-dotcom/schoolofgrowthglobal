@@ -15,6 +15,7 @@ import { NotConnected } from './AdminOverviewView';
 import { PLANS } from '../../lib/pricing';
 import type { Enrolment, EnrolmentsResponse } from '../../lib/adminApi';
 import { Search, Download, RefreshCw } from 'lucide-react';
+import { ComplimentaryAccessPanel } from './ComplimentaryAccessPanel';
 
 /**
  * Every payment the site has taken, searchable and exportable.
@@ -81,6 +82,7 @@ export const AdminEnrolmentsView: React.FC = () => {
         }
       />
 
+      <ComplimentaryAccessPanel />
       {loading && !data && <LoadingState label="Loading enrolments" />}
       {error && <ErrorState message={error} onRetry={reload} />}
       {data && !data.connected && <NotConnected message={data.message} />}

@@ -8,7 +8,7 @@ export interface StudentProfile { id: string; email: string; name: string; creat
 export const STUDENT_COOKIE = 'sgg_student';
 const SESSION_SECONDS = 30 * 86400;
 
-export async function ensureStudentAccount(email: string, reference: string, name = '') {
+export async function ensureStudentAccount(email: string, reference?: string, name = '') {
   const normalized = email.trim().toLowerCase();
   const id = intensiveStudentKey(normalized);
   const key = `students/${id}/profile`;
@@ -23,7 +23,7 @@ export async function ensureStudentAccount(email: string, reference: string, nam
     await writeLearningRecord(key, profile);
   }
   // Separate immutable entries avoid lost purchases when two webhooks arrive together.
-  await writeLearningRecord(`students/${id}/purchases/${learningKey(reference)}`, { reference }, false);
+  if (reference) await writeLearningRecord(`students/${id}/purchases/${learningKey(reference)}`, { reference }, false);
   return profile;
 }
 

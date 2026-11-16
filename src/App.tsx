@@ -9,6 +9,7 @@ import { CourseDetailView } from './views/CourseDetailView';
 import { ProfessionalCourseView } from './views/ProfessionalCourseView';
 import { isProfessionalCourseId } from './data/professionalCourses';
 import { StudentDashboardView } from './views/StudentDashboardView';
+import { CourseInvitationView } from './views/CourseInvitationView';
 import { CommandCenterView } from './views/CommandCenterView';
 
 // New PRD public-website pages
@@ -169,6 +170,7 @@ const AppRoutes: React.FC = () => {
       <Route path="lms/:courseId/:moduleId/:lessonId" element={<LmsLessonView />} />
 
       <Route path="mentor/inbox" element={<MentorInboxView />} />
+      <Route path="activate-course" element={<CourseInvitationView />} />
 
       <Route element={<Layout />}>
         <Route index element={<HomeRoute />} />

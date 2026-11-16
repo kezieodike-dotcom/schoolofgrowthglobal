@@ -715,6 +715,7 @@ export interface Entitlement {
   mentorshipExpiresAt: string;
   levels: CourseLevel[];
   leadershipAccess?: { token: string; expiresAt: string };
+  accessKind?: 'complimentary';
   intensiveAccess?: { token: string; expiresAt: string; courseIds: import('../data/intensiveCourses').IntensiveCourseId[] };
 }
 
