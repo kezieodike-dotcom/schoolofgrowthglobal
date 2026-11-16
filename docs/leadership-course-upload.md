@@ -34,3 +34,17 @@ Course checkout uses the server-side NGN catalogue and the existing Paystack acc
 The course player supports headings, lists and tables in the lesson body. For an objective assessment, use a `leadership_quiz` block with public question prompts and choices under `metadata.questions`. Keep correct choices in the course file's top-level `answerKey` field. The authenticated quiz endpoint returns an aggregate score for the current attempt. Projects and certification follow the school's separate assessment procedures.
 
 The file-backed progress and submission stores require a persistent writable host. Configure durable progress storage before relying on saved submissions or completion records on Vercel.
+
+## Additional manuscripts received on 16 November 2026
+
+`scripts/import-leadership-updates.py` imports the reviewed Leadership Character, Change Leadership and Crisis Leadership manuscripts into ignored `data/lms/` files. It reuses the shared DOCX extraction/table helpers, preserves the original module order, and verifies every source line by reconstructing it from its actual public or private destination. Run it with the bundled Python and `-B`; use `--verify-only` to compare imported JSON against the unchanged original manuscripts without rewriting it. Synthetic parser and privacy checks are in `scripts/test_import_leadership_updates.py`.
+
+| Permanent course ID | Course | Original manuscript modules | Approved individual fee |
+| --- | --- | --- | --- |
+| leadership-003 | Leadership Character | 10 | ₦15,000 |
+| leadership-016 | Change Leadership | 21 | ₦20,000 |
+| leadership-017 | Crisis Leadership | 16 | ₦25,000 |
+
+The module counts include the assessment and completion modules where the author numbered them. Keep original exercises, projects, practical evaluation criteria and certification requirements. Model answers, correct choices and explanations belong only in private top-level fields. Publishing these existing catalogue IDs makes them available through the existing enrolment and paid lesson routes; no duplicate course listing is needed.
+
+The attachment named `SGG-COURSE -LEADERSHIP ACCOUNTABILITY.docx` contains the institutional company profile. Hold `leadership-018` until the actual Leadership Accountability teaching manuscript is supplied. The importer records this rejected source privately and does not generate or publish course material for it.
