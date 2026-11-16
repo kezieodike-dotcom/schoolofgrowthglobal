@@ -103,7 +103,7 @@ export function buildAcademicCatalogue() {
   }
 
   for (const course of PROFESSIONAL_COURSES) register(course.title,
-    schools.get(course.id === 'customer-relationship-service-excellence' ? 'marketing-sales-and-business-development' : 'human-resources-and-talent-management')!,
+    schools.get(course.schoolId)!,
     course.title, course.id, `/courses/${course.id}`);
 
   // Leadership leads the public directory. Stable faculty identities keep the

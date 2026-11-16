@@ -8,10 +8,19 @@ function leadershipCard(id: LeadershipCourseId) {
   return { ...course, ...preview, kind: 'leadership' as const, detailsUrl: `/courses/leadership?course=${id}`, moduleCount: undefined, hours: undefined };
 }
 
+const originalProfessionalIds = new Set<string>([
+  'customer-relationship-service-excellence',
+  'professional-ethics-workplace-integrity',
+]);
+const professionalCards = PROFESSIONAL_COURSES.map(course => ({
+  ...course, kind: 'professional' as const, detailsUrl: `/courses/${course.id}`,
+}));
+
 export const FEATURED_SHORT_COURSES = [
   leadershipCard('leadership-001'),
-  ...PROFESSIONAL_COURSES.map(course => ({ ...course, kind: 'professional' as const, detailsUrl: `/courses/${course.id}` })),
+  ...professionalCards.filter(course => originalProfessionalIds.has(course.id)),
   leadershipCard('leadership-005'),
   leadershipCard('leadership-006'),
   leadershipCard('leadership-004'),
+  ...professionalCards.filter(course => !originalProfessionalIds.has(course.id)),
 ];

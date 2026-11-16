@@ -116,7 +116,7 @@ export const PLANS: Record<PlanCode, Plan> = {
   ...Object.fromEntries(PROFESSIONAL_COURSES.map(course => [course.id, {
     code: course.id, kind: 'individual-course', name: course.title, position: course.category,
     tagline: course.summary, amountKobo: naira(course.feeNaira), durationDays: 0, billing: 'One-time course fee',
-    features: [`${course.moduleCount} teaching modules`, 'Original practical tools and workplace activities', '15-question knowledge assessment', 'Workplace implementation project'],
+    features: [`${course.moduleCount} teaching modules`, 'Original practical tools and activities', course.assessmentDescription, course.applicationDescription],
     excludes: ['Live facilitation and certificate assessment are arranged separately.'],
     includedLevels: [], mentorshipDays: 0, mentorSlots: 0,
   } satisfies Plan])) as Record<ProfessionalCourseId, Plan>,

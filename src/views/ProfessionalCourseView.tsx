@@ -1,5 +1,5 @@
 import { Link, Navigate, useParams } from 'react-router-dom';
-import { PROFESSIONAL_COURSES, PROFESSIONAL_FACULTY } from '../data/professionalCourses';
+import { PROFESSIONAL_COURSES } from '../data/professionalCourses';
 import { formatNaira, PLANS } from '../lib/pricing';
 import { leadershipPurchaseFor, useEnrollment } from '../lib/useEnrollment';
 import { useLeadershipAvailability } from '../lib/useLeadershipAvailability';
@@ -12,7 +12,8 @@ export function ProfessionalCourseView() {
   if (!course) return <Navigate to="/courses" replace />;
   const purchase = leadershipPurchaseFor(entitlements, course.id);
   const active = purchase && Date.parse(purchase.leadershipAccess!.expiresAt) > Date.now();
-  const target = purchase ? active ? available[course.id] : `/payment/callback?reference=${encodeURIComponent(purchase.reference)}` : available[course.id] ? `/checkout/${course.id}` : undefined;
+  const priceConfirmed = course.feeNaira > 0;
+  const target = purchase ? active ? available[course.id] : `/payment/callback?reference=${encodeURIComponent(purchase.reference)}` : priceConfirmed && available[course.id] ? `/checkout/${course.id}` : undefined;
   return <main className="bg-white text-slate-900">
     <div className="mx-auto max-w-7xl px-4 pt-6 sm:px-6 lg:px-8">
       <Link to="/courses#professional-courses" className="inline-flex min-h-11 items-center text-sm font-semibold text-slate-600 hover:text-amber-800">← All courses</Link>
@@ -23,7 +24,7 @@ export function ProfessionalCourseView() {
         <p className="text-xs font-bold uppercase tracking-widest text-amber-800">{course.category} <span aria-hidden="true">·</span> {course.code}</p>
         <h1 className="mt-3 max-w-3xl font-serif text-3xl font-bold leading-tight sm:text-4xl">{course.title}</h1>
         <p className="mt-5 max-w-2xl text-base leading-8 text-slate-600">{course.summary}</p>
-        <p className="mt-4 text-sm text-slate-500">{PROFESSIONAL_FACULTY}</p>
+        <p className="mt-4 text-sm text-slate-500">{course.faculty}</p>
         <section className="mt-10 border-t border-slate-200 pt-7">
           <h2 className="text-xl font-bold">What you will learn</h2>
           <ul className="mt-4 space-y-3">{course.outcomes.map(outcome => <li key={outcome} className="flex gap-3 text-sm leading-7 text-slate-700"><span aria-hidden="true" className="text-amber-700">✓</span>{outcome}</li>)}</ul>
@@ -39,13 +40,13 @@ export function ProfessionalCourseView() {
         </section>
       </div>
       <aside className="h-fit rounded-2xl border border-amber-200 bg-[#fff8eb] p-6 lg:sticky lg:top-28">
-        <p className="text-xs font-bold uppercase tracking-widest text-amber-800">One-time course fee</p>
-        <p className="mt-2 text-4xl font-bold tracking-tight">{formatNaira(PLANS[course.id].amountKobo)}</p>
+        <p className="text-xs font-bold uppercase tracking-widest text-amber-800">{priceConfirmed ? 'One-time course fee' : 'Course fee'}</p>
+        <p className="mt-2 text-4xl font-bold tracking-tight">{priceConfirmed ? formatNaira(PLANS[course.id].amountKobo) : 'Fee to be confirmed'}</p>
         <dl className="my-6 space-y-3 border-y border-amber-200 py-5 text-sm">
-          {[['Course materials',course.hours],['Teaching modules',String(course.moduleCount)],['Delivery','Self-paced study'],['Knowledge check','15 questions'],['Practical application','Workplace exercises and project']].map(([term,value]) => <div key={term} className="flex justify-between gap-4"><dt className="text-slate-600">{term}</dt><dd className="max-w-[11rem] text-right font-semibold">{value}</dd></div>)}
+          {[['Course materials',course.hours],['Teaching modules',String(course.moduleCount)],['Delivery','Self-paced study'],['Knowledge check',course.assessmentDescription],['Practical application',course.applicationDescription]].map(([term,value]) => <div key={term} className="flex justify-between gap-4"><dt className="text-slate-600">{term}</dt><dd className="max-w-[11rem] text-right font-semibold">{value}</dd></div>)}
         </dl>
         {target ? <Link to={target} className="flex min-h-12 items-center justify-center rounded-lg bg-amber-500 px-4 py-3 text-sm font-bold text-slate-950 hover:bg-amber-400 active:scale-[0.98]">{purchase ? active ? 'Open my course' : 'Restore paid access' : `Enrol for ${formatNaira(PLANS[course.id].amountKobo)}`}</Link>
-          : <p role="status" className="rounded-lg bg-white p-4 text-sm leading-6 text-slate-600">{loading ? 'Checking enrolment availability…' : error ? 'We could not check enrolment. Please reload before paying.' : 'Enrolment is temporarily unavailable.'}</p>}
+          : <p role="status" className="rounded-lg bg-white p-4 text-sm leading-6 text-slate-600">{!priceConfirmed ? 'Enrolment will open after the course fee is confirmed.' : loading ? 'Checking enrolment availability…' : error ? 'We could not check enrolment. Please reload before paying.' : 'Enrolment is temporarily unavailable.'}</p>}
         <p className="mt-4 text-xs leading-6 text-slate-600">Course materials open after verified payment. Practical competency review and certification follow the requirements in the original course. Live facilitation is arranged separately.</p>
         <Link to="/portal" className="mt-5 inline-block text-sm font-semibold text-amber-900 underline underline-offset-4">Already paid? Restore your access</Link>
       </aside>

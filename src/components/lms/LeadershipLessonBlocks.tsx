@@ -19,17 +19,19 @@ export function LessonList({ content }: { content: string }) {
   );
 }
 
-export function LessonTable({ content }: { content: string }) {
-  const [headers, ...rows] = content.split('\n').map(line => line.split(/[|\t]/).map(cell => cell.trim()));
+export function LessonTable({ content, rows: sourceRows }: { content: string; rows?: string[][] }) {
+  const cells = Array.isArray(sourceRows) && sourceRows.length > 0 && sourceRows.every(row => Array.isArray(row) && row.every(cell => typeof cell === 'string'))
+    ? sourceRows : content.split('\n').map(line => line.split(/[|\t]/).map(cell => cell.trim()));
+  const [headers, ...rows] = cells;
   return (
     <div className="my-5 overflow-x-auto rounded-xl border border-slate-200" tabIndex={0} role="region" aria-label={headers.join(', ')}>
       <table className="w-full border-collapse text-left text-sm leading-relaxed">
         <thead className="bg-slate-900 text-white">
-          <tr>{headers.map((cell, i) => <th key={i} scope="col" className="px-4 py-3 font-semibold">{cell}</th>)}</tr>
+          <tr>{headers.map((cell, i) => <th key={i} scope="col" className="whitespace-pre-line px-4 py-3 font-semibold">{cell}</th>)}</tr>
         </thead>
         <tbody className="divide-y divide-slate-200 bg-white">
           {rows.map((row, i) => (
-            <tr key={i}>{row.map((cell, j) => <td key={j} className="min-w-20 px-4 py-3 align-top text-slate-700">{cell}</td>)}</tr>
+            <tr key={i}>{row.map((cell, j) => <td key={j} className="min-w-20 whitespace-pre-line px-4 py-3 align-top text-slate-700">{cell}</td>)}</tr>
           ))}
         </tbody>
       </table>

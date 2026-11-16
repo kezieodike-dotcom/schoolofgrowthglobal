@@ -217,6 +217,9 @@ export function createPaymentRouter(): Router {
         return res.status(400).json({ error: 'Choose one item for checkout.' });
       }
       if (individual) {
+        if (!Number.isSafeInteger(PLANS[planCode].amountKobo) || PLANS[planCode].amountKobo <= 0) {
+          return res.status(409).json({ error: 'The course fee has not been confirmed. Enrolment will open after fee confirmation.' });
+        }
         const course = await getPublishedLeadershipCourse(planCode).catch(() => undefined);
         if (course === undefined) return res.status(503).json({ error: LEADERSHIP_STORAGE_UNAVAILABLE });
         if (!course) return res.status(409).json({ error: 'This course is not open for enrolment yet.' });

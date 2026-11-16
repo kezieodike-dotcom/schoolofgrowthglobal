@@ -12,6 +12,8 @@ export function ProfessionalCoursesSection({ ownedOnly = false, includeLeadershi
   const leadership = useLeadershipAvailability(includeLeadership && !ownedOnly, 'leadership');
   const catalogue = includeLeadership && !ownedOnly ? FEATURED_SHORT_COURSES : PROFESSIONAL_COURSES.map(course => ({ ...course, kind: 'professional' as const, detailsUrl: `/courses/${course.id}` }));
   const courses = catalogue.filter(course => !ownedOnly || leadershipPurchaseFor(entitlements, course.id));
+  const pricedCourses = catalogue.filter(course => course.feeNaira > 0);
+  const fromAmountKobo = Math.min(...pricedCourses.map(course => PLANS[course.id].amountKobo));
   if (!courses.length) return null;
   return <section id="professional-courses" aria-labelledby="professional-courses-heading" className="scroll-mt-24 border-y border-amber-200/70 bg-[#fff8eb] py-12 sm:py-16 lg:py-20">
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -22,23 +24,24 @@ export function ProfessionalCoursesSection({ ownedOnly = false, includeLeadershi
       <div className="mb-8 grid gap-5 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
         <div className="max-w-2xl">
           <p className="text-xs font-bold uppercase tracking-[0.18em] text-amber-800">{includeLeadership ? 'Leadership & professional short courses' : 'Professional short courses'}</p>
-          <h2 id="professional-courses-heading" className="mt-3 font-serif text-3xl font-bold leading-tight text-slate-950 sm:text-4xl">{ownedOnly ? 'Your professional courses.' : 'Build the skills people notice at work'}</h2>
-          <p className="mt-4 max-w-xl text-sm leading-7 text-slate-600">{includeLeadership ? 'Lead with purpose. Build stronger customer relationships. Bring integrity to your workplace. Choose practical learning that helps you make a difference at work.' : 'Practical learning in customer service and workplace integrity. Original course materials, real workplace scenarios and a knowledge assessment in every course.'}</p>
+          <h2 id="professional-courses-heading" className="mt-3 font-serif text-3xl font-bold leading-tight text-slate-950 sm:text-4xl">{ownedOnly ? 'Your professional courses.' : includeLeadership ? 'Build the skills people notice at work' : 'Build practical skills for work and public service'}</h2>
+          <p className="mt-4 max-w-xl text-sm leading-7 text-slate-600">{includeLeadership ? 'Develop leadership, AI, governance and professional skills through practical study, activities and applied projects.' : 'Explore AI, governance, public administration, customer service and workplace integrity. Study original course materials and apply what you learn through activities, assessments and projects.'}</p>
         </div>
-        {!ownedOnly && <div className="w-fit border-l-2 border-amber-500 pl-4">
-          <p className="text-xs font-semibold uppercase tracking-wider text-slate-600">{includeLeadership ? 'Courses from' : 'One-time fee per course'}</p>
-          <p className="mt-1 text-3xl font-bold tracking-tight text-slate-950">{formatNaira(PLANS[PROFESSIONAL_COURSES[0].id].amountKobo)}</p>
-          <p className="mt-1 text-xs text-slate-600">{includeLeadership ? 'One-time fee. See each course for its price.' : 'Choose the skill you want to build.'}</p>
+        {!ownedOnly && pricedCourses.length > 0 && <div className="w-fit border-l-2 border-amber-500 pl-4">
+          <p className="text-xs font-semibold uppercase tracking-wider text-slate-600">Courses from</p>
+          <p className="mt-1 text-3xl font-bold tracking-tight text-slate-950">{formatNaira(fromAmountKobo)}</p>
+          <p className="mt-1 text-xs text-slate-600">One-time fee. See each course for its price.</p>
         </div>}
       </div>
-      <div className={`grid gap-6 md:grid-cols-2 ${includeLeadership ? 'xl:grid-cols-3' : ''}`}>
+      <div className={`grid gap-6 md:grid-cols-2 ${courses.length > 2 ? 'xl:grid-cols-3' : ''}`}>
         {courses.map(course => {
           const purchase = leadershipPurchaseFor(entitlements, course.id);
           const active = purchase && Date.parse(purchase.leadershipAccess!.expiresAt) > Date.now();
+          const priceConfirmed = course.feeNaira > 0;
           const publishedPath = course.kind === 'leadership' ? leadership.available[course.id] : available[course.id];
-          const target = purchase ? active ? publishedPath ?? course.detailsUrl : `/payment/callback?reference=${encodeURIComponent(purchase.reference)}` : course.kind === 'leadership' && publishedPath ? `/checkout/${course.id}` : course.detailsUrl;
+          const target = purchase ? active ? publishedPath ?? course.detailsUrl : `/payment/callback?reference=${encodeURIComponent(purchase.reference)}` : course.kind === 'leadership' && priceConfirmed && publishedPath ? `/checkout/${course.id}` : course.detailsUrl;
           const moduleCount = course.moduleCount ?? leadership.outlines[course.id]?.length;
-          const action = purchase ? active ? 'Open course' : 'Restore access' : course.kind === 'leadership' ? publishedPath ? 'Enrol on course' : 'View course details' : 'Explore course';
+          const action = purchase ? active ? 'Open course' : 'Restore access' : course.kind === 'leadership' ? priceConfirmed && publishedPath ? 'Enrol on course' : 'View course details' : 'Explore course';
           return <article key={course.id} data-professional-course={course.id} data-featured-course={course.id} className="group flex min-w-0 flex-col overflow-hidden rounded-2xl border border-slate-800 bg-slate-950 text-white">
             <Link to={course.detailsUrl} aria-label={`Explore ${course.title}`} className="relative block overflow-hidden bg-slate-200 focus-visible:outline-2 focus-visible:outline-offset-[-4px] focus-visible:outline-amber-400">
               <img src={course.image} alt={course.alt} width={1200} height={800} loading="lazy" className="aspect-[16/9] w-full object-cover transition-transform duration-500 motion-safe:group-hover:scale-[1.025]" />
@@ -49,7 +52,7 @@ export function ProfessionalCoursesSection({ ownedOnly = false, includeLeadershi
               <h3 className="mt-3 text-xl font-bold leading-snug sm:text-2xl"><Link to={course.detailsUrl} className="hover:text-amber-200">{course.title}</Link></h3>
               <p className="mb-7 mt-3 text-sm leading-7 text-slate-300">{course.summary}</p>
               <div className="mt-auto flex flex-wrap items-center justify-between gap-4 border-t border-white/15 pt-5">
-                <div><p className="text-xl font-bold text-white">{formatNaira(PLANS[course.id].amountKobo)}</p><p className="mt-1 text-xs text-slate-400">{purchase ? 'Payment verified' : 'One-time course fee'}</p></div>
+                <div><p className="text-xl font-bold text-white">{priceConfirmed ? formatNaira(PLANS[course.id].amountKobo) : 'Fee to be confirmed'}</p><p className="mt-1 text-xs text-slate-400">{purchase ? 'Payment verified' : priceConfirmed ? 'One-time course fee' : 'Enrolment opens after fee confirmation'}</p></div>
                 <Link to={target} className="inline-flex min-h-11 items-center justify-center rounded-lg bg-amber-500 px-5 py-3 text-sm font-bold text-slate-950 transition-colors hover:bg-amber-400 active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-amber-300">{action} <span aria-hidden="true" className="ml-3">↗</span></Link>
               </div>
             </div>

@@ -9,7 +9,7 @@ export function isLeadershipPayment(id: PaidCourseId, reference: string, tx: {
   status: string; reference: string; amount: number; currency: string; domain?: string;
   customer?: { email?: string }; metadata?: { plan?: string; itemKind?: string } | null;
 }, production: boolean): boolean {
-  return tx.status === 'success' && tx.reference === reference && tx.amount === PLANS[id].amountKobo &&
+  return PLANS[id].amountKobo > 0 && tx.status === 'success' && tx.reference === reference && tx.amount === PLANS[id].amountKobo &&
     tx.currency === CURRENCY && (!production || tx.domain === 'live') && Boolean(tx.customer?.email?.trim()) &&
     tx.metadata?.itemKind === 'plan' && tx.metadata.plan === id;
 }

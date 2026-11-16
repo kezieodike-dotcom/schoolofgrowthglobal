@@ -102,7 +102,7 @@ const BlockRenderer: React.FC<{ block: LmsBlock; courseId: string; moduleId: str
     case 'list':
       return <LessonList content={block.content ?? ''} />;
     case 'table':
-      return <LessonTable content={block.content ?? ''} />;
+      return <LessonTable content={block.content ?? ''} rows={block.metadata?.rows} />;
     case 'leadership_quiz':
       return isPaidCourseId(courseId) && (
         <>

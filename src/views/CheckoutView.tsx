@@ -86,6 +86,7 @@ export const CheckoutView: React.FC = () => {
 
   if (!isPlanCode(planParam)) return <Navigate to="/pricing" replace />;
   const plan = PLANS[planParam];
+  if (leadershipId && plan.amountKobo <= 0) return <Navigate to={individualHome} replace />;
 
   if (plan.kind === 'course-intensive' && plan.code !== 'foundation-intensive') return <main className="mx-auto min-h-[50vh] max-w-2xl space-y-4 px-4 py-12">
     <h1 className="text-2xl font-bold">{plan.name}</h1>

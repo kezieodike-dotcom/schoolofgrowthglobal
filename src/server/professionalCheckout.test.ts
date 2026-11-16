@@ -3,10 +3,14 @@ import { test } from 'node:test';
 import express from 'express';
 import type { AddressInfo } from 'node:net';
 import { PROFESSIONAL_COURSES } from '../data/professionalCourses.js';
+import { SPECIALIST_COURSES } from '../data/specialistCourses.js';
 import { PLANS, entitlementFor, hasCourseAccess, hasMentorshipAccess } from '../lib/pricing.js';
 
-test('both professional courses charge exactly 2500 naira without unlocking a cohort or mentor', () => {
-  for (const course of PROFESSIONAL_COURSES) {
+test('the original professional courses charge exactly 2500 naira without unlocking a cohort or mentor', () => {
+  const originalCourses = PROFESSIONAL_COURSES.filter(course =>
+    course.id === 'customer-relationship-service-excellence' || course.id === 'professional-ethics-workplace-integrity');
+  assert.equal(originalCourses.length, 2);
+  for (const course of originalCourses) {
     const plan = PLANS[course.id];
     assert.equal(plan.amountKobo, 250_000);
     const purchase = entitlementFor(plan, { reference: 'fixture', email: 'buyer@example.test' });
@@ -42,7 +46,8 @@ test('professional checkout verifies payment, hides instructor data, and persist
       assert.equal(new Headers(init?.headers).get('Authorization'), 'Bearer fixture-service-key');
       if (storageDown) return Response.json({ error: 'Unavailable' }, { status: 503 });
       if (url.pathname.includes('/leadership-courses/')) {
-        return available ? Response.json({ ...privateCourse, id: url.pathname.endsWith(id+'.json') ? id : otherId }) : Response.json({ statusCode: '404' }, { status: 400 });
+        const requestedId = url.pathname.split('/').at(-1)!.replace(/\.json$/, '');
+        return available ? Response.json({ ...privateCourse, id: requestedId }) : Response.json({ statusCode: '404' }, { status: 400 });
       }
       const key = url.pathname.replace('/storage/v1/object/authenticated/','').replace('/storage/v1/object/','');
       if (init?.method === 'POST') { records.set(key, JSON.parse(String(init.body))); return Response.json({ Key: key }); }
@@ -61,7 +66,7 @@ test('professional checkout verifies payment, hides instructor data, and persist
   const get=(path:string,token?:string)=>fetch(base+path,{headers:token?{Authorization:`Bearer ${token}`}:{}});
   const post=(path:string,body:unknown,token?:string)=>fetch(base+path,{method:'POST',headers:{'Content-Type':'application/json',...(token?{Authorization:`Bearer ${token}`}:{})},body:JSON.stringify(body)});
   const catalogue=await (await get('/lms/professional/availability')).json();
-  assert.equal(Object.keys(catalogue.available).length,2);
+  assert.equal(Object.keys(catalogue.available).length,PROFESSIONAL_COURSES.length);
   assert.ok(!JSON.stringify(catalogue).includes('Private manuscript'));
   assert.equal((await get('/lms/courses/'+id)).status,401);
   assert.equal((await get('/lms/courses/'+otherId)).status,401);
@@ -96,4 +101,20 @@ test('professional checkout verifies payment, hides instructor data, and persist
   const progress=await (await get('/lms/progress/forged/'+id,token)).json();
   assert.deepEqual(progress.completedLessons,['lesson-1']); assert.equal(progress.progressPercentage,100);
   assert.ok(records.size>0);
+  for (const specialist of SPECIALIST_COURSES) {
+    assert.equal((await post('/payments/initialize', { plan: specialist.id, email: 'buyer@example.test', amount: 1 })).status, 200);
+    assert.equal(charge.amount, 1_500_000, specialist.id);
+    assert.equal(charge.metadata.plan, specialist.id);
+    const paid = await get('/payments/verify/specialist-' + specialist.id);
+    assert.equal(paid.status, 200);
+    const { entitlement: specialistPurchase } = await paid.json();
+    assert.equal(specialistPurchase.plan, specialist.id);
+    const courseToken = specialistPurchase.leadershipAccess.token;
+    const opened = await get('/lms/courses/' + specialist.id, courseToken);
+    assert.equal(opened.status, 200);
+    const publicCourse = await opened.json();
+    assert.equal(publicCourse.id, specialist.id);
+    assert.deepEqual(Object.keys(publicCourse).sort(), ['id', 'modules', 'title']);
+    assert.equal((await get('/lms/courses/' + id, courseToken)).status, 401);
+  }
 });
