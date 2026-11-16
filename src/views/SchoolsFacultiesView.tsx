@@ -13,15 +13,19 @@ function SchoolDetails({ school }: { school: FacultySchool }) {
           {note}
         </p>
       ))}
-      <p className="mb-3 text-xs font-semibold text-amber-800">Courses and subject areas</p>
-      <ol className="grid list-decimal gap-2 pl-5 text-sm leading-6 text-slate-600 marker:text-amber-700">
-        {school.courses.map(course => {
-          const entry = getAcademicCourse(course);
-          return <li key={entry?.key ?? course} data-academic-course={entry?.key} className="pl-1 [overflow-wrap:anywhere]">
-            {entry?.href ? <Link to={entry.href} className="font-semibold text-amber-900 underline decoration-amber-300 underline-offset-4 hover:text-amber-700">{course}</Link> : course}
-          </li>;
-        })}
-      </ol>
+      {school.courses.length > 0 ? (
+        <>
+          <p className="mb-3 text-xs font-semibold text-amber-800">Courses and subject areas</p>
+          <ol className="grid list-decimal gap-2 pl-5 text-sm leading-6 text-slate-600 marker:text-amber-700">
+            {school.courses.map(course => {
+              const entry = getAcademicCourse(course);
+              return <li key={entry?.key ?? course} data-academic-course={entry?.key} className="pl-1 [overflow-wrap:anywhere]">
+                {entry?.href ? <Link to={entry.href} className="font-semibold text-amber-900 underline decoration-amber-300 underline-offset-4 hover:text-amber-700">{course}</Link> : course}
+              </li>;
+            })}
+          </ol>
+        </>
+      ) : <p className="text-sm leading-6 text-slate-600">Course information for this school is being prepared.</p>}
       {school.id === 'leadership' && <Link to="/courses/leadership" className="mt-4 inline-flex min-h-11 items-center gap-2 text-sm font-bold text-amber-800 hover:underline">Individual leadership course prices <ArrowRight className="h-4 w-4 shrink-0" aria-hidden="true" /></Link>}
     </div>
   );
@@ -31,7 +35,7 @@ export const SchoolsFacultiesView: React.FC<{ embedded?: boolean; searchQuery?: 
   const [localQuery, setLocalQuery] = useState('');
   const query = searchQuery ?? localQuery;
   const setQuery = onSearchQueryChange ?? setLocalQuery;
-  const [openFaculty, setOpenFaculty] = useState(embedded ? 0 : FACULTIES[0].number);
+  const [openFaculties, setOpenFaculties] = useState<number[]>(() => FACULTIES.map(faculty => faculty.number));
   const [openSchool, setOpenSchool] = useState<number | null>(null);
   const normalizedQuery = query.trim().toLowerCase();
 
@@ -41,6 +45,7 @@ export const SchoolsFacultiesView: React.FC<{ embedded?: boolean; searchQuery?: 
     })).filter(faculty => faculty.schools.length > 0),
     [normalizedQuery, schoolId]
   );
+  const filtering = Boolean(normalizedQuery || schoolId);
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
@@ -88,15 +93,42 @@ export const SchoolsFacultiesView: React.FC<{ embedded?: boolean; searchQuery?: 
         </div>
       </section>
 
+      {visibleFaculties.length > 0 && <section className="border-b border-slate-200 bg-white" aria-label="Faculty directory navigation">
+        <div className={`mx-auto max-w-7xl py-6 ${embedded ? '' : 'px-4 sm:px-6 lg:px-8'}`}>
+          <p className="text-sm font-semibold text-slate-950">Browse faculties</p>
+          <nav aria-label="Browse faculties" data-faculty-index className="mt-4 grid gap-x-8 gap-y-3 sm:grid-cols-2 lg:grid-cols-3">
+            {visibleFaculties.map(faculty => <a
+              key={faculty.number}
+              href={`#faculty-${faculty.number}`}
+              onClick={() => setOpenFaculties(current => current.includes(faculty.number) ? current : [...current, faculty.number])}
+              className="flex min-h-11 items-start gap-3 border-l-2 border-amber-300 py-1 pl-3 text-sm leading-6 text-slate-700 hover:border-amber-500 hover:text-amber-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-amber-500"
+            >
+              <span className="shrink-0 font-mono text-xs font-bold leading-6 text-[#ff9700]">{String(faculty.displayNumber ?? faculty.number).padStart(2, '0')}</span>
+              <span className="min-w-0 capitalize [overflow-wrap:anywhere]">{faculty.title.toLowerCase()}</span>
+            </a>)}
+          </nav>
+          {!filtering && <div className="mt-5 flex flex-wrap gap-3 border-t border-slate-100 pt-4">
+            <button type="button" onClick={() => setOpenFaculties(FACULTIES.map(faculty => faculty.number))}
+              disabled={visibleFaculties.every(faculty => openFaculties.includes(faculty.number))}
+              className="min-h-11 border border-amber-300 bg-amber-50 px-4 py-2 text-sm font-semibold text-amber-900 hover:bg-amber-100 disabled:cursor-default disabled:opacity-50">Show all schools</button>
+            <button type="button" onClick={() => setOpenFaculties([])} disabled={openFaculties.length === 0}
+              className="min-h-11 border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 disabled:cursor-default disabled:opacity-50">Collapse faculties</button>
+          </div>}
+        </div>
+      </section>}
+
       <div data-academic-directory className={`mx-auto max-w-7xl space-y-4 py-10 sm:py-14 ${embedded ? '' : 'px-4 sm:px-6 lg:px-8'}`}>
         {visibleFaculties.map((faculty) => {
-          const isOpen = openFaculty === faculty.number || Boolean(normalizedQuery) || Boolean(schoolId);
+          const isOpen = openFaculties.includes(faculty.number) || filtering;
           return (
-            <section key={faculty.number} data-faculty-number={faculty.number} data-faculty-display-number={faculty.displayNumber ?? faculty.number} className="overflow-hidden border border-slate-200 bg-white shadow-[0_8px_26px_rgba(15,23,42,0.04)]">
+            <section id={`faculty-${faculty.number}`} key={faculty.number} data-faculty-number={faculty.number} data-faculty-display-number={faculty.displayNumber ?? faculty.number} className="scroll-mt-24 overflow-hidden border border-slate-200 bg-white shadow-[0_8px_26px_rgba(15,23,42,0.04)]">
+              <h3>
               <button
                 type="button"
-                onClick={() => setOpenFaculty(isOpen ? 0 : faculty.number)}
+                onClick={() => setOpenFaculties(current => current.includes(faculty.number) ? current.filter(number => number !== faculty.number) : [...current, faculty.number])}
                 aria-expanded={isOpen}
+                aria-controls={`faculty-${faculty.number}-schools`}
+                disabled={filtering}
                 className="flex w-full items-center justify-between gap-5 px-4 py-5 text-left transition hover:bg-amber-50/40 sm:px-6 sm:py-6"
               >
                 <span className="flex min-w-0 items-start gap-3 sm:gap-4">
@@ -110,31 +142,34 @@ export const SchoolsFacultiesView: React.FC<{ embedded?: boolean; searchQuery?: 
                 </span>
                 <ChevronDown className={`h-5 w-5 shrink-0 text-amber-700 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
               </button>
+              </h3>
 
               {isOpen && (
-                <div className="border-t border-slate-200 px-3 py-3 sm:px-5 sm:py-5">
+                <div id={`faculty-${faculty.number}-schools`} className="border-t border-slate-200 px-3 py-3 sm:px-5 sm:py-5">
                   <p className="mb-5 text-sm leading-6 text-slate-600"><strong className="font-semibold text-slate-800">Purpose: </strong>{faculty.purpose}</p>
                   <div className="grid items-start gap-3 lg:grid-cols-2">
                     {faculty.schools.map((school) => {
                       const schoolOpen = openSchool === school.number || Boolean(normalizedQuery) || schoolId === school.id;
-                      const hasDetails = Boolean(
-                        school.notes.length || school.courses.length
-                      );
+                      const alternateNames = school.aliases.filter(name => name !== school.title);
                       return (
                         <div key={school.number} data-school-id={school.id} className="min-w-0 overflow-hidden border border-slate-200 bg-white">
                           <button
                             type="button"
                             onClick={() => setOpenSchool(schoolOpen ? null : school.number)}
                             aria-expanded={schoolOpen}
+                            aria-controls={`school-${school.id}-details`}
                             className="flex w-full items-center justify-between gap-4 px-4 py-4 text-left transition hover:bg-slate-50"
                           >
                             <span className="flex min-w-0 items-start gap-3">
                               <span className="font-mono text-[11px] text-amber-700">{String(school.number).padStart(2, '0')}</span>
-                              <span className="min-w-0 text-sm font-semibold leading-6 text-slate-800 [overflow-wrap:anywhere]">{school.title}</span>
+                              <span className="min-w-0 [overflow-wrap:anywhere]">
+                                <span className="block text-sm font-semibold leading-6 text-slate-800">{school.title}</span>
+                                {alternateNames.length > 0 && <span className="mt-1 block text-xs leading-5 text-slate-500">Also listed as: {alternateNames.join('; ')}</span>}
+                              </span>
                             </span>
-                            {hasDetails && <ChevronDown className={`h-4 w-4 shrink-0 text-slate-400 transition-transform ${schoolOpen ? 'rotate-180' : ''}`} />}
+                            <ChevronDown className={`h-4 w-4 shrink-0 text-slate-400 transition-transform ${schoolOpen ? 'rotate-180' : ''}`} />
                           </button>
-                          {schoolOpen && hasDetails && <SchoolDetails school={school} />}
+                          {schoolOpen && <div id={`school-${school.id}-details`}><SchoolDetails school={school} /></div>}
                         </div>
                       );
                     })}

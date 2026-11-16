@@ -18,6 +18,30 @@ test('the restored directory includes the original Kingdom and humanitarian scho
   assert.ok(searchFacultyCatalogue('Refugee').length);
 });
 
+test('Governance has its own visible faculty with all of its earlier school names', () => {
+  const originalFaculty = original.faculties.find(faculty => faculty.title.startsWith('GOVERNANCE,'))!;
+  const restoredFaculty = FACULTIES.find(faculty => faculty.title === originalFaculty.title);
+  assert.ok(restoredFaculty, 'Governance must be a faculty heading, not only a search alias under Research');
+  for (const school of originalFaculty.schools) {
+    assert.ok(restoredFaculty.schools.some(entry => [entry.title, ...entry.aliases].includes(school.title)), school.title);
+  }
+  assert.ok(restoredFaculty.schools.some(school => school.id === 'governance-and-public-administration'));
+  for (const id of ['governance-001', 'governance-005', 'governance-013', 'governance-014', 'governance-015']) {
+    const course = ACADEMIC_COURSES.find(course => course.courseId === id);
+    assert.ok(course?.href?.includes(id), id);
+    assert.ok(restoredFaculty.schools.some(school => school.id === course.schoolId), id);
+  }
+});
+
+test('Relationships and Family has its own visible faculty with its earlier schools', () => {
+  const originalFaculty = original.faculties.find(faculty => faculty.title.startsWith('RELATIONSHIPS,'))!;
+  const restoredFaculty = FACULTIES.find(faculty => faculty.title === originalFaculty.title);
+  assert.ok(restoredFaculty, 'Relationships and Family must be a faculty heading, not hidden under Personal Growth or Leadership');
+  for (const school of originalFaculty.schools) {
+    assert.ok(restoredFaculty.schools.some(entry => [entry.title, ...entry.aliases].includes(school.title)), school.title);
+  }
+});
+
 test('every updated school retains its published ID, number and title', () => {
   for (const school of updated.faculties.flatMap(faculty => faculty.schools)) {
     const found = SCHOOL_CATALOGUE.find(entry => entry.id === school.id);

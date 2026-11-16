@@ -42,7 +42,7 @@ export const EventsView: React.FC = () => {
             </a>
           </div>
           <div className="overflow-hidden rounded-2xl border border-slate-200 bg-slate-950 shadow-2xl shadow-slate-950/15">
-            <img src="/scenes/events-hero-graduation.jpg" alt="Graduates celebrating at a School of Growth Global conference" className="block h-auto max-h-[38rem] w-full object-contain" />
+            <img src="/scenes/events-hero-graduation.jpg?v=official-crest-20261116" alt="Graduates celebrating at a School of Growth Global conference with the official gold crest" className="block h-auto max-h-[38rem] w-full object-contain" />
           </div>
         </div>
       </section>

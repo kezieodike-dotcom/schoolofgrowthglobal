@@ -25,8 +25,8 @@ const destinations: Record<number, [number, string?]> = {
   7: [4], 8: [4, 'management-and-organizational-development'], 9: [7], 10: [4],
   11: [10], 12: [10], 13: [10], 14: [10], 15: [10], 16: [10],
   17: [10], 18: [10], 19: [10], 20: [10], 21: [10],
-  22: [8, 'governance-and-public-administration'], 23: [8], 24: [8], 25: [8], 26: [8],
-  27: [8, 'governance-and-public-administration'], 28: [8], 29: [8],
+  22: [12, 'governance-and-public-administration'], 23: [12], 24: [12], 25: [12], 26: [12],
+  27: [12, 'governance-and-public-administration'], 28: [12], 29: [12],
   30: [11], 31: [11], 32: [11], 33: [11],
   34: [2, 'entrepreneurship-and-business-creation'], 35: [2],
   36: [2, 'marketing-sales-and-business-development'], 37: [3],
@@ -35,8 +35,8 @@ const destinations: Record<number, [number, string?]> = {
   44: [4, 'human-resources-and-talent-management'], 45: [4, 'project-and-programme-management'],
   46: [7, 'communication-and-public-speaking'], 47: [5], 48: [1],
   49: [1, 'artificial-intelligence'], 50: [7, 'media-branding-and-public-relations'],
-  51: [6], 52: [6], 53: [6], 54: [4], 55: [4],
-  56: [6, 'emotional-intelligence-and-human-relations'], 57: [8],
+  51: [13], 52: [13], 53: [13], 54: [13], 55: [13],
+  56: [13, 'emotional-intelligence-and-human-relations'], 57: [8],
   58: [8, 'research-and-critical-thinking'], 59: [4], 60: [1], 61: [8], 62: [8],
 };
 
@@ -51,7 +51,21 @@ export function buildAcademicCatalogue() {
   for (const [number, title, purpose] of [
     [10, previous.faculties[2].title, 'Develop biblical leadership, ministry, discipleship and stewardship skills for responsible service, spiritual formation and community impact.'],
     [11, previous.faculties[4].title, 'Develop the capabilities to serve communities, lead humanitarian programmes and build accountable nonprofit organizations.'],
+    [12, previous.faculties[3].title, 'Develop public leaders, policymakers and administrators who strengthen governance, serve citizens and build accountable institutions.'],
+    [13, previous.faculties[7].title, 'Strengthen relationships, families and human development through social intelligence, responsible leadership and support across life stages.'],
   ] as const) faculties.push({ number, title, purpose, schools: [], aliases: [] });
+
+  // Restore these faculty headings without creating duplicate schools or
+  // changing the IDs and numbers used by existing courses and enrolments.
+  for (const [schoolId, facultyNumber] of [
+    ['governance-and-public-administration', 12],
+    ['emotional-intelligence-and-human-relations', 13],
+  ] as const) {
+    const currentFaculty = faculties.find(faculty => faculty.schools.some(school => school.id === schoolId))!;
+    const school = currentFaculty.schools.find(school => school.id === schoolId)!;
+    currentFaculty.schools = currentFaculty.schools.filter(school => school.id !== schoolId);
+    faculties.find(faculty => faculty.number === facultyNumber)!.schools.push(school);
+  }
 
   const schools = new Map(faculties.flatMap(faculty => faculty.schools.map(school => [school.id, school] as const)));
   const courses = new Map<string, AcademicCourse>();
